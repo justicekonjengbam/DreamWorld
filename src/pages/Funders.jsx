@@ -144,15 +144,15 @@ function Funders() {
           <Card hover={false}>
             <div className="impact-stats">
               <div className="impact-stat">
-                <div className="stat-number">24</div>
+                <div className="stat-number">0</div>
                 <div className="stat-label">Quests Funded</div>
               </div>
               <div className="impact-stat">
-                <div className="stat-number">150+</div>
+                <div className="stat-number">0</div>
                 <div className="stat-label">Kits Sponsored</div>
               </div>
               <div className="impact-stat">
-                <div className="stat-number">8</div>
+                <div className="stat-number">0</div>
                 <div className="stat-label">Workshops Hosted</div>
               </div>
             </div>

@@ -5,12 +5,10 @@ import SectionHeader from '../components/SectionHeader'
 import Badge from '../components/Badge'
 import './Characters.css'
 
-
 function Characters() {
   return (
     <div className="characters page">
       <div className="container">
-        {/* Logo at top like homepage */}
         <div className="characters-hero">
           <img src="/logo.png" alt="DreamWorld Logo" className="characters-logo" />
         </div>
@@ -33,8 +31,20 @@ function Characters() {
           {characters.map((character) => (
             <Link to={`/characters/${character.id}`} key={character.id} className="character-link">
               <Card>
-                <div className="character-photo-wrapper">
-                  <img src={character.avatar} alt={character.name} className="character-photo" />
+                <div 
+                  className="character-cover-section"
+                  style={{
+                    backgroundImage: character.coverImage ? `url(${character.coverImage})` : 'none',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    height: '200px',
+                    borderRadius: '8px 8px 0 0',
+                    position: 'relative'
+                  }}
+                >
+                  <div className="character-photo-wrapper">
+                    <img src={character.avatar} alt={character.name} className="character-photo" />
+                  </div>
                 </div>
                 <h3>{character.name}</h3>
                 <p className="character-role-title">{character.title}</p>
@@ -53,6 +63,5 @@ function Characters() {
     </div>
   )
 }
-
 
 export default Characters

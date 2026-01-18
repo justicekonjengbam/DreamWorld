@@ -2,7 +2,7 @@
 export const roles = [
   {
     id: 'guardian',
-    name: 'The Guardians',
+    name: 'Guardians',
     singular: 'Guardian',
     description: 'Architects and guides of DreamWorld. They weave together nature, technology, and community.',
     color: 'linear-gradient(135deg, #FFD700, #4CA1AF)',
@@ -17,7 +17,7 @@ export const roles = [
   },
   {
     id: 'florist',
-    name: 'The Florists',
+    name: 'Florists',
     singular: 'Florist',
     description: 'Represents nature, beauty, and meaning. Shares plant/flower knowledge, eco-living habits, and calming creative content.',
     color: 'linear-gradient(135deg, #4CAF50, #5fd65f)',
@@ -32,7 +32,7 @@ export const roles = [
   },
   {
     id: 'healer',
-    name: 'The Healers',
+    name: 'Healers',
     singular: 'Healer',
     description: 'Supports wellness (non-medical): mindset, routines, rest, confidence, and recovery. Helps members stay balanced while learning and building.',
     color: 'linear-gradient(135deg, #A8E6CF, #56CCF2)',
@@ -47,7 +47,7 @@ export const roles = [
   },
   {
     id: 'builder',
-    name: 'The Builders',
+    name: 'Builders',
     singular: 'Builder',
     description: 'Creates tools and projects that help life—DIY, tech, repairs, coding, robotics, and practical inventions. Teaches by showing progress.',
     color: 'linear-gradient(135deg, #667eea, #764ba2)',
@@ -62,7 +62,7 @@ export const roles = [
   },
   {
     id: 'scholar',
-    name: 'The Scholars',
+    name: 'Scholars',
     singular: 'Scholar',
     description: 'Turns complex ideas into simple lessons. Shares mini-explainers, resources, study methods, and "learn together" content.',
     color: 'linear-gradient(135deg, #f093fb, #f5576c)',
@@ -77,7 +77,7 @@ export const roles = [
   },
   {
     id: 'ranger',
-    name: 'The Rangers',
+    name: 'Rangers',
     singular: 'Ranger',
     description: 'Takes DreamWorld into the real world: cleanups, planting, community help, outdoor learning, and environment-focused quests.',
     color: 'linear-gradient(135deg, #2E7D32, #66BB6A)',
@@ -92,7 +92,7 @@ export const roles = [
   },
   {
     id: 'athlete',
-    name: 'The Athletes',
+    name: 'Athletes',
     singular: 'Athlete',
     description: 'Trains discipline and teamwork through sports and fitness. Shares drills, challenges, and growth mindset through movement.',
     color: 'linear-gradient(135deg, #FF6F61, #C33764)',
@@ -107,7 +107,7 @@ export const roles = [
   },
   {
     id: 'artist',
-    name: 'The Artists',
+    name: 'Artists',
     singular: 'Artist',
     description: 'Brings DreamWorld to life visually and creatively—design, drawing, editing, music, photography, posters, and aesthetic worldbuilding.',
     color: 'linear-gradient(135deg, #FA8BFF, #2BD2FF)',
@@ -122,7 +122,7 @@ export const roles = [
   },
   {
     id: 'antagonist',
-    name: 'The Antagonists',
+    name: 'Antagonists',
     singular: 'Antagonist',
     description: 'Creates playful challenges and controlled chaos during events—testing skills, teamwork, and creativity to make quests more exciting (never harmful, always fair).',
     color: 'linear-gradient(135deg, #FF4D6D, #7B2CBF)',
@@ -176,6 +176,7 @@ export const characters = [
     role: 'florist',
     title: 'Lead Florist',
     avatar: '/Priyaluxmi.png',
+    coverImage: '/Priyaluxmi1.png',
     bio: 'Early members of DreamWorld. Helps in bringing flowers and colours into the Dream World',
     themes: ['Education', 'Peace', 'Flowers'],
     socials: {
@@ -190,6 +191,7 @@ export const characters = [
     role: 'athlete',
     title: 'Player',
     avatar: '/Shankerson.png',
+    coverImage: '/Shankerson1.png',
     bio: 'I turn drills into quests and sweat into progress.Fitness • Basketball • Teamwork • Growth',
     themes: ['Basketball', 'Coaching', 'Discipline'],
     socials: {
@@ -199,11 +201,12 @@ export const characters = [
     joinedDate: '2025-02-15'
   },
   {
-    id: 'antagonist',
+    id: 'antagonist-001',
     name: 'Vincent Law',
-    role: 'Antagonist ',
+    role: 'antagonist',
     title: 'Event Rival & Challenge Master',
     avatar: '/Bicky.png',
+    coverImage: '/Bicky1.png',
     bio: 'The playful opposition of DreamWorld—designs twists, rival quests, and mind-games that make events thrilling while staying fair and safe.',
     themes: ['Challenge Design', 'Strategy', 'Mischief (Fair Play)', 'Roleplay', 'Event Hype'],
     socials: {
@@ -255,14 +258,15 @@ export const getRoleById = (roleId) => {
 }
 
 
-// Helper function to add new character with photo
+// Helper function to add new character with photo AND cover
 export const addNewCharacter = (characterData) => {
   const newCharacter = {
     id: `${characterData.role}-${Date.now()}`,
     name: characterData.name,
     role: characterData.role,
     title: characterData.title || 'Member',
-    avatar: characterData.avatar || '/photo1.png', // Only ONE photo field
+    avatar: characterData.avatar || '/photo1.png',
+    coverImage: characterData.coverImage || '/default-cover.png', // ADD THIS
     bio: characterData.bio || '',
     themes: characterData.themes || [],
     socials: characterData.socials || {},
@@ -273,12 +277,11 @@ export const addNewCharacter = (characterData) => {
   return newCharacter
 }
 
-
-// Helper function to update character photo
-export const updateCharacterPhoto = (characterId, photoUrl) => {
+// Helper function to update character cover image
+export const updateCharacterCover = (characterId, coverUrl) => {
   const character = characters.find(char => char.id === characterId)
   if (character) {
-    character.avatar = photoUrl
+    character.coverImage = coverUrl
     return true
   }
   return false
