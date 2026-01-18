@@ -1,0 +1,51 @@
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.main-content {
+  flex: 1;
+  padding-top: 80px;
+  position: relative;
+  z-index: 2;
+}
+
+.main-app-content {
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+
+.main-app-content.fade-in {
+  opacity: 1;
+}
+/* Universal page logo styling */
+.page-hero {
+  text-align: center;
+  margin-bottom: 30px;
+  padding-top: 40px;
+}
+
+.page-logo {
+  width: 300px;
+  height: auto;
+  filter: drop-shadow(0 0 30px rgba(76, 161, 175, 0.6));
+  animation: gentleFloat 4s ease-in-out infinite;
+}
+
+@keyframes gentleFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@media (max-width: 768px) {
+  .page-logo {
+    width: 200px;
+  }
+}

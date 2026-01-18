@@ -1,0 +1,462 @@
+/* Impact Mission */
+.impact-mission {
+  max-width: 900px;
+  margin: 0 auto 60px;
+}
+
+.impact-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin-bottom: 30px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid rgba(76, 161, 175, 0.2);
+}
+
+.impact-stat {
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 3rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--color-gold), var(--color-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  color: var(--color-gray);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.impact-text {
+  color: var(--color-gray);
+  font-size: 1.1rem;
+  line-height: 1.8;
+  text-align: center;
+  margin: 0;
+}
+
+/* Section Styling */
+.section-title {
+  color: var(--color-gold);
+  font-size: 2rem;
+  margin-bottom: 10px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.section-subtitle {
+  color: var(--color-gray);
+  text-align: center;
+  margin-bottom: 40px;
+  font-size: 1.05rem;
+}
+
+/* Donation Form */
+.donation-section {
+  max-width: 700px;
+  margin: 60px auto;
+}
+
+.donation-form {
+  padding: 20px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group-full {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.form-group label,
+.form-group-full label {
+  color: var(--color-cyan);
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group-full input {
+  padding: 12px 15px;
+  background: rgba(76, 161, 175, 0.05);
+  border: 1px solid rgba(76, 161, 175, 0.3);
+  border-radius: 6px;
+  color: var(--color-white);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group-full input:focus {
+  outline: none;
+  border-color: var(--color-cyan);
+  background: rgba(76, 161, 175, 0.1);
+}
+
+.form-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.form-checkbox input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.form-checkbox label {
+  color: var(--color-gray);
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.success-message {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.success-icon {
+  font-size: 5rem;
+  margin-bottom: 20px;
+}
+
+.success-message h3 {
+  color: var(--color-gold);
+  font-size: 2rem;
+  margin-bottom: 15px;
+}
+
+.success-message p {
+  color: var(--color-gray);
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+/* Monthly Champions */
+.champions-section {
+  margin: 80px 0;
+}
+
+.champions-podium {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.champion-card {
+  text-align: center;
+  padding: 30px 20px;
+  background: rgba(25, 30, 45, 0.98);
+  border: 1px solid rgba(76, 161, 175, 0.25);
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+.champion-card:hover {
+  transform: translateY(-5px);
+}
+
+.champion-tier {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  margin: 0 auto 15px;
+}
+
+.champion-avatar {
+  font-size: 3.5rem;
+  margin-bottom: 15px;
+}
+
+.champion-name {
+  color: var(--color-white);
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.champion-impact {
+  color: var(--color-cyan);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* Quest Sponsors */
+.quest-sponsors-section {
+  margin: 80px 0;
+}
+
+.quest-sponsors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.quest-sponsor-card {
+  text-align: center;
+  padding: 25px 20px !important;
+}
+
+.quest-avatar {
+  font-size: 3rem;
+  margin-bottom: 15px;
+}
+
+.quest-title {
+  color: var(--color-gold);
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.quest-sponsor {
+  color: var(--color-gray);
+  font-size: 0.9rem;
+}
+
+.quest-sponsor strong {
+  color: var(--color-cyan);
+}
+
+/* Builders Circle */
+.builders-section {
+  margin: 80px 0;
+}
+
+.builders-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.builder-card {
+  text-align: center;
+  padding: 25px 15px !important;
+}
+
+.builder-avatar {
+  font-size: 3rem;
+  margin-bottom: 12px;
+}
+
+.builder-name {
+  color: var(--color-white);
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+.builder-since {
+  color: var(--color-gray);
+  font-size: 0.85rem;
+}
+
+/* First-Timers */
+.firsttimers-section {
+  margin: 80px 0;
+}
+
+.firsttimers-list {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.firsttimer-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px !important;
+}
+
+.firsttimer-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(76, 161, 175, 0.2), rgba(255, 215, 0, 0.2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.firsttimer-info {
+  flex: 1;
+}
+
+.firsttimer-info h4 {
+  color: var(--color-white);
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+}
+
+.firsttimer-info p {
+  color: var(--color-cyan);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.welcome-badge {
+  background: linear-gradient(135deg, var(--color-gold), var(--color-cyan));
+  color: var(--color-dark);
+  padding: 6px 12px;
+  border-radius: 15px;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+/* Hall of Fame */
+.halloffame-section {
+  margin: 80px 0;
+  padding: 40px 20px;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 215, 0, 0.05), transparent);
+  border-radius: 12px;
+}
+
+.halloffame-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.legend-card {
+  text-align: center;
+  padding: 30px 20px !important;
+  border: 2px solid rgba(255, 215, 0, 0.3) !important;
+}
+
+.legend-tier {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.tier-emoji {
+  font-size: 1.5rem;
+}
+
+.tier-name {
+  color: var(--color-white);
+  font-size: 1rem;
+}
+
+.legend-avatar {
+  font-size: 4rem;
+  margin-bottom: 15px;
+}
+
+.legend-name {
+  color: var(--color-gold);
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.legend-impact {
+  color: var(--color-cyan);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* Other Ways */
+.other-ways {
+  margin: 80px 0 40px;
+}
+
+.ways-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 25px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.way-card {
+  text-align: center;
+  padding: 30px 20px !important;
+}
+
+.way-icon {
+  font-size: 3.5rem;
+  margin-bottom: 15px;
+}
+
+.way-card h4 {
+  color: var(--color-cyan);
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.way-card p {
+  color: var(--color-gray);
+  font-size: 0.95rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .impact-stats {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .stat-number {
+    font-size: 2.5rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .champions-podium {
+    grid-template-columns: 1fr;
+  }
+
+  .halloffame-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ways-grid {
+    grid-template-columns: 1fr;
+  }
+}

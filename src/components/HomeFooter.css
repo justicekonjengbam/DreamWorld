@@ -1,0 +1,137 @@
+.home-footer {
+  background: rgba(15, 20, 35, 0.95);
+  border-top: 1px solid rgba(76, 161, 175, 0.2);
+  padding: 40px 20px 25px;
+  position: relative;
+  z-index: 10;
+}
+
+.home-footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.home-footer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 30px;
+  max-width: 800px;
+  margin: 0 auto 30px;
+}
+
+.home-footer-section h3 {
+  font-size: 1.2rem;
+  color: var(--color-gold);
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.home-footer-section p {
+  color: rgba(184, 197, 214, 0.8);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+.home-footer-section p:last-child {
+  margin-bottom: 0;
+}
+
+.home-footer-section em {
+  font-style: italic;
+  color: rgba(184, 197, 214, 0.7);
+}
+
+.social-links {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.social-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(76, 161, 175, 0.1);
+  border: 1px solid rgba(76, 161, 175, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-cyan);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+}
+
+.social-icon:hover {
+  background: rgba(76, 161, 175, 0.2);
+  border-color: var(--color-cyan);
+  transform: translateY(-3px);
+}
+
+.home-footer-bottom {
+  text-align: center;
+  padding-top: 20px;
+  border-top: 1px solid rgba(76, 161, 175, 0.15);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.home-footer-bottom p {
+  color: rgba(184, 197, 214, 0.7);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.home-footer-bottom p a {
+  color: var(--color-cyan);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.home-footer-bottom p a:hover {
+  color: var(--color-gold);
+}
+
+@media (max-width: 768px) {
+  .home-footer-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    margin-bottom: 25px;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-footer {
+    padding: 30px 15px 20px;
+  }
+
+  .home-footer-grid {
+    gap: 25px;
+    margin-bottom: 20px;
+  }
+
+  .home-footer-section h3 {
+    font-size: 1.1rem;
+  }
+
+  .home-footer-section p {
+    font-size: 0.85rem;
+  }
+
+  .social-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+
+  .home-footer-bottom {
+    padding-top: 15px;
+  }
+
+  .home-footer-bottom p {
+    font-size: 0.8rem;
+  }
+}

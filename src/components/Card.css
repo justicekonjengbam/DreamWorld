@@ -1,0 +1,25 @@
+.card {
+  background: rgba(26, 31, 53, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(76, 161, 175, 0.3);
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 35px rgba(76, 161, 175, 0.4);
+  border-color: var(--color-cyan);
+}
+
+.card h3 {
+  color: var(--color-gold);
+  margin-bottom: 10px;
+}
+
+.card p {
+  color: var(--color-gray);
+  line-height: 1.6;
+}

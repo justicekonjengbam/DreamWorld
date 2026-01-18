@@ -1,0 +1,142 @@
+.back-link {
+  display: inline-block;
+  color: var(--color-cyan);
+  text-decoration: none;
+  margin-bottom: 30px;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.back-link:hover {
+  color: var(--color-leaf);
+}
+
+.character-hero {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  margin-bottom: 50px;
+  flex-wrap: wrap;
+}
+
+.character-avatar-large {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 0 40px rgba(76, 161, 175, 0.6);
+  flex-shrink: 0;
+}
+
+.character-header h1 {
+  font-size: 3rem;
+  color: var(--color-gold);
+  margin-bottom: 10px;
+}
+
+.character-role-large {
+  color: var(--color-cyan);
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.role-badge {
+  display: inline-block;
+  padding: 8px 16px;
+  background: rgba(76, 161, 175, 0.2);
+  border: 1px solid var(--color-cyan);
+  border-radius: 20px;
+  color: var(--color-cyan);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+}
+
+.role-badge:hover {
+  background: rgba(76, 161, 175, 0.3);
+  box-shadow: 0 4px 15px var(--glow-cyan);
+}
+
+.character-themes-large {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.character-content {
+  max-width: 900px;
+}
+
+.character-full-bio {
+  font-size: 1.15rem;
+  line-height: 1.9;
+  color: var(--color-gray);
+  margin-bottom: 20px;
+}
+
+.character-meta {
+  padding-top: 20px;
+  border-top: 1px solid rgba(76, 161, 175, 0.2);
+}
+
+.character-meta p {
+  color: var(--color-gray);
+  margin-bottom: 10px;
+}
+
+.character-meta strong {
+  color: var(--color-cyan);
+}
+
+.view-role-link {
+  display: inline-block;
+  margin-top: 15px;
+  color: var(--color-cyan);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.view-role-link:hover {
+  color: var(--color-leaf);
+}
+
+.social-links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.social-link {
+  padding: 12px 20px;
+  background: rgba(76, 161, 175, 0.1);
+  border: 1px solid var(--color-cyan);
+  border-radius: 8px;
+  color: var(--color-cyan);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.social-link:hover {
+  background: rgba(76, 161, 175, 0.2);
+  box-shadow: 0 4px 15px var(--glow-cyan);
+}
+
+@media (max-width: 768px) {
+  .character-hero {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .character-header h1 {
+    font-size: 2.2rem;
+  }
+
+  .character-themes-large {
+    justify-content: center;
+  }
+}

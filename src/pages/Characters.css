@@ -1,0 +1,134 @@
+/* Logo section at top */
+.characters-hero {
+  text-align: center;
+  margin-bottom: 30px;
+  padding-top: 40px;
+}
+
+.characters-logo {
+  width: 300px;
+  height: auto;
+  filter: drop-shadow(0 0 30px rgba(76, 161, 175, 0.6));
+  animation: gentleFloat 4s ease-in-out infinite;
+}
+
+@keyframes gentleFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.view-roles-banner {
+  max-width: 800px;
+  margin: 0 auto 50px;
+  text-align: center;
+}
+
+.view-roles-banner p {
+  color: var(--color-gray);
+  margin-bottom: 15px;
+  font-size: 1.1rem;
+}
+
+.roles-banner-link {
+  color: var(--color-cyan);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: color 0.3s ease;
+}
+
+.roles-banner-link:hover {
+  color: var(--color-leaf);
+}
+
+.characters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+.character-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  height: 100%;
+}
+
+.character-link .card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.character-photo-wrapper {
+  width: 100%;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(76, 161, 175, 0.1), rgba(255, 215, 0, 0.1));
+}
+
+.character-photo {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgba(76, 161, 175, 0.4);
+}
+
+.character-role-title {
+  color: var(--color-cyan);
+  font-weight: 600;
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+
+.character-bio {
+  margin-bottom: 20px;
+  line-height: 1.7;
+  flex-grow: 1;
+  min-height: 80px;
+}
+
+.character-themes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+  flex-shrink: 0;
+}
+
+.character-cta {
+  color: var(--color-gold);
+  font-weight: 600;
+  transition: color 0.3s ease;
+  margin-top: auto;
+  padding-top: 10px;
+}
+
+.character-link:hover .character-cta {
+  color: var(--color-leaf);
+}
+
+@media (max-width: 768px) {
+  .characters-logo {
+    width: 200px;
+  }
+
+  .characters-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .character-bio {
+    min-height: auto;
+  }
+}

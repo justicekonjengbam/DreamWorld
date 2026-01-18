@@ -1,0 +1,38 @@
+.section-header {
+  text-align: center;
+  margin-bottom: 50px;
+  position: relative;
+}
+
+.header-glow {
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--color-green), var(--color-cyan));
+  margin: 0 auto 20px;
+  border-radius: 2px;
+  box-shadow: 0 0 15px var(--glow-cyan);
+}
+
+.section-header h2 {
+  font-size: 2.5rem;
+  color: var(--color-gold);
+  margin-bottom: 15px;
+  font-weight: 700;
+}
+
+.section-header .subtitle {
+  font-size: 1.2rem;
+  color: var(--color-gray);
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .section-header h2 {
+    font-size: 2rem;
+  }
+
+  .section-header .subtitle {
+    font-size: 1rem;
+  }
+}
