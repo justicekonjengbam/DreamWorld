@@ -19,7 +19,7 @@ function Creator() {
             />
             <div className="creator-intro">
               <h1>Justice Konjengbam</h1>
-              <p className="title">Project Assistant | CSC Dept | IIT Dharwad</p>
+              <p className="title">Creator</p>
               <p className="bio">
                 Building DreamWorld—where technology meets nature, and every quest brings us closer to the world we dream of creating.
               </p>
@@ -29,11 +29,9 @@ function Creator() {
           <div className="creator-section">
             <h2>About Me</h2>
             <p>
-              I'm Justice, working at IIT Dharwad as a Project Assistant in the Computer Science department. DreamWorld is my passion project—a universe where learning, building, and growing happen through weekly quests that make real impact.
-            </p>
+              I am Justice — the Creator of DreamWorld. I opened this universe as a portal for curious minds: a place where we learn, build, and grow together through weekly quests that turn small actions into real impact. Step in, choose your role, and let’s make the world better            </p>
             <p>
-              I believe in learning by doing, building in public, and creating communities that uplift everyone. This project combines my love for technology, storytelling, and making knowledge accessible to all.
-            </p>
+              I believe in learning by doing, sharing the journey as I build, and shaping communities where everyone rises together. DreamWorld blends my love of technology and storytelling into a space where knowledge feels welcoming, practical, and open to all.            </p>
           </div>
 
           <div className="creator-section">
@@ -64,6 +62,10 @@ function Creator() {
                 <span>Email</span>
               </a>
               <a href="#" className="social-link">
+                <span>🎥</span>
+                <span>Youtube</span>
+              </a>
+              <a href="#" className="social-link">
                 <span>💼</span>
                 <span>LinkedIn</span>
               </a>
@@ -82,11 +84,11 @@ function Creator() {
             <h2>DreamWorld Stats</h2>
             <div className="stats-grid">
               <div className="stat-card">
-                <span className="stat-value">52+</span>
+                <span className="stat-value">0</span>
                 <span className="stat-label">Quests</span>
               </div>
               <div className="stat-card">
-                <span className="stat-value">8</span>
+                <span className="stat-value">9</span>
                 <span className="stat-label">Roles</span>
               </div>
               <div className="stat-card">
