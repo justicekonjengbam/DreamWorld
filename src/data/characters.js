@@ -119,6 +119,21 @@ export const roles = [
       'World Building'
     ],
     philosophy: 'Artists paint the soul of DreamWorld. They transform ideas into visual stories, create beauty that inspires, and make the universe feel alive through creativity.'
+  },
+  {
+    id: 'antagonist',
+    name: 'The Antagonists',
+    singular: 'Antagonist',
+    description: 'Creates playful challenges and controlled chaos during events—testing skills, teamwork, and creativity to make quests more exciting (never harmful, always fair).',
+    color: 'linear-gradient(135deg, #FF4D6D, #7B2CBF)',
+    traits: [
+      'Challenge Design',
+      'Mischief with Rules',
+      'Psychology & Strategy',
+      'Improv & Roleplay',
+      'Fair Play'
+    ],
+    philosophy: 'Antagonists are the spice, not the poison. They turn events into stories by introducing obstacles, twists, and rival quests—pushing everyone to grow while keeping it safe, respectful, and fun.'
   }
 ]
 
@@ -184,13 +199,13 @@ export const characters = [
     joinedDate: '2025-02-15'
   },
   {
-    id: 'florist-003',
-    name: 'Jordan Bloom',
-    role: 'florist',
-    title: 'Urban Garden Specialist',
-    avatar: '/photo1.png',
-    bio: 'Transforms concrete jungles into green havens. Passionate about accessible urban gardening.',
-    themes: ['Urban Gardening', 'Sustainability', 'DIY'],
+    id: 'antagonist',
+    name: 'Vincent Law',
+    role: 'Antagonist ',
+    title: 'Event Rival & Challenge Master',
+    avatar: '/Bicky.png',
+    bio: 'The playful opposition of DreamWorld—designs twists, rival quests, and mind-games that make events thrilling while staying fair and safe.',
+    themes: ['Challenge Design', 'Strategy', 'Mischief (Fair Play)', 'Roleplay', 'Event Hype'],
     socials: {
       instagram: 'https://instagram.com/jordanbloom',
       youtube: 'https://youtube.com/jordanbloom'
