@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
+import { useAudio } from '../context/AudioContext'
 import './AudioPlayer.css'
 
 function AudioPlayer({ shouldStart }) {
   const audio1Ref = useRef(null)
   const audio2Ref = useRef(null)
   const [isPlaying, setIsPlaying] = useState(false)
-  const [isMuted, setIsMuted] = useState(false)
+  const { isSoundMuted, setIsSoundMuted } = useAudio()
 
   useEffect(() => {
     const audio1 = audio1Ref.current
@@ -33,6 +34,15 @@ function AudioPlayer({ shouldStart }) {
     }
   }, [shouldStart])
 
+  // Update music mute state when isSoundMuted changes
+  useEffect(() => {
+    const audio1 = audio1Ref.current
+    const audio2 = audio2Ref.current
+    
+    audio1.muted = isSoundMuted
+    audio2.muted = isSoundMuted
+  }, [isSoundMuted])
+
   const togglePlay = () => {
     const audio1 = audio1Ref.current
     const audio2 = audio2Ref.current
@@ -53,12 +63,7 @@ function AudioPlayer({ shouldStart }) {
   }
 
   const toggleMute = () => {
-    const audio1 = audio1Ref.current
-    const audio2 = audio2Ref.current
-    
-    audio1.muted = !isMuted
-    audio2.muted = !isMuted
-    setIsMuted(!isMuted)
+    setIsSoundMuted(!isSoundMuted)
   }
 
   return (
@@ -77,9 +82,9 @@ function AudioPlayer({ shouldStart }) {
         <button 
           onClick={toggleMute} 
           className="audio-btn"
-          aria-label={isMuted ? 'Unmute' : 'Mute'}
+          aria-label={isSoundMuted ? 'Unmute all sounds' : 'Mute all sounds'}
         >
-          {isMuted ? '🔇' : '🔊'}
+          {isSoundMuted ? '🔇' : '🔊'}
         </button>
       </div>
     </>

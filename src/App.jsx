@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
+import { useAudio } from './context/AudioContext'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import AudioPlayer from './components/AudioPlayer'
@@ -19,22 +20,39 @@ import Funders from './pages/Funders'
 import ScrollToTop from './components/ScrollToTop'
 import './App.css'
 
-
 function App() {
   const location = useLocation()
   const isHomePage = location.pathname === '/'
   
   const [hasEntered, setHasEntered] = useState(false)
   const [shouldStartAudio, setShouldStartAudio] = useState(false)
+  const { isSoundMuted } = useAudio()
 
   const handleEnterDreamWorld = () => {
     setHasEntered(true)
     setShouldStartAudio(true)
   }
 
+  // Global click sound for all clickable elements
+  useEffect(() => {
+    const handleClick = (e) => {
+      if (isSoundMuted) return // Don't play if muted
+      
+      const clickable = e.target.closest('a, button, [role="button"], .card, .character-link, .role-card')
+      if (clickable) {
+        const audio = new Audio('/ButtonAudio.mp3')
+        audio.volume = 0.7
+        audio.play().catch(err => console.log('Audio play failed:', err))
+      }
+    }
+
+    document.addEventListener('click', handleClick)
+    return () => document.removeEventListener('click', handleClick)
+  }, [isSoundMuted])
+
   return (
     <div className="app">
-       <ScrollToTop />
+      <ScrollToTop />
       {!hasEntered && <WelcomeOverlay onEnter={handleEnterDreamWorld} />}
       
       <ParticlesBackground />
@@ -63,6 +81,5 @@ function App() {
     </div>
   )
 }
-
 
 export default App
