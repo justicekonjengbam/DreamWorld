@@ -16,6 +16,7 @@ import Quests from './pages/Quests'
 import Events from './pages/Events'
 import Join from './pages/Join'
 import Funders from './pages/Funders'
+import ScrollToTop from './components/ScrollToTop'
 import './App.css'
 
 
@@ -33,6 +34,7 @@ function App() {
 
   return (
     <div className="app">
+       <ScrollToTop />
       {!hasEntered && <WelcomeOverlay onEnter={handleEnterDreamWorld} />}
       
       <ParticlesBackground />
