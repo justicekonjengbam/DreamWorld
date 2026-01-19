@@ -8,6 +8,11 @@ function ScrollToTop() {
     window.scrollTo(0, 0)
   }, [pathname])
 
+  // Also scroll to top on page load/refresh
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
   return null
 }
 
