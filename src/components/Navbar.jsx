@@ -45,7 +45,7 @@ function Navbar() {
           <li><Link to="/quests" className={isActive('/quests')} onClick={closeMenu}>Quests</Link></li>
           <li><Link to="/events" className={isActive('/events')} onClick={closeMenu}>Events</Link></li>
           <li><Link to="/join" className={isActive('/join')} onClick={closeMenu}>Join</Link></li>
-          <Link to="/funders">Support</Link>
+          <li><Link to="/funders" className={isActive('/funders')} onClick={closeMenu}>Support</Link></li>
         </ul>
 
         {isOpen && <div className="overlay" onClick={closeMenu}></div>}
