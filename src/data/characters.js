@@ -216,13 +216,14 @@ export const characters = [
     joinedDate: '2025-03-20'
   },
   {
-    id: 'athlete-002',
-    name: 'Chris Summit',
-    role: 'athlete',
-    title: 'Head Coach & Movement Mentor',
-    avatar: '/photo2.png',
-    bio: 'Former professional athlete now dedicated to helping others find their physical potential.',
-    themes: ['Basketball', 'Coaching', 'Discipline'],
+    id: 'artist-002',
+    name: 'Bidyashwori',
+    role: 'artist',
+    title: 'cake artist',
+    avatar: '/Bidya1.png',
+    coverImage: '/BidyaBackground.png',
+    bio: 'I bake stories you can taste, DreamWorld Cake Artist, turning simple ingredients into little moments of magic',
+    themes: ['Cakes', 'Cookies', 'sweets'],
     socials: {
       youtube: 'https://youtube.com/chrissummit',
       twitter: 'https://twitter.com/chrissummit'
@@ -230,12 +231,13 @@ export const characters = [
     joinedDate: '2025-02-01'
   },
   {
-    id: 'athlete-003',
-    name: 'Sam Victory',
-    role: 'athlete',
-    title: 'Fitness & Wellness Coach',
-    avatar: '/photo1.png',
-    bio: 'Specializes in building sustainable fitness habits. Believes movement is medicine.',
+    id: 'healer-001',
+    name: 'Dhanaluxmi Konjengbam',
+    role: 'healer',
+    title: 'DreamWorld Healer',
+    avatar: '/Mache.png',
+    coverImage: '/MacheBackground.png',
+    bio: 'I help DreamWorld members reset, recover, and keep going—softly and steadily. Sleep, mindset, and healthy habits made simple. Small steps, real change.',
     themes: ['Fitness', 'Wellness', 'Habit Building'],
     socials: {
       instagram: 'https://instagram.com/samvictory',
