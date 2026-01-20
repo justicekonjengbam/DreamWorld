@@ -15,8 +15,8 @@ function HomeFooter() {
           <div className="home-footer-section">
             <h3>Connect</h3>
             <div className="contact-info">
-              <p>✉️ contact@dreamworld.com</p>
-              <p>📞 +91 98765 43210</p>
+              <p>✉️ theonewhodreamsabeautifuldream@gmail.com</p>
+              <p>📞 +91 8837478383</p>
             </div>
           </div>
         </div>
