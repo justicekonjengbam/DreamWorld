@@ -259,11 +259,12 @@ function Join() {
                 </form>
               ) : (
                 <div className="success-message">
-                  <div className="success-icon">🌟</div>
-                  <h3>You're now a Dreamer!</h3>
-                  <p>Your role as <strong>{roles && roles.find(r => r.id === dreamerForm.role)?.singular || 'Dreamer'}</strong> has been registered.</p>
+                  <div className="success-icon">📜</div>
+                  <h3>Application Submitted</h3>
+                  <p>Your petition to join as a <strong>{roles && roles.find(r => r.id === dreamerForm.role)?.singular || 'Dreamer'}</strong> has been inscribed in the Archives.</p>
+                  <p>The Council shall review your request with great care.</p>
                   <p className="success-note">
-                    Start exploring your character and begin creating content for DreamWorld!
+                    Await a formal decree via Email or WhatsApp regarding your acceptance into the DreamWorld.
                   </p>
                 </div>
               )}
