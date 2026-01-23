@@ -1,12 +1,20 @@
+import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { characters, getRoleById } from '../data/characters'
+import { useContent } from '../context/ContentContext'
 import Card from '../components/Card'
 import Badge from '../components/Badge'
 import Button from '../components/Button'
+import ImageModal from '../components/ImageModal'
 import './CharacterDetail.css'
 
 function CharacterDetail() {
   const { id } = useParams()
+  const { characters, roles, loading } = useContent()
+  const [modalOpen, setModalOpen] = useState(false)
+  const [modalImage, setModalImage] = useState('')
+
+  if (loading) return <div className="loading-state">Syncing Member Info...</div>
+
   const character = characters.find(c => c.id === id)
 
   if (!character) {
@@ -20,7 +28,12 @@ function CharacterDetail() {
     )
   }
 
-  const role = getRoleById(character.role)
+  const role = roles.find(r => r.id === character.role)
+
+  const openLightbox = (src) => {
+    setModalImage(src)
+    setModalOpen(true)
+  }
 
   return (
     <div className="character-detail page">
@@ -28,10 +41,12 @@ function CharacterDetail() {
         <Link to="/characters" className="back-link">← Back to Members</Link>
 
         <div className="character-hero">
-          <img 
-            src={character.avatar} 
-            alt={character.name} 
+          <img
+            src={character.avatar}
+            alt={character.name}
             className="character-avatar-large"
+            style={{ cursor: 'zoom-in' }}
+            onClick={() => openLightbox(character.avatar)}
           />
           <div className="character-header">
             <h1>{character.name}</h1>
@@ -49,12 +64,19 @@ function CharacterDetail() {
           </div>
         </div>
 
+        <ImageModal
+          src={modalImage}
+          alt={character.name}
+          isOpen={modalOpen}
+          onClose={() => setModalOpen(false)}
+        />
+
         <div className="character-content">
           <Card hover={false}>
             <h2>About {character.name}</h2>
             <p className="character-full-bio">{character.bio}</p>
-            <div className="character-meta">
-              <p><strong>Joined:</strong> {new Date(character.joinedDate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</p>
+            <div className="character-meta" style={{ marginTop: '20px', color: 'var(--color-gray)', fontSize: '0.9rem' }}>
+              <p><strong>Joined:</strong> {character.joinedDate || 'Dreamer Since Launch'}</p>
             </div>
           </Card>
 
@@ -67,17 +89,6 @@ function CharacterDetail() {
               </Link>
             </Card>
           )}
-
-          <Card hover={false}>
-            <h3>Connect</h3>
-            <div className="social-links">
-              {Object.entries(character.socials).map(([platform, url]) => (
-                <a key={platform} href={url} className="social-link" target="_blank" rel="noopener noreferrer">
-                  {platform.charAt(0).toUpperCase() + platform.slice(1)}
-                </a>
-              ))}
-            </div>
-          </Card>
         </div>
       </div>
     </div>

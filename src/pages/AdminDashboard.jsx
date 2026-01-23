@@ -315,7 +315,7 @@ function AdminDashboard() {
                                         </div>
                                     </div>
                                     <div className="form-group-full"><label>Title (e.g. Lead Artist)</label><input type="text" value={memberFormData.title} onChange={(e) => setMemberFormData({ ...memberFormData, title: e.target.value })} required /></div>
-                                    <div className="form-row">
+                                    <div className="form-row" style={{ gap: '20px' }}>
                                         <ImageUpload
                                             label="Avatar Image"
                                             onUploadComplete={(url) => setMemberFormData({ ...memberFormData, avatar: url })}
@@ -345,6 +345,45 @@ function AdminDashboard() {
                                         <div className="admin-item-actions">
                                             <button onClick={() => { setEditingId(c.id); setMemberFormData({ ...c, themes: c.themes.join(', ') }) }}>✏️</button>
                                             <button onClick={() => handleMemberDelete(c.id)}>🗑️</button>
+                                        </div>
+                                    </Card>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {activeTab === 'events' && (
+                    <div className="admin-section animate-fade">
+                        <div className="admin-split-layout">
+                            <Card className="admin-form-card">
+                                <h3>{editingId ? 'Edit Event' : 'Add New Event'}</h3>
+                                <form onSubmit={handleEventSubmit} className="admin-form">
+                                    <div className="form-group-full"><label>Event Title</label><input type="text" value={eventFormData.title} onChange={(e) => setEventFormData({ ...eventFormData, title: e.target.value })} required /></div>
+                                    <div className="form-row">
+                                        <div className="form-group"><label>Host</label><input type="text" value={eventFormData.host} onChange={(e) => setEventFormData({ ...eventFormData, host: e.target.value })} required /></div>
+                                        <div className="form-group"><label>Type (e.g. Online, Workshop)</label><input type="text" value={eventFormData.type} onChange={(e) => setEventFormData({ ...eventFormData, type: e.target.value })} required /></div>
+                                    </div>
+                                    <div className="form-row">
+                                        <div className="form-group"><label>Date/Time</label><input type="text" value={eventFormData.date} onChange={(e) => setEventFormData({ ...eventFormData, date: e.target.value })} required /></div>
+                                        <div className="form-group"><label>Location</label><input type="text" value={eventFormData.location} onChange={(e) => setEventFormData({ ...eventFormData, location: e.target.value })} required /></div>
+                                    </div>
+                                    <div className="form-group-full"><label>Description</label><textarea rows="3" value={eventFormData.description} onChange={(e) => setEventFormData({ ...eventFormData, description: e.target.value })} required /></div>
+                                    <div className="form-group-full"><label>Registration Link (URL)</label><input type="text" value={eventFormData.registrationLink} onChange={(e) => setEventFormData({ ...eventFormData, registrationLink: e.target.value })} required /></div>
+                                    <Button type="submit" variant="primary">{editingId ? 'Update' : 'Add'} Event</Button>
+                                    {editingId && <Button type="button" variant="secondary" onClick={resetForms}>Cancel</Button>}
+                                </form>
+                            </Card>
+                            <div className="admin-list">
+                                {events.map(e => (
+                                    <Card key={e.id} className="admin-item-card">
+                                        <div>
+                                            <h4>{e.title}</h4>
+                                            <p style={{ fontSize: '0.8rem', color: 'var(--color-gray)' }}>{e.date} • {e.host}</p>
+                                        </div>
+                                        <div className="admin-item-actions">
+                                            <button onClick={() => { setEditingId(e.id); setEventFormData(e) }}>✏️</button>
+                                            <button onClick={() => handleEventDelete(e.id)}>🗑️</button>
                                         </div>
                                     </Card>
                                 ))}

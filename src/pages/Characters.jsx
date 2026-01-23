@@ -1,15 +1,25 @@
+import { useState } from 'react'
 import { useContent } from '../context/ContentContext'
 import Card from '../components/Card'
 import SectionHeader from '../components/SectionHeader'
 import Badge from '../components/Badge'
+import ImageModal from '../components/ImageModal'
 import './Characters.css'
 
 import { Link } from 'react-router-dom'
 
 function Characters() {
   const { characters, loading } = useContent()
+  const [modalOpen, setModalOpen] = useState(false)
+  const [modalImage, setModalImage] = useState('')
 
   if (loading) return <div className="loading-state">Syncing Members with DreamWorld...</div>
+
+  const openLightbox = (src) => {
+    setModalImage(src)
+    setModalOpen(true)
+  }
+
   return (
     <div className="characters page">
       <div className="container">
@@ -31,6 +41,13 @@ function Characters() {
           </Card>
         </div>
 
+        <ImageModal
+          src={modalImage}
+          alt="Member Photo"
+          isOpen={modalOpen}
+          onClose={() => setModalOpen(false)}
+        />
+
         <div className="characters-grid">
           {characters.map((character) => (
             <Link to={`/characters/${character.id}`} key={character.id} className="character-link">
@@ -43,11 +60,28 @@ function Characters() {
                     backgroundPosition: 'center',
                     height: '200px',
                     borderRadius: '8px 8px 0 0',
-                    position: 'relative'
+                    position: 'relative',
+                    cursor: 'zoom-in'
+                  }}
+                  onClick={(e) => {
+                    if (character.coverImage) {
+                      e.preventDefault();
+                      openLightbox(character.coverImage);
+                    }
                   }}
                 >
                   <div className="character-photo-wrapper">
-                    <img src={character.avatar} alt={character.name} className="character-photo" />
+                    <img
+                      src={character.avatar}
+                      alt={character.name}
+                      className="character-photo"
+                      style={{ cursor: 'zoom-in' }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        openLightbox(character.avatar);
+                      }}
+                    />
                   </div>
                 </div>
                 <h3>{character.name}</h3>
