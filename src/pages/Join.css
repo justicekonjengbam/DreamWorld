@@ -33,6 +33,9 @@
 
 .join-form-card {
   padding: 40px;
+  position: relative;
+  /* Ensure it sits above particles */
+  z-index: 10;
 }
 
 .join-form {
@@ -68,6 +71,9 @@
   color: var(--color-white);
   font-size: 1rem;
   transition: all 0.3s ease;
+  width: 100%;
+  /* Force full width within container */
+  max-width: 100%;
 }
 
 .form-group select option {

@@ -17,6 +17,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -32,10 +33,12 @@
     opacity: 1;
     backdrop-filter: blur(10px);
   }
+
   60% {
     opacity: 0.3;
     backdrop-filter: blur(20px);
   }
+
   100% {
     opacity: 0;
     backdrop-filter: blur(30px);
@@ -60,11 +63,13 @@
     transform: scale(1);
     filter: blur(0);
   }
+
   50% {
     opacity: 0.8;
     transform: scale(1.15);
     filter: blur(2px);
   }
+
   100% {
     opacity: 0;
     transform: scale(1.4);
@@ -77,6 +82,7 @@
     transform: translateY(30px);
     opacity: 0;
   }
+
   to {
     transform: translateY(0);
     opacity: 1;
@@ -84,7 +90,8 @@
 }
 
 .welcome-logo {
-  width: 1000px;
+  width: 100%;
+  max-width: 800px;
   height: auto;
   margin-bottom: 30px;
   filter: drop-shadow(0 0 40px rgba(76, 161, 175, 0.8));
@@ -92,9 +99,12 @@
 }
 
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-15px);
   }
@@ -109,7 +119,7 @@
   margin-bottom: 15px;
 }
 
-.welcome-content > p {
+.welcome-content>p {
   font-size: 1.3rem;
   color: var(--color-cyan);
   margin-bottom: 40px;
@@ -130,9 +140,12 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     box-shadow: 0 6px 30px rgba(255, 215, 0, 0.4);
   }
+
   50% {
     box-shadow: 0 6px 40px rgba(76, 161, 175, 0.6);
   }
@@ -176,54 +189,173 @@
   animation: magicalBurst 1.2s ease-out forwards;
 }
 
-.magic-particle:nth-child(1) { background: rgba(76, 161, 175, 1); --x: 1; --y: 0; animation-delay: 0s; }
-.magic-particle:nth-child(2) { background: rgba(255, 215, 0, 1); --x: 0.9; --y: 0.4; animation-delay: 0.05s; }
-.magic-particle:nth-child(3) { background: rgba(79, 209, 95, 1); --x: 0.7; --y: 0.7; animation-delay: 0.1s; }
-.magic-particle:nth-child(4) { background: rgba(76, 161, 175, 1); --x: 0.4; --y: 0.9; animation-delay: 0.15s; }
-.magic-particle:nth-child(5) { background: rgba(255, 215, 0, 1); --x: 0; --y: 1; animation-delay: 0.2s; }
-.magic-particle:nth-child(6) { background: rgba(79, 209, 95, 1); --x: -0.4; --y: 0.9; animation-delay: 0.05s; }
-.magic-particle:nth-child(7) { background: rgba(76, 161, 175, 1); --x: -0.7; --y: 0.7; animation-delay: 0.1s; }
-.magic-particle:nth-child(8) { background: rgba(255, 215, 0, 1); --x: -0.9; --y: 0.4; animation-delay: 0.15s; }
-.magic-particle:nth-child(9) { background: rgba(79, 209, 95, 1); --x: -1; --y: 0; animation-delay: 0.2s; }
-.magic-particle:nth-child(10) { background: rgba(76, 161, 175, 1); --x: -0.9; --y: -0.4; animation-delay: 0.05s; }
-.magic-particle:nth-child(11) { background: rgba(255, 215, 0, 1); --x: -0.7; --y: -0.7; animation-delay: 0.1s; }
-.magic-particle:nth-child(12) { background: rgba(79, 209, 95, 1); --x: -0.4; --y: -0.9; animation-delay: 0.15s; }
-.magic-particle:nth-child(13) { background: rgba(76, 161, 175, 1); --x: 0; --y: -1; animation-delay: 0.2s; }
-.magic-particle:nth-child(14) { background: rgba(255, 215, 0, 1); --x: 0.4; --y: -0.9; animation-delay: 0.05s; }
-.magic-particle:nth-child(15) { background: rgba(79, 209, 95, 1); --x: 0.7; --y: -0.7; animation-delay: 0.1s; }
-.magic-particle:nth-child(16) { background: rgba(76, 161, 175, 1); --x: 0.9; --y: -0.4; animation-delay: 0.15s; }
-.magic-particle:nth-child(17) { background: rgba(255, 215, 0, 1); --x: 0.5; --y: 0.5; animation-delay: 0.08s; }
-.magic-particle:nth-child(18) { background: rgba(79, 209, 95, 1); --x: -0.5; --y: 0.5; animation-delay: 0.12s; }
-.magic-particle:nth-child(19) { background: rgba(76, 161, 175, 1); --x: 0.5; --y: -0.5; animation-delay: 0.16s; }
-.magic-particle:nth-child(20) { background: rgba(255, 215, 0, 1); --x: -0.5; --y: -0.5; animation-delay: 0.2s; }
+.magic-particle:nth-child(1) {
+  background: rgba(76, 161, 175, 1);
+  --x: 1;
+  --y: 0;
+  animation-delay: 0s;
+}
+
+.magic-particle:nth-child(2) {
+  background: rgba(255, 215, 0, 1);
+  --x: 0.9;
+  --y: 0.4;
+  animation-delay: 0.05s;
+}
+
+.magic-particle:nth-child(3) {
+  background: rgba(79, 209, 95, 1);
+  --x: 0.7;
+  --y: 0.7;
+  animation-delay: 0.1s;
+}
+
+.magic-particle:nth-child(4) {
+  background: rgba(76, 161, 175, 1);
+  --x: 0.4;
+  --y: 0.9;
+  animation-delay: 0.15s;
+}
+
+.magic-particle:nth-child(5) {
+  background: rgba(255, 215, 0, 1);
+  --x: 0;
+  --y: 1;
+  animation-delay: 0.2s;
+}
+
+.magic-particle:nth-child(6) {
+  background: rgba(79, 209, 95, 1);
+  --x: -0.4;
+  --y: 0.9;
+  animation-delay: 0.05s;
+}
+
+.magic-particle:nth-child(7) {
+  background: rgba(76, 161, 175, 1);
+  --x: -0.7;
+  --y: 0.7;
+  animation-delay: 0.1s;
+}
+
+.magic-particle:nth-child(8) {
+  background: rgba(255, 215, 0, 1);
+  --x: -0.9;
+  --y: 0.4;
+  animation-delay: 0.15s;
+}
+
+.magic-particle:nth-child(9) {
+  background: rgba(79, 209, 95, 1);
+  --x: -1;
+  --y: 0;
+  animation-delay: 0.2s;
+}
+
+.magic-particle:nth-child(10) {
+  background: rgba(76, 161, 175, 1);
+  --x: -0.9;
+  --y: -0.4;
+  animation-delay: 0.05s;
+}
+
+.magic-particle:nth-child(11) {
+  background: rgba(255, 215, 0, 1);
+  --x: -0.7;
+  --y: -0.7;
+  animation-delay: 0.1s;
+}
+
+.magic-particle:nth-child(12) {
+  background: rgba(79, 209, 95, 1);
+  --x: -0.4;
+  --y: -0.9;
+  animation-delay: 0.15s;
+}
+
+.magic-particle:nth-child(13) {
+  background: rgba(76, 161, 175, 1);
+  --x: 0;
+  --y: -1;
+  animation-delay: 0.2s;
+}
+
+.magic-particle:nth-child(14) {
+  background: rgba(255, 215, 0, 1);
+  --x: 0.4;
+  --y: -0.9;
+  animation-delay: 0.05s;
+}
+
+.magic-particle:nth-child(15) {
+  background: rgba(79, 209, 95, 1);
+  --x: 0.7;
+  --y: -0.7;
+  animation-delay: 0.1s;
+}
+
+.magic-particle:nth-child(16) {
+  background: rgba(76, 161, 175, 1);
+  --x: 0.9;
+  --y: -0.4;
+  animation-delay: 0.15s;
+}
+
+.magic-particle:nth-child(17) {
+  background: rgba(255, 215, 0, 1);
+  --x: 0.5;
+  --y: 0.5;
+  animation-delay: 0.08s;
+}
+
+.magic-particle:nth-child(18) {
+  background: rgba(79, 209, 95, 1);
+  --x: -0.5;
+  --y: 0.5;
+  animation-delay: 0.12s;
+}
+
+.magic-particle:nth-child(19) {
+  background: rgba(76, 161, 175, 1);
+  --x: 0.5;
+  --y: -0.5;
+  animation-delay: 0.16s;
+}
+
+.magic-particle:nth-child(20) {
+  background: rgba(255, 215, 0, 1);
+  --x: -0.5;
+  --y: -0.5;
+  animation-delay: 0.2s;
+}
 
 @keyframes magicalBurst {
   0% {
     transform: translate(-50%, -50%) scale(1) rotate(0deg);
     opacity: 1;
   }
+
   50% {
     opacity: 1;
   }
+
   100% {
-    transform: translate(
-      calc(-50% + (var(--x) * 400px)),
-      calc(-50% + (var(--y) * 400px))
-    ) scale(0) rotate(360deg);
+    transform: translate(calc(-50% + (var(--x) * 400px)),
+        calc(-50% + (var(--y) * 400px))) scale(0) rotate(360deg);
     opacity: 0;
   }
 }
 
 @media (max-width: 768px) {
   .welcome-logo {
-    width: 500px !important;
+    max-width: 500px;
   }
 
   .welcome-content h1 {
     font-size: 2.5rem;
   }
 
-  .welcome-content > p {
+  .welcome-content>p {
     font-size: 1.1rem;
   }
 
@@ -231,13 +363,11 @@
     padding: 15px 40px;
     font-size: 1.1rem;
   }
-  
+
   @keyframes magicalBurst {
     100% {
-      transform: translate(
-        calc(-50% + (var(--x) * 200px)),
-        calc(-50% + (var(--y) * 200px))
-      ) scale(0) rotate(360deg);
+      transform: translate(calc(-50% + (var(--x) * 200px)),
+          calc(-50% + (var(--y) * 200px))) scale(0) rotate(360deg);
       opacity: 0;
     }
   }
