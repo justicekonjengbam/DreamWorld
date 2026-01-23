@@ -71,7 +71,13 @@ export const ContentProvider = ({ children }) => {
                             id: n.id || n.mid || '',
                             avatar: n.avatar || n.avatar_url || n.photo || n.image || '',
                             coverImage: n.coverimage || n.cover_url || n.background || '',
-                            themes: n.themes ? String(n.themes).split(',').map(t => t.trim()) : []
+                            themes: n.themes ? String(n.themes).split(',').map(t => t.trim()) : [],
+                            socials: {
+                                youtube: n.youtube || '',
+                                instagram: n.instagram || '',
+                                facebook: n.facebook || '',
+                                twitter: n.twitter || ''
+                            }
                         }
                     }))
                 }

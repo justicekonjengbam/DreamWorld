@@ -365,7 +365,15 @@ function AdminDashboard() {
                                         </div>
                                     </div>
                                     <div className="form-group-full"><label>Bio</label><textarea rows="3" value={memberFormData.bio} onChange={(e) => setMemberFormData(prev => ({ ...prev, bio: e.target.value }))} required /></div>
-                                    <div className="form-group-full"><label>Themes (Comma separated)</label><input type="text" placeholder="Future, Solar, Community" value={memberFormData.themes} onChange={(e) => setMemberFormData({ ...memberFormData, themes: e.target.value })} required /></div>
+                                    <div className="form-row">
+                                        <div className="form-group"><label>YouTube URL</label><input type="text" placeholder="https://youtube.com/..." value={memberFormData.youtube || ''} onChange={(e) => setMemberFormData(prev => ({ ...prev, youtube: e.target.value }))} /></div>
+                                        <div className="form-group"><label>Instagram URL</label><input type="text" placeholder="https://instagram.com/..." value={memberFormData.instagram || ''} onChange={(e) => setMemberFormData(prev => ({ ...prev, instagram: e.target.value }))} /></div>
+                                    </div>
+                                    <div className="form-row">
+                                        <div className="form-group"><label>Facebook URL</label><input type="text" placeholder="https://facebook.com/..." value={memberFormData.facebook || ''} onChange={(e) => setMemberFormData(prev => ({ ...prev, facebook: e.target.value }))} /></div>
+                                        <div className="form-group"><label>Twitter URL</label><input type="text" placeholder="https://twitter.com/..." value={memberFormData.twitter || ''} onChange={(e) => setMemberFormData(prev => ({ ...prev, twitter: e.target.value }))} /></div>
+                                    </div>
+                                    <div className="form-group-full"><label>Themes (Comma separated)</label><input type="text" placeholder="Future, Solar, Community" value={memberFormData.themes} onChange={(e) => setMemberFormData(prev => ({ ...prev, themes: e.target.value }))} required /></div>
                                     <Button type="submit" variant="primary">{editingId ? 'Update' : 'Add'} Member</Button>
                                     {editingId && <Button type="button" variant="secondary" onClick={resetForms}>Cancel</Button>}
                                 </form>
@@ -382,7 +390,17 @@ function AdminDashboard() {
                                             <div><h4>{c.name}</h4><Badge>{c.role}</Badge></div>
                                         </div>
                                         <div className="admin-item-actions">
-                                            <button onClick={() => { setEditingId(c.id); setMemberFormData({ ...c, themes: Array.isArray(c.themes) ? c.themes.join(', ') : (c.themes || '') }) }}>✏️</button>
+                                            <button onClick={() => {
+                                                setEditingId(c.id);
+                                                setMemberFormData({
+                                                    ...c,
+                                                    themes: Array.isArray(c.themes) ? c.themes.join(', ') : (c.themes || ''),
+                                                    youtube: c.socials?.youtube || '',
+                                                    instagram: c.socials?.instagram || '',
+                                                    facebook: c.socials?.facebook || '',
+                                                    twitter: c.socials?.twitter || ''
+                                                })
+                                            }}>✏️</button>
                                             <button onClick={() => handleMemberDelete(c.id)}>🗑️</button>
                                         </div>
                                     </Card>
