@@ -13,31 +13,16 @@ export const ContentProvider = ({ children }) => {
     const [loading, setLoading] = useState(!!API_URL)
 
     // States with Local fallbacks
-    const [quests, setQuests] = useState(() => {
-        const saved = localStorage.getItem('dreamworld_quests')
-        return saved ? JSON.parse(saved) : initialQuests
-    })
-    const [roles, setRoles] = useState(() => {
-        const saved = localStorage.getItem('dreamworld_roles')
-        return saved ? JSON.parse(saved) : initialRoles
-    })
-    const [characters, setCharacters] = useState(() => {
-        const saved = localStorage.getItem('dreamworld_characters')
-        return saved ? JSON.parse(saved) : initialCharacters
-    })
-    const [events, setEvents] = useState(() => {
-        const saved = localStorage.getItem('dreamworld_events')
-        return saved ? JSON.parse(saved) : initialEvents
-    })
-    const [announcement, setAnnouncement] = useState(() => {
-        const saved = localStorage.getItem('dreamworld_announcement')
-        return saved ? JSON.parse(saved) : {
-            title: 'Welcome to DreamWorld! 🌟',
-            date: 'January 18, 2026',
-            content: "We're thrilled to launch DreamWorld—a space for learning, creating, and growing together.",
-            linkText: "View This Week's Quests",
-            linkTo: '/quests'
-        }
+    const [quests, setQuests] = useState(initialQuests)
+    const [roles, setRoles] = useState(initialRoles)
+    const [characters, setCharacters] = useState(initialCharacters)
+    const [events, setEvents] = useState(initialEvents)
+    const [announcement, setAnnouncement] = useState({
+        title: 'Welcome to DreamWorld! 🌟',
+        date: 'January 18, 2026',
+        content: "We're thrilled to launch DreamWorld—a space for learning, creating, and growing together.",
+        linkText: "View This Week's Quests",
+        linkTo: '/quests'
     })
 
     // --- API Sync (Fetch) ---
@@ -85,12 +70,7 @@ export const ContentProvider = ({ children }) => {
         fetchData()
     }, [])
 
-    // Local Storage backups (Always keep as fallback)
-    useEffect(() => { localStorage.setItem('dreamworld_quests', JSON.stringify(quests)) }, [quests])
-    useEffect(() => { localStorage.setItem('dreamworld_roles', JSON.stringify(roles)) }, [roles])
-    useEffect(() => { localStorage.setItem('dreamworld_characters', JSON.stringify(characters)) }, [characters])
-    useEffect(() => { localStorage.setItem('dreamworld_events', JSON.stringify(events)) }, [events])
-    useEffect(() => { localStorage.setItem('dreamworld_announcement', JSON.stringify(announcement)) }, [announcement])
+
 
     // --- Global Sync Trigger (For Admin) ---
     const syncGlobalData = async (password) => {
@@ -135,10 +115,21 @@ export const ContentProvider = ({ children }) => {
                 url = `${API_URL}/${idColumn}/${idValue}?sheet=${sheet}`
             }
 
+            // Force all keys to lowercase to match Sheet headers exactly
+            let normalizedData = null;
+            if (data) {
+                normalizedData = {};
+                for (const key in data) {
+                    if (data[key] !== null && data[key] !== undefined) {
+                        normalizedData[key.toLowerCase()] = data[key];
+                    }
+                }
+            }
+
             const res = await fetch(url, {
                 method,
                 headers: { 'Content-Type': 'application/json' },
-                body: method !== 'DELETE' ? JSON.stringify({ data: [data] }) : null
+                body: method !== 'DELETE' ? JSON.stringify({ data: [normalizedData] }) : null
             })
             if (!res.ok) {
                 const err = await res.json()

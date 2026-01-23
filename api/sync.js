@@ -68,11 +68,11 @@ export default async function handler(req, res) {
         };
 
         const globalData = {
-            quests: normalize(qData),
-            roles: normalize(rData),
-            characters: normalize(cData),
-            events: normalize(eData),
-            announcement: normalize(aData)[0] || {},
+            quests: normalize(qData).filter(q => q.title),
+            roles: normalize(rData).filter(r => r.name),
+            characters: normalize(cData).filter(c => c.name),
+            events: normalize(eData).filter(e => e.title),
+            announcement: normalize(aData).find(a => a.title) || {},
             lastSynced: new Date().toISOString()
         };
 
