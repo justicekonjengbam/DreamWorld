@@ -210,13 +210,25 @@ export const ContentProvider = ({ children }) => {
     }
 
     // Announcement
-    const updateAnnouncement = (newAnnouncement) => {
+    const updateAnnouncement = async (newAnnouncement) => {
         const oldTitle = announcement.title
         setAnnouncement(newAnnouncement)
 
-        // SheetDB PUT to the row matching the PREVIOUS title
-        // We use the 'title' column as the identification key
-        syncToApi('announcements', 'PUT', newAnnouncement, oldTitle, 'title')
+        try {
+            // First, check if there's existing data to decide between POST (first time) or PUT (update)
+            const checkRes = await fetch(`${API_URL}?sheet=announcements`)
+            const existing = await checkRes.json()
+
+            if (Array.isArray(existing) && existing.length > 0) {
+                // If it exists, update the first row matching the old title
+                await syncToApi('announcements', 'PUT', newAnnouncement, oldTitle, 'title')
+            } else {
+                // If sheet is empty, create the first row
+                await syncToApi('announcements', 'POST', newAnnouncement)
+            }
+        } catch (e) {
+            console.error("Announcement state sync failed:", e)
+        }
     }
 
     return (
