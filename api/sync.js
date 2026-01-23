@@ -28,7 +28,7 @@ export default async function handler(req, res) {
             fetch(`${sheetApiUrl}?sheet=roles`),
             fetch(`${sheetApiUrl}?sheet=dreamers`), // Changed from members
             fetch(`${sheetApiUrl}?sheet=events`),
-            fetch(`${sheetApiUrl}?sheet=announcements`)
+            fetch(`${sheetApiUrl}?sheet=announcements`),
             fetch(`${sheetApiUrl}?sheet=events`),
             fetch(`${sheetApiUrl}?sheet=announcements`)
         ]);
@@ -54,7 +54,7 @@ export default async function handler(req, res) {
             checkError(rData, 'roles'),
             checkError(cData, 'dreamers'), // Changed from members
             checkError(eData, 'events'),
-            checkError(aData, 'announcements')
+            checkError(aData, 'announcements'),
             checkError(eData, 'events'),
             checkError(aData, 'announcements')
         ].filter(Boolean);

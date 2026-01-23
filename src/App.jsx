@@ -16,7 +16,6 @@ import Creator from './pages/Creator'
 import Quests from './pages/Quests'
 import Events from './pages/Events'
 import Join from './pages/Join'
-import Members from './pages/Members'
 import Funders from './pages/Funders'
 import ScrollToTop from './components/ScrollToTop'
 import { ContentProvider } from './context/ContentContext'
@@ -81,7 +80,6 @@ function App() {
               <Route path="/quests" element={<Quests />} />
               <Route path="/events" element={<Events />} />
               <Route path="/join" element={<Join />} />
-              <Route path="/members" element={<Members />} />
               <Route path="/funders" element={<Funders />} />
               <Route path="/admin" element={<AdminLogin />} />
               <Route path="/admin/dashboard" element={<AdminDashboard />} />

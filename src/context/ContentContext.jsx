@@ -259,6 +259,23 @@ export const ContentProvider = ({ children }) => {
         }
     }
 
+    // Join Form Submission
+    const submitDreamerApplication = async (formData) => {
+        // Map frontend fields to Sheet columns: name, email, phone, role, whydream, whyrole, age, gender
+        const payload = {
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            role: formData.role, // This sends the ID. The user might want the Name, but ID is safer for linking.
+            whydream: formData.reason,
+            whyrole: formData.roleReason,
+            age: formData.age,
+            gender: formData.gender,
+            submittedAt: new Date().toISOString()
+        }
+        await syncToApi('joindream', 'POST', payload)
+    }
+
     return (
         <ContentContext.Provider value={{
             loading,
@@ -267,7 +284,8 @@ export const ContentProvider = ({ children }) => {
             characters, addCharacter, updateCharacter, deleteCharacter,
             events, addEvent, updateEvent, deleteEvent,
             announcement, updateAnnouncement,
-            syncGlobalData
+            syncGlobalData,
+            submitDreamerApplication
         }}>
             {children}
         </ContentContext.Provider>

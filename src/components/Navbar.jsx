@@ -32,8 +32,8 @@ function Navbar() {
         </Link>
 
 
-        <button 
-          className={`hamburger ${isOpen ? 'active' : ''}`} 
+        <button
+          className={`hamburger ${isOpen ? 'active' : ''}`}
           onClick={toggleMenu}
           aria-label="Toggle menu"
         >
@@ -49,7 +49,6 @@ function Navbar() {
           <li><Link to="/creator" className={isActive('/creator')} onClick={closeMenu}>Creator</Link></li>
           <li><Link to="/roles" className={isActive('/roles')} onClick={closeMenu}>Roles</Link></li>
           <li><Link to="/characters" className={isActive('/characters')} onClick={closeMenu}>Dreamers</Link></li>
-          <li><Link to="/members" className={isActive('/members')} onClick={closeMenu}>Members</Link></li>
           <li><Link to="/quests" className={isActive('/quests')} onClick={closeMenu}>Quests</Link></li>
           <li><Link to="/events" className={isActive('/events')} onClick={closeMenu}>Events</Link></li>
           <li><Link to="/join" className={isActive('/join')} onClick={closeMenu}>Join</Link></li>
