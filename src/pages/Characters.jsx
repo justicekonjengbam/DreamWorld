@@ -86,7 +86,11 @@ function Characters() {
                 </div>
                 <h3>{character.name}</h3>
                 <p className="character-role-title">{character.title}</p>
-                <p className="character-bio">{character.bio}</p>
+                <p className="character-bio">
+                  {character.bio && character.bio.length > 120
+                    ? character.bio.substring(0, 120) + '...'
+                    : character.bio}
+                </p>
                 <div className="character-themes">
                   {character.themes.map((theme, index) => (
                     <Badge key={index}>{theme}</Badge>
