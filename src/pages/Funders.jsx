@@ -104,7 +104,27 @@ function Funders() {
   const handleSubmit = (e) => {
     e.preventDefault()
 
-    // RAZORPAY INTEGRATION
+    // Redirect to Subscription Page for Monthly/Auto-Pay
+    if (formData.type === 'monthly') {
+      window.open('https://rzp.io/rzp/VUIo0oZ', '_blank')
+      setSubmitted(true)
+      setTimeout(() => {
+        setFormData({
+          name: '',
+          displayName: '',
+          email: '',
+          amount: '',
+          type: 'one-time',
+          showPublicly: true,
+          paymentMethod: 'upi',
+          upiId: ''
+        })
+        setSubmitted(false)
+      }, 5000)
+      return
+    }
+
+    // RAZORPAY INTEGRATION (For One-Time Payments)
     // The Key ID is now stored in the .env file for security
     const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID
 
@@ -113,7 +133,7 @@ function Funders() {
       amount: formData.amount * 100, // Razorpay expects amount in paise (100 paise = 1 INR)
       currency: "INR",
       name: "DreamWorld",
-      description: formData.type === 'monthly' ? "Monthly Support Contribution" : "Support Contribution",
+      description: "Support Contribution",
       image: "/logo.png",
       handler: function (response) {
         console.log('Payment Successful:', response)
