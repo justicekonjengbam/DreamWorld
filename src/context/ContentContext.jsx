@@ -56,10 +56,22 @@ export const ContentProvider = ({ children }) => {
                     })))
                 }
                 if (data.characters) {
-                    setCharacters(data.characters.map(c => ({
-                        ...c,
-                        themes: c.themes ? c.themes.split(',').map(t => t.trim()) : []
-                    })))
+                    setCharacters(data.characters.map(c => {
+                        // Normalize keys to lowercase to be case-insensitive
+                        const normalized = {}
+                        Object.keys(c).forEach(key => {
+                            normalized[key.toLowerCase().trim()] = c[key]
+                        })
+                        return {
+                            ...normalized,
+                            // Ensure common expected keys are present even if sheet has different headers
+                            id: normalized.id || normalized.mid || '',
+                            name: normalized.name || normalized.fullname || '',
+                            avatar: normalized.avatar || normalized.avatar_url || normalized.photo || normalized.image || '',
+                            coverImage: normalized.coverimage || normalized.cover_url || normalized.background || '',
+                            themes: normalized.themes ? normalized.themes.split(',').map(t => t.trim()) : []
+                        }
+                    }))
                 }
                 if (data.events) {
                     setEvents(data.events)

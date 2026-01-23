@@ -12,22 +12,26 @@ function CharacterDetail() {
   const { characters, roles, loading } = useContent()
   const [modalOpen, setModalOpen] = useState(false)
   const [modalImage, setModalImage] = useState('')
+  const [imgError, setImgError] = useState(false)
 
   if (loading) return <div className="loading-state">Syncing Member Info...</div>
 
-  const character = characters.find(c => c.id === id)
+  const character = characters.find(c => String(c.id) === String(id))
 
   if (!character) {
     return (
       <div className="character-detail page">
         <div className="container">
           <h2>Character not found</h2>
+          <p style={{ color: 'var(--color-gray)', marginBottom: '20px' }}>ID: {id}</p>
           <Link to="/characters"><Button>Back to Members</Button></Link>
         </div>
       </div>
     )
   }
 
+  // Robustly find the avatar in case of hidden names
+  const avatarUrl = character.avatar || character.avatar_url || character.photo || character.image
   const role = roles.find(r => r.id === character.role)
 
   const openLightbox = (src) => {
@@ -35,18 +39,19 @@ function CharacterDetail() {
     setModalOpen(true)
   }
 
-  const [imgError, setImgError] = useState(false)
-
   return (
     <div className="character-detail page">
       <div className="container">
         <Link to="/characters" className="back-link">← Back to Members</Link>
 
         <div className="character-hero">
-          <div className="character-avatar-large" onClick={() => !imgError && character.avatar && openLightbox(character.avatar)}>
-            {!imgError && character.avatar ? (
+          <div
+            className="character-avatar-large"
+            onClick={() => avatarUrl && !imgError && openLightbox(avatarUrl)}
+          >
+            {avatarUrl && !imgError ? (
               <img
-                src={character.avatar}
+                src={avatarUrl}
                 alt={character.name}
                 className="avatar-img-actual"
                 onError={() => setImgError(true)}
@@ -85,7 +90,7 @@ function CharacterDetail() {
             <h2>About {character.name}</h2>
             <p className="character-full-bio">{character.bio}</p>
             <div className="character-meta" style={{ marginTop: '20px', color: 'var(--color-gray)', fontSize: '0.9rem' }}>
-              <p><strong>Joined:</strong> {character.joinedDate || 'Dreamer Since Launch'}</p>
+              <p><strong>Joined:</strong> {character.joineddate || character.joinedDate || 'Dreamer Since Launch'}</p>
             </div>
           </Card>
 
