@@ -217,15 +217,15 @@ export const ContentProvider = ({ children }) => {
     const addCharacter = (newChar) => {
         const member = { ...newChar, id: newChar.id || `mem-${Date.now()}`, joinedDate: new Date().toISOString().split('T')[0] }
         setCharacters(prev => [...prev, member])
-        syncToApi('members', 'POST', { ...member, themes: member.themes.join(',') })
+        syncToApi('dreamers', 'POST', { ...member, themes: member.themes.join(',') })
     }
     const updateCharacter = (id, updated) => {
         setCharacters(prev => prev.map(c => c.id === id ? { ...c, ...updated } : c))
-        syncToApi('members', 'PUT', { ...updated, themes: Array.isArray(updated.themes) ? updated.themes.join(',') : updated.themes }, id, 'id')
+        syncToApi('dreamers', 'PUT', { ...updated, themes: Array.isArray(updated.themes) ? updated.themes.join(',') : updated.themes }, id, 'id')
     }
     const deleteCharacter = (id) => {
         setCharacters(prev => prev.filter(c => c.id !== id))
-        syncToApi('members', 'DELETE', null, id)
+        syncToApi('dreamers', 'DELETE', null, id)
     }
 
     // Events

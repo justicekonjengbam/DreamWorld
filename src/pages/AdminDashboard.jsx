@@ -100,7 +100,7 @@ function AdminDashboard() {
             const result = await syncGlobalData(pass)
             const { details } = result
             setHasUnsyncedChanges(false)
-            alert(`✅ Global Sync Successful! \n\nSynced:\n- ${details.quests} Quests\n- ${details.roles} Roles\n- ${details.members} Members\n- ${details.events} Events\n\nLast Synced: ${new Date(result.lastSynced).toLocaleString()}`)
+            alert(`✅ Global Sync Successful! \n\nSynced:\n- ${details.quests} Quests\n- ${details.roles} Roles\n- ${details.members} Dreamers\n- ${details.events} Events\n\nLast Synced: ${new Date(result.lastSynced).toLocaleString()}`)
         } catch (error) {
             alert(`❌ Sync Failed: ${error.message}`)
         } finally {
@@ -181,7 +181,7 @@ function AdminDashboard() {
                     <button className={`nav-item ${activeTab === 'announcement' ? 'active' : ''}`} onClick={() => { setActiveTab('announcement'); resetForms() }}>📢 Announcement</button>
                     <button className={`nav-item ${activeTab === 'quests' ? 'active' : ''}`} onClick={() => { setActiveTab('quests'); resetForms() }}>🎯 Quests</button>
                     <button className={`nav-item ${activeTab === 'roles' ? 'active' : ''}`} onClick={() => { setActiveTab('roles'); resetForms() }}>🎭 Roles</button>
-                    <button className={`nav-item ${activeTab === 'members' ? 'active' : ''}`} onClick={() => { setActiveTab('members'); resetForms() }}>👥 Members</button>
+                    <button className={`nav-item ${activeTab === 'members' ? 'active' : ''}`} onClick={() => { setActiveTab('members'); resetForms() }}>👥 Dreamers</button>
                     <button className={`nav-item ${activeTab === 'events' ? 'active' : ''}`} onClick={() => { setActiveTab('events'); resetForms() }}>📅 Events</button>
                     <button className={`nav-item ${activeTab === 'status' ? 'active' : ''}`} onClick={() => { setActiveTab('status'); resetForms() }}>🛡️ System Health</button>
                 </nav>
@@ -314,7 +314,7 @@ function AdminDashboard() {
                     <div className="admin-section animate-fade">
                         <div className="admin-split-layout">
                             <Card className="admin-form-card">
-                                <h3>{editingId ? 'Edit Member' : 'Add New Member'}</h3>
+                                <h3>{editingId ? 'Edit Dreamer' : 'Add New Dreamer'}</h3>
                                 <form onSubmit={handleMemberSubmit} className="admin-form">
                                     <div className="form-row">
                                         <div className="form-group"><label>Full Name</label><input type="text" value={memberFormData.name} onChange={(e) => setMemberFormData({ ...memberFormData, name: e.target.value })} required /></div>
@@ -384,7 +384,7 @@ function AdminDashboard() {
                                         <div className="form-group"><label>Twitter URL</label><input type="text" placeholder="https://twitter.com/..." value={memberFormData.twitter || ''} onChange={(e) => setMemberFormData(prev => ({ ...prev, twitter: e.target.value }))} /></div>
                                     </div>
                                     <div className="form-group-full"><label>Themes (Comma separated)</label><input type="text" placeholder="Future, Solar, Community" value={memberFormData.themes} onChange={(e) => setMemberFormData(prev => ({ ...prev, themes: e.target.value }))} required /></div>
-                                    <Button type="submit" variant="primary">{editingId ? 'Update' : 'Add'} Member</Button>
+                                    <Button type="submit" variant="primary">{editingId ? 'Update' : 'Add'} Dreamer</Button>
                                     {editingId && <Button type="button" variant="secondary" onClick={resetForms}>Cancel</Button>}
                                 </form>
                             </Card>

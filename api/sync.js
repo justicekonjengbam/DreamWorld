@@ -24,7 +24,11 @@ export default async function handler(req, res) {
         const [qRes, rRes, cRes, eRes, aRes] = await Promise.all([
             fetch(`${sheetApiUrl}?sheet=quests`),
             fetch(`${sheetApiUrl}?sheet=roles`),
-            fetch(`${sheetApiUrl}?sheet=members`),
+            fetch(`${sheetApiUrl}?sheet=quests`),
+            fetch(`${sheetApiUrl}?sheet=roles`),
+            fetch(`${sheetApiUrl}?sheet=dreamers`), // Changed from members
+            fetch(`${sheetApiUrl}?sheet=events`),
+            fetch(`${sheetApiUrl}?sheet=announcements`)
             fetch(`${sheetApiUrl}?sheet=events`),
             fetch(`${sheetApiUrl}?sheet=announcements`)
         ]);
@@ -46,7 +50,11 @@ export default async function handler(req, res) {
         const errors = [
             checkError(qData, 'quests'),
             checkError(rData, 'roles'),
-            checkError(cData, 'members'),
+            checkError(qData, 'quests'),
+            checkError(rData, 'roles'),
+            checkError(cData, 'dreamers'), // Changed from members
+            checkError(eData, 'events'),
+            checkError(aData, 'announcements')
             checkError(eData, 'events'),
             checkError(aData, 'announcements')
         ].filter(Boolean);
