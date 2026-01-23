@@ -152,17 +152,30 @@ export const ContentProvider = ({ children }) => {
                 url = `${API_URL}/${idColumn}/${idValue}?sheet=${sheet}`
             }
 
+            console.log(`Synced[${method}] to ${sheet}:`, data);
+
             const res = await fetch(url, {
                 method,
                 headers: { 'Content-Type': 'application/json' },
                 body: method !== 'DELETE' ? JSON.stringify({ data: [data] }) : null
             })
+
+            const resData = await res.json()
+
             if (!res.ok) {
-                const err = await res.json()
-                console.error(`SheetDB Error (${sheet}):`, err)
+                console.error(`SheetDB Error (${sheet}):`, resData)
+                alert(`Sync Error: ${JSON.stringify(resData)}`)
+            } else {
+                // "Upsert" Logic: If PUT updated 0 rows, the row is missing. Try POSTing it to restore.
+                if (method === 'PUT' && resData.updated === 0) {
+                    console.warn(`Row missing in ${sheet}, attempting to restore via POST...`)
+                    await syncToApi(sheet, 'POST', data)
+                    alert(`Note: The item was missing from the Sheet, so it has been re-created.`)
+                }
             }
         } catch (e) {
             console.error(`API Sync failed for ${sheet}:`, e)
+            alert(`Network Error during Sync: ${e.message}`)
         }
     }
 

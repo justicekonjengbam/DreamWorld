@@ -55,12 +55,24 @@ export default async function handler(req, res) {
             throw new Error(`Sync blocked. Check Google Sheet setup:\n${errors.join('\n')}`);
         }
 
+        // Helper to normalize keys to lowercase
+        const normalize = (arr) => {
+            if (!Array.isArray(arr)) return [];
+            return arr.map(item => {
+                const normalizedItem = {};
+                Object.keys(item).forEach(key => {
+                    normalizedItem[key.toLowerCase().trim()] = item[key];
+                });
+                return normalizedItem;
+            });
+        };
+
         const globalData = {
-            quests: qData.filter(q => q.title),
-            roles: rData.filter(r => r.name),
-            characters: cData.filter(c => c.name),
-            events: eData.filter(e => e.title),
-            announcement: aData.find(a => a.title) || {},
+            quests: normalize(qData).filter(q => q.title),
+            roles: normalize(rData).filter(r => r.name),
+            characters: normalize(cData).filter(c => c.name),
+            events: normalize(eData).filter(e => e.title),
+            announcement: normalize([aData])[0] || {},
             lastSynced: new Date().toISOString()
         };
 

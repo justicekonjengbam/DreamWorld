@@ -197,7 +197,7 @@ function AdminDashboard() {
                         className={`sync-btn ${syncing ? 'syncing' : ''} ${hasUnsyncedChanges ? 'highlight' : ''}`}
                         disabled={syncing}
                     >
-                        {syncing ? '⌛ Syncing...' : '🔄 Sync Global Site'}
+                        {syncing ? '⌛ Pulling...' : '⬇️ Pull from Google Sheets'}
                     </button>
                     <button onClick={handleLogout} className="logout-btn">🚪 Logout</button>
                 </div>
