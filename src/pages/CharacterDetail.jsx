@@ -123,7 +123,8 @@ function CharacterDetail() {
             <div className="about-member-section">
               <p className="character-full-bio">{character.bio}</p>
               <div className="character-meta">
-                <p>{character.joineddate || character.joinedDate}</p>
+                <span className="joined-label">Dreaming Since</span>
+                <span className="joined-date">{character.joineddate || character.joinedDate}</span>
               </div>
             </div>
 
