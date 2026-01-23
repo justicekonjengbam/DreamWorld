@@ -136,7 +136,6 @@ function Home() {
             <p>{announcement.content}</p>
             <div className="update-actions">
               <Link to={announcement.linkTo}><Button variant="primary">{announcement.linkText}</Button></Link>
-              <Link to="/join"><Button variant="ghost">Join Our Community</Button></Link>
             </div>
           </Card>
         </div>

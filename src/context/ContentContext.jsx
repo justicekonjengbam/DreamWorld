@@ -215,17 +215,11 @@ export const ContentProvider = ({ children }) => {
         setAnnouncement(newAnnouncement)
 
         try {
-            // First, check if there's existing data to decide between POST (first time) or PUT (update)
-            const checkRes = await fetch(`${API_URL}?sheet=announcements`)
-            const existing = await checkRes.json()
-
-            if (Array.isArray(existing) && existing.length > 0) {
-                // If it exists, update the first row matching the old title
-                await syncToApi('announcements', 'PUT', newAnnouncement, oldTitle, 'title')
-            } else {
-                // If sheet is empty, create the first row
-                await syncToApi('announcements', 'POST', newAnnouncement)
-            }
+            // We use Delete-then-Post for the announcement to ensure that 
+            // even if the Title changes, the record is updated correctly.
+            // (SheetDB often can't update the column used as the identification key).
+            await syncToApi('announcements', 'DELETE', null, oldTitle, 'title')
+            await syncToApi('announcements', 'POST', newAnnouncement)
         } catch (e) {
             console.error("Announcement state sync failed:", e)
         }
