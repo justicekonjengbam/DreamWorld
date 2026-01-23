@@ -93,28 +93,20 @@ function CharacterDetail() {
                 ))}
               </div>
 
-              {/* Social Links Bar */}
+              {/* Social Links Bar - Always Visible */}
               <div className="profile-social-bar">
-                {character.socials?.youtube && (
-                  <a href={character.socials.youtube} target="_blank" rel="noreferrer" className="social-icon youtube" title="YouTube">
-                    <span className="icon">▶</span>
-                  </a>
-                )}
-                {character.socials?.instagram && (
-                  <a href={character.socials.instagram} target="_blank" rel="noreferrer" className="social-icon instagram" title="Instagram">
-                    <span className="icon">📸</span>
-                  </a>
-                )}
-                {character.socials?.facebook && (
-                  <a href={character.socials.facebook} target="_blank" rel="noreferrer" className="social-icon facebook" title="Facebook">
-                    <span className="icon">f</span>
-                  </a>
-                )}
-                {character.socials?.twitter && (
-                  <a href={character.socials.twitter} target="_blank" rel="noreferrer" className="social-icon twitter" title="Twitter">
-                    <span className="icon">𝕏</span>
-                  </a>
-                )}
+                <a href={character.socials?.youtube || '#'} target="_blank" rel="noreferrer" className={`social-icon youtube ${!character.socials?.youtube ? 'unlinked' : ''}`} title="YouTube">
+                  <span className="icon">▶</span>
+                </a>
+                <a href={character.socials?.instagram || '#'} target="_blank" rel="noreferrer" className={`social-icon instagram ${!character.socials?.instagram ? 'unlinked' : ''}`} title="Instagram">
+                  <span className="icon">📸</span>
+                </a>
+                <a href={character.socials?.facebook || '#'} target="_blank" rel="noreferrer" className={`social-icon facebook ${!character.socials?.facebook ? 'unlinked' : ''}`} title="Facebook">
+                  <span className="icon">f</span>
+                </a>
+                <a href={character.socials?.twitter || '#'} target="_blank" rel="noreferrer" className={`social-icon twitter ${!character.socials?.twitter ? 'unlinked' : ''}`} title="Twitter">
+                  <span className="icon">𝕏</span>
+                </a>
               </div>
             </div>
           </div>
