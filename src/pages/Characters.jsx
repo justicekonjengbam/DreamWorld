@@ -76,6 +76,11 @@ function Characters() {
                       src={character.avatar}
                       name={character.name}
                       className="character-photo"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        openLightbox(character.avatar);
+                      }}
                     />
                   </div>
                 </div>
