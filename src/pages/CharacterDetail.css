@@ -159,33 +159,28 @@
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: rgba(255, 215, 0, 0.1);
-  /* Subtle gold background */
+  background: rgba(255, 215, 0, 0.15);
+  /* More visible background */
   border: 2px solid var(--color-gold);
-  /* Prominent gold border */
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--color-gold);
-  /* Always gold */
   text-decoration: none;
   font-size: 1.3rem;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 }
 
 .social-icon:not(.unlinked) {
-  background: var(--color-gold);
-  color: #0d1117;
-  /* Dark icon on gold background */
+  background: var(--color-gold) !important;
+  color: #0d1117 !important;
 }
 
 .social-icon.unlinked {
-  opacity: 0.5;
-  filter: grayscale(0.5);
-  /* Keep some gold color */
-  border-style: dotted;
-  /* Distinct unlinked style */
+  opacity: 0.4;
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 215, 0, 0.3);
 }
 
 .social-icon:not(.unlinked):hover {
