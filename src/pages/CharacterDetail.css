@@ -5,8 +5,8 @@
   background-color: transparent;
   color: var(--color-text);
   position: relative;
-  z-index: 10;
-  /* Above particles */
+  z-index: 30;
+  /* Well above particles (10) */
   padding-bottom: 100px;
 }
 
@@ -41,14 +41,15 @@
   position: relative;
   overflow: hidden;
   background-color: #050a10;
-  height: 650px;
-  /* Even taller as requested */
+  height: 850px;
+  /* Increased height across all devices as baseline */
   width: 100vw;
   left: 50%;
   right: 50%;
   margin-left: -50vw;
   margin-right: -50vw;
-  z-index: 5;
+  z-index: 20;
+  /* Above particles (10) */
 }
 
 /* Opaque cover - no dark gradient over the top part */
@@ -154,19 +155,23 @@
 }
 
 .social-icon {
-  width: 55px;
-  height: 55px;
+  width: 60px;
+  /* Slightly larger */
+  height: 60px;
   border-radius: 12px;
-  /* Slightly squared for modern look */
-  background: #1a1f2e;
-  border: 2px solid rgba(255, 215, 0, 0.4);
+  background: #11141d;
+  /* Darker background for more pop */
+  border: 3px solid var(--color-gold);
+  /* Thicker, more visible gold border */
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-gold);
+  color: white;
+  /* White icons for maximum contrast */
   text-decoration: none;
-  font-size: 1.5rem;
-  transition: all 0.3s ease;
+  font-size: 1.6rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 }
 
 .social-icon.unlinked {
@@ -177,11 +182,12 @@
 }
 
 .social-icon:not(.unlinked):hover {
-  transform: translateY(-5px);
+  transform: translateY(-8px) scale(1.1);
   background: var(--color-gold);
   color: black;
-  box-shadow: 0 10px 25px rgba(255, 215, 0, 0.4);
-  border-color: var(--color-gold);
+  box-shadow: 0 15px 30px rgba(255, 215, 0, 0.5);
+  border-color: #fff;
+  /* White border on hover for extra "pop" */
 }
 
 /* Content Layout */

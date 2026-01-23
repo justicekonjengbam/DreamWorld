@@ -46,9 +46,9 @@ function CharacterDetail() {
           backgroundImage: character.coverImage ? `url("${character.coverImage}")` : 'none',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          height: '400px',
           width: '100%',
           position: 'relative',
+          zIndex: 20, /* Above particles */
           cursor: character.coverImage ? 'zoom-in' : 'default',
           borderBottom: '1px solid rgba(76, 161, 175, 0.3)'
         }}
