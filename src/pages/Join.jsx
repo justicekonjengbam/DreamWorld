@@ -80,6 +80,18 @@ function Join() {
 
   const handleDreamerSubmit = async (e) => {
     e.preventDefault()
+
+    // Spam Protection: check local storage
+    const lastSubmission = localStorage.getItem('dreamworld_last_submission')
+    if (lastSubmission) {
+      const timeSince = Date.now() - parseInt(lastSubmission)
+      const COOLDOWN = 24 * 60 * 60 * 1000 // 24 hours
+      if (timeSince < COOLDOWN) {
+        alert("🛑 The Council requires patience. You have already sent a petition recently. Please wait for the decree.")
+        return
+      }
+    }
+
     const errors = validateDreamerForm()
 
     if (Object.keys(errors).length > 0) {
@@ -89,6 +101,10 @@ function Join() {
 
     try {
       await submitDreamerApplication(dreamerForm)
+
+      // Set Spam Protection Timestamp
+      localStorage.setItem('dreamworld_last_submission', Date.now().toString())
+
       setDreamerSubmitted(true)
 
       setTimeout(() => {
