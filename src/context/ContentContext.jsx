@@ -277,6 +277,20 @@ export const ContentProvider = ({ children }) => {
         await syncToApi('joindream', 'POST', payload)
     }
 
+    // Donation Submission
+    const submitDonation = async (donationData) => {
+        // Map fields to Sheet columns: name, email, amount, type, message, date
+        const payload = {
+            name: donationData.name,
+            email: donationData.email,
+            amount: donationData.amount,
+            type: donationData.type,
+            message: donationData.message,
+            date: new Date().toISOString()
+        }
+        await syncToApi('donations', 'POST', payload)
+    }
+
     return (
         <ContentContext.Provider value={{
             loading,
@@ -286,7 +300,8 @@ export const ContentProvider = ({ children }) => {
             events, addEvent, updateEvent, deleteEvent,
             announcement, updateAnnouncement,
             syncGlobalData,
-            submitDreamerApplication
+            submitDreamerApplication,
+            submitDonation
         }}>
             {children}
         </ContentContext.Provider>

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useContent } from '../context/ContentContext'
 import Card from '../components/Card'
 import SectionHeader from '../components/SectionHeader'
 import Button from '../components/Button'
@@ -7,6 +8,7 @@ import './Funders.css'
 
 
 function Funders() {
+  const { submitDonation } = useContent()
   const [formData, setFormData] = useState({
     name: '',
     displayName: '',
@@ -107,6 +109,9 @@ function Funders() {
 
     // Redirect to Subscription Page for Monthly/Auto-Pay
     if (formData.type === 'monthly') {
+      // Record the intent to subscribe to the sheet
+      submitDonation(formData).catch(err => console.error("Failed to log monthly intent", err))
+
       window.open('https://rzp.io/rzp/VUIo0oZ', '_blank')
       setSubmitted(true)
       setTimeout(() => {
@@ -139,6 +144,10 @@ function Funders() {
       image: "/logo.png",
       handler: function (response) {
         console.log('Payment Successful:', response)
+
+        // Record successful one-time donation
+        submitDonation(formData).catch(err => console.error("Failed to log donation", err))
+
         setSubmitted(true)
 
         // Reset form after 5 seconds
