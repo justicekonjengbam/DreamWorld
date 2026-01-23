@@ -65,7 +65,13 @@ export const ContentProvider = ({ children }) => {
                     setEvents(data.events)
                 }
                 if (data.announcement) {
-                    setAnnouncement(data.announcement);
+                    const ann = data.announcement;
+                    // If Google Sheets sends a numeric serial date (like 46045), 
+                    // we keep it as a string so it doesn't break the UI.
+                    setAnnouncement({
+                        ...ann,
+                        date: ann.date ? String(ann.date) : ''
+                    });
                 }
 
                 setLoading(false)

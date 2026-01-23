@@ -13,9 +13,12 @@
 }
 
 @keyframes gentleFloat {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-10px);
   }
@@ -24,7 +27,7 @@
 /* Rest of your existing Roles.css stays below... */
 .roles-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 30px;
 }
 
@@ -128,7 +131,7 @@
   .roles-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .role-description {
     min-height: auto;
   }

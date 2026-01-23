@@ -4,6 +4,7 @@ import { useContent } from '../context/ContentContext'
 import Card from '../components/Card'
 import Button from '../components/Button'
 import Badge from '../components/Badge'
+import ImageUpload from '../components/ImageUpload'
 import './AdminDashboard.css'
 
 function AdminDashboard() {
@@ -269,11 +270,12 @@ function AdminDashboard() {
                                         <div className="form-group"><label>Singular Name</label><input type="text" value={roleFormData.singular} onChange={(e) => setRoleFormData({ ...roleFormData, singular: e.target.value })} required /></div>
                                         <div className="form-group"><label>Brand Color</label><input type="text" value={roleFormData.color} onChange={(e) => setRoleFormData({ ...roleFormData, color: e.target.value })} required /></div>
                                     </div>
-                                    <div className="form-group-full">
-                                        <label>Role Icon/Image URL</label>
-                                        <input type="text" value={roleFormData.image} onChange={(e) => setRoleFormData({ ...roleFormData, image: e.target.value })} />
-                                        {roleFormData.image && <div className="url-preview"><img src={roleFormData.image} alt="Preview" onError={(e) => e.target.style.display = 'none'} /></div>}
-                                    </div>
+                                    <ImageUpload
+                                        label="Role Icon/Image"
+                                        onUploadComplete={(url) => setRoleFormData({ ...roleFormData, image: url })}
+                                        defaultImage={roleFormData.image}
+                                        folder="roles"
+                                    />
                                     <div className="form-group-full"><label>Description</label><textarea rows="3" value={roleFormData.description} onChange={(e) => setRoleFormData({ ...roleFormData, description: e.target.value })} required /></div>
                                     <div className="form-group-full"><label>Traits (One per line)</label><textarea rows="4" value={roleFormData.traits} onChange={(e) => setRoleFormData({ ...roleFormData, traits: e.target.value })} required /></div>
                                     <div className="form-group-full"><label>Philosophy</label><textarea rows="3" value={roleFormData.philosophy} onChange={(e) => setRoleFormData({ ...roleFormData, philosophy: e.target.value })} required /></div>
@@ -314,16 +316,18 @@ function AdminDashboard() {
                                     </div>
                                     <div className="form-group-full"><label>Title (e.g. Lead Artist)</label><input type="text" value={memberFormData.title} onChange={(e) => setMemberFormData({ ...memberFormData, title: e.target.value })} required /></div>
                                     <div className="form-row">
-                                        <div className="form-group">
-                                            <label>Avatar Image URL</label>
-                                            <input type="text" value={memberFormData.avatar} onChange={(e) => setMemberFormData({ ...memberFormData, avatar: e.target.value })} required />
-                                            {memberFormData.avatar && <div className="url-preview mini"><img src={memberFormData.avatar} alt="Avatar Preview" /></div>}
-                                        </div>
-                                        <div className="form-group">
-                                            <label>Cover Image URL</label>
-                                            <input type="text" value={memberFormData.coverImage} onChange={(e) => setMemberFormData({ ...memberFormData, coverImage: e.target.value })} />
-                                            {memberFormData.coverImage && <div className="url-preview mini"><img src={memberFormData.coverImage} alt="Cover Preview" /></div>}
-                                        </div>
+                                        <ImageUpload
+                                            label="Avatar Image"
+                                            onUploadComplete={(url) => setMemberFormData({ ...memberFormData, avatar: url })}
+                                            defaultImage={memberFormData.avatar}
+                                            folder="members"
+                                        />
+                                        <ImageUpload
+                                            label="Cover Image"
+                                            onUploadComplete={(url) => setMemberFormData({ ...memberFormData, coverImage: url })}
+                                            defaultImage={memberFormData.coverImage}
+                                            folder="members/covers"
+                                        />
                                     </div>
                                     <div className="form-group-full"><label>Bio</label><textarea rows="3" value={memberFormData.bio} onChange={(e) => setMemberFormData({ ...memberFormData, bio: e.target.value })} required /></div>
                                     <div className="form-group-full"><label>Themes (Comma separated)</label><input type="text" placeholder="Future, Solar, Community" value={memberFormData.themes} onChange={(e) => setMemberFormData({ ...memberFormData, themes: e.target.value })} required /></div>

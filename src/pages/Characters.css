@@ -13,9 +13,12 @@
 }
 
 @keyframes gentleFloat {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-10px);
   }
@@ -47,7 +50,7 @@
 
 .characters-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 30px;
 }
 
@@ -142,31 +145,32 @@
   .characters-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .character-bio {
     min-height: auto;
   }
 
   .character-cover-section {
-    min-height: 180px !important; /* INCREASED */
+    min-height: 180px !important;
+    /* INCREASED */
   }
-  
+
   .character-photo {
     width: 130px;
     height: 130px;
   }
-  
+
   .character-photo-wrapper {
-    margin-top: 30px; /* ADDED */
-    margin-bottom: -60px; /* CHANGED */
+    margin-top: 30px;
+    /* ADDED */
+    margin-bottom: -60px;
+    /* CHANGED */
   }
-  
+
   .character-link h3 {
     font-size: 1.3rem;
     line-height: 1.3;
-    padding-top: 10px; /* ADDED - gives space after photo */
+    padding-top: 10px;
+    /* ADDED - gives space after photo */
   }
 }
-
-
-
