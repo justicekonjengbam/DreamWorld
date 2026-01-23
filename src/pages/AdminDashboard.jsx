@@ -33,6 +33,7 @@ function AdminDashboard() {
 
     const [editingId, setEditingId] = useState(null)
     const [hasUnsyncedChanges, setHasUnsyncedChanges] = useState(false)
+    const [sheetData, setSheetData] = useState(null)
 
     useEffect(() => {
         const token = localStorage.getItem('dw_admin_token')
@@ -45,6 +46,24 @@ function AdminDashboard() {
             setAnnouncementFormData(announcement)
         }
     }, [loading, announcement])
+
+    // Live check for Google Sheets data (Layer 2)
+    useEffect(() => {
+        if (activeTab === 'status') {
+            const checkSheet = async () => {
+                const sheetApiUrl = import.meta.env.VITE_SHEET_API_URL;
+                if (!sheetApiUrl) return;
+                try {
+                    const res = await fetch(`${sheetApiUrl}?sheet=announcements`);
+                    const data = await res.json();
+                    setSheetData(Array.isArray(data) ? data[0] : null);
+                } catch (e) {
+                    setSheetData('error');
+                }
+            };
+            checkSheet();
+        }
+    }, [activeTab])
 
     const handleLogout = () => {
         localStorage.removeItem('dw_admin_token')
@@ -315,8 +334,6 @@ function AdminDashboard() {
                     </div>
                 )}
 
-                )}
-
                 {activeTab === 'status' && (
                     <div className="admin-section animate-fade">
                         <div className="status-grid">
@@ -337,8 +354,18 @@ function AdminDashboard() {
                                 <h3>📊 Layer 2: Google Sheets</h3>
                                 <p className="status-desc">This is the "Source of Truth." If data is missing here, it won't show for visitors.</p>
                                 <a href="https://docs.google.com/spreadsheets" target="_blank" rel="noreferrer" className="status-link">Open My Google Sheet ↗</a>
-                                <div className="status-info">
-                                    <p>API: <code>{import.meta.env.VITE_SHEET_API_URL?.substring(0, 30)}...</code></p>
+                                <div className="status-data">
+                                    {sheetData === 'error' ? (
+                                        <p style={{ color: '#ff6f61' }}>❌ Connection Error. Check your API URL.</p>
+                                    ) : sheetData ? (
+                                        <pre>{JSON.stringify({
+                                            title: sheetData.title || 'MISSING',
+                                            date: sheetData.date || 'MISSING',
+                                            found: 'YES ✅'
+                                        }, null, 2)}</pre>
+                                    ) : (
+                                        <p>⏳ Loading sheet data...</p>
+                                    )}
                                 </div>
                             </Card>
 
