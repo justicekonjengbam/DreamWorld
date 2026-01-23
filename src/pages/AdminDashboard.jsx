@@ -315,38 +315,40 @@ function AdminDashboard() {
                     </div>
                 )}
 
-                {activeTab === 'events' && (
+                )}
+
+                {activeTab === 'status' && (
                     <div className="admin-section animate-fade">
-                        <div className="admin-split-layout">
-                            <Card className="admin-form-card">
-                                <h3>{editingId ? 'Edit Event' : 'Add New Event'}</h3>
-                                <form onSubmit={handleEventSubmit} className="admin-form">
-                                    <div className="form-group-full"><label>Event Title</label><input type="text" value={eventFormData.title} onChange={(e) => setEventFormData({ ...eventFormData, title: e.target.value })} required /></div>
-                                    <div className="form-row">
-                                        <div className="form-group"><label>Host</label><input type="text" value={eventFormData.host} onChange={(e) => setEventFormData({ ...eventFormData, host: e.target.value })} required /></div>
-                                        <div className="form-group"><label>Type</label><select value={eventFormData.type} onChange={(e) => setEventFormData({ ...eventFormData, type: e.target.value })}><option value="online">Online</option><option value="offline">Offline</option><option value="hybrid">Hybrid</option></select></div>
-                                    </div>
-                                    <div className="form-row">
-                                        <div className="form-group"><label>Date (ISO Format)</label><input type="datetime-local" value={eventFormData.date} onChange={(e) => setEventFormData({ ...eventFormData, date: e.target.value })} required /></div>
-                                        <div className="form-group"><label>Location</label><input type="text" value={eventFormData.location} onChange={(e) => setEventFormData({ ...eventFormData, location: e.target.value })} required /></div>
-                                    </div>
-                                    <div className="form-group-full"><label>Description</label><textarea rows="3" value={eventFormData.description} onChange={(e) => setEventFormData({ ...eventFormData, description: e.target.value })} required /></div>
-                                    <div className="form-group-full"><label>Registration Link</label><input type="text" value={eventFormData.registrationLink} onChange={(e) => setEventFormData({ ...eventFormData, registrationLink: e.target.value })} required /></div>
-                                    <Button type="submit" variant="primary">{editingId ? 'Update' : 'Add'} Event</Button>
-                                    {editingId && <Button type="button" variant="secondary" onClick={resetForms}>Cancel</Button>}
-                                </form>
+                        <div className="status-grid">
+                            <Card className="status-card">
+                                <h3>📦 Layer 1: Your Browser</h3>
+                                <p className="status-desc">This is what YOU see right now. It is saved locally on your computer.</p>
+                                <div className="status-data">
+                                    <pre>{JSON.stringify({
+                                        announcement: announcement.title || 'EMPTY',
+                                        quests: quests.length,
+                                        roles: roles.length,
+                                        members: characters.length
+                                    }, null, 2)}</pre>
+                                </div>
                             </Card>
-                            <div className="admin-list">
-                                {events.map(e => (
-                                    <Card key={e.id} className="admin-item-card">
-                                        <div><h4>{e.title}</h4><Badge variant={e.type === 'online' ? 'default' : 'medium'}>{e.type}</Badge></div>
-                                        <div className="admin-item-actions">
-                                            <button onClick={() => { setEditingId(e.id); setEventFormData(e) }}>✏️</button>
-                                            <button onClick={() => handleEventDelete(e.id)}>🗑️</button>
-                                        </div>
-                                    </Card>
-                                ))}
-                            </div>
+
+                            <Card className="status-card highlight">
+                                <h3>📊 Layer 2: Google Sheets</h3>
+                                <p className="status-desc">This is the "Source of Truth." If data is missing here, it won't show for visitors.</p>
+                                <a href="https://docs.google.com/spreadsheets" target="_blank" rel="noreferrer" className="status-link">Open My Google Sheet ↗</a>
+                                <div className="status-info">
+                                    <p>API: <code>{import.meta.env.VITE_SHEET_API_URL?.substring(0, 30)}...</code></p>
+                                </div>
+                            </Card>
+
+                            <Card className="status-card">
+                                <h3>⚡ Layer 3: Global Cache</h3>
+                                <p className="status-desc">This is what your VISITORS see. Keep this updated!</p>
+                                <Button onClick={handleSync} variant="secondary" disabled={syncing}>
+                                    {syncing ? '⌛ Syncing...' : '🔄 Push to Global Cache'}
+                                </Button>
+                            </Card>
                         </div>
                     </div>
                 )}
