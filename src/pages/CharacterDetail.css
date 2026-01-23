@@ -100,6 +100,11 @@
 
 .character-header-info {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 15px;
+  /* Consistent spacing between lines */
 }
 
 .character-header-info h1 {

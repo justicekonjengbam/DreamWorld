@@ -80,33 +80,31 @@ function CharacterDetail() {
           <div className="character-header-info">
             <h1>{character.name}</h1>
             <p className="character-role-large">{character.title}</p>
-            <div className="character-tags-socials">
-              <div className="character-themes-large">
-                {role && (
-                  <Link to={`/roles/${role.id}`} className="role-badge-small">
-                    {role.singular}
-                  </Link>
-                )}
-                {character.themes && character.themes.map((theme, index) => (
-                  <Badge key={index}>{theme}</Badge>
-                ))}
-              </div>
+            <div className="character-themes-large">
+              {role && (
+                <Link to={`/roles/${role.id}`} className="role-badge-small">
+                  {role.singular}
+                </Link>
+              )}
+              {character.themes && character.themes.map((theme, index) => (
+                <Badge key={index}>{theme}</Badge>
+              ))}
+            </div>
 
-              {/* Social Links Bar - Always Visible */}
-              <div className="profile-social-bar">
-                <a href={character.socials?.youtube || '#'} target="_blank" rel="noreferrer" className={`social-icon youtube ${!character.socials?.youtube ? 'unlinked' : ''}`} title="YouTube">
-                  <span className="icon">▶</span>
-                </a>
-                <a href={character.socials?.instagram || '#'} target="_blank" rel="noreferrer" className={`social-icon instagram ${!character.socials?.instagram ? 'unlinked' : ''}`} title="Instagram">
-                  <span className="icon">📸</span>
-                </a>
-                <a href={character.socials?.facebook || '#'} target="_blank" rel="noreferrer" className={`social-icon facebook ${!character.socials?.facebook ? 'unlinked' : ''}`} title="Facebook">
-                  <span className="icon">f</span>
-                </a>
-                <a href={character.socials?.twitter || '#'} target="_blank" rel="noreferrer" className={`social-icon twitter ${!character.socials?.twitter ? 'unlinked' : ''}`} title="Twitter">
-                  <span className="icon">𝕏</span>
-                </a>
-              </div>
+            {/* Social Links Bar - Always Visible */}
+            <div className="profile-social-bar">
+              <a href={character.socials?.youtube || '#'} target="_blank" rel="noreferrer" className={`social-icon youtube ${!character.socials?.youtube ? 'unlinked' : ''}`} title="YouTube">
+                <span className="icon">▶</span>
+              </a>
+              <a href={character.socials?.instagram || '#'} target="_blank" rel="noreferrer" className={`social-icon instagram ${!character.socials?.instagram ? 'unlinked' : ''}`} title="Instagram">
+                <span className="icon">📸</span>
+              </a>
+              <a href={character.socials?.facebook || '#'} target="_blank" rel="noreferrer" className={`social-icon facebook ${!character.socials?.facebook ? 'unlinked' : ''}`} title="Facebook">
+                <span className="icon">f</span>
+              </a>
+              <a href={character.socials?.twitter || '#'} target="_blank" rel="noreferrer" className={`social-icon twitter ${!character.socials?.twitter ? 'unlinked' : ''}`} title="Twitter">
+                <span className="icon">𝕏</span>
+              </a>
             </div>
           </div>
         </div>
