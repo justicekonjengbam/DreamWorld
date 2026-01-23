@@ -118,11 +118,15 @@ export const ContentProvider = ({ children }) => {
                 url = `${API_URL}/id/${id}?sheet=${sheet}`
             }
 
-            await fetch(url, {
+            const res = await fetch(url, {
                 method,
                 headers: { 'Content-Type': 'application/json' },
                 body: method !== 'DELETE' ? JSON.stringify({ data: [data] }) : null
             })
+            if (!res.ok) {
+                const err = await res.json()
+                console.error(`SheetDB Error (${sheet}):`, err)
+            }
         } catch (e) {
             console.error(`API Sync failed for ${sheet}:`, e)
         }
@@ -190,10 +194,14 @@ export const ContentProvider = ({ children }) => {
 
     // Announcement
     const updateAnnouncement = (newAnnouncement) => {
+        // We always use the title as the unique key for the announcement row.
+        // If the user changes the title, we first try to update the "current" title row.
+        // For simplicity in this demo, we assume the first row is always the one.
+        const oldTitle = announcement.title
         setAnnouncement(newAnnouncement)
-        // SheetDB DELETE everything and POST for announcement (since it's usually just 1 row)
-        // Or just PUT to the first row
-        syncToApi('announcements', 'PUT', newAnnouncement, 'Welcome to DreamWorld! 🌟') // Using title as lookup for simplicity
+
+        // SheetDB PUT to the row matching the PREVIOUS title to update it with NEW data
+        syncToApi('announcements', 'PUT', newAnnouncement, oldTitle)
     }
 
     return (

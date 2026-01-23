@@ -18,6 +18,8 @@ export default async function handler(req, res) {
     }
 
     try {
+        console.log("Starting Global Sync from SheetDB...");
+
         // Fetch all data from SheetDB
         const [qRes, rRes, cRes, eRes, aRes] = await Promise.all([
             fetch(`${sheetApiUrl}?sheet=quests`),
@@ -27,21 +29,56 @@ export default async function handler(req, res) {
             fetch(`${sheetApiUrl}?sheet=announcements`)
         ]);
 
+        const qData = await qRes.json();
+        const rData = await rRes.json();
+        const cData = await cRes.json();
+        const eData = await eRes.json();
+        const aData = await aRes.json();
+
+        // Check if SheetDB returned an error instead of an array
+        const checkError = (data, name) => {
+            if (!Array.isArray(data)) {
+                return `Sheet "${name}" error: ${JSON.stringify(data).substring(0, 100)}`;
+            }
+            return null;
+        };
+
+        const errors = [
+            checkError(qData, 'quests'),
+            checkError(rData, 'roles'),
+            checkError(cData, 'members'),
+            checkError(eData, 'events'),
+            checkError(aData, 'announcements')
+        ].filter(Boolean);
+
+        if (errors.length > 0) {
+            throw new Error(`Sync blocked. Check Google Sheet setup:\n${errors.join('\n')}`);
+        }
+
         const globalData = {
-            quests: await qRes.json(),
-            roles: await rRes.json(),
-            characters: await cRes.json(),
-            events: await eRes.json(),
-            announcement: (await aRes.json())[0] || {},
+            quests: qData,
+            roles: rData,
+            characters: cData,
+            events: eData,
+            announcement: aData[0] || {},
             lastSynced: new Date().toISOString()
         };
 
         // Store in Vercel KV
         await kv.set('dreamworld_global_data', globalData);
 
-        return res.status(200).json({ message: 'Sync Successful', lastSynced: globalData.lastSynced });
+        return res.status(200).json({
+            message: 'Sync Successful',
+            lastSynced: globalData.lastSynced,
+            details: {
+                quests: qData.length,
+                roles: rData.length,
+                members: cData.length,
+                events: eData.length
+            }
+        });
     } catch (error) {
-        console.error('Sync Error:', error);
-        return res.status(500).json({ error: 'Failed to sync data from SheetDB' });
+        console.error('Sync Error:', error.message);
+        return res.status(500).json({ error: error.message });
     }
 }

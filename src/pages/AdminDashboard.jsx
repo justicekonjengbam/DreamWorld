@@ -54,7 +54,8 @@ function AdminDashboard() {
         setSyncing(true)
         try {
             const result = await syncGlobalData(pass)
-            alert(`✅ Global Sync Successful! \nLast Synced: ${new Date(result.lastSynced).toLocaleString()}`)
+            const { details } = result
+            alert(`✅ Global Sync Successful! \n\nSynced:\n- ${details.quests} Quests\n- ${details.roles} Roles\n- ${details.members} Members\n- ${details.events} Events\n\nLast Synced: ${new Date(result.lastSynced).toLocaleString()}`)
         } catch (error) {
             alert(`❌ Sync Failed: ${error.message}`)
         } finally {
