@@ -1,0 +1,146 @@
+.search-section {
+  max-width: 600px;
+  margin: 0 auto 40px;
+  text-align: center;
+}
+
+.search-input {
+  width: 100%;
+  padding: 15px 20px;
+  background: rgba(26, 31, 53, 0.8);
+  border: 2px solid rgba(76, 161, 175, 0.3);
+  border-radius: 12px;
+  color: var(--color-white);
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+}
+
+.search-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--color-cyan);
+  box-shadow: 0 0 20px var(--glow-cyan);
+}
+
+.search-result-count {
+  margin-top: 12px;
+  color: var(--color-gray);
+  font-size: 0.95rem;
+}
+
+.members-table-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.members-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.members-table thead {
+  background: rgba(76, 161, 175, 0.1);
+}
+
+.members-table th {
+  padding: 18px 20px;
+  text-align: left;
+  color: var(--color-gold);
+  font-weight: 600;
+  font-size: 1rem;
+  border-bottom: 2px solid rgba(76, 161, 175, 0.3);
+}
+
+.members-table tbody tr {
+  border-bottom: 1px solid rgba(76, 161, 175, 0.1);
+  transition: background 0.3s ease;
+}
+
+.members-table tbody tr:hover {
+  background: rgba(76, 161, 175, 0.05);
+}
+
+.members-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.members-table td {
+  padding: 16px 20px;
+  color: var(--color-gray);
+  font-size: 0.95rem;
+}
+
+.member-name {
+  color: var(--color-cyan);
+  font-weight: 600;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 30px;
+}
+
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  opacity: 0.5;
+}
+
+.empty-state h3 {
+  font-size: 1.8rem;
+  color: var(--color-gold);
+  margin-bottom: 15px;
+}
+
+.empty-state p {
+  color: var(--color-gray);
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.members-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  margin-top: 50px;
+}
+
+.info-card h3 {
+  color: var(--color-gold);
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+}
+
+.info-card p {
+  color: var(--color-gray);
+  line-height: 1.7;
+}
+
+@media (max-width: 768px) {
+  .members-table th,
+  .members-table td {
+    padding: 12px 15px;
+    font-size: 0.9rem;
+  }
+
+  .members-table th:first-child,
+  .members-table td:first-child {
+    padding-left: 15px;
+  }
+
+  .search-input {
+    font-size: 1rem;
+    padding: 12px 16px;
+  }
+
+  .empty-state {
+    padding: 40px 20px;
+  }
+}

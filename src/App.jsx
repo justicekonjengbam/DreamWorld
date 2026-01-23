@@ -16,9 +16,11 @@ import Creator from './pages/Creator'
 import Quests from './pages/Quests'
 import Events from './pages/Events'
 import Join from './pages/Join'
+import Members from './pages/Members'
 import Funders from './pages/Funders'
 import ScrollToTop from './components/ScrollToTop'
 import './App.css'
+
 
 function App() {
   const location = useLocation()
@@ -28,10 +30,12 @@ function App() {
   const [shouldStartAudio, setShouldStartAudio] = useState(false)
   const { isSoundMuted } = useAudio()
 
+
   const handleEnterDreamWorld = () => {
     setHasEntered(true)
     setShouldStartAudio(true)
   }
+
 
   // Global click sound for all clickable elements
   useEffect(() => {
@@ -46,9 +50,11 @@ function App() {
       }
     }
 
+
     document.addEventListener('click', handleClick)
     return () => document.removeEventListener('click', handleClick)
   }, [isSoundMuted])
+
 
   return (
     <div className="app">
@@ -71,6 +77,7 @@ function App() {
             <Route path="/quests" element={<Quests />} />
             <Route path="/events" element={<Events />} />
             <Route path="/join" element={<Join />} />
+            <Route path="/members" element={<Members />} />
             <Route path="/funders" element={<Funders />} />
           </Routes>
         </main>
@@ -81,5 +88,6 @@ function App() {
     </div>
   )
 }
+
 
 export default App
