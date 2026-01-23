@@ -5,8 +5,7 @@
   background-color: transparent;
   color: var(--color-text);
   position: relative;
-  z-index: 30;
-  /* Well above particles (10) */
+  z-index: 1;
   padding-bottom: 100px;
 }
 
@@ -41,15 +40,14 @@
   position: relative;
   overflow: hidden;
   background-color: #050a10;
-  height: 850px;
-  /* Increased height across all devices as baseline */
+  height: 450px;
+  /* Reduced as requested */
   width: 100vw;
   left: 50%;
   right: 50%;
   margin-left: -50vw;
   margin-right: -50vw;
-  z-index: 20;
-  /* Above particles (10) */
+  z-index: 1;
 }
 
 /* Opaque cover - stronger gradient for readability */
@@ -72,16 +70,18 @@
 
 .character-hero {
   display: flex;
-  align-items: flex-end;
-  gap: 50px;
-  margin-top: -180px;
-  /* Pull up to overlap cover naturally */
-  margin-bottom: 60px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  /* Vertical stack */
+  align-items: center;
+  /* Centered */
+  gap: 30px;
+  margin-top: -120px;
+  /* Sit halfway over cover edge */
+  margin-bottom: 50px;
   padding: 0 20px;
-  /* Remove the "block" look */
   position: relative;
   z-index: 5;
+  text-align: center;
 }
 
 .avatar-overlap-wrapper {
@@ -106,16 +106,16 @@
 }
 
 .character-header-info {
-  flex: 1;
+  width: 100%;
 }
 
 .character-header-info h1 {
-  font-size: 5.5rem;
-  /* Larger, more impactful */
+  font-size: 4.5rem;
+  /* Slightly smaller for centered layout */
   color: var(--color-gold);
-  margin: 0 0 5px 0;
-  letter-spacing: -3px;
-  line-height: 0.9;
+  margin: 0 0 10px 0;
+  letter-spacing: -2px;
+  line-height: 1;
   font-weight: 900;
   text-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
 }
@@ -134,6 +134,8 @@
   flex-wrap: wrap;
   gap: 12px;
   margin-bottom: 30px;
+  justify-content: center;
+  /* Center badges */
 }
 
 .role-badge-small {
@@ -155,6 +157,8 @@
   display: flex;
   gap: 20px;
   padding-top: 10px;
+  justify-content: center;
+  /* Center icons */
 }
 
 .social-icon {

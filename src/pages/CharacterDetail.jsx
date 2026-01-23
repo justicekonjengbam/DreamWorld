@@ -60,7 +60,7 @@ function CharacterDetail() {
         </div>
       </div>
 
-      <div className="container" style={{ position: 'relative', zIndex: 10, paddingTop: '40px' }}>
+      <div className="container" style={{ position: 'relative', zIndex: 10, marginTop: '20px' }}>
         <div className="character-hero">
           <Avatar
             src={character.avatar}
