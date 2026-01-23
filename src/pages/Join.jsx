@@ -64,15 +64,15 @@ function Join() {
       errors.phone = 'Phone number is required'
     }
 
-    if (!dreamerForm.role) {
-      errors.role = 'Please select a role'
+    if (!dreamerForm.role && !dreamerForm.otherRole.trim()) {
+      errors.role = 'Please select a role or propose a new one'
     }
 
     if (!dreamerForm.reason.trim()) {
       errors.reason = 'Please tell us why you want to join'
     }
 
-    if (!dreamerForm.roleReason.trim()) {
+    if (!dreamerForm.roleReason.trim() && !dreamerForm.otherRole.trim()) {
       errors.roleReason = 'Please tell us why you chose this role'
     }
 
@@ -210,7 +210,7 @@ function Join() {
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="dreamer-role">Choose Your Role *</label>
+                    <label htmlFor="dreamer-role">Choose Your Role (Optional if suggesting new)</label>
                     <select
                       id="dreamer-role"
                       name="role"
@@ -250,7 +250,7 @@ function Join() {
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="dreamer-roleReason">Why did you choose this role? *</label>
+                    <label htmlFor="dreamer-roleReason">Why did you choose this role? (Required if selected)</label>
                     <textarea
                       id="dreamer-roleReason"
                       name="roleReason"
