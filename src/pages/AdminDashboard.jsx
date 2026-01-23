@@ -376,7 +376,7 @@ function AdminDashboard() {
                                         <div>
                                             <pre>{JSON.stringify({
                                                 "Sheet Headers Found": sheetData.rawKeys,
-                                                "Title Value": sheetData.summary.title || 'NULL/EMPTY',
+                                                "Live Data (Top Row)": sheetData.summary,
                                             }, null, 2)}</pre>
                                             <p className="status-mini-note">Found {sheetData.count} row(s) in sheet.</p>
                                         </div>

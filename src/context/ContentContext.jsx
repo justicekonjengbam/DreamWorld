@@ -46,8 +46,6 @@ export const ContentProvider = ({ children }) => {
                 if (data.quests) {
                     setQuests(data.quests.map(q => ({
                         ...q,
-                        timeNeeded: q.timeneeded || q.timeNeeded || '',
-                        sharePrompt: q.shareprompt || q.sharePrompt || '',
                         steps: q.steps ? q.steps.split('\n') : []
                     })))
                 }
@@ -60,31 +58,19 @@ export const ContentProvider = ({ children }) => {
                 if (data.characters) {
                     setCharacters(data.characters.map(c => ({
                         ...c,
-                        coverImage: c.coverimage || c.coverImage || '',
                         themes: c.themes ? c.themes.split(',').map(t => t.trim()) : []
                     })))
                 }
                 if (data.events) {
-                    setEvents(data.events.map(e => ({
-                        ...e,
-                        registrationLink: e.registrationlink || e.registrationLink || ''
-                    })))
+                    setEvents(data.events)
                 }
                 if (data.announcement) {
-                    const raw = data.announcement;
-                    setAnnouncement({
-                        title: raw.title || '',
-                        content: raw.content || '',
-                        date: String(raw.date || ''),
-                        linkText: raw.linktext || raw.linkText || '',
-                        linkTo: raw.linkto || raw.linkTo || ''
-                    });
+                    setAnnouncement(data.announcement);
                 }
 
                 setLoading(false)
             } catch (error) {
-                console.warn("Failed to fetch from Cache, falling back to Local Storage/Defaults:", error)
-                // If cache fails, we already have initial states from LocalStorage or Defaults
+                console.warn("Failed to fetch from Cache:", error)
                 setLoading(false)
             }
         }
@@ -137,21 +123,10 @@ export const ContentProvider = ({ children }) => {
                 url = `${API_URL}/${idColumn}/${idValue}?sheet=${sheet}`
             }
 
-            // Force all keys to lowercase to match Sheet headers exactly
-            let normalizedData = null;
-            if (data) {
-                normalizedData = {};
-                for (const key in data) {
-                    if (data[key] !== null && data[key] !== undefined) {
-                        normalizedData[key.toLowerCase()] = data[key];
-                    }
-                }
-            }
-
             const res = await fetch(url, {
                 method,
                 headers: { 'Content-Type': 'application/json' },
-                body: method !== 'DELETE' ? JSON.stringify({ data: [normalizedData] }) : null
+                body: method !== 'DELETE' ? JSON.stringify({ data: [data] }) : null
             })
             if (!res.ok) {
                 const err = await res.json()
