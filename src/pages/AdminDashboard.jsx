@@ -32,6 +32,7 @@ function AdminDashboard() {
     const [eventFormData, setEventFormData] = useState({ title: '', host: '', type: 'online', date: '', location: '', description: '', registrationLink: '' })
 
     const [editingId, setEditingId] = useState(null)
+    const [hasUnsyncedChanges, setHasUnsyncedChanges] = useState(false)
 
     useEffect(() => {
         const token = localStorage.getItem('dw_admin_token')
@@ -55,6 +56,7 @@ function AdminDashboard() {
         try {
             const result = await syncGlobalData(pass)
             const { details } = result
+            setHasUnsyncedChanges(false)
             alert(`✅ Global Sync Successful! \n\nSynced:\n- ${details.quests} Quests\n- ${details.roles} Roles\n- ${details.members} Members\n- ${details.events} Events\n\nLast Synced: ${new Date(result.lastSynced).toLocaleString()}`)
         } catch (error) {
             alert(`❌ Sync Failed: ${error.message}`)
@@ -75,13 +77,15 @@ function AdminDashboard() {
     const handleAnnouncementSubmit = (e) => {
         e.preventDefault()
         updateAnnouncement(announcementFormData)
-        alert('Announcement updated!')
+        setHasUnsyncedChanges(true)
+        alert('Announcement updated! Don\'t forget to click "Sync Global Site" below.')
     }
 
     const handleQuestSubmit = (e) => {
         e.preventDefault()
         const data = { ...questFormData, steps: questFormData.steps.split('\n').filter(s => s.trim()) }
         editingId ? updateQuest(editingId, data) : addQuest(data)
+        setHasUnsyncedChanges(true)
         resetForms()
         alert(editingId ? 'Quest updated!' : 'Quest added!')
     }
@@ -90,6 +94,7 @@ function AdminDashboard() {
         e.preventDefault()
         const data = { ...roleFormData, traits: roleFormData.traits.split('\n').filter(t => t.trim()) }
         editingId ? updateRole(editingId, data) : addRole(data)
+        setHasUnsyncedChanges(true)
         resetForms()
         alert(editingId ? 'Role updated!' : 'Role added!')
     }
@@ -98,13 +103,20 @@ function AdminDashboard() {
         e.preventDefault()
         const data = { ...memberFormData, themes: memberFormData.themes.split(',').map(t => t.trim()) }
         editingId ? updateCharacter(editingId, data) : addCharacter(data)
+        setHasUnsyncedChanges(true)
         resetForms()
         alert(editingId ? 'Member updated!' : 'Member added!')
     }
 
+    const handleQuestDelete = (id) => { if (window.confirm('Delete this quest?')) { deleteQuest(id); setHasUnsyncedChanges(true) } }
+    const handleRoleDelete = (id) => { if (window.confirm('Delete this role?')) { deleteRole(id); setHasUnsyncedChanges(true) } }
+    const handleMemberDelete = (id) => { if (window.confirm('Delete this member?')) { deleteCharacter(id); setHasUnsyncedChanges(true) } }
+    const handleEventDelete = (id) => { if (window.confirm('Delete this event?')) { deleteEvent(id); setHasUnsyncedChanges(true) } }
+
     const handleEventSubmit = (e) => {
         e.preventDefault()
         editingId ? updateEvent(editingId, eventFormData) : addEvent(eventFormData)
+        setHasUnsyncedChanges(true)
         resetForms()
         alert(editingId ? 'Event updated!' : 'Event added!')
     }
@@ -126,9 +138,14 @@ function AdminDashboard() {
                 </nav>
 
                 <div className="sidebar-footer">
+                    {hasUnsyncedChanges && (
+                        <div className="sync-warning animate-pulse">
+                            ⚠️ Changes pending sync
+                        </div>
+                    )}
                     <button
                         onClick={handleSync}
-                        className={`sync-btn ${syncing ? 'syncing' : ''}`}
+                        className={`sync-btn ${syncing ? 'syncing' : ''} ${hasUnsyncedChanges ? 'highlight' : ''}`}
                         disabled={syncing}
                     >
                         {syncing ? '⌛ Syncing...' : '🔄 Sync Global Site'}
@@ -183,7 +200,7 @@ function AdminDashboard() {
                                         <div><h4>{q.title}</h4><Badge variant={q.difficulty}>{q.difficulty}</Badge></div>
                                         <div className="admin-item-actions">
                                             <button onClick={() => { setEditingId(q.id); setQuestFormData({ ...q, steps: q.steps.join('\n') }) }}>✏️</button>
-                                            <button onClick={() => deleteQuest(q.id)}>🗑️</button>
+                                            <button onClick={() => handleQuestDelete(q.id)}>🗑️</button>
                                         </div>
                                     </Card>
                                 ))}
@@ -219,7 +236,7 @@ function AdminDashboard() {
                                         <div><h4>{r.name}</h4><Badge>{r.singular}</Badge></div>
                                         <div className="admin-item-actions">
                                             <button onClick={() => { setEditingId(r.id); setRoleFormData({ ...r, traits: r.traits.join('\n') }) }}>✏️</button>
-                                            <button onClick={() => deleteRole(r.id)}>🗑️</button>
+                                            <button onClick={() => handleRoleDelete(r.id)}>🗑️</button>
                                         </div>
                                     </Card>
                                 ))}
@@ -264,7 +281,7 @@ function AdminDashboard() {
                                         </div>
                                         <div className="admin-item-actions">
                                             <button onClick={() => { setEditingId(c.id); setMemberFormData({ ...c, themes: c.themes.join(', ') }) }}>✏️</button>
-                                            <button onClick={() => deleteCharacter(c.id)}>🗑️</button>
+                                            <button onClick={() => handleMemberDelete(c.id)}>🗑️</button>
                                         </div>
                                     </Card>
                                 ))}
@@ -300,7 +317,7 @@ function AdminDashboard() {
                                         <div><h4>{e.title}</h4><Badge variant={e.type === 'online' ? 'default' : 'medium'}>{e.type}</Badge></div>
                                         <div className="admin-item-actions">
                                             <button onClick={() => { setEditingId(e.id); setEventFormData(e) }}>✏️</button>
-                                            <button onClick={() => deleteEvent(e.id)}>🗑️</button>
+                                            <button onClick={() => handleEventDelete(e.id)}>🗑️</button>
                                         </div>
                                     </Card>
                                 ))}

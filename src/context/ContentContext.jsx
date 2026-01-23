@@ -48,7 +48,12 @@ export const ContentProvider = ({ children }) => {
                 const response = await fetch('/api/data')
 
                 if (!response.ok) {
-                    throw new Error('Cache fetch failed')
+                    throw new Error(`Cache fetch failed (Status: ${response.status})`)
+                }
+
+                const contentType = response.headers.get("content-type")
+                if (!contentType || !contentType.includes("application/json")) {
+                    throw new Error("API returned non-JSON response (likely 404 in local dev)")
                 }
 
                 const data = await response.json()
@@ -97,8 +102,20 @@ export const ContentProvider = ({ children }) => {
             })
 
             if (!response.ok) {
-                const err = await response.json()
-                throw new Error(err.error || 'Sync failed')
+                let errorMessage = 'Sync failed'
+                const contentType = response.headers.get("content-type")
+                if (contentType && contentType.includes("application/json")) {
+                    const err = await response.json()
+                    errorMessage = err.error || errorMessage
+                } else if (response.status === 404) {
+                    errorMessage = 'Sync API not found. If testing locally, use "vercel dev" instead of "npm run dev".'
+                }
+                throw new Error(errorMessage)
+            }
+
+            const contentType = response.headers.get("content-type")
+            if (!contentType || !contentType.includes("application/json")) {
+                throw new Error("Server returned an invalid response. Please check your live logs.")
             }
 
             return await response.json()
@@ -110,12 +127,12 @@ export const ContentProvider = ({ children }) => {
 
     // --- Helper Methods with API Sync (SheetDB Source of Truth) ---
 
-    const syncToApi = async (sheet, method, data, id = null) => {
+    const syncToApi = async (sheet, method, data, idValue = null, idColumn = 'id') => {
         if (!API_URL) return
         try {
             let url = `${API_URL}?sheet=${sheet}`
-            if (id && (method === 'PUT' || method === 'DELETE')) {
-                url = `${API_URL}/id/${id}?sheet=${sheet}`
+            if (idValue && (method === 'PUT' || method === 'DELETE')) {
+                url = `${API_URL}/${idColumn}/${idValue}?sheet=${sheet}`
             }
 
             const res = await fetch(url, {
@@ -140,7 +157,7 @@ export const ContentProvider = ({ children }) => {
     }
     const updateQuest = (id, updated) => {
         setQuests(prev => prev.map(q => q.id === id ? { ...q, ...updated } : q))
-        syncToApi('quests', 'PUT', { ...updated, steps: Array.isArray(updated.steps) ? updated.steps.join('\n') : updated.steps }, id)
+        syncToApi('quests', 'PUT', { ...updated, steps: Array.isArray(updated.steps) ? updated.steps.join('\n') : updated.steps }, id, 'id')
     }
     const deleteQuest = (id) => {
         setQuests(prev => prev.filter(q => q.id !== id))
@@ -155,7 +172,7 @@ export const ContentProvider = ({ children }) => {
     }
     const updateRole = (id, updated) => {
         setRoles(prev => prev.map(r => r.id === id ? { ...r, ...updated } : r))
-        syncToApi('roles', 'PUT', { ...updated, traits: Array.isArray(updated.traits) ? updated.traits.join('\n') : updated.traits }, id)
+        syncToApi('roles', 'PUT', { ...updated, traits: Array.isArray(updated.traits) ? updated.traits.join('\n') : updated.traits }, id, 'id')
     }
     const deleteRole = (id) => {
         setRoles(prev => prev.filter(r => r.id !== id))
@@ -170,7 +187,7 @@ export const ContentProvider = ({ children }) => {
     }
     const updateCharacter = (id, updated) => {
         setCharacters(prev => prev.map(c => c.id === id ? { ...c, ...updated } : c))
-        syncToApi('members', 'PUT', { ...updated, themes: Array.isArray(updated.themes) ? updated.themes.join(',') : updated.themes }, id)
+        syncToApi('members', 'PUT', { ...updated, themes: Array.isArray(updated.themes) ? updated.themes.join(',') : updated.themes }, id, 'id')
     }
     const deleteCharacter = (id) => {
         setCharacters(prev => prev.filter(c => c.id !== id))
@@ -185,7 +202,7 @@ export const ContentProvider = ({ children }) => {
     }
     const updateEvent = (id, updated) => {
         setEvents(prev => prev.map(e => e.id === id ? { ...e, ...updated } : e))
-        syncToApi('events', 'PUT', updated, id)
+        syncToApi('events', 'PUT', updated, id, 'id')
     }
     const deleteEvent = (id) => {
         setEvents(prev => prev.filter(e => e.id !== id))
@@ -194,14 +211,12 @@ export const ContentProvider = ({ children }) => {
 
     // Announcement
     const updateAnnouncement = (newAnnouncement) => {
-        // We always use the title as the unique key for the announcement row.
-        // If the user changes the title, we first try to update the "current" title row.
-        // For simplicity in this demo, we assume the first row is always the one.
         const oldTitle = announcement.title
         setAnnouncement(newAnnouncement)
 
-        // SheetDB PUT to the row matching the PREVIOUS title to update it with NEW data
-        syncToApi('announcements', 'PUT', newAnnouncement, oldTitle)
+        // SheetDB PUT to the row matching the PREVIOUS title
+        // We use the 'title' column as the identification key
+        syncToApi('announcements', 'PUT', newAnnouncement, oldTitle, 'title')
     }
 
     return (
