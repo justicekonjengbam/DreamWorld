@@ -14,6 +14,7 @@ function Funders() {
     amount: '',
     type: 'one-time',
     showPublicly: true,
+    message: '',
     paymentMethod: 'upi',
     upiId: ''
   })
@@ -114,6 +115,7 @@ function Funders() {
           displayName: '',
           email: '',
           amount: '',
+          message: '',
           type: 'one-time',
           showPublicly: true,
           paymentMethod: 'upi',
@@ -146,6 +148,7 @@ function Funders() {
             displayName: '',
             email: '',
             amount: '',
+            message: '',
             type: 'one-time',
             showPublicly: true,
             paymentMethod: 'upi',
@@ -163,6 +166,7 @@ function Funders() {
       notes: {
         contribution_type: formData.type,
         display_name: formData.displayName || formData.name,
+        message: formData.message,
         show_publicly: formData.showPublicly
       },
       theme: {
@@ -358,6 +362,19 @@ function Funders() {
                     value={formData.displayName}
                     onChange={handleChange}
                     placeholder="Leave blank to use your name, or enter 'Anonymous'"
+                  />
+                </div>
+
+                <div className="form-group-full">
+                  <label htmlFor="message">Message (Optional)</label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    rows="2"
+                    placeholder="Leave a message for the team..."
+                    style={{ background: 'rgba(26, 31, 53, 0.8)', border: '1px solid rgba(76, 161, 175, 0.3)', borderRadius: '8px', color: 'white', padding: '12px', width: '100%' }}
                   />
                 </div>
 
