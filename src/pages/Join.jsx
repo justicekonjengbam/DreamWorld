@@ -6,7 +6,7 @@ import Button from '../components/Button'
 import './Join.css'
 
 function Join() {
-  const { submitDreamerApplication } = useContent()
+  const { submitDreamerApplication, roles } = useContent()
 
   // Dreamer Form State
   const [dreamerForm, setDreamerForm] = useState({
@@ -261,7 +261,7 @@ function Join() {
                 <div className="success-message">
                   <div className="success-icon">🌟</div>
                   <h3>You're now a Dreamer!</h3>
-                  <p>Your role as <strong>{roles.find(r => r.id === dreamerForm.role)?.singular}</strong> has been registered.</p>
+                  <p>Your role as <strong>{roles && roles.find(r => r.id === dreamerForm.role)?.singular || 'Dreamer'}</strong> has been registered.</p>
                   <p className="success-note">
                     Start exploring your character and begin creating content for DreamWorld!
                   </p>
