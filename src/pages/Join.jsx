@@ -164,7 +164,7 @@ function Join() {
                     {dreamerErrors.email && <span className="error-message">{dreamerErrors.email}</span>}
                   </div>
 
-                  <div className="form-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                  <div className="form-row">
                     <div className="form-group">
                       <label htmlFor="dreamer-age">Age *</label>
                       <input
