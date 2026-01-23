@@ -61,27 +61,21 @@
   pointer-events: none;
 }
 
-.profile-container {
-  margin-top: -120px;
-  /* Pull content up to overlap cover */
-  position: relative;
-  z-index: 15;
-}
-
+/* Main profile content area */
 .character-hero {
   display: flex;
   flex-direction: column;
   /* Vertical stack */
-  align-items: center;
-  /* Centered */
+  align-items: flex-start;
+  /* Left aligned */
   gap: 30px;
   margin-top: -120px;
   /* Sit halfway over cover edge */
   margin-bottom: 50px;
-  padding: 0 20px;
+  padding: 0;
   position: relative;
   z-index: 5;
-  text-align: center;
+  text-align: left;
 }
 
 .avatar-overlap-wrapper {
@@ -122,11 +116,13 @@
 
 .character-role-large {
   color: var(--color-cyan);
-  font-size: 1.8rem;
-  font-weight: 800;
-  margin-bottom: 25px;
+  font-size: 1.5rem;
+  /* Slightly smaller for elegance */
+  font-weight: 700;
+  margin-top: -5px;
+  margin-bottom: 20px;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 3px;
 }
 
 .character-themes-large {
@@ -134,8 +130,8 @@
   flex-wrap: wrap;
   gap: 12px;
   margin-bottom: 30px;
-  justify-content: center;
-  /* Center badges */
+  justify-content: flex-start;
+  /* Left aligned */
 }
 
 .role-badge-small {
@@ -157,43 +153,49 @@
   display: flex;
   gap: 20px;
   padding-top: 10px;
-  justify-content: center;
-  /* Center icons */
+  justify-content: flex-start;
+  /* Left aligned */
 }
 
 .social-icon {
-  width: 50px;
-  height: 50px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  /* Circular icons */
-  background: var(--color-gold);
-  /* Solid gold background */
-  border: none;
+  background: rgba(255, 215, 0, 0.1);
+  /* Subtle gold background */
+  border: 2px solid var(--color-gold);
+  /* Prominent gold border */
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #0a1118;
-  /* Dark symbol for contrast */
+  color: var(--color-gold);
+  /* Always gold */
   text-decoration: none;
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.social-icon:not(.unlinked) {
+  background: var(--color-gold);
+  color: #0d1117;
+  /* Dark icon on gold background */
 }
 
 .social-icon.unlinked {
-  opacity: 0.1;
-  filter: grayscale(1);
-  border-color: rgba(255, 255, 255, 0.1);
-  color: white;
+  opacity: 0.5;
+  filter: grayscale(0.5);
+  /* Keep some gold color */
+  border-style: dotted;
+  /* Distinct unlinked style */
 }
 
 .social-icon:not(.unlinked):hover {
-  transform: translateY(-8px) rotate(8deg) scale(1.1);
+  transform: translateY(-5px) rotate(5deg) scale(1.1);
   background: #fff;
-  /* White on hover */
   color: var(--color-gold);
-  /* Gold symbol on hover */
-  box-shadow: 0 15px 30px rgba(255, 255, 255, 0.4);
+  border-color: #fff;
+  box-shadow: 0 10px 25px rgba(255, 255, 255, 0.3);
 }
 
 /* Content Layout */

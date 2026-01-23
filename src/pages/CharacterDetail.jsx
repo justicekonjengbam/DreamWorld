@@ -49,8 +49,7 @@ function CharacterDetail() {
           width: '100%',
           position: 'relative',
           zIndex: 1,
-          cursor: character.coverImage ? 'zoom-in' : 'default',
-          borderBottom: '1px solid rgba(76, 161, 175, 0.3)'
+          cursor: character.coverImage ? 'zoom-in' : 'default'
         }}
         onClick={() => character.coverImage && openLightbox(character.coverImage)}
       >
@@ -60,7 +59,7 @@ function CharacterDetail() {
         </div>
       </div>
 
-      <div className="container" style={{ position: 'relative', zIndex: 10, marginTop: '20px' }}>
+      <div className="container" style={{ position: 'relative', zIndex: 10 }}>
         <div className="character-hero">
           <Avatar
             src={character.avatar}
