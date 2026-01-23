@@ -272,6 +272,16 @@ function AdminDashboard() {
                                         <div className="form-group"><label>Singular Name</label><input type="text" value={roleFormData.singular} onChange={(e) => setRoleFormData({ ...roleFormData, singular: e.target.value })} required /></div>
                                         <div className="form-group"><label>Brand Color</label><input type="text" value={roleFormData.color} onChange={(e) => setRoleFormData({ ...roleFormData, color: e.target.value })} required /></div>
                                     </div>
+                                    <div className="form-group-full">
+                                        <label>Image URL (imgURL)</label>
+                                        <input
+                                            type="text"
+                                            placeholder="https://..."
+                                            value={roleFormData.image || ''}
+                                            onChange={(e) => setRoleFormData({ ...roleFormData, image: e.target.value })}
+                                        />
+                                        <small style={{ color: 'var(--color-gray)', fontSize: '0.8rem' }}>Paste a link here or use the uploader below.</small>
+                                    </div>
                                     <ImageUpload
                                         label="Role Icon/Image"
                                         onUploadComplete={(url) => setRoleFormData(prev => ({ ...prev, image: url }))}

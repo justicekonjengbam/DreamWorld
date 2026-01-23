@@ -57,7 +57,7 @@ export const ContentProvider = ({ children }) => {
                         return {
                             ...n,
                             id: n.id || String(n.id),
-                            image: n.image || n.icon || n.photo || '',
+                            image: n.image || n.icon || n.photo || n.imgurl || '', // Added n.imgurl
                             traits: n.traits ? String(n.traits).split('\n') : []
                         }
                     }))
@@ -198,11 +198,13 @@ export const ContentProvider = ({ children }) => {
     const addRole = (newRole) => {
         const role = { ...newRole, id: newRole.id || `role-${Date.now()}` }
         setRoles(prev => [...prev, role])
-        syncToApi('roles', 'POST', { ...role, traits: role.traits.join('\n') })
+        // Map 'image' to 'imgURL' for the sheet
+        syncToApi('roles', 'POST', { ...role, traits: role.traits.join('\n'), imgURL: role.image })
     }
     const updateRole = (id, updated) => {
         setRoles(prev => prev.map(r => r.id === id ? { ...r, ...updated } : r))
-        syncToApi('roles', 'PUT', { ...updated, traits: Array.isArray(updated.traits) ? updated.traits.join('\n') : updated.traits }, id, 'id')
+        // Map 'image' to 'imgURL' for the sheet
+        syncToApi('roles', 'PUT', { ...updated, traits: Array.isArray(updated.traits) ? updated.traits.join('\n') : updated.traits, imgURL: updated.image }, id, 'id')
     }
     const deleteRole = (id) => {
         setRoles(prev => prev.filter(r => r.id !== id))
