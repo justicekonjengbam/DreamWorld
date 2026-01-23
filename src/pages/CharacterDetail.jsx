@@ -38,20 +38,45 @@ function CharacterDetail() {
   }
 
   return (
-    <div className="character-detail page">
-      <div className="container">
-        <Link to="/characters" className="back-link">← Back to Members</Link>
+    <div className="character-detail page" style={{ padding: 0 }}>
+      {/* Cover Image Hero */}
+      <div
+        className="character-full-cover"
+        style={{
+          backgroundImage: character.coverImage ? `url("${character.coverImage}")` : 'none',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          height: '350px',
+          width: '100%',
+          position: 'relative',
+          cursor: character.coverImage ? 'zoom-in' : 'default',
+          borderBottom: '1px solid rgba(76, 161, 175, 0.3)'
+        }}
+        onClick={() => character.coverImage && openLightbox(character.coverImage)}
+      >
+        <div className="cover-overlay"></div>
+      </div>
 
-        <div className="character-hero">
+      <div className="container" style={{ marginTop: '-80px', position: 'relative', zIndex: 2 }}>
+        <Link to="/characters" className="back-link" style={{ color: 'white', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>← Back to Members</Link>
+
+        <div className="character-hero" style={{ alignItems: 'flex-end' }}>
           <Avatar
             src={character.avatar}
             name={character.name}
             className="character-avatar-large"
-            style={{ cursor: character.avatar ? 'zoom-in' : 'default' }}
-            onClick={() => openLightbox(character.avatar)}
+            style={{
+              cursor: character.avatar ? 'zoom-in' : 'default',
+              border: '6px solid var(--color-background)',
+              boxShadow: '0 10px 30px rgba(0,0,0,0.5)'
+            }}
+            onClick={(e) => {
+              e.stopPropagation();
+              openLightbox(character.avatar);
+            }}
           />
-          <div className="character-header">
-            <h1>{character.name}</h1>
+          <div className="character-header" style={{ paddingBottom: '20px' }}>
+            <h1 style={{ textShadow: '0 2px 10px rgba(0,0,0,0.8)' }}>{character.name}</h1>
             <p className="character-role-large">{character.title}</p>
             {role && (
               <Link to={`/roles/${role.id}`} className="role-badge">

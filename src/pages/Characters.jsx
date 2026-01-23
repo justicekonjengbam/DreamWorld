@@ -56,12 +56,19 @@ function Characters() {
                 <div
                   className="character-cover-section"
                   style={{
-                    backgroundImage: character.coverimage || character.coverImage ? `url(${character.coverimage || character.coverImage})` : 'none',
+                    backgroundImage: character.coverImage ? `url("${character.coverImage}")` : 'none',
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     height: '200px',
                     borderRadius: '8px 8px 0 0',
-                    position: 'relative'
+                    position: 'relative',
+                    cursor: character.coverImage ? 'zoom-in' : 'default'
+                  }}
+                  onClick={(e) => {
+                    if (character.coverImage) {
+                      e.preventDefault();
+                      openLightbox(character.coverImage);
+                    }
                   }}
                 >
                   <div className="character-photo-wrapper">
