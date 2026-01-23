@@ -382,7 +382,7 @@ function AdminDashboard() {
                                             <div><h4>{c.name}</h4><Badge>{c.role}</Badge></div>
                                         </div>
                                         <div className="admin-item-actions">
-                                            <button onClick={() => { setEditingId(c.id); setMemberFormData({ ...c, themes: c.themes.join(', ') }) }}>✏️</button>
+                                            <button onClick={() => { setEditingId(c.id); setMemberFormData({ ...c, themes: Array.isArray(c.themes) ? c.themes.join(', ') : (c.themes || '') }) }}>✏️</button>
                                             <button onClick={() => handleMemberDelete(c.id)}>🗑️</button>
                                         </div>
                                     </Card>

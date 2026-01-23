@@ -83,10 +83,12 @@ export const ContentProvider = ({ children }) => {
                     }))
                 }
                 if (data.announcement) {
-                    const ann = data.announcement;
+                    const ann = Array.isArray(data.announcement) ? data.announcement[0] : data.announcement;
                     const n = {}
-                    Object.keys(ann).forEach(k => n[k.toLowerCase().trim()] = ann[k])
-                    setAnnouncement({ ...n, date: n.date ? String(n.date) : '' });
+                    if (ann) {
+                        Object.keys(ann).forEach(k => n[k.toLowerCase().trim()] = ann[k])
+                        setAnnouncement(prev => ({ ...prev, ...n, date: n.date ? String(n.date) : (prev.date || '') }));
+                    }
                 }
 
                 setLoading(false)

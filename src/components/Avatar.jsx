@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 function Avatar({ src, name, className, style, onClick }) {
     const [status, setStatus] = useState('loading') // 'loading', 'error', 'success'
