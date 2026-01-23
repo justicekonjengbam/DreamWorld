@@ -120,22 +120,17 @@ function CharacterDetail() {
 
         <div className="character-content-grid">
           <div className="character-main-content">
-            <Card hover={false} className="about-member-card">
-              <h2>About {character.name}</h2>
+            <div className="about-member-section">
               <p className="character-full-bio">{character.bio}</p>
               <div className="character-meta">
-                <p><strong>Member Since:</strong> {character.joineddate || character.joinedDate || 'Dreamer Since Launch'}</p>
+                <p>{character.joineddate || character.joinedDate}</p>
               </div>
-            </Card>
+            </div>
 
             {role && (
-              <Card hover={false} className="path-member-card">
-                <h3>Path: {role.singular}</h3>
+              <div className="path-member-section">
                 <p>{role.description}</p>
-                <Link to={`/roles/${role.id}`} className="view-role-link">
-                  Learn more about the {role.name} path →
-                </Link>
-              </Card>
+              </div>
             )}
           </div>
 
