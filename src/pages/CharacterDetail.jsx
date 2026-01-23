@@ -50,60 +50,60 @@ function CharacterDetail() {
               backgroundPosition: 'center',
               display: 'flex',
               alignItems: 'center',
-              justify- content: 'center',
-          backgroundColor: 'rgba(76, 161, 175, 0.1)',
-          fontSize: '4rem',
-          color: 'var(--color-cyan)',
-          fontWeight: '700'
+              justifyContent: 'center',
+              backgroundColor: 'rgba(76, 161, 175, 0.1)',
+              fontSize: '4rem',
+              color: 'var(--color-cyan)',
+              fontWeight: '700'
             }}
-          onClick={() => character.avatar && openLightbox(character.avatar)}
+            onClick={() => character.avatar && openLightbox(character.avatar)}
           >
-          {!character.avatar && character.name.charAt(0)}
-        </div>
-        <div className="character-header">
-          <h1>{character.name}</h1>
-          <p className="character-role-large">{character.title}</p>
-          {role && (
-            <Link to={`/roles/${role.id}`} className="role-badge">
-              {role.singular}
-            </Link>
-          )}
-          <div className="character-themes-large">
-            {character.themes.map((theme, index) => (
-              <Badge key={index}>{theme}</Badge>
-            ))}
+            {!character.avatar && character.name ? character.name.charAt(0) : ''}
+          </div>
+          <div className="character-header">
+            <h1>{character.name}</h1>
+            <p className="character-role-large">{character.title}</p>
+            {role && (
+              <Link to={`/roles/${role.id}`} className="role-badge">
+                {role.singular}
+              </Link>
+            )}
+            <div className="character-themes-large">
+              {character.themes && character.themes.map((theme, index) => (
+                <Badge key={index}>{theme}</Badge>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
 
-      <ImageModal
-        src={modalImage}
-        alt={character.name}
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-      />
+        <ImageModal
+          src={modalImage}
+          alt={character.name}
+          isOpen={modalOpen}
+          onClose={() => setModalOpen(false)}
+        />
 
-      <div className="character-content">
-        <Card hover={false}>
-          <h2>About {character.name}</h2>
-          <p className="character-full-bio">{character.bio}</p>
-          <div className="character-meta" style={{ marginTop: '20px', color: 'var(--color-gray)', fontSize: '0.9rem' }}>
-            <p><strong>Joined:</strong> {character.joinedDate || 'Dreamer Since Launch'}</p>
-          </div>
-        </Card>
-
-        {role && (
+        <div className="character-content">
           <Card hover={false}>
-            <h3>Path: {role.singular}</h3>
-            <p>{role.description}</p>
-            <Link to={`/roles/${role.id}`} className="view-role-link">
-              Learn more about {role.name} →
-            </Link>
+            <h2>About {character.name}</h2>
+            <p className="character-full-bio">{character.bio}</p>
+            <div className="character-meta" style={{ marginTop: '20px', color: 'var(--color-gray)', fontSize: '0.9rem' }}>
+              <p><strong>Joined:</strong> {character.joinedDate || 'Dreamer Since Launch'}</p>
+            </div>
           </Card>
-        )}
+
+          {role && (
+            <Card hover={false}>
+              <h3>Path: {role.singular}</h3>
+              <p>{role.description}</p>
+              <Link to={`/roles/${role.id}`} className="view-role-link">
+                Learn more about {role.name} →
+              </Link>
+            </Card>
+          )}
+        </div>
       </div>
     </div>
-    </div >
   )
 }
 
