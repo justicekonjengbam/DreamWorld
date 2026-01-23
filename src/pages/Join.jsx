@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { useContent } from '../context/ContentContext'
-import { roles } from '../data/characters'
 import Card from '../components/Card'
 import SectionHeader from '../components/SectionHeader'
 import Button from '../components/Button'
