@@ -198,13 +198,15 @@ export const ContentProvider = ({ children }) => {
     const addRole = (newRole) => {
         const role = { ...newRole, id: newRole.id || `role-${Date.now()}` }
         setRoles(prev => [...prev, role])
-        // Map 'image' to 'imgURL' for the sheet
-        syncToApi('roles', 'POST', { ...role, traits: role.traits.join('\n'), imgURL: role.image })
+        // Sanitize Payload for SheetDB: Ensure only 'imgURL' is sent, remove duplicates.
+        const { image, imgurl, ...rest } = role;
+        syncToApi('roles', 'POST', { ...rest, traits: role.traits.join('\n'), imgURL: role.image })
     }
     const updateRole = (id, updated) => {
         setRoles(prev => prev.map(r => r.id === id ? { ...r, ...updated } : r))
-        // Map 'image' to 'imgURL' for the sheet
-        syncToApi('roles', 'PUT', { ...updated, traits: Array.isArray(updated.traits) ? updated.traits.join('\n') : updated.traits, imgURL: updated.image }, id, 'id')
+        // Sanitize Payload for SheetDB: Ensure only 'imgURL' is sent, remove duplicates.
+        const { image, imgurl, ...rest } = updated;
+        syncToApi('roles', 'PUT', { ...rest, traits: Array.isArray(updated.traits) ? updated.traits.join('\n') : updated.traits, imgURL: updated.image }, id, 'id')
     }
     const deleteRole = (id) => {
         setRoles(prev => prev.filter(r => r.id !== id))
