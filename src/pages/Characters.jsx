@@ -4,6 +4,7 @@ import Card from '../components/Card'
 import SectionHeader from '../components/SectionHeader'
 import Badge from '../components/Badge'
 import ImageModal from '../components/ImageModal'
+import Avatar from '../components/Avatar'
 import './Characters.css'
 
 import { Link } from 'react-router-dom'
@@ -55,32 +56,19 @@ function Characters() {
                 <div
                   className="character-cover-section"
                   style={{
-                    backgroundImage: character.coverImage ? `url(${character.coverImage})` : 'none',
+                    backgroundImage: character.coverimage || character.coverImage ? `url(${character.coverimage || character.coverImage})` : 'none',
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     height: '200px',
                     borderRadius: '8px 8px 0 0',
-                    position: 'relative',
-                    cursor: 'zoom-in'
-                  }}
-                  onClick={(e) => {
-                    if (character.coverImage) {
-                      e.preventDefault();
-                      openLightbox(character.coverImage);
-                    }
+                    position: 'relative'
                   }}
                 >
                   <div className="character-photo-wrapper">
-                    <img
+                    <Avatar
                       src={character.avatar}
-                      alt={character.name}
+                      name={character.name}
                       className="character-photo"
-                      style={{ cursor: 'zoom-in' }}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        openLightbox(character.avatar);
-                      }}
                     />
                   </div>
                 </div>

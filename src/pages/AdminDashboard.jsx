@@ -5,6 +5,7 @@ import Card from '../components/Card'
 import Button from '../components/Button'
 import Badge from '../components/Badge'
 import ImageUpload from '../components/ImageUpload'
+import Avatar from '../components/Avatar'
 import './AdminDashboard.css'
 
 function AdminDashboard() {
@@ -339,7 +340,11 @@ function AdminDashboard() {
                                 {characters.map(c => (
                                     <Card key={c.id} className="admin-item-card">
                                         <div className="admin-member-preview">
-                                            <img src={c.avatar} alt="" style={{ width: 40, height: 40, borderRadius: '50%' }} />
+                                            <Avatar
+                                                src={c.avatar}
+                                                name={c.name}
+                                                style={{ width: 40, height: 40, borderRadius: '50%' }}
+                                            />
                                             <div><h4>{c.name}</h4><Badge>{c.role}</Badge></div>
                                         </div>
                                         <div className="admin-item-actions">

@@ -44,46 +44,49 @@ export const ContentProvider = ({ children }) => {
                 const data = await response.json()
 
                 if (data.quests) {
-                    setQuests(data.quests.map(q => ({
-                        ...q,
-                        steps: q.steps ? q.steps.split('\n') : []
-                    })))
+                    setQuests(data.quests.map(q => {
+                        const n = {}
+                        Object.keys(q).forEach(k => n[k.toLowerCase().trim()] = q[k])
+                        return { ...n, id: n.id || `q-${Date.now()}`, steps: n.steps ? String(n.steps).split('\n') : [] }
+                    }))
                 }
                 if (data.roles) {
-                    setRoles(data.roles.map(r => ({
-                        ...r,
-                        traits: r.traits ? r.traits.split('\n') : []
-                    })))
+                    setRoles(data.roles.map(r => {
+                        const n = {}
+                        Object.keys(r).forEach(k => n[k.toLowerCase().trim()] = r[k])
+                        return {
+                            ...n,
+                            id: n.id || String(n.id),
+                            image: n.image || n.icon || n.photo || '',
+                            traits: n.traits ? String(n.traits).split('\n') : []
+                        }
+                    }))
                 }
                 if (data.characters) {
                     setCharacters(data.characters.map(c => {
-                        // Normalize keys to lowercase to be case-insensitive
-                        const normalized = {}
-                        Object.keys(c).forEach(key => {
-                            normalized[key.toLowerCase().trim()] = c[key]
-                        })
+                        const n = {}
+                        Object.keys(c).forEach(k => n[k.toLowerCase().trim()] = c[k])
                         return {
-                            ...normalized,
-                            // Ensure common expected keys are present even if sheet has different headers
-                            id: normalized.id || normalized.mid || '',
-                            name: normalized.name || normalized.fullname || '',
-                            avatar: normalized.avatar || normalized.avatar_url || normalized.photo || normalized.image || '',
-                            coverImage: normalized.coverimage || normalized.cover_url || normalized.background || '',
-                            themes: normalized.themes ? normalized.themes.split(',').map(t => t.trim()) : []
+                            ...n,
+                            id: n.id || n.mid || '',
+                            avatar: n.avatar || n.avatar_url || n.photo || n.image || '',
+                            coverImage: n.coverimage || n.cover_url || n.background || '',
+                            themes: n.themes ? String(n.themes).split(',').map(t => t.trim()) : []
                         }
                     }))
                 }
                 if (data.events) {
-                    setEvents(data.events)
+                    setEvents(data.events.map(e => {
+                        const n = {}
+                        Object.keys(e).forEach(k => n[k.toLowerCase().trim()] = e[k])
+                        return n
+                    }))
                 }
                 if (data.announcement) {
                     const ann = data.announcement;
-                    // If Google Sheets sends a numeric serial date (like 46045), 
-                    // we keep it as a string so it doesn't break the UI.
-                    setAnnouncement({
-                        ...ann,
-                        date: ann.date ? String(ann.date) : ''
-                    });
+                    const n = {}
+                    Object.keys(ann).forEach(k => n[k.toLowerCase().trim()] = ann[k])
+                    setAnnouncement({ ...n, date: n.date ? String(n.date) : '' });
                 }
 
                 setLoading(false)

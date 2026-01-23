@@ -4,6 +4,7 @@ import { useContent } from '../context/ContentContext'
 import Card from '../components/Card'
 import SectionHeader from '../components/SectionHeader'
 import ImageModal from '../components/ImageModal'
+import Avatar from '../components/Avatar'
 import './Roles.css'
 
 
@@ -15,6 +16,7 @@ function Roles() {
   if (loading) return <div className="loading-state">Syncing Roles with DreamWorld...</div>
 
   const openLightbox = (src) => {
+    if (!src) return
     setModalImage(src)
     setModalOpen(true)
   }
@@ -43,12 +45,11 @@ function Roles() {
           {roles.map((role) => (
             <Link to={`/roles/${role.id}`} key={role.id} className="role-link" onClick={() => { }}>
               <Card>
-                <div
+                <Avatar
+                  src={role.image}
+                  name={role.singular}
                   className="role-icon"
-                  style={{
-                    background: role.color,
-                    cursor: role.image ? 'zoom-in' : 'default'
-                  }}
+                  style={{ background: role.color }}
                   onClick={(e) => {
                     if (role.image) {
                       e.preventDefault();
@@ -56,13 +57,7 @@ function Roles() {
                       openLightbox(role.image);
                     }
                   }}
-                >
-                  {role.image ? (
-                    <img src={role.image} alt={role.singular} className="role-image" />
-                  ) : (
-                    <span className="role-initial">{role.singular.charAt(0)}</span>
-                  )}
-                </div>
+                />
                 <h3>{role.name}</h3>
                 <p className="role-description">{role.description}</p>
                 <div className="role-traits">
@@ -82,6 +77,5 @@ function Roles() {
     </div>
   )
 }
-
 
 export default Roles

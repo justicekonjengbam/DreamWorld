@@ -5,6 +5,7 @@ import Card from '../components/Card'
 import SectionHeader from '../components/SectionHeader'
 import Button from '../components/Button'
 import ImageModal from '../components/ImageModal'
+import Avatar from '../components/Avatar'
 import './RoleDetail.css'
 
 function RoleDetail() {
@@ -19,6 +20,7 @@ function RoleDetail() {
   const members = characters.filter(c => c.role === id)
 
   const openLightbox = (src) => {
+    if (!src) return
     setModalImage(src)
     setModalOpen(true)
   }
@@ -40,19 +42,16 @@ function RoleDetail() {
         <Link to="/roles" className="back-link">← Back to Roles</Link>
 
         <div className="role-hero">
-          <div
+          <Avatar
+            src={role.image}
+            name={role.singular}
             className="role-icon-large"
             style={{
               background: role.color,
-              cursor: role.image ? 'zoom-in' : 'default',
-              backgroundImage: role.image ? `url(${role.image})` : 'none',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center'
+              cursor: role.image ? 'zoom-in' : 'default'
             }}
-            onClick={() => role.image && openLightbox(role.image)}
-          >
-            {!role.image && role.singular.charAt(0)}
-          </div>
+            onClick={() => openLightbox(role.image)}
+          />
           <div className="role-header">
             <h1>{role.name}</h1>
             <p className="role-description-large">{role.description}</p>
@@ -93,13 +92,12 @@ function RoleDetail() {
             {members.map((member) => (
               <Link to={`/characters/${member.id}`} key={member.id} className="member-link">
                 <Card>
-                  <img
+                  <Avatar
                     src={member.avatar}
-                    alt={member.name}
+                    name={member.name}
                     className="member-photo"
-                    style={{ cursor: 'zoom-in' }}
                     onClick={(e) => {
-                      e.preventDefault(); // Don't navigate
+                      e.preventDefault();
                       openLightbox(member.avatar);
                     }}
                   />

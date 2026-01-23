@@ -5,6 +5,7 @@ import Card from '../components/Card'
 import Badge from '../components/Badge'
 import Button from '../components/Button'
 import ImageModal from '../components/ImageModal'
+import Avatar from '../components/Avatar'
 import './CharacterDetail.css'
 
 function CharacterDetail() {
@@ -12,7 +13,6 @@ function CharacterDetail() {
   const { characters, roles, loading } = useContent()
   const [modalOpen, setModalOpen] = useState(false)
   const [modalImage, setModalImage] = useState('')
-  const [imgError, setImgError] = useState(false)
 
   if (loading) return <div className="loading-state">Syncing Member Info...</div>
 
@@ -23,18 +23,16 @@ function CharacterDetail() {
       <div className="character-detail page">
         <div className="container">
           <h2>Character not found</h2>
-          <p style={{ color: 'var(--color-gray)', marginBottom: '20px' }}>ID: {id}</p>
           <Link to="/characters"><Button>Back to Members</Button></Link>
         </div>
       </div>
     )
   }
 
-  // Robustly find the avatar in case of hidden names
-  const avatarUrl = character.avatar || character.avatar_url || character.photo || character.image
   const role = roles.find(r => r.id === character.role)
 
   const openLightbox = (src) => {
+    if (!src) return
     setModalImage(src)
     setModalOpen(true)
   }
@@ -45,23 +43,13 @@ function CharacterDetail() {
         <Link to="/characters" className="back-link">← Back to Members</Link>
 
         <div className="character-hero">
-          <div
+          <Avatar
+            src={character.avatar}
+            name={character.name}
             className="character-avatar-large"
-            onClick={() => avatarUrl && !imgError && openLightbox(avatarUrl)}
-          >
-            {avatarUrl && !imgError ? (
-              <img
-                src={avatarUrl}
-                alt={character.name}
-                className="avatar-img-actual"
-                onError={() => setImgError(true)}
-              />
-            ) : (
-              <span className="avatar-initial-fallback">
-                {character.name ? character.name.charAt(0) : '?'}
-              </span>
-            )}
-          </div>
+            style={{ cursor: character.avatar ? 'zoom-in' : 'default' }}
+            onClick={() => openLightbox(character.avatar)}
+          />
           <div className="character-header">
             <h1>{character.name}</h1>
             <p className="character-role-large">{character.title}</p>
