@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { events } from '../data/events'
+import { useContent } from '../context/ContentContext'
 import Card from '../components/Card'
 import SectionHeader from '../components/SectionHeader'
 import Badge from '../components/Badge'
@@ -9,14 +9,17 @@ import './Events.css'
 
 
 function Events() {
+  const { events, loading } = useContent()
   const [selectedEvent, setSelectedEvent] = useState(null)
+
+  if (loading) return <div className="loading-state">Syncing Events with DreamWorld...</div>
 
   const formatDate = (dateString) => {
     const date = new Date(dateString)
-    return date.toLocaleDateString('en-US', { 
+    return date.toLocaleDateString('en-US', {
       weekday: 'long',
-      year: 'numeric', 
-      month: 'long', 
+      year: 'numeric',
+      month: 'long',
       day: 'numeric',
       hour: '2-digit',
       minute: '2-digit'
@@ -35,8 +38,8 @@ function Events() {
           <img src="/logo.png" alt="DreamWorld Logo" className="page-logo" />
         </div>
 
-        <SectionHeader 
-          title="Upcoming Events" 
+        <SectionHeader
+          title="Upcoming Events"
           subtitle="Join live sessions, workshops, and community gatherings"
         />
 

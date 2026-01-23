@@ -1,11 +1,14 @@
 import { Link } from 'react-router-dom'
-import { roles } from '../data/characters'
+import { useContent } from '../context/ContentContext'
 import Card from '../components/Card'
 import SectionHeader from '../components/SectionHeader'
 import './Roles.css'
 
 
 function Roles() {
+  const { roles, loading } = useContent()
+
+  if (loading) return <div className="loading-state">Syncing Roles with DreamWorld...</div>
   return (
     <div className="roles page">
       <div className="container">
@@ -14,8 +17,8 @@ function Roles() {
           <img src="/logo.png" alt="DreamWorld Logo" className="roles-logo" />
         </div>
 
-        <SectionHeader 
-          title="Character Roles" 
+        <SectionHeader
+          title="Character Roles"
           subtitle="Discover the different paths and philosophies in DreamWorld"
         />
 

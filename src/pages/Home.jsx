@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { useContent } from '../context/ContentContext'
 import Button from '../components/Button'
 import Card from '../components/Card'
 import SectionHeader from '../components/SectionHeader'
@@ -8,6 +9,10 @@ import './Home.css'
 
 
 function Home() {
+  const { announcement, loading } = useContent()
+
+  if (loading) return <div className="loading-state">Syncing with DreamWorld...</div>
+
   useEffect(() => {
     const observerOptions = {
       threshold: 0.15,
@@ -57,13 +62,13 @@ function Home() {
         <p className="animate-on-scroll delay-1 mission-subtitle">Education, community, and action—building a brighter future together</p>
         <div className="mission-content animate-on-scroll delay-2">
           <p>
-            DreamWorld is more than a fantasy universe—it's a living community dedicated to 
-            continuous learning and positive impact. We believe that when people learn together, 
+            DreamWorld is more than a fantasy universe—it's a living community dedicated to
+            continuous learning and positive impact. We believe that when people learn together,
             create together, and support each other, extraordinary things happen.
           </p>
           <p>
-            Every week, we embark on small "quests"—simple actions that improve our skills, 
-            our spaces, and our communities. From planting a seed to learning a new skill 
+            Every week, we embark on small "quests"—simple actions that improve our skills,
+            our spaces, and our communities. From planting a seed to learning a new skill
             to helping someone in need, every quest brings us closer to the world we want to live in.
           </p>
         </div>
@@ -80,7 +85,7 @@ function Home() {
               </div>
               <h3>Learn</h3>
               <p>
-                Explore knowledge from technology to nature, from coding to gardening. 
+                Explore knowledge from technology to nature, from coding to gardening.
                 Our community shares resources, tutorials, and guidance for beginners and experts alike.
               </p>
               <Link to="/about" className="feature-link">Discover the lore →</Link>
@@ -95,7 +100,7 @@ function Home() {
               </div>
               <h3>Characters</h3>
               <p>
-                Meet the guides of DreamWorld—The Guardian, The Florist, The Hooper—each 
+                Meet the guides of DreamWorld—The Guardian, The Florist, The Hooper—each
                 bringing unique wisdom and inspiration to our community.
               </p>
               <Link to="/characters" className="feature-link">Meet the characters →</Link>
@@ -110,7 +115,7 @@ function Home() {
               </div>
               <h3>Quests & Events</h3>
               <p>
-                Take on weekly quests and join live events. Small, achievable actions that build 
+                Take on weekly quests and join live events. Small, achievable actions that build
                 skills, strengthen community, and create positive change in the world.
               </p>
               <Link to="/quests" className="feature-link">See active quests →</Link>
@@ -125,19 +130,12 @@ function Home() {
         <div className="animate-on-scroll delay-1">
           <Card className="update-card" hover={false}>
             <div className="update-header">
-              <h3>Welcome to DreamWorld! 🌟</h3>
-              <span className="update-date">January 18, 2026</span>
+              <h3>{announcement.title}</h3>
+              <span className="update-date">{announcement.date}</span>
             </div>
-            <p>
-              We're thrilled to launch DreamWorld—a space for learning, creating, and growing together. 
-              Our first weekly quests are live, and our community is already gathering in Discord.
-            </p>
-            <p>
-              This week's featured quest: <strong>Plant a Seed</strong>. Whether it's a literal plant 
-              or the seed of a new skill, we're celebrating growth in all its forms.
-            </p>
+            <p>{announcement.content}</p>
             <div className="update-actions">
-              <Link to="/quests"><Button variant="primary">View This Week's Quests</Button></Link>
+              <Link to={announcement.linkTo}><Button variant="primary">{announcement.linkText}</Button></Link>
               <Link to="/join"><Button variant="ghost">Join Our Community</Button></Link>
             </div>
           </Card>

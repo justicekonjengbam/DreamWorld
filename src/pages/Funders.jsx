@@ -13,54 +13,56 @@ function Funders() {
     email: '',
     amount: '',
     type: 'one-time',
-    showPublicly: true
+    showPublicly: true,
+    paymentMethod: 'upi',
+    upiId: ''
   })
   const [submitted, setSubmitted] = useState(false)
 
   // Hall of Fame - All-time impact leaders (static, celebrate achievements)
   const hallOfFame = [
-    { 
-      id: 1, 
-      name: 'Innovation Labs', 
-      tier: 'Nebula', 
+    {
+      id: 1,
+      name: 'Innovation Labs',
+      tier: 'Nebula',
       impact: 'Funded 12 community workshops',
-      avatar: '🚀' 
+      avatar: '🚀'
     },
-    { 
-      id: 2, 
-      name: 'Tech for Good Foundation', 
-      tier: 'Comet', 
+    {
+      id: 2,
+      name: 'Tech for Good Foundation',
+      tier: 'Comet',
       impact: 'Sponsored 50 student kits',
-      avatar: '🏢' 
+      avatar: '🏢'
     },
-    { 
-      id: 3, 
-      name: 'Green Earth Collective', 
-      tier: 'Star', 
+    {
+      id: 3,
+      name: 'Green Earth Collective',
+      tier: 'Star',
       impact: 'Powered 8 nature quests',
-      avatar: '🌍' 
+      avatar: '🌍'
     }
   ]
 
   // This Month's Champions (resets monthly)
   const monthlyChampions = [
-    { 
-      id: 1, 
-      name: 'Sarah Chen', 
+    {
+      id: 1,
+      name: 'Sarah Chen',
       impact: 'Funded Art Quest Workshop',
       avatar: '👩‍💻',
       tier: 'Star'
     },
-    { 
-      id: 2, 
-      name: 'Community Tech Fund', 
+    {
+      id: 2,
+      name: 'Community Tech Fund',
       impact: 'Sponsored 10 beginner coding kits',
       avatar: '💻',
       tier: 'Comet'
     },
-    { 
-      id: 3, 
-      name: 'Alex Rivera', 
+    {
+      id: 3,
+      name: 'Alex Rivera',
       impact: 'Enabled Sustainability Quest',
       avatar: '🎨',
       tier: 'Star'
@@ -101,20 +103,67 @@ function Funders() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log('Donation submitted:', formData)
-    setSubmitted(true)
-    
-    setTimeout(() => {
-      setFormData({ 
-        name: '', 
-        displayName: '',
-        email: '', 
-        amount: '', 
-        type: 'one-time',
-        showPublicly: true
+
+    // RAZORPAY INTEGRATION
+    // The Key ID is now stored in the .env file for security
+    const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID
+
+    const options = {
+      key: RAZORPAY_KEY_ID,
+      amount: formData.amount * 100, // Razorpay expects amount in paise (100 paise = 1 INR)
+      currency: "INR",
+      name: "DreamWorld",
+      description: formData.type === 'monthly' ? "Monthly Support Contribution" : "Support Contribution",
+      image: "/logo.png",
+      handler: function (response) {
+        console.log('Payment Successful:', response)
+        setSubmitted(true)
+
+        // Reset form after 5 seconds
+        setTimeout(() => {
+          setFormData({
+            name: '',
+            displayName: '',
+            email: '',
+            amount: '',
+            type: 'one-time',
+            showPublicly: true,
+            paymentMethod: 'upi',
+            upiId: ''
+          })
+          setSubmitted(false)
+        }, 5000)
+      },
+      prefill: {
+        name: formData.name,
+        email: formData.email,
+        contact: "", // Optional
+        method: formData.paymentMethod === 'upi' ? 'upi' : (formData.paymentMethod === 'gpay' ? 'upi' : 'card')
+      },
+      notes: {
+        contribution_type: formData.type,
+        display_name: formData.displayName || formData.name,
+        show_publicly: formData.showPublicly
+      },
+      theme: {
+        color: "#4CA1AF" // Site's Cyan color
+      }
+    }
+
+    // Handle UPI ID if specifically selected in our UI
+    if (formData.paymentMethod === 'upi' && formData.upiId) {
+      options.prefill.vpa = formData.upiId
+    }
+
+    if (window.Razorpay) {
+      const rzp = new window.Razorpay(options)
+      rzp.on('payment.failed', function (response) {
+        alert("Payment Failed: " + response.error.description)
       })
-      setSubmitted(false)
-    }, 5000)
+      rzp.open()
+    } else {
+      alert("Razorpay SDK failed to load. Please check your internet connection.")
+    }
   }
 
   const getTierBadge = (tier) => {
@@ -134,8 +183,8 @@ function Funders() {
           <img src="/logo.png" alt="DreamWorld Logo" className="page-logo" />
         </div>
 
-        <SectionHeader 
-          title="Power the Dream Together" 
+        <SectionHeader
+          title="Power the Dream Together"
           subtitle="Every contribution creates real impact in our community"
         />
 
@@ -157,7 +206,7 @@ function Funders() {
               </div>
             </div>
             <p className="impact-text">
-              Your support doesn't just fund a project—it empowers learners, enables quests, 
+              Your support doesn't just fund a project—it empowers learners, enables quests,
               and builds a community where everyone can grow together.
             </p>
           </Card>
@@ -199,7 +248,7 @@ function Funders() {
 
                 <div className="form-row">
                   <div className="form-group">
-                    <label htmlFor="amount">Amount (USD)</label>
+                    <label htmlFor="amount">Amount (INR)</label>
                     <input
                       type="number"
                       id="amount"
@@ -213,7 +262,7 @@ function Funders() {
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="type">Support Type</label>
+                    <label htmlFor="type">Contribution Schedule</label>
                     <select
                       id="type"
                       name="type"
@@ -221,9 +270,63 @@ function Funders() {
                       onChange={handleChange}
                     >
                       <option value="one-time">One-Time Support</option>
-                      <option value="monthly">Monthly Builder</option>
+                      <option value="monthly">Auto Pay (Monthly Subscription)</option>
                     </select>
                   </div>
+                </div>
+
+                <div className="payment-method-section">
+                  <label className="section-label">Select Payment Method</label>
+                  <div className="payment-methods-grid">
+                    <div
+                      className={`payment-method-card ${formData.paymentMethod === 'upi' ? 'active' : ''}`}
+                      onClick={() => setFormData(prev => ({ ...prev, paymentMethod: 'upi' }))}
+                    >
+                      <div className="method-icon">📱</div>
+                      <div className="method-name">UPI</div>
+                      <div className="method-sub">PhonePe, GPay, etc.</div>
+                    </div>
+                    <div
+                      className={`payment-method-card ${formData.paymentMethod === 'gpay' ? 'active' : ''}`}
+                      onClick={() => setFormData(prev => ({ ...prev, paymentMethod: 'gpay' }))}
+                    >
+                      <div className="method-icon">💳</div>
+                      <div className="method-name">Google Pay</div>
+                      <div className="method-sub">Fast & Secure</div>
+                    </div>
+                    <div
+                      className={`payment-method-card ${formData.paymentMethod === 'card' ? 'active' : ''}`}
+                      onClick={() => setFormData(prev => ({ ...prev, paymentMethod: 'card' }))}
+                    >
+                      <div className="method-icon">🏛️</div>
+                      <div className="method-name">Credit/Debit</div>
+                      <div className="method-sub">All major cards</div>
+                    </div>
+                  </div>
+
+                  {formData.paymentMethod === 'upi' && (
+                    <div className="form-group-full upi-input-field">
+                      <label htmlFor="upiId">Your UPI ID</label>
+                      <input
+                        type="text"
+                        id="upiId"
+                        name="upiId"
+                        value={formData.upiId}
+                        onChange={handleChange}
+                        required
+                        placeholder="username@bank"
+                      />
+                    </div>
+                  )}
+
+                  {formData.paymentMethod === 'gpay' && (
+                    <div className="gpay-container">
+                      <div className="gpay-simulated-button clickable" onClick={handleSubmit}>
+                        <span className="gpay-logo">Pay with Google Pay</span>
+                      </div>
+                      <p className="gpay-infoText">Razorpay will open to securely process your GPay request.</p>
+                    </div>
+                  )}
                 </div>
 
                 <div className="form-group-full">
@@ -251,15 +354,17 @@ function Funders() {
                   </label>
                 </div>
 
-                <Button type="submit" variant="primary">Continue to Payment</Button>
+                <Button type="submit" variant="primary">
+                  {formData.paymentMethod === 'gpay' ? 'Pay Now' : 'Continue to Payment'}
+                </Button>
               </form>
             ) : (
               <div className="success-message">
                 <div className="success-icon">✨</div>
                 <h3>Thank You for Your Impact!</h3>
                 <p>
-                  {formData.name}, you're now part of the community building DreamWorld. 
-                  Your contribution will help create real opportunities for learning and growth!
+                  {formData.name}, you're now part of the community building DreamWorld.
+                  Your {formData.type === 'monthly' ? 'Auto Pay subscription' : 'contribution'} via {formData.paymentMethod.toUpperCase()} will help create real opportunities for learning and growth!
                 </p>
               </div>
             )}
@@ -270,7 +375,7 @@ function Funders() {
         <div className="champions-section">
           <h2 className="section-title">🌟 This Month's Champions</h2>
           <p className="section-subtitle">January 2026 - Making the biggest impact this month</p>
-          
+
           <div className="champions-podium">
             {monthlyChampions.map((champion, index) => {
               const badge = getTierBadge(champion.tier)
@@ -292,7 +397,7 @@ function Funders() {
         <div className="quest-sponsors-section">
           <h2 className="section-title">🎯 Quest Sponsors</h2>
           <p className="section-subtitle">Powering specific quests and workshops</p>
-          
+
           <div className="quest-sponsors-grid">
             {questSponsors.map((item) => (
               <Card key={item.id} className="quest-sponsor-card">
@@ -308,7 +413,7 @@ function Funders() {
         <div className="builders-section">
           <h2 className="section-title">🛠️ Builders Circle</h2>
           <p className="section-subtitle">Monthly supporters sustaining DreamWorld</p>
-          
+
           <div className="builders-grid">
             {buildersCircle.map((builder) => (
               <Card key={builder.id} className="builder-card">
@@ -324,7 +429,7 @@ function Funders() {
         <div className="firsttimers-section">
           <h2 className="section-title">🎉 First-Time Supporters</h2>
           <p className="section-subtitle">Welcome to our newest community champions!</p>
-          
+
           <div className="firsttimers-list">
             {firstTimers.map((supporter) => (
               <Card key={supporter.id} className="firsttimer-card">
@@ -343,7 +448,7 @@ function Funders() {
         <div className="halloffame-section">
           <h2 className="section-title">🏆 All-Time Hall of Fame</h2>
           <p className="section-subtitle">Legendary supporters who've created lasting impact</p>
-          
+
           <div className="halloffame-grid">
             {hallOfFame.map((legend) => {
               const badge = getTierBadge(legend.tier)

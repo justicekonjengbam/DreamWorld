@@ -19,13 +19,16 @@ import Join from './pages/Join'
 import Members from './pages/Members'
 import Funders from './pages/Funders'
 import ScrollToTop from './components/ScrollToTop'
+import { ContentProvider } from './context/ContentContext'
+import AdminLogin from './pages/AdminLogin'
+import AdminDashboard from './pages/AdminDashboard'
 import './App.css'
 
 
 function App() {
   const location = useLocation()
   const isHomePage = location.pathname === '/'
-  
+
   const [hasEntered, setHasEntered] = useState(false)
   const [shouldStartAudio, setShouldStartAudio] = useState(false)
   const { isSoundMuted } = useAudio()
@@ -41,7 +44,7 @@ function App() {
   useEffect(() => {
     const handleClick = (e) => {
       if (isSoundMuted) return // Don't play if muted
-      
+
       const clickable = e.target.closest('a, button, [role="button"], .card, .character-link, .role-card')
       if (clickable) {
         const audio = new Audio('/ButtonAudio.mp3')
@@ -57,35 +60,39 @@ function App() {
 
 
   return (
-    <div className="app">
-      <ScrollToTop />
-      {!hasEntered && <WelcomeOverlay onEnter={handleEnterDreamWorld} />}
-      
-      <ParticlesBackground />
-      
-      <div className={`main-app-content ${hasEntered ? 'fade-in' : ''}`}>
-        <Navbar />
-        <main className="main-content">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/characters" element={<Characters />} />
-            <Route path="/characters/:id" element={<CharacterDetail />} />
-            <Route path="/roles" element={<Roles />} />
-            <Route path="/roles/:id" element={<RoleDetail />} />
-            <Route path="/creator" element={<Creator />} />
-            <Route path="/quests" element={<Quests />} />
-            <Route path="/events" element={<Events />} />
-            <Route path="/join" element={<Join />} />
-            <Route path="/members" element={<Members />} />
-            <Route path="/funders" element={<Funders />} />
-          </Routes>
-        </main>
-        {!isHomePage && <Footer />}
+    <ContentProvider>
+      <div className="app">
+        <ScrollToTop />
+        {!hasEntered && <WelcomeOverlay onEnter={handleEnterDreamWorld} />}
+
+        <ParticlesBackground />
+
+        <div className={`main-app-content ${hasEntered ? 'fade-in' : ''}`}>
+          <Navbar />
+          <main className="main-content">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/characters" element={<Characters />} />
+              <Route path="/characters/:id" element={<CharacterDetail />} />
+              <Route path="/roles" element={<Roles />} />
+              <Route path="/roles/:id" element={<RoleDetail />} />
+              <Route path="/creator" element={<Creator />} />
+              <Route path="/quests" element={<Quests />} />
+              <Route path="/events" element={<Events />} />
+              <Route path="/join" element={<Join />} />
+              <Route path="/members" element={<Members />} />
+              <Route path="/funders" element={<Funders />} />
+              <Route path="/admin" element={<AdminLogin />} />
+              <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            </Routes>
+          </main>
+          {!isHomePage && <Footer />}
+        </div>
+
+        <AudioPlayer shouldStart={shouldStartAudio} />
       </div>
-      
-      <AudioPlayer shouldStart={shouldStartAudio} />
-    </div>
+    </ContentProvider>
   )
 }
 

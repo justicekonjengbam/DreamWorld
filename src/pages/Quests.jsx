@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { quests } from '../data/quests'
+import { useContent } from '../context/ContentContext'
 import Card from '../components/Card'
 import SectionHeader from '../components/SectionHeader'
 import Badge from '../components/Badge'
@@ -8,7 +8,10 @@ import './Quests.css'
 
 
 function Quests() {
+  const { quests, loading } = useContent()
   const [selectedQuest, setSelectedQuest] = useState(null)
+
+  if (loading) return <div className="loading-state">Syncing Quests with DreamWorld...</div>
 
   const getDifficultyVariant = (difficulty) => {
     const variants = {
@@ -27,8 +30,8 @@ function Quests() {
           <img src="/logo.png" alt="DreamWorld Logo" className="page-logo" />
         </div>
 
-        <SectionHeader 
-          title="Weekly Quests" 
+        <SectionHeader
+          title="Weekly Quests"
           subtitle="Small actions, big impact. Choose a quest and start building better habits today."
         />
 
@@ -45,7 +48,7 @@ function Quests() {
               <div className="quest-meta">
                 <span className="quest-time">⏱️ {quest.timeNeeded}</span>
               </div>
-              <button 
+              <button
                 className="quest-details-btn"
                 onClick={() => setSelectedQuest(quest)}
               >
@@ -55,7 +58,7 @@ function Quests() {
           ))}
         </div>
 
-        <Modal 
+        <Modal
           isOpen={selectedQuest !== null}
           onClose={() => setSelectedQuest(null)}
           title={selectedQuest?.title}

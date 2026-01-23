@@ -460,3 +460,139 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Payment Methods Stylings */
+.payment-method-section {
+  margin-bottom: 30px;
+  padding-top: 10px;
+}
+
+.section-label {
+  display: block;
+  color: var(--color-cyan);
+  font-weight: 600;
+  margin-bottom: 15px;
+  font-size: 0.95rem;
+}
+
+.payment-methods-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.payment-method-card {
+  background: rgba(76, 161, 175, 0.05);
+  border: 1px solid rgba(76, 161, 175, 0.2);
+  border-radius: 10px;
+  padding: 15px 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.payment-method-card:hover {
+  background: rgba(76, 161, 175, 0.12);
+  border-color: var(--color-cyan);
+  transform: translateY(-2px);
+}
+
+.payment-method-card.active {
+  background: rgba(255, 215, 0, 0.1);
+  border-color: var(--color-gold);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+}
+
+.method-icon {
+  font-size: 2rem;
+  margin-bottom: 5px;
+}
+
+.method-name {
+  color: var(--color-white);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.method-sub {
+  color: var(--color-gray);
+  font-size: 0.75rem;
+}
+
+.payment-method-card.active .method-name {
+  color: var(--color-gold);
+}
+
+.upi-input-field {
+  animation: fadeIn 0.4s ease forwards;
+}
+
+.gpay-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 10px;
+  animation: fadeIn 0.4s ease forwards;
+}
+
+.gpay-simulated-button {
+  background: #000;
+  color: #fff;
+  padding: 12px 30px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  max-width: 250px;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  transition: all 0.2s ease;
+}
+
+.gpay-simulated-button:hover {
+  background: #222;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+}
+
+.gpay-simulated-button.clickable:active {
+  transform: scale(0.98);
+}
+
+.gpay-logo {
+  font-family: 'Product Sans', sans-serif;
+  letter-spacing: -0.5px;
+}
+
+.gpay-infoText {
+  color: var(--color-gray);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 500px) {
+  .payment-methods-grid {
+    grid-template-columns: 1fr;
+  }
+}

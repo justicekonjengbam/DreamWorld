@@ -1,11 +1,15 @@
-import { Link } from 'react-router-dom'
-import { characters } from '../data/characters'
+import { useContent } from '../context/ContentContext'
 import Card from '../components/Card'
 import SectionHeader from '../components/SectionHeader'
 import Badge from '../components/Badge'
 import './Characters.css'
 
+import { Link } from 'react-router-dom'
+
 function Characters() {
+  const { characters, loading } = useContent()
+
+  if (loading) return <div className="loading-state">Syncing Members with DreamWorld...</div>
   return (
     <div className="characters page">
       <div className="container">
@@ -13,8 +17,8 @@ function Characters() {
           <img src="/logo.png" alt="DreamWorld Logo" className="characters-logo" />
         </div>
 
-        <SectionHeader 
-          title="Community Members" 
+        <SectionHeader
+          title="Community Members"
           subtitle="Meet the people building DreamWorld together"
         />
 
@@ -31,7 +35,7 @@ function Characters() {
           {characters.map((character) => (
             <Link to={`/characters/${character.id}`} key={character.id} className="character-link">
               <Card>
-                <div 
+                <div
                   className="character-cover-section"
                   style={{
                     backgroundImage: character.coverImage ? `url(${character.coverImage})` : 'none',
