@@ -10,7 +10,8 @@
   flex: 1;
   padding-top: 80px;
   position: relative;
-  z-index: 2;
+  z-index: 1;
+  /* Above particles (-1) */
 }
 
 .main-app-content {
@@ -21,6 +22,7 @@
 .main-app-content.fade-in {
   opacity: 1;
 }
+
 /* Universal page logo styling */
 .page-hero {
   text-align: center;
@@ -36,9 +38,12 @@
 }
 
 @keyframes gentleFloat {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-10px);
   }

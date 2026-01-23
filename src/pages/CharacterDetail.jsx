@@ -48,7 +48,7 @@ function CharacterDetail() {
           backgroundPosition: 'center',
           width: '100%',
           position: 'relative',
-          zIndex: 20, /* Above particles */
+          zIndex: 1,
           cursor: character.coverImage ? 'zoom-in' : 'default',
           borderBottom: '1px solid rgba(76, 161, 175, 0.3)'
         }}

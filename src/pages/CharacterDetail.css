@@ -52,12 +52,13 @@
   /* Above particles (10) */
 }
 
-/* Opaque cover - no dark gradient over the top part */
+/* Opaque cover - stronger gradient for readability */
 .cover-overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(to bottom,
-      rgba(0, 0, 0, 0) 70%,
+      rgba(0, 0, 0, 0) 40%,
+      rgba(10, 17, 24, 0.4) 70%,
       rgba(10, 17, 24, 1) 100%);
   pointer-events: none;
 }
@@ -72,15 +73,15 @@
 .character-hero {
   display: flex;
   align-items: flex-end;
-  gap: 40px;
+  gap: 50px;
+  margin-top: -180px;
+  /* Pull up to overlap cover naturally */
   margin-bottom: 60px;
   flex-wrap: wrap;
-  background: #0d1117;
-  /* Solid background for info section */
-  padding: 40px;
-  border-radius: 20px;
-  border: 1px solid rgba(255, 215, 0, 0.2);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  padding: 0 20px;
+  /* Remove the "block" look */
+  position: relative;
+  z-index: 5;
 }
 
 .avatar-overlap-wrapper {
@@ -109,12 +110,14 @@
 }
 
 .character-header-info h1 {
-  font-size: 4.5rem;
+  font-size: 5.5rem;
+  /* Larger, more impactful */
   color: var(--color-gold);
-  margin: 0 0 10px 0;
-  letter-spacing: -2px;
-  line-height: 1;
-  text-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+  margin: 0 0 5px 0;
+  letter-spacing: -3px;
+  line-height: 0.9;
+  font-weight: 900;
+  text-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
 }
 
 .character-role-large {
@@ -155,23 +158,22 @@
 }
 
 .social-icon {
-  width: 60px;
-  /* Slightly larger */
-  height: 60px;
-  border-radius: 12px;
-  background: #11141d;
-  /* Darker background for more pop */
-  border: 3px solid var(--color-gold);
-  /* Thicker, more visible gold border */
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  /* Circular icons */
+  background: var(--color-gold);
+  /* Solid gold background */
+  border: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  /* White icons for maximum contrast */
+  color: #0a1118;
+  /* Dark symbol for contrast */
   text-decoration: none;
-  font-size: 1.6rem;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  font-size: 1.4rem;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
 }
 
 .social-icon.unlinked {
@@ -182,12 +184,12 @@
 }
 
 .social-icon:not(.unlinked):hover {
-  transform: translateY(-8px) scale(1.1);
-  background: var(--color-gold);
-  color: black;
-  box-shadow: 0 15px 30px rgba(255, 215, 0, 0.5);
-  border-color: #fff;
-  /* White border on hover for extra "pop" */
+  transform: translateY(-8px) rotate(8deg) scale(1.1);
+  background: #fff;
+  /* White on hover */
+  color: var(--color-gold);
+  /* Gold symbol on hover */
+  box-shadow: 0 15px 30px rgba(255, 255, 255, 0.4);
 }
 
 /* Content Layout */
