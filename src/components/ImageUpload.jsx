@@ -7,6 +7,11 @@ function ImageUpload({ onUploadComplete, label, defaultImage, folder = 'dreamwor
     const [preview, setPreview] = useState(defaultImage)
     const fileInputRef = useRef(null)
 
+    // Sync preview if defaultImage changes from outside (e.g. on Edit)
+    useEffect(() => {
+        setPreview(defaultImage)
+    }, [defaultImage])
+
     const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
     const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
 

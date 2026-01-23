@@ -148,6 +148,7 @@ function AdminDashboard() {
 
     const handleMemberSubmit = (e) => {
         e.preventDefault()
+        console.log('DEBUG - Submitting Member Data:', memberFormData)
         const data = { ...memberFormData, themes: memberFormData.themes.split(',').map(t => t.trim()) }
         editingId ? updateCharacter(editingId, data) : addCharacter(data)
         setHasUnsyncedChanges(true)
@@ -273,7 +274,7 @@ function AdminDashboard() {
                                     </div>
                                     <ImageUpload
                                         label="Role Icon/Image"
-                                        onUploadComplete={(url) => setRoleFormData({ ...roleFormData, image: url })}
+                                        onUploadComplete={(url) => setRoleFormData(prev => ({ ...prev, image: url }))}
                                         defaultImage={roleFormData.image}
                                         folder="roles"
                                     />
@@ -319,18 +320,51 @@ function AdminDashboard() {
                                     <div className="form-row" style={{ gap: '20px' }}>
                                         <ImageUpload
                                             label="Avatar Image"
-                                            onUploadComplete={(url) => setMemberFormData({ ...memberFormData, avatar: url })}
+                                            onUploadComplete={(url) => setMemberFormData(prev => ({ ...prev, avatar: url }))}
                                             defaultImage={memberFormData.avatar}
                                             folder="members"
                                         />
                                         <ImageUpload
                                             label="Cover Image"
-                                            onUploadComplete={(url) => setMemberFormData({ ...memberFormData, coverImage: url })}
+                                            onUploadComplete={(url) => setMemberFormData(prev => ({ ...prev, coverImage: url }))}
                                             defaultImage={memberFormData.coverImage}
                                             folder="members/covers"
                                         />
                                     </div>
-                                    <div className="form-group-full"><label>Bio</label><textarea rows="3" value={memberFormData.bio} onChange={(e) => setMemberFormData({ ...memberFormData, bio: e.target.value })} required /></div>
+                                    <div className="admin-member-visual-preview" style={{
+                                        margin: '15px 0',
+                                        padding: '15px',
+                                        background: 'rgba(0,0,0,0.2)',
+                                        borderRadius: '8px',
+                                        display: 'flex',
+                                        gap: '20px',
+                                        alignItems: 'center'
+                                    }}>
+                                        <div style={{ textAlign: 'center' }}>
+                                            <p style={{ fontSize: '0.7rem', color: 'var(--color-gray)', marginBottom: '5px' }}>Avatar</p>
+                                            <Avatar src={memberFormData.avatar} name={memberFormData.name} style={{ width: 60, height: 60, borderRadius: '50%' }} />
+                                        </div>
+                                        <div style={{ flex: 1 }}>
+                                            <p style={{ fontSize: '0.7rem', color: 'var(--color-gray)', marginBottom: '5px' }}>Cover Background</p>
+                                            <div style={{
+                                                height: 60,
+                                                width: '100%',
+                                                borderRadius: '4px',
+                                                backgroundImage: memberFormData.coverImage ? `url("${memberFormData.coverImage}")` : 'none',
+                                                backgroundSize: 'cover',
+                                                backgroundPosition: 'center',
+                                                border: '1px solid rgba(76, 161, 175, 0.3)',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                color: 'var(--color-gray)',
+                                                fontSize: '0.8rem'
+                                            }}>
+                                                {!memberFormData.coverImage && 'No Cover'}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="form-group-full"><label>Bio</label><textarea rows="3" value={memberFormData.bio} onChange={(e) => setMemberFormData(prev => ({ ...prev, bio: e.target.value }))} required /></div>
                                     <div className="form-group-full"><label>Themes (Comma separated)</label><input type="text" placeholder="Future, Solar, Community" value={memberFormData.themes} onChange={(e) => setMemberFormData({ ...memberFormData, themes: e.target.value })} required /></div>
                                     <Button type="submit" variant="primary">{editingId ? 'Update' : 'Add'} Member</Button>
                                     {editingId && <Button type="button" variant="secondary" onClick={resetForms}>Cancel</Button>}
