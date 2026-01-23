@@ -1,124 +1,138 @@
-/* Character Detail Premium Styles */
+/* Character Detail Facebook-Style Overlap Redesign */
 
 .character-detail.page {
   background-color: var(--color-background);
   color: var(--color-text);
+  position: relative;
+  z-index: 5;
+  /* Above particles */
 }
 
 .back-link-overlay {
   position: absolute;
-  top: 30px;
+  top: 40px;
   left: 0;
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   color: white;
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 0.95rem;
   z-index: 20;
-  background: rgba(0, 0, 0, 0.3);
-  padding: 8px 16px;
-  border-radius: 20px;
-  backdrop-filter: blur(5px);
-  transition: all 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.4);
+  padding: 12px 24px;
+  border-radius: 40px;
+  backdrop-filter: blur(12px);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 .back-link-overlay:hover {
-  background: rgba(0, 0, 0, 0.5);
-  transform: translateX(-5px);
+  background: var(--color-gold);
+  color: black;
+  transform: translateX(-8px);
+  border-color: var(--color-gold);
 }
 
 .character-full-cover {
   position: relative;
   overflow: hidden;
   background-color: #050a10;
-  height: 450px;
-  /* Slightly taller for more presence */
+  height: 500px;
+  /* Taller Cover as requested */
+  width: 100vw;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  z-index: 1;
 }
 
 .cover-overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(to bottom,
-      rgba(10, 17, 24, 0) 0%,
-      rgba(10, 17, 24, 0.4) 50%,
+      rgba(10, 17, 24, 0.1) 0%,
+      rgba(10, 17, 24, 0.4) 60%,
       rgba(10, 17, 24, 1) 100%);
+}
+
+.profile-container {
+  margin-top: -100px;
+  /* Pull content up to overlap cover */
+  position: relative;
+  z-index: 10;
 }
 
 .character-hero {
   display: flex;
-  align-items: center;
-  /* Center vertically for better alignment */
-  gap: 50px;
+  align-items: flex-end;
+  /* Align to the bottom of the overlap area */
+  gap: 40px;
   margin-bottom: 60px;
   flex-wrap: wrap;
 }
 
-.character-avatar-large {
+.avatar-overlap-wrapper {
   flex-shrink: 0;
+}
+
+.character-avatar-large {
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
-  overflow: hidden;
-  z-index: 10;
+  border: 6px solid var(--color-background);
+  /* Strong border for separation */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
   background-color: #0d1117;
+  cursor: zoom-in;
   transition: transform 0.3s ease;
-  width: 260px;
-  /* Slightly larger for better balance */
-  height: 260px;
 }
 
 .character-avatar-large:hover {
   transform: scale(1.05);
+  border-color: var(--color-gold);
 }
 
 .character-header-info {
   flex: 1;
-  min-width: 300px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  padding-bottom: 10px;
 }
 
 .character-header-info h1 {
   font-size: 4rem;
-  /* Even bolder */
   color: var(--color-gold);
   margin: 0 0 5px 0;
   letter-spacing: -2px;
   line-height: 1;
+  text-shadow: 0 5px 15px rgba(0, 0, 0, 0.8);
 }
 
 .character-role-large {
   color: var(--color-cyan);
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   font-weight: 700;
-  margin-bottom: 25px;
-  opacity: 0.9;
+  margin-bottom: 20px;
   text-transform: uppercase;
   letter-spacing: 1px;
-}
-
-.character-tags-socials {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  /* Aligned icons with tags */
-  gap: 30px;
-  flex-wrap: wrap;
 }
 
 .character-themes-large {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  flex: 1;
+  margin-bottom: 25px;
 }
 
 .role-badge-small {
   display: inline-block;
   padding: 8px 18px;
-  background: rgba(76, 161, 175, 0.2);
-  border: 1px solid var(--color-cyan);
+  background: rgba(255, 215, 0, 0.1);
+  border: 1px solid var(--color-gold);
   border-radius: 30px;
-  color: var(--color-cyan);
+  color: var(--color-gold);
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: 800;
@@ -128,127 +142,70 @@
 }
 
 .role-badge-small:hover {
-  background: var(--color-cyan);
-  color: white;
-  box-shadow: 0 0 20px var(--glow-cyan);
+  background: var(--color-gold);
+  color: black;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
 }
 
-/* Social Bar */
+/* Social Bar - Centered/Bottom Alignment */
 .profile-social-bar {
   display: flex;
-  gap: 18px;
+  gap: 15px;
+  padding: 15px 0;
 }
 
 .social-icon {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid rgba(76, 161, 175, 0.3);
+  background: rgba(20, 25, 40, 0.9);
+  border: 2px solid rgba(76, 161, 175, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: var(--color-white);
   text-decoration: none;
-  font-size: 1.4rem;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  backdrop-filter: blur(10px);
+  font-size: 1.3rem;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .social-icon.unlinked {
-  opacity: 0.3;
+  opacity: 0.2;
   filter: grayscale(1);
-  cursor: not-allowed;
-  border-style: dashed;
+  cursor: help;
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .social-icon:not(.unlinked):hover {
-  transform: translateY(-8px) scale(1.1);
-  background: rgba(76, 161, 175, 0.2);
-  border-color: var(--color-cyan);
-  box-shadow: 0 10px 25px rgba(76, 161, 175, 0.4);
-}
-
-.social-icon.youtube:not(.unlinked):hover {
-  border-color: #ff0000;
-  color: #ff0000;
-  box-shadow: 0 10px 25px rgba(255, 0, 0, 0.4);
-}
-
-.social-icon.instagram:not(.unlinked):hover {
-  border-color: #e4405f;
-  color: #e4405f;
-  box-shadow: 0 10px 25px rgba(228, 64, 95, 0.4);
-}
-
-.social-icon.facebook:not(.unlinked):hover {
-  border-color: #1877f2;
-  color: #1877f2;
-  box-shadow: 0 10px 25px rgba(24, 119, 242, 0.4);
-}
-
-.social-icon.twitter:not(.unlinked):hover {
-  border-color: #1da1f2;
-  color: #1da1f2;
-  box-shadow: 0 10px 25px rgba(29, 161, 242, 0.4);
+  transform: translateY(-8px);
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+  box-shadow: 0 8px 20px rgba(255, 215, 0, 0.3);
 }
 
 /* Content Layout */
 .character-content-grid {
   display: grid;
   grid-template-columns: 1fr 300px;
-  gap: 50px;
+  gap: 40px;
   margin-bottom: 100px;
 }
 
 .about-member-card,
 .path-member-card {
-  margin-bottom: 30px;
+  background: var(--color-card-bg) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .character-full-bio {
   font-size: 1.2rem;
-  line-height: 1.8;
-  color: var(--color-gray);
-  margin-bottom: 25px;
-}
-
-.character-meta {
-  padding-top: 25px;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.character-meta p {
-  font-size: 0.95rem;
-  color: var(--color-gray);
-}
-
-.character-meta strong {
-  color: var(--color-cyan);
-}
-
-.view-role-link {
-  display: inline-block;
-  margin-top: 20px;
-  color: var(--color-cyan);
-  text-decoration: none;
-  font-weight: 700;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-}
-
-.view-role-link:hover {
-  color: var(--color-gold);
-  transform: translateX(5px);
+  line-height: 1.9;
+  color: #d1d1d1;
 }
 
 @media (max-width: 1024px) {
   .character-content-grid {
     grid-template-columns: 1fr;
-  }
-
-  .character-sidebar {
-    display: none;
   }
 }
 
@@ -257,21 +214,15 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    margin-top: -80px;
-  }
-
-  .character-avatar-large {
-    width: 200px !important;
-    height: 200px !important;
+    gap: 20px;
   }
 
   .character-header-info h1 {
-    font-size: 2.5rem;
+    font-size: 2.8rem;
   }
 
-  .character-tags-socials {
-    flex-direction: column;
-    align-items: center;
+  .profile-social-bar {
+    justify-content: center;
   }
 
   .character-themes-large {
