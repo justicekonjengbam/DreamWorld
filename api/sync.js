@@ -55,12 +55,24 @@ export default async function handler(req, res) {
             throw new Error(`Sync blocked. Check Google Sheet setup:\n${errors.join('\n')}`);
         }
 
+        // Helper to force all object keys to lowercase (makes headers case-insensitive)
+        const normalize = (arr) => {
+            if (!Array.isArray(arr)) return arr;
+            return arr.map(item => {
+                const normalized = {};
+                for (const key in item) {
+                    normalized[key.toLowerCase()] = item[key];
+                }
+                return normalized;
+            });
+        };
+
         const globalData = {
-            quests: qData,
-            roles: rData,
-            characters: cData,
-            events: eData,
-            announcement: aData[0] || {},
+            quests: normalize(qData),
+            roles: normalize(rData),
+            characters: normalize(cData),
+            events: normalize(eData),
+            announcement: normalize(aData)[0] || {},
             lastSynced: new Date().toISOString()
         };
 

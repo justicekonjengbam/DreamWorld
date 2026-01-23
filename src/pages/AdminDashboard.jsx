@@ -39,6 +39,13 @@ function AdminDashboard() {
         if (!token) navigate('/admin')
     }, [navigate])
 
+    // Update form states when context data is loaded
+    useEffect(() => {
+        if (!loading && announcement) {
+            setAnnouncementFormData(announcement)
+        }
+    }, [loading, announcement])
+
     const handleLogout = () => {
         localStorage.removeItem('dw_admin_token')
         navigate('/admin')
@@ -76,6 +83,10 @@ function AdminDashboard() {
     // Submit Handlers
     const handleAnnouncementSubmit = (e) => {
         e.preventDefault()
+        if (!announcementFormData.title || announcementFormData.title.trim() === '') {
+            alert('❌ Please provide a Title for the announcement. It is required for the database.')
+            return
+        }
         updateAnnouncement(announcementFormData)
         setHasUnsyncedChanges(true)
         alert('Announcement updated! Don\'t forget to click "Sync Global Site" below.')
