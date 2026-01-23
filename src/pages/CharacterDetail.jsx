@@ -80,12 +80,13 @@ function CharacterDetail() {
           <div className="character-header-info">
             <h1>{character.name}</h1>
             <p className="character-role-large">{character.title}</p>
+            {role && (
+              <Link to={`/roles/${role.id}`} className="role-badge-small-link">
+                {role.singular}
+              </Link>
+            )}
+
             <div className="character-themes-large">
-              {role && (
-                <Link to={`/roles/${role.id}`} className="role-badge-small">
-                  {role.singular}
-                </Link>
-              )}
               {character.themes && character.themes.map((theme, index) => (
                 <Badge key={index}>{theme}</Badge>
               ))}
