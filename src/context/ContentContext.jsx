@@ -44,19 +44,41 @@ export const ContentProvider = ({ children }) => {
                 const data = await response.json()
 
                 if (data.quests) {
-                    setQuests(data.quests.map(q => ({ ...q, steps: q.steps ? q.steps.split('\n') : [] })))
+                    setQuests(data.quests.map(q => ({
+                        ...q,
+                        timeNeeded: q.timeneeded || q.timeNeeded || '',
+                        sharePrompt: q.shareprompt || q.sharePrompt || '',
+                        steps: q.steps ? q.steps.split('\n') : []
+                    })))
                 }
                 if (data.roles) {
-                    setRoles(data.roles.map(r => ({ ...r, traits: r.traits ? r.traits.split('\n') : [] })))
+                    setRoles(data.roles.map(r => ({
+                        ...r,
+                        traits: r.traits ? r.traits.split('\n') : []
+                    })))
                 }
                 if (data.characters) {
-                    setCharacters(data.characters.map(c => ({ ...c, themes: c.themes ? c.themes.split(',').map(t => t.trim()) : [] })))
+                    setCharacters(data.characters.map(c => ({
+                        ...c,
+                        coverImage: c.coverimage || c.coverImage || '',
+                        themes: c.themes ? c.themes.split(',').map(t => t.trim()) : []
+                    })))
                 }
                 if (data.events) {
-                    setEvents(data.events)
+                    setEvents(data.events.map(e => ({
+                        ...e,
+                        registrationLink: e.registrationlink || e.registrationLink || ''
+                    })))
                 }
                 if (data.announcement) {
-                    setAnnouncement(data.announcement)
+                    const raw = data.announcement;
+                    setAnnouncement({
+                        title: raw.title || '',
+                        content: raw.content || '',
+                        date: String(raw.date || ''),
+                        linkText: raw.linktext || raw.linkText || '',
+                        linkTo: raw.linkto || raw.linkTo || ''
+                    });
                 }
 
                 setLoading(false)
