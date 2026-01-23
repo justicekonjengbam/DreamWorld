@@ -6,10 +6,10 @@ export default async function handler(req, res) {
     }
 
     const { password } = req.body;
-    const adminPassword = process.env.VITE_ADMIN_PASSWORD;
-    const sheetApiUrl = process.env.VITE_SHEET_API_URL;
+    const adminPassword = process.env.VITE_ADMIN_PASSWORD || process.env.ADMIN_PASSWORD;
+    const sheetApiUrl = process.env.VITE_SHEET_API_URL || process.env.SHEET_API_URL;
 
-    if (!password || password !== adminPassword) {
+    if (!password || (adminPassword && password !== adminPassword)) {
         return res.status(401).json({ error: 'Unauthorized' });
     }
 
