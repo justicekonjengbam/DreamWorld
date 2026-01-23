@@ -269,6 +269,7 @@ export const ContentProvider = ({ children }) => {
             role: formData.role, // This sends the ID. The user might want the Name, but ID is safer for linking.
             whydream: formData.reason,
             whyrole: formData.roleReason,
+            otherrole: formData.otherRole,
             age: formData.age,
             gender: formData.gender,
             submittedAt: new Date().toISOString()

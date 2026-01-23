@@ -16,6 +16,7 @@ function Join() {
     age: '',
     gender: '',
     role: '',
+    otherRole: '',
     reason: '',
     roleReason: ''
   })
@@ -108,7 +109,7 @@ function Join() {
       setDreamerSubmitted(true)
 
       setTimeout(() => {
-        setDreamerForm({ name: '', email: '', phone: '', age: '', gender: '', role: '', reason: '', roleReason: '' })
+        setDreamerForm({ name: '', email: '', phone: '', age: '', gender: '', role: '', otherRole: '', reason: '', roleReason: '' })
         setDreamerSubmitted(false)
       }, 6000)
     } catch (error) {
@@ -267,6 +268,18 @@ function Join() {
                       }}
                     />
                     {dreamerErrors.roleReason && <span className="error-message">{dreamerErrors.roleReason}</span>}
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="dreamer-otherRole">Have another role in mind? (Optional)</label>
+                    <input
+                      type="text"
+                      id="dreamer-otherRole"
+                      name="otherRole"
+                      value={dreamerForm.otherRole}
+                      onChange={handleDreamerChange}
+                      placeholder="If you have an idea for a role not listed..."
+                    />
                   </div>
 
                   <Button type="submit" variant="primary">
