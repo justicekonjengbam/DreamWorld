@@ -55,8 +55,23 @@ function AdminDashboard() {
                 if (!sheetApiUrl) return;
                 try {
                     const res = await fetch(`${sheetApiUrl}?sheet=announcements`);
+                    if (!res.ok) throw new Error('API Error');
                     const data = await res.json();
-                    setSheetData(Array.isArray(data) ? data[0] : null);
+
+                    if (Array.isArray(data) && data.length > 0) {
+                        const rawRow = data[0];
+                        // Normalize keys for the summary
+                        const normalized = {};
+                        Object.keys(rawRow).forEach(k => { normalized[k.toLowerCase().trim()] = rawRow[k] });
+
+                        setSheetData({
+                            summary: normalized,
+                            rawKeys: Object.keys(rawRow),
+                            count: data.length
+                        });
+                    } else {
+                        setSheetData({ count: 0 });
+                    }
                 } catch (e) {
                     setSheetData('error');
                 }
@@ -357,12 +372,16 @@ function AdminDashboard() {
                                 <div className="status-data">
                                     {sheetData === 'error' ? (
                                         <p style={{ color: '#ff6f61' }}>❌ Connection Error. Check your API URL.</p>
-                                    ) : sheetData ? (
-                                        <pre>{JSON.stringify({
-                                            title: sheetData.title || 'MISSING',
-                                            date: sheetData.date || 'MISSING',
-                                            found: 'YES ✅'
-                                        }, null, 2)}</pre>
+                                    ) : sheetData && sheetData.count > 0 ? (
+                                        <div>
+                                            <pre>{JSON.stringify({
+                                                "Sheet Headers Found": sheetData.rawKeys,
+                                                "Title Value": sheetData.summary.title || 'NULL/EMPTY',
+                                            }, null, 2)}</pre>
+                                            <p className="status-mini-note">Found {sheetData.count} row(s) in sheet.</p>
+                                        </div>
+                                    ) : sheetData && sheetData.count === 0 ? (
+                                        <p>📭 Sheet is empty (only headers exist).</p>
                                     ) : (
                                         <p>⏳ Loading sheet data...</p>
                                     )}
