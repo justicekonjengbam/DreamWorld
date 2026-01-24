@@ -66,6 +66,7 @@ const PrintableCertificate = ({ dreamer, onClose }) => {
                     <div className="certificate-wrapper">
                         <div className="card-label">Back Side Preview</div>
                         <div className="certificate back" style={bgStyle}>
+                            {/* Centered Role Image Only */}
                             <div className="cert-back-content">
                                 <img src={roleObj.image || '/logo.png'} alt="Role" className="cert-back-role-img" />
                             </div>
