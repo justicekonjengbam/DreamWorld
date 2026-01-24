@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { createPortal } from 'react-dom'
 import { useContent } from '../context/ContentContext'
 import Card from '../components/Card'
 import Button from '../components/Button'
@@ -532,12 +533,14 @@ function AdminDashboard() {
                 )}
             </div>
 
-            {/* Print Overlays */}
-            {printingDreamer && printType === 'id' && (
-                <PrintableID dreamer={printingDreamer} onClose={() => setPrintingDreamer(null)} />
+            {/* Print Overlays (Portals make them direct children of body for safe printing) */}
+            {printingDreamer && printType === 'id' && createPortal(
+                <PrintableID dreamer={printingDreamer} onClose={() => setPrintingDreamer(null)} />,
+                document.body
             )}
-            {printingDreamer && printType === 'cert' && (
-                <PrintableCertificate dreamer={printingDreamer} onClose={() => setPrintingDreamer(null)} />
+            {printingDreamer && printType === 'cert' && createPortal(
+                <PrintableCertificate dreamer={printingDreamer} onClose={() => setPrintingDreamer(null)} />,
+                document.body
             )}
         </div>
     )
