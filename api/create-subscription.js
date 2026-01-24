@@ -50,7 +50,8 @@ export default async function handler(req, res) {
     } catch (error) {
         console.error('SERVER ERROR:', error.message);
         return res.status(500).json({
-            error: error.message || 'Unknown Server Error'
+            error: `${error.message} (Target Plan ID: ${planId})`,
+            suggestion: 'Ensure this Plan ID was created in LIVE MODE on Razorpay.'
         });
     }
 }
