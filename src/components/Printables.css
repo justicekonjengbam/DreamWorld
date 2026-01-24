@@ -3,87 +3,64 @@
 @media print {
     @page {
         size: landscape;
-        margin: 0;
+        margin: 5mm;
+        /* Small safety margin */
     }
 
-    /* 1. Hide everything on the entire website */
-    body * {
-        visibility: hidden !important;
+    /* Nuclear option: hide EVERYTHING on the main site */
+    body>*:not(.printable-container) {
+        display: none !important;
     }
 
-    /* 2. ONLY show the printable container and everything inside it */
-    .printable-container,
-    .printable-container * {
-        visibility: visible !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-    }
-
-    /* 3. Reset the container to start at the top-left of the paper */
     .printable-container {
-        position: absolute !important;
-        left: 0 !important;
-        top: 0 !important;
-        width: 100vw !important;
-        height: auto !important;
         display: block !important;
+        position: static !important;
+        visibility: visible !important;
+        width: 100% !important;
         background: white !important;
+        padding: 0 !important;
+        margin: 0 !important;
     }
 
-    /* Hide the toolbar and labels during print */
     .printable-toolbar,
     .card-label {
         display: none !important;
     }
 
     .printable-content-scroll {
-        display: block !important;
-        overflow: visible !important;
-        height: auto !important;
-        padding: 0 !important;
-        margin: 0 !important;
-    }
-
-    /* Force each side onto a NEW PAGE */
-    .id-card-wrapper,
-    .certificate-wrapper {
-        break-after: page;
-        page-break-after: always;
-        margin: 0 !important;
-        padding: 0 !important;
         display: flex !important;
         justify-content: center !important;
         align-items: center !important;
-        height: 100vh !important;
-        width: 100vw !important;
+        overflow: visible !important;
+        height: 95vh !important;
+        /* Centered on the page */
+        padding: 0 !important;
+        margin: 0 !important;
     }
 
-    /* SCALE FOR SAFETY MARGINS */
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        visibility: visible !important;
+    }
+
+    /* SCALE FOR FIT */
     .id-card {
-        transform: scale(1.1) !important;
+        transform: scale(1.4) !important;
+        /* Make single cards fill more space */
         transform-origin: center center !important;
-        margin: auto !important;
         box-shadow: none !important;
     }
 
     .certificate {
-        transform: scale(0.8) !important;
-        /* Aggressive shrink to guarantee NO CUTOFF */
+        transform: scale(0.85) !important;
+        /* Fits A4 Landscape perfectly */
         transform-origin: center center !important;
-        margin: auto !important;
         box-shadow: none !important;
-    }
-
-    .editable-input,
-    .editable-date,
-    .editable-bio-input {
-        border: none !important;
-        background: transparent !important;
-        color: inherit !important;
     }
 }
 
-/* --- PREVIEW MODAL (ON SCREEN) --- */
+/* --- ON-SCREEN PREVIEW ONLY --- */
 .printable-container {
     display: none;
 }
@@ -113,8 +90,29 @@
     align-items: center;
     z-index: 10;
     flex-shrink: 0;
-    position: relative;
     box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.side-selectors {
+    display: flex;
+    gap: 10px;
+}
+
+.side-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+.side-btn.active {
+    background: #FFD700;
+    color: #1a1f35;
+    border-color: #FFD700;
 }
 
 .toolbar-btn {
@@ -123,8 +121,6 @@
     border: none;
     font-weight: bold;
     cursor: pointer;
-    font-size: 1rem;
-    transition: all 0.3s ease;
     text-transform: uppercase;
 }
 
@@ -146,10 +142,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 80px;
+    justify-content: center;
     width: 100%;
 }
 
+/* --- THE REST ARE SAME AS PREVIOUS (kept for consistency) --- */
 .id-card-wrapper,
 .certificate-wrapper {
     display: flex;
@@ -166,7 +163,6 @@
     opacity: 0.6;
 }
 
-/* --- ID CARD --- */
 .id-card {
     width: 350px;
     height: 220px;
@@ -174,10 +170,8 @@
     background-position: center;
     border-radius: 12px;
     border: 2px solid #4CA1AF;
-    box-shadow: 0 0 30px rgba(76, 161, 175, 0.2);
     display: flex;
     flex-direction: column;
-    padding: 0;
     position: relative;
     overflow: hidden;
     color: white;
@@ -193,7 +187,6 @@
     font-family: monospace;
     font-size: 0.8rem;
     letter-spacing: 3px;
-    color: white;
 }
 
 .id-main {
@@ -223,12 +216,6 @@
     padding-bottom: 5px;
 }
 
-.id-brand {
-    font-size: 0.6rem;
-    color: #4CA1AF;
-    text-transform: uppercase;
-}
-
 .id-name {
     font-size: 1.1rem;
     font-weight: 700;
@@ -240,12 +227,9 @@
     color: #FFD700;
     font-weight: bold;
     font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
     margin-bottom: 5px;
 }
 
-/* Bio Input visibility in preview */
 .editable-bio-input {
     background: rgba(255, 255, 255, 0.08);
     border: 1px dashed rgba(255, 255, 255, 0.3);
@@ -256,17 +240,8 @@
     width: 100%;
     height: 60px;
     resize: none;
-    line-height: 1.4;
-    padding: 8px;
-    margin-top: 5px;
-    outline: none;
     border-radius: 6px;
-}
-
-.editable-bio-input:hover,
-.editable-bio-input:focus {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: #FFD700;
+    padding: 5px;
 }
 
 .id-footer-strip {
@@ -276,15 +251,6 @@
     align-items: center;
     justify-content: flex-end;
     padding: 0 15px;
-    font-family: monospace;
-    font-size: 0.65rem;
-    color: #4CA1AF;
-}
-
-.id-card.back {
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .id-back-overlay {
@@ -301,14 +267,12 @@
     filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.8));
 }
 
-/* --- CERTIFICATE --- */
 .certificate {
     width: 1123px;
     height: 794px;
     color: #e0e0e0;
     position: relative;
     border: 12px solid #1a1f35;
-    box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
     font-family: 'Cinzel', serif;
     display: flex;
     flex-direction: column;
@@ -320,10 +284,7 @@
 .certificate::before {
     content: '';
     position: absolute;
-    top: 15px;
-    left: 15px;
-    right: 15px;
-    bottom: 15px;
+    inset: 15px;
     border: 2px solid #FFD700;
     pointer-events: none;
 }
@@ -333,7 +294,6 @@
     width: 80px;
     height: 80px;
     border: 4px solid #FFD700;
-    z-index: 1;
 }
 
 .top-left {
@@ -369,7 +329,6 @@
     height: 90px;
     object-fit: contain;
     margin-bottom: 5px;
-    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.8));
 }
 
 .cert-title {
@@ -382,9 +341,6 @@
 .cert-subtitle {
     font-size: 1.1rem;
     color: #4CA1AF;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    margin-bottom: 15px;
 }
 
 .cert-avatar {
@@ -393,29 +349,24 @@
     border-radius: 50%;
     border: 3px solid #FFD700;
     object-fit: cover;
-    margin-bottom: 15px;
 }
 
 .cert-body-compact {
     font-size: 1.2rem;
-    line-height: 1.4;
-    margin-bottom: 10px;
     width: 90%;
+    margin: 10px 0;
 }
 
 .cert-name {
     font-size: 3.2rem;
     color: #fff;
     font-family: 'Great Vibes', cursive;
-    margin: 5px 0;
-    line-height: 1;
 }
 
 .cert-role-text {
     color: #FFD700;
     font-size: 1.8rem;
     text-transform: uppercase;
-    display: block;
 }
 
 .cert-footer {
@@ -434,13 +385,11 @@
 
 .sign-line {
     border-bottom: 1px solid #FFD700;
-    margin-top: 2px;
 }
 
 .sign-label-top {
     font-size: 0.75rem;
     color: #aaa;
-    text-transform: uppercase;
     margin-bottom: 2px;
 }
 
@@ -457,15 +406,6 @@
     border: 3px double #3e2723;
 }
 
-.cert-back-content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    background: rgba(10, 14, 26, 0.2);
-}
-
 .cert-back-role-img {
     width: 250px;
     filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.9));
@@ -478,7 +418,6 @@
     font-size: 1.6rem;
     color: #FFD700;
     text-align: center;
-    width: 100%;
 }
 
 .editable-date {
@@ -487,16 +426,4 @@
     color: #FFD700 !important;
     width: 70px;
     font-weight: bold;
-}
-
-/* Mobile Adjustments */
-@media screen and (max-width: 768px) {
-    .id-card {
-        transform: scale(0.9);
-    }
-
-    .certificate {
-        transform: scale(0.3);
-        margin-bottom: -550px;
-    }
 }
