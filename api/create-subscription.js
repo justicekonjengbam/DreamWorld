@@ -9,7 +9,7 @@ export default async function handler(req, res) {
 
     // Check for necessary environment variables
     const keyId = process.env.VITE_RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID;
-    const keySecret = process.env.RAZORPAY_SECRET;
+    const keySecret = process.env.RAZORPAY_SECRET || process.env.VITE_RAZORPAY_SECRET;
 
     if (!keyId) {
         return res.status(500).json({ error: 'Backend Error: VITE_RAZORPAY_KEY_ID is missing in Vercel. Please add it to Environment Variables.' });
