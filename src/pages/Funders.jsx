@@ -104,98 +104,116 @@ function Funders() {
     }))
   }
 
-  const handleSubmit = (e) => {
+  const [isProcessing, setIsProcessing] = useState(false)
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
+    setIsProcessing(true)
 
-    // Redirect to Subscription Page for Monthly/Auto-Pay
-    if (formData.type === 'monthly') {
-      // Record the intent to subscribe to the sheet
-      submitDonation(formData).catch(err => console.error("Failed to log monthly intent", err))
-
-      window.open('https://rzp.io/rzp/VUIo0oZ', '_blank')
-      setSubmitted(true)
-      setTimeout(() => {
-        setFormData({
-          name: '',
-          displayName: '',
-          email: '',
-          amount: '',
-          message: '',
-          type: 'one-time',
-          showPublicly: true,
-          paymentMethod: 'upi',
-          upiId: ''
-        })
-        setSubmitted(false)
-      }, 5000)
-      return
-    }
-
-    // RAZORPAY INTEGRATION (For One-Time Payments)
-    // The Key ID is now stored in the .env file for security
+    // Common Razorpay Config
     const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID
 
-    const options = {
-      key: RAZORPAY_KEY_ID,
-      amount: formData.amount * 100, // Razorpay expects amount in paise (100 paise = 1 INR)
-      currency: "INR",
-      name: "DreamWorld",
-      description: "Support Contribution",
-      image: "/logo.png",
-      handler: function (response) {
-        console.log('Payment Successful:', response)
+    try {
+      // --- AUTO-PAY (MONTHLY) FLOW ---
+      if (formData.type === 'monthly') {
+        const PLAN_ID = import.meta.env.VITE_RAZORPAY_PLAN_ID; // Should be set in .env
 
-        // Record successful one-time donation
-        submitDonation(formData).catch(err => console.error("Failed to log donation", err))
+        // If no Plan ID is configured, fallback to the redirect method but in same window
+        if (!PLAN_ID) {
+          console.warn("No VITE_RAZORPAY_PLAN_ID found. Falling back to redirect.");
+          submitDonation(formData).catch(err => console.error("Failed to log monthly intent", err))
+          window.location.href = import.meta.env.VITE_RAZORPAY_SUBSCRIPTION_URL || 'https://rzp.io/rzp/VUIo0oZ';
+          return;
+        }
 
-        setSubmitted(true)
-
-        // Reset form after 5 seconds
-        setTimeout(() => {
-          setFormData({
-            name: '',
-            displayName: '',
-            email: '',
-            amount: '',
-            message: '',
-            type: 'one-time',
-            showPublicly: true,
-            paymentMethod: 'upi',
-            upiId: ''
+        // Create a real subscription via our backend API
+        const subRes = await fetch('/api/create-subscription', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            planId: PLAN_ID,
+            customerName: formData.name,
+            customerEmail: formData.email
           })
-          setSubmitted(false)
-        }, 5000)
-      },
-      prefill: {
-        name: formData.name,
-        email: formData.email,
-        contact: "", // Optional
-        method: formData.paymentMethod === 'upi' ? 'upi' : (formData.paymentMethod === 'gpay' ? 'upi' : 'card')
-      },
-      notes: {
-        contribution_type: formData.type,
-        display_name: formData.displayName || formData.name,
-        message: formData.message,
-        show_publicly: formData.showPublicly
-      },
-      theme: {
-        color: "#4CA1AF" // Site's Cyan color
+        });
+
+        const subData = await subRes.json();
+
+        if (!subRes.ok) {
+          throw new Error(subData.error || 'Failed to initialize subscription');
+        }
+
+        const subOptions = {
+          key: subData.keyId,
+          subscription_id: subData.subscriptionId,
+          name: "DreamWorld",
+          description: "Monthly Support Subscription",
+          image: "/logo.png",
+          handler: function (response) {
+            submitDonation({ ...formData, message: `[SUB_ID: ${response.razorpay_subscription_id}] ${formData.message}` })
+            setSubmitted(true)
+          },
+          prefill: {
+            name: formData.name,
+            email: formData.email
+          },
+          theme: { color: "#4CA1AF" }
+        };
+
+        const rzpSub = new window.Razorpay(subOptions);
+        rzpSub.open();
+        setIsProcessing(false);
+        return;
       }
-    }
 
-    // Handle UPI ID if specifically selected in our UI
-    if (formData.paymentMethod === 'upi' && formData.upiId) {
-      options.prefill.vpa = formData.upiId
-    }
+      // --- ONE-TIME PAYMENT FLOW ---
+      const options = {
+        key: RAZORPAY_KEY_ID,
+        amount: formData.amount * 100,
+        currency: "INR",
+        name: "DreamWorld",
+        description: "Support Contribution",
+        image: "/logo.png",
+        handler: function (response) {
+          submitDonation(formData).catch(err => console.error("Failed to log donation", err))
+          setSubmitted(true)
+          setTimeout(() => {
+            setFormData({
+              name: '', displayName: '', email: '', amount: '',
+              message: '', type: 'one-time', showPublicly: true,
+              paymentMethod: 'upi', upiId: ''
+            })
+            setSubmitted(false)
+          }, 5000)
+        },
+        prefill: {
+          name: formData.name,
+          email: formData.email,
+          method: formData.paymentMethod === 'upi' ? 'upi' : (formData.paymentMethod === 'gpay' ? 'upi' : 'card')
+        },
+        notes: {
+          contribution_type: formData.type,
+          display_name: formData.displayName || formData.name,
+          message: formData.message
+        },
+        theme: { color: "#4CA1AF" }
+      }
 
-    if (window.Razorpay) {
-      const rzp = new window.Razorpay(options)
-      rzp.on('payment.failed', function (response) {
-        alert("Payment Failed: " + response.error.description)
-      })
-      rzp.open()
-    } else {
-      alert("Razorpay SDK failed to load. Please check your internet connection.")
+      if (formData.paymentMethod === 'upi' && formData.upiId) {
+        options.prefill.vpa = formData.upiId
+      }
+
+      if (window.Razorpay) {
+        const rzp = new window.Razorpay(options)
+        rzp.open()
+      } else {
+        alert("Razorpay SDK failed to load.")
+      }
+    } catch (err) {
+      console.error("Payment Error:", err);
+      alert("Something went wrong with the payment: " + err.message);
+    } finally {
+      setIsProcessing(false)
     }
   }
 
@@ -400,8 +418,8 @@ function Funders() {
                   </label>
                 </div>
 
-                <Button type="submit" variant="primary">
-                  {formData.paymentMethod === 'gpay' ? 'Pay Now' : 'Continue to Payment'}
+                <Button type="submit" variant="primary" disabled={isProcessing}>
+                  {isProcessing ? '🔄 Processing...' : (formData.paymentMethod === 'gpay' ? 'Pay Now' : 'Continue to Payment')}
                 </Button>
               </form>
             ) : (
