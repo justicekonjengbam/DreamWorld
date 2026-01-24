@@ -11,15 +11,16 @@ export default async function handler(req, res) {
     const keyId = process.env.VITE_RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID;
     const keySecret = process.env.RAZORPAY_SECRET || process.env.VITE_RAZORPAY_SECRET;
 
-    if (!keyId) {
-        return res.status(500).json({ error: 'Backend Error: VITE_RAZORPAY_KEY_ID is missing in Vercel. Please add it to Environment Variables.' });
-    }
-    if (!keySecret) {
-        return res.status(500).json({ error: 'Backend Error: RAZORPAY_SECRET is missing in Vercel. Please add it to Environment Variables.' });
-    }
+    const foundKeys = {
+        keyId: !!keyId,
+        keySecret: !!keySecret,
+        planId: !!planId
+    };
 
-    if (!planId) {
-        return res.status(400).json({ error: 'Plan ID is required for subscriptions' });
+    if (!keyId || !keySecret || !planId) {
+        return res.status(500).json({
+            error: `Missing Keys: ${JSON.stringify(foundKeys)}. Please check Vercel Environment Variables.`
+        });
     }
 
     try {
@@ -44,6 +45,15 @@ export default async function handler(req, res) {
         });
     } catch (error) {
         console.error('Razorpay Subscription Error:', error);
-        return res.status(500).json({ error: error.message });
+
+        // Return clear diagnostics to the user
+        let message = error.message;
+        if (message.includes('Unauthorized') || message.includes('401')) {
+            message = "AUTHENTICATION FAILED: Your Key ID and Secret Key do not match. Check if you copied the Live Secret correctly.";
+        } else if (message.includes('400') || message.includes('plan')) {
+            message = `PLAN ERROR: The Plan ID '${planId}' was not found. ⚠️ You must create a NEW Plan while Razorpay is in LIVE MODE. Plans created in Test Mode will not work here.`;
+        }
+
+        return res.status(500).json({ error: message });
     }
 }
