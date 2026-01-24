@@ -13,15 +13,16 @@ const PrintableCertificate = ({ dreamer, onClose }) => {
         window.print()
     }
 
-    // Background style
+    // Lighter background style for better visibility
     const bgStyle = dreamer.coverImage
-        ? { backgroundImage: `linear-gradient(rgba(10,14,26,0.9), rgba(10,14,26,0.9)), url(${dreamer.coverImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }
-        : {};
+        ? { backgroundImage: `linear-gradient(rgba(10,14,26,0.8), rgba(10,14,26,0.8)), url(${dreamer.coverImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+        : { background: '#0a0e1a' };
 
     return (
         <div className="printable-container preview-mode">
             <div className="printable-content-scroll">
                 <div className="certificate-wrapper">
+                    <div className="card-label">Front Side (Printed Page 1)</div>
                     <div className="certificate" style={bgStyle}>
                         {/* Decorative Corners */}
                         <div className="cert-corner top-left"></div>
@@ -87,6 +88,7 @@ const PrintableCertificate = ({ dreamer, onClose }) => {
 
                 {/* Back Side: Cover Background + Role Image Only */}
                 <div className="certificate-wrapper">
+                    <div className="card-label">Back Side (Printed Page 2)</div>
                     <div className="certificate back" style={bgStyle}>
                         <div className="cert-back-content">
                             <img src={roleObj.image || '/logo.png'} alt="Role" className="cert-back-role-img" />
@@ -97,8 +99,8 @@ const PrintableCertificate = ({ dreamer, onClose }) => {
 
             <div className="printable-toolbar">
                 <button className="toolbar-btn close-btn" onClick={onClose}>❌ Close</button>
-                <div style={{ color: 'white', fontWeight: 'bold' }}>CERTIFICATE PREVIEW</div>
-                <button className="toolbar-btn print-btn" onClick={handlePrint}>🖨️ Print</button>
+                <div style={{ color: 'white', fontWeight: 'bold', fontSize: '0.9rem' }}>CERTIFICATE PREVIEW</div>
+                <button className="toolbar-btn print-btn" onClick={handlePrint}>🖨️ Print Pages</button>
             </div>
         </div>
     )

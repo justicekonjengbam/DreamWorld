@@ -8,29 +8,22 @@ const PrintableID = ({ dreamer, onClose }) => {
 
     const roleObj = roles.find(r => r.id === dreamer.role) || { singular: dreamer.role, image: '', description: '' }
 
-    const truncate = (str, n) => {
-        return (str?.length > n) ? str.substr(0, n - 1) + '...' : str;
-    }
-
-    const bio = truncate(dreamer.bio || roleObj.description || "A dedicated dreamer exploring the wonders of this world.", 80)
-
     const handlePrint = () => {
         window.print()
     }
 
     // Background style
     const cardStyle = dreamer.coverImage
-        ? { backgroundImage: `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url(${dreamer.coverImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }
-        : {};
+        ? { backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${dreamer.coverImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+        : { background: '#1a1f35' };
 
     return (
         <div className="printable-container preview-mode">
             <div className="printable-content-scroll">
                 {/* FRONT */}
                 <div className="id-card-wrapper">
-                    <div className="card-label">FRONT CARD</div>
+                    <div className="card-label">Front Side (Printed Page 1)</div>
                     <div className="id-card front" style={cardStyle}>
-                        {/* Text on TOP now */}
                         <div className="id-topbar">
                             DREAMWORLD ID
                         </div>
@@ -52,9 +45,8 @@ const PrintableID = ({ dreamer, onClose }) => {
                                     <div className="id-name">{dreamer.name}</div>
                                 </div>
                                 <div className="id-body">
-                                    <div className="id-role">{roleObj.singular}</div>
-                                    <div className="id-id">#{dreamer.id ? dreamer.id.substring(0, 6).toUpperCase() : '0000'}</div>
-                                    <div className="id-bio">"{bio}"</div>
+                                    <div className="id-role-text">{roleObj.singular}</div>
+                                    {/* Bio and ID serial removed as requested */}
                                 </div>
                             </div>
                         </div>
@@ -66,10 +58,9 @@ const PrintableID = ({ dreamer, onClose }) => {
 
                 {/* BACK */}
                 <div className="id-card-wrapper">
-                    <div className="card-label">BACK CARD</div>
+                    <div className="card-label">Back Side (Printed Page 2)</div>
                     <div className="id-card back" style={cardStyle}>
                         <div className="id-back-overlay">
-                            {/* Back is Cover Image (via cardStyle) + Role Image */}
                             <img src={roleObj.image || '/logo.png'} alt="Role" className="id-back-role-large" />
                         </div>
                     </div>
@@ -78,8 +69,8 @@ const PrintableID = ({ dreamer, onClose }) => {
 
             <div className="printable-toolbar">
                 <button className="toolbar-btn close-btn" onClick={onClose}>❌ Close</button>
-                <div style={{ color: 'white', fontWeight: 'bold' }}>ID PREVIEW</div>
-                <button className="toolbar-btn print-btn" onClick={handlePrint}>🖨️ Print</button>
+                <div style={{ color: 'white', fontWeight: 'bold', fontSize: '0.9rem' }}>ID CARD PREVIEW</div>
+                <button className="toolbar-btn print-btn" onClick={handlePrint}>🖨️ Print Pages</button>
             </div>
         </div>
     )

@@ -1,6 +1,6 @@
 /* Printables.css */
 
-/* Hide everything else when printing */
+/* --- PRINT RULES (Critical for Multi-Page) --- */
 @media print {
     body * {
         visibility: hidden;
@@ -11,7 +11,8 @@
         visibility: visible;
     }
 
-    .printable-toolbar {
+    .printable-toolbar,
+    .card-label {
         display: none !important;
     }
 
@@ -20,27 +21,32 @@
         left: 0;
         top: 0;
         width: 100vw;
-        height: 100vh;
-        background: white;
-        display: block;
-        padding: 0;
-        margin: 0;
+        height: auto;
+        background: white !important;
+        display: block !important;
     }
 
+    /* Force each side onto a NEW PAGE */
     .id-card-wrapper,
     .certificate-wrapper {
-        break-inside: avoid;
-        page-break-inside: avoid;
-        margin-bottom: 20px;
+        break-after: page;
+        page-break-after: always;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        height: 100vh;
+        /* Fill page for centering */
     }
 
     .id-card,
     .certificate {
         transform: none !important;
-        margin: 0 auto !important;
+        margin: auto !important;
         box-shadow: none !important;
-        border: 1px solid #ddd;
-        page-break-inside: avoid;
+        border: 1px solid #eee;
+        /* Faint cutting guide */
     }
 
     .editable-input,
@@ -53,6 +59,7 @@
     }
 }
 
+/* --- PREVIEW MODAL --- */
 .printable-container {
     display: none;
 }
@@ -71,7 +78,7 @@
     overflow: hidden;
 }
 
-/* Toolbar Styles */
+/* Toolbar (at bottom) */
 .printable-toolbar {
     width: 100%;
     padding: 15px 30px;
@@ -93,8 +100,8 @@
     font-weight: bold;
     cursor: pointer;
     font-size: 1rem;
+    transition: all 0.3s ease;
     text-transform: uppercase;
-    letter-spacing: 1px;
 }
 
 .close-btn {
@@ -115,11 +122,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 60px;
+    gap: 80px;
     width: 100%;
 }
 
-.id-card-wrapper {
+.id-card-wrapper,
+.certificate-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -131,14 +139,13 @@
     font-size: 0.9rem;
     text-transform: uppercase;
     letter-spacing: 3px;
-    opacity: 0.8;
+    opacity: 0.6;
 }
 
-/* --- ID CARD STYLES --- */
+/* --- ID CARD --- */
 .id-card {
     width: 350px;
     height: 220px;
-    background: #000;
     background-size: cover;
     background-position: center;
     border-radius: 12px;
@@ -146,7 +153,6 @@
     box-shadow: 0 0 30px rgba(76, 161, 175, 0.2);
     display: flex;
     flex-direction: column;
-    /* Stack Top to Bottom */
     padding: 0;
     position: relative;
     overflow: hidden;
@@ -161,11 +167,9 @@
     align-items: center;
     justify-content: center;
     font-family: monospace;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     letter-spacing: 3px;
     color: white;
-    font-weight: bold;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 .id-main {
@@ -173,7 +177,6 @@
     padding: 15px;
     display: flex;
     gap: 15px;
-    /* background set inline */
 }
 
 .id-photo-frame {
@@ -192,7 +195,7 @@
 
 .id-header {
     border-bottom: 1px solid rgba(76, 161, 175, 0.5);
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     padding-bottom: 5px;
 }
 
@@ -200,7 +203,6 @@
     font-size: 0.6rem;
     color: #4CA1AF;
     text-transform: uppercase;
-    letter-spacing: 1px;
 }
 
 .id-name {
@@ -208,37 +210,25 @@
     font-weight: 700;
     color: #fff;
     text-transform: uppercase;
-    line-height: 1.2;
 }
 
-.id-body {
-    font-size: 0.7rem;
-    color: #ccc;
-}
-
-.id-role {
+.id-role-text {
     color: #FFD700;
     font-weight: bold;
-    margin-bottom: 2px;
-}
-
-.id-bio {
-    font-size: 0.6rem;
-    font-style: italic;
-    opacity: 0.8;
-    margin-top: 5px;
-    line-height: 1.3;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .id-footer-strip {
-    height: 25px;
-    background: rgba(76, 161, 175, 0.2);
+    height: 30px;
+    background: rgba(10, 14, 26, 0.9);
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    padding-right: 15px;
+    padding: 0 15px;
     font-family: monospace;
-    font-size: 0.6rem;
+    font-size: 0.65rem;
     color: #4CA1AF;
 }
 
@@ -254,39 +244,33 @@
     justify-content: center;
     width: 100%;
     height: 100%;
+    background: rgba(10, 14, 26, 0.5);
+    /* Much lighter to see cover photo */
 }
 
 .id-back-role-large {
-    width: 120px;
+    width: 100px;
     filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.8));
 }
 
-/* --- COMPACT FANTASY CERTIFICATE --- */
-.certificate-wrapper {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-}
-
+/* --- CERTIFICATE --- */
 .certificate {
     width: 1123px;
+    /* A4 landscape roughly */
     height: 794px;
-    background: #0a0e1a;
-    /* Fallback */
     color: #e0e0e0;
     position: relative;
-    border: 10px solid #1a1f35;
+    border: 12px solid #1a1f35;
     box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
     font-family: 'Cinzel', serif;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 40px 60px;
+    padding: 30px 60px;
     text-align: center;
-    /* Reduced padding to fit more vertically */
 }
 
-/* Borders */
+/* Background Visibility */
 .certificate::before {
     content: '';
     position: absolute;
@@ -334,30 +318,28 @@
     border-top: none;
 }
 
-/* COMPACT CONTENT STACK */
 .cert-top-role img {
-    width: 100px;
-    height: 100px;
+    width: 90px;
+    /* Smaller as requested */
+    height: 90px;
     object-fit: contain;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.8));
 }
 
 .cert-title {
-    font-size: 3rem;
+    font-size: 2.8rem;
     color: #FFD700;
-    text-transform: uppercase;
     letter-spacing: 8px;
-    margin-bottom: 5px;
-    line-height: 1;
+    margin-bottom: 2px;
 }
 
 .cert-subtitle {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     color: #4CA1AF;
-    letter-spacing: 3px;
+    letter-spacing: 4px;
     text-transform: uppercase;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .cert-avatar {
@@ -366,59 +348,43 @@
     border-radius: 50%;
     border: 3px solid #FFD700;
     object-fit: cover;
-    margin-bottom: 20px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6);
+    margin-bottom: 15px;
 }
 
-/* Body Text Compact */
 .cert-body-compact {
-    font-size: 1.3rem;
-    line-height: 1.5;
-    margin-bottom: 20px;
-    max-width: 900px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.cert-text-line {
-    margin: 5px 0;
+    font-size: 1.2rem;
+    line-height: 1.4;
+    margin-bottom: 10px;
+    width: 90%;
 }
 
 .cert-name {
-    font-size: 3rem;
+    font-size: 3.2rem;
     color: #fff;
     font-family: 'Great Vibes', cursive;
-    margin: 10px 0;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    margin: 5px 0;
     line-height: 1;
 }
 
 .cert-role-text {
     color: #FFD700;
-    font-size: 2rem;
+    font-size: 1.8rem;
     text-transform: uppercase;
     display: block;
-    margin-top: 5px;
-    letter-spacing: 2px;
 }
 
-/* Footer */
 .cert-footer {
     display: flex;
     justify-content: space-between;
     width: 90%;
     margin-top: auto;
-    padding-bottom: 10px;
+    padding-bottom: 20px;
     align-items: flex-end;
-    position: relative;
-    z-index: 10;
 }
 
 .sign-box {
     text-align: center;
-    width: 280px;
+    width: 250px;
 }
 
 .sign-line {
@@ -427,63 +393,51 @@
 }
 
 .sign-label-top {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: #aaa;
     text-transform: uppercase;
-    letter-spacing: 2px;
     margin-bottom: 2px;
 }
 
 .gold-seal {
-    width: 120px;
-    height: 120px;
+    width: 100px;
+    height: 100px;
     background: radial-gradient(circle at 30% 30%, #FFD700, #B8860B);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 3rem;
+    font-size: 2rem;
     color: #3e2723;
-    font-weight: bold;
-    border: 4px double #3e2723;
+    border: 3px double #3e2723;
 }
 
-/* Back page */
-.certificate.back {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
+/* Certificate Back Refinements */
 .cert-back-content {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
     height: 100%;
-    background: rgba(10, 14, 26, 0.6);
+    background: rgba(10, 14, 26, 0.3);
+    /* Much clearer to see cover */
 }
 
 .cert-back-role-img {
-    width: 400px;
-    filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.3));
+    width: 250px;
+    /* Smaller as requested */
+    filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.9));
 }
 
-/* Inputs */
+/* Input Tweaks */
 .editable-input {
     background: transparent;
     border: none;
     font-family: 'Great Vibes', cursive;
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     color: #FFD700;
     text-align: center;
     width: 100%;
-    padding-bottom: 0;
-    height: 40px;
-}
-
-.editable-input:focus {
-    outline: none;
 }
 
 .editable-date {
@@ -491,18 +445,17 @@
     border: none !important;
     color: #FFD700 !important;
     width: 60px;
-    padding: 0;
-    outline: none !important;
+    font-weight: bold;
 }
 
-/* Mobile */
+/* Mobile Adjustments */
 @media screen and (max-width: 768px) {
     .id-card {
         transform: scale(0.9);
     }
 
     .certificate {
-        transform: scale(0.32);
+        transform: scale(0.3);
         margin-bottom: -550px;
     }
 }
