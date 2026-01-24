@@ -11,10 +11,8 @@
         visibility: visible;
     }
 
-    /* Ensure toolbar and labels are hidden in print */
-    .printable-toolbar,
-    .card-label,
-    .close-preview-btn {
+    /* Ensure toolbar is hidden in print */
+    .printable-toolbar {
         display: none !important;
     }
 
@@ -22,33 +20,32 @@
         position: absolute;
         left: 0;
         top: 0;
-        width: 100%;
-        height: auto;
+        width: 100vw;
+        height: 100vh;
         background: white;
-        /* Ensure clean background for print */
         display: block;
+        padding: 0;
+        margin: 0;
     }
 
     .id-card-wrapper {
         break-inside: avoid;
         page-break-inside: avoid;
-        margin-bottom: 50px;
+        margin-bottom: 20px;
     }
 
     .id-card,
     .certificate {
         transform: none !important;
-        /* Reset any preview scaling */
-        margin: 20px auto !important;
+        margin: 0 auto !important;
         box-shadow: none !important;
         border: 1px solid #ddd;
-        /* Light border for cutting guide */
+        page-break-inside: avoid;
     }
 
     .editable-input,
     .editable-date {
         border-bottom: none !important;
-        /* Hide input lines on print */
     }
 
     .admin-page {
@@ -58,19 +55,19 @@
 
 .printable-container {
     display: none;
-    /* Hidden by default on screen */
 }
 
 .printable-container.preview-mode {
     display: flex;
-    /* Show when previewing */
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.95);
-    z-index: 10000;
+    background: rgba(10, 14, 26, 0.98);
+    /* Dark background for preview */
+    z-index: 20000;
+    /* Super high z-index to overlay sidebar */
     flex-direction: column;
     align-items: center;
 }
@@ -79,43 +76,63 @@
 .printable-toolbar {
     width: 100%;
     padding: 15px 30px;
-    background: #1a1f35;
+    background: linear-gradient(90deg, #1a1f35, #2c3e50);
+    border-bottom: 1px solid rgba(255, 215, 0, 0.3);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    z-index: 10001;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    z-index: 20001;
+    /* Above container */
     flex-shrink: 0;
+    position: fixed;
+    /* Force fixed at top */
+    top: 0;
+    left: 0;
 }
 
 .toolbar-btn {
-    padding: 10px 20px;
-    border-radius: 8px;
+    padding: 10px 25px;
+    border-radius: 50px;
     border: none;
     font-weight: bold;
     cursor: pointer;
     font-size: 1rem;
-    transition: transform 0.2s;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .toolbar-btn:hover {
-    transform: scale(1.05);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
 .close-btn {
+    background: rgba(255, 77, 77, 0.2);
+    border: 1px solid #ff4d4d;
+    color: #ff4d4d;
+}
+
+.close-btn:hover {
     background: #ff4d4d;
     color: white;
 }
 
 .print-btn {
-    background: #4CA1AF;
-    color: white;
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    color: #1a1f35;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+}
+
+.print-btn:hover {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
 }
 
 .printable-content-scroll {
     overflow-y: auto;
     height: 100%;
-    padding: 40px;
+    padding: 100px 20px 40px 20px;
+    /* Top padding for fixed toolbar */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -131,335 +148,357 @@
 }
 
 .card-label {
-    color: #888;
+    color: #FFD700;
     font-size: 0.9rem;
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
+    opacity: 0.8;
 }
 
-/* --- ID CARD STYLES (Solarpunk/Sci-Fi) --- */
+/* --- ID CARD STYLES (Sci-Fi/Holographic) --- */
 .id-card {
     width: 350px;
-    /* Standard ID width */
     height: 220px;
-    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-    border-radius: 15px;
+    background: #000;
+    background-image: url('/logo.png');
+    /* Subtle watermark */
+    background-size: 150%;
+    background-position: center;
+    background-blend-mode: overlay;
+    border-radius: 12px;
     border: 2px solid #4CA1AF;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 30px rgba(76, 161, 175, 0.2);
     display: flex;
-    padding: 15px;
-    color: white;
-    font-family: 'Orbitron', sans-serif;
-    /* Tech font */
+    padding: 0;
     position: relative;
     overflow: hidden;
-    transition: transform 0.3s;
+    color: white;
 }
 
-.id-card::before {
+/* Holographic overlay effect */
+.id-card::after {
     content: '';
     position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: repeating-linear-gradient(45deg,
-            transparent,
-            transparent 10px,
-            rgba(76, 161, 175, 0.05) 10px,
-            rgba(76, 161, 175, 0.05) 20px);
-    z-index: 0;
+    inset: 0;
+    background: linear-gradient(125deg,
+            rgba(255, 255, 255, 0) 30%,
+            rgba(255, 255, 255, 0.1) 40%,
+            rgba(255, 255, 255, 0) 50%);
+    pointer-events: none;
 }
 
-.id-photo-section {
-    width: 100px;
-    z-index: 1;
+.id-sidebar {
+    width: 30px;
+    height: 100%;
+    background: linear-gradient(180deg, #4CA1AF, #2c3e50);
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
+}
+
+.id-sidebar-text {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-family: monospace;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.id-main {
+    flex: 1;
+    padding: 15px;
+    display: flex;
+    gap: 15px;
+    background: rgba(10, 14, 26, 0.9);
+    /* Darken content area */
+}
+
+.id-photo-frame {
+    width: 90px;
+    height: 90px;
+    border: 2px solid #FFD700;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
 }
 
 .id-photo {
-    width: 90px;
-    height: 90px;
-    border-radius: 10px;
-    border: 2px solid #FFD700;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    background: #000;
-}
-
-.id-role-icon {
-    font-size: 1.5rem;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 5px;
-    border-radius: 50%;
-}
-
-.id-info-section {
-    flex: 1;
-    padding-left: 15px;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
 }
 
 .id-header {
-    border-bottom: 2px solid #4CA1AF;
+    border-bottom: 1px solid rgba(76, 161, 175, 0.5);
+    margin-bottom: 8px;
     padding-bottom: 5px;
-    margin-bottom: 5px;
 }
 
-.id-title {
+.id-brand {
     font-size: 0.6rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
     color: #4CA1AF;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .id-name {
     font-size: 1.1rem;
-    font-weight: bold;
-    color: #FFD700;
+    font-weight: 700;
+    color: #fff;
     text-transform: uppercase;
+    line-height: 1.2;
 }
 
-.id-details {
+.id-body {
     font-size: 0.7rem;
     color: #ccc;
-    line-height: 1.4;
 }
 
-.id-role-name {
-    color: #4FD15F;
+.id-role {
+    color: #FFD700;
     font-weight: bold;
-    font-size: 0.9rem;
+    margin-bottom: 2px;
 }
 
 .id-bio {
-    font-size: 0.65rem;
-    margin-top: 5px;
+    font-size: 0.6rem;
     font-style: italic;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    opacity: 0.8;
+    margin-top: 5px;
+    line-height: 1.3;
 }
 
-.id-footer {
-    margin-top: auto;
-    font-size: 0.5rem;
-    text-align: right;
-    opacity: 0.7;
-}
-
-/* ID Card Back Side */
-.id-card.back {
-    justify-content: center;
+.id-footer-strip {
+    position: absolute;
+    bottom: 0;
+    left: 30px;
+    right: 0;
+    height: 25px;
+    background: rgba(76, 161, 175, 0.2);
+    display: flex;
     align-items: center;
+    justify-content: flex-end;
+    padding-right: 15px;
+    font-family: monospace;
+    font-size: 0.6rem;
+    color: #4CA1AF;
 }
 
-.id-back-content {
+/* Back Side */
+.id-card.back {
+    background: #0a0e1a;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    z-index: 2;
-    text-align: center;
 }
 
-.id-back-role-img {
-    width: 120px;
-    height: 120px;
-    object-fit: contain;
-    margin-bottom: 10px;
-    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));
+.id-back-logo {
+    width: 150px;
+    opacity: 0.9;
+    filter: drop-shadow(0 0 15px rgba(76, 161, 175, 0.5));
 }
 
-.id-back-text {
-    font-size: 1.5rem;
-    font-weight: bold;
+.id-back-role-large {
+    font-size: 1.2rem;
     color: #FFD700;
-    letter-spacing: 2px;
+    margin-top: 10px;
     text-transform: uppercase;
+    letter-spacing: 3px;
 }
 
-.id-back-sub {
-    color: #4CA1AF;
-    font-size: 0.8rem;
-    letter-spacing: 5px;
-}
-
-/* Editable Inputs */
-.editable-date {
-    background: transparent;
-    border: none;
-    border-bottom: 1px dashed rgba(255, 255, 255, 0.5);
-    color: white;
-    width: 50px;
-    text-align: center;
-    font-family: inherit;
-    font-size: inherit;
-    cursor: pointer;
-}
-
-.editable-date:focus {
-    outline: none;
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.editable-input {
-    background: transparent;
-    border: none;
-    border-bottom: 1px dashed rgba(44, 30, 18, 0.3);
-    color: #2c1e12;
-    text-align: center;
-    font-family: inherit;
-    font-size: 1.5rem;
-    font-weight: bold;
-    width: 100%;
-    cursor: pointer;
-}
-
-.editable-input:focus {
-    outline: none;
-    background: rgba(0, 0, 0, 0.05);
-}
-
-/* --- CERTIFICATE STYLES (Fantasy/Ornate) --- */
+/* --- PREMIUM CERTIFICATE STYLES (Fantasy) --- */
 .certificate-wrapper {
     display: flex;
     justify-content: center;
     width: 100%;
-    margin-bottom: 100px;
 }
 
 .certificate {
     width: 1123px;
-    /* A4 Landscape roughly (@96dpi) */
+    /* A4 Landscape */
     height: 794px;
-    background: #fdfbf7;
-    /* Parchment color */
-    background-image: url("https://www.transparenttextures.com/patterns/parchment.png");
-    padding: 40px;
+    /* Dark Fantasy Theme */
+    background: radial-gradient(circle at center, #1a253a 0%, #0a0e1a 100%);
+    color: #e0e0e0;
     position: relative;
-    color: #2c1e12;
+    border: 10px solid #1a1f35;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
     font-family: 'Cinzel', serif;
-    /* Fantasy font */
-    border: 20px solid #FFD700;
-    /* Gold border */
-    box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.1), 0 0 50px rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    padding: 60px;
     text-align: center;
-    transform-origin: top center;
 }
 
-.certificate-border-inner {
+/* Gold Frame */
+.certificate::before {
+    content: '';
     position: absolute;
-    top: 10px;
-    left: 10px;
-    right: 10px;
-    bottom: 10px;
-    border: 5px double #2c1e12;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+    border: 2px solid #FFD700;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
     pointer-events: none;
 }
 
-.cert-header {
-    font-size: 4rem;
-    margin-bottom: 20px;
-    color: #2c1e12;
-    text-transform: uppercase;
-    letter-spacing: 5px;
-    text-shadow: 2px 2px 0px rgba(255, 215, 0, 0.5);
+.certificate::after {
+    content: '';
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    right: 30px;
+    bottom: 30px;
+    border: 1px solid rgba(255, 215, 0, 0.5);
+    pointer-events: none;
 }
 
-.cert-subheader {
-    font-size: 1.5rem;
-    font-style: italic;
+/* Ornate Corners (CSS shapes) */
+.cert-corner {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border: 2px solid #FFD700;
+    z-index: 1;
+}
+
+.top-left {
+    top: 20px;
+    left: 20px;
+    border-right: none;
+    border-bottom: none;
+}
+
+.top-right {
+    top: 20px;
+    right: 20px;
+    border-left: none;
+    border-bottom: none;
+}
+
+.bottom-left {
+    bottom: 20px;
+    left: 20px;
+    border-right: none;
+    border-top: none;
+}
+
+.bottom-right {
+    bottom: 20px;
+    right: 20px;
+    border-left: none;
+    border-top: none;
+}
+
+.cert-logo {
+    width: 120px;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6));
+}
+
+.cert-title {
+    font-size: 4rem;
+    color: #FFD700;
+    text-transform: uppercase;
+    letter-spacing: 8px;
+    margin-bottom: 10px;
+    text-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.cert-subtitle {
+    font-size: 1.2rem;
+    color: #4CA1AF;
+    letter-spacing: 2px;
+    text-transform: uppercase;
     margin-bottom: 40px;
-    font-family: 'Playfair Display', serif;
 }
 
 .cert-body {
-    font-size: 1.8rem;
-    line-height: 1.6;
-    margin-bottom: 50px;
-    width: 80%;
+    font-size: 1.5rem;
+    line-height: 2;
+    margin-bottom: 60px;
+    max-width: 800px;
 }
 
 .cert-name {
-    font-size: 3.5rem;
-    color: #d4af37;
-    /* Gold */
-    font-weight: bold;
     display: block;
-    margin: 20px 0;
+    font-size: 3.5rem;
+    color: #fff;
     font-family: 'Great Vibes', cursive;
-    /* Handwritten style */
-    text-decoration: underline;
-}
-
-.cert-role {
-    font-weight: bold;
-    color: #2c3e50;
+    /* Handwritten font */
+    margin: 10px 0;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
 
 .cert-footer {
     display: flex;
-    justify-content: space-around;
-    width: 100%;
-    margin-top: 50px;
+    justify-content: space-between;
+    width: 80%;
+    margin-top: 40px;
+    align-items: flex-end;
 }
 
-.signature-block {
+.sign-box {
     text-align: center;
-    border-top: 2px solid #2c1e12;
-    width: 300px;
-    padding-top: 10px;
+    width: 250px;
 }
 
-.seal {
-    width: 150px;
-    height: 150px;
-    background: #800000;
-    /* Wax Seal Red */
+.sign-line {
+    border-bottom: 1px solid #FFD700;
+    margin-bottom: 10px;
+}
+
+.sign-label {
+    font-size: 0.9rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.gold-seal {
+    width: 140px;
+    height: 140px;
+    background: radial-gradient(circle at 30% 30%, #FFD700, #B8860B);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #d4af37;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     font-size: 3rem;
-    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
-    border: 5px dashed #d4af37;
+    color: #3e2723;
+    font-weight: bold;
+    border: 4px double #3e2723;
 }
 
-/* Responsive Preview Adjustment */
-@media screen and (max-width: 768px) {
-    .printable-content-scroll {
-        gap: 30px;
-        padding: 20px;
-    }
+/* Edit Inputs */
+.editable-input {
+    background: transparent;
+    border: none;
+    font-family: 'Great Vibes', cursive;
+    font-size: 2rem;
+    color: #FFD700;
+    text-align: center;
+    width: 100%;
+}
 
+.editable-input:focus {
+    outline: none;
+    border-bottom: 1px dashed #4CA1AF;
+}
+
+/* Mobile Preview */
+@media screen and (max-width: 768px) {
     .id-card {
         transform: scale(0.9);
-        transform-origin: top center;
-        margin-bottom: -20px;
-        /* Compensate for scaling gap */
     }
 
     .certificate {
-        transform: scale(0.35);
-        /* Fit detailed cert on phone */
-        margin-bottom: -500px !important;
-        /* Huge compensation for scaled height */
-    }
-
-    .toolbar-btn {
-        padding: 8px 12px;
-        font-size: 0.8rem;
+        transform: scale(0.32);
+        margin-bottom: -550px;
     }
 }
