@@ -24,9 +24,16 @@
         left: 0;
         top: 0;
         width: 100vw;
-        height: auto;
+        height: auto !important;
         background: white !important;
         display: block !important;
+        overflow: visible !important;
+    }
+
+    .printable-content-scroll {
+        display: block !important;
+        overflow: visible !important;
+        height: auto !important;
     }
 
     /* Force each side onto a NEW PAGE */
@@ -39,7 +46,7 @@
         display: flex !important;
         justify-content: center !important;
         align-items: center !important;
-        height: 100vh;
+        height: 100vh !important;
         /* Fill page for centering */
     }
 
