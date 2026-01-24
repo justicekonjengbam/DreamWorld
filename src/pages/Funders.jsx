@@ -98,6 +98,17 @@ function Funders() {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target
+
+    // If user selects "monthly", auto-set amount to 399 and lock it
+    if (name === 'type' && value === 'monthly') {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value,
+        amount: '399' // Hardcoded to match your Razorpay Plan
+      }))
+      return
+    }
+
     setFormData(prev => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value
@@ -140,11 +151,12 @@ function Funders() {
         const subData = await subRes.json();
 
         if (!subRes.ok) {
-          throw new Error(subData.error || 'Failed to initialize subscription');
+          // If the secret is missing, it will throw here
+          throw new Error(subData.error || 'Check if RAZORPAY_SECRET is added to Vercel/Env');
         }
 
         const subOptions = {
-          key: subData.keyId,
+          key: RAZORPAY_KEY_ID, // Use the public key here
           subscription_id: subData.subscriptionId,
           name: "DreamWorld",
           description: "Monthly Support Subscription",
@@ -211,7 +223,7 @@ function Funders() {
       }
     } catch (err) {
       console.error("Payment Error:", err);
-      alert("Something went wrong with the payment: " + err.message);
+      alert("⚠️ Payment Initialization Failed: " + err.message + "\n\n(Ask Antigravity if you need help with the Secret Key!)");
     } finally {
       setIsProcessing(false)
     }
@@ -299,17 +311,26 @@ function Funders() {
 
                 <div className="form-row">
                   <div className="form-group">
-                    <label htmlFor="amount">Amount (INR)</label>
+                    <label htmlFor="amount">
+                      {formData.type === 'monthly' ? 'Fixed Subscription Amount (INR)' : 'Amount (INR)'}
+                    </label>
                     <input
                       type="number"
                       id="amount"
                       name="amount"
                       value={formData.amount}
                       onChange={handleChange}
-                      required
+                      required={formData.type !== 'monthly'}
+                      disabled={formData.type === 'monthly'}
                       min="1"
-                      placeholder="Any amount helps"
+                      placeholder={formData.type === 'monthly' ? '399' : 'Any amount helps'}
+                      style={formData.type === 'monthly' ? { opacity: 0.7, cursor: 'not-allowed', background: 'rgba(255,215,0,0.1)', borderColor: 'var(--color-gold)' } : {}}
                     />
+                    {formData.type === 'monthly' && (
+                      <small style={{ color: 'var(--color-gold)', marginTop: '4px', fontSize: '0.75rem' }}>
+                        ✨ Price is locked to ₹399/mo by your selected plan.
+                      </small>
+                    )}
                   </div>
 
                   <div className="form-group">
@@ -321,7 +342,7 @@ function Funders() {
                       onChange={handleChange}
                     >
                       <option value="one-time">One-Time Support</option>
-                      <option value="monthly">Auto Pay (Monthly Subscription)</option>
+                      <option value="monthly">Auto Pay (₹399 Monthly)</option>
                     </select>
                   </div>
                 </div>
