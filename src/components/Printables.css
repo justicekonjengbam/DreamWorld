@@ -6,37 +6,34 @@
         margin: 0;
     }
 
-    /* Hide UI elements */
-    .admin-sidebar,
-    .admin-page,
-    .admin-dashboard-content header,
+    /* 1. Hide everything on the entire website */
+    body * {
+        visibility: hidden !important;
+    }
+
+    /* 2. ONLY show the printable container and everything inside it */
+    .printable-container,
+    .printable-container * {
+        visibility: visible !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    /* 3. Reset the container to start at the top-left of the paper */
+    .printable-container {
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100vw !important;
+        height: auto !important;
+        display: block !important;
+        background: white !important;
+    }
+
+    /* Hide the toolbar and labels during print */
     .printable-toolbar,
     .card-label {
         display: none !important;
-    }
-
-    /* Reset body/html for full page */
-    html,
-    body {
-        height: auto !important;
-        overflow: visible !important;
-        background: white !important;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
-
-    .printable-container {
-        display: block !important;
-        position: static !important;
-        visibility: visible !important;
-        width: 100% !important;
-        height: auto !important;
-    }
-
-    /* Force background colors/images */
-    * {
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
     }
 
     .printable-content-scroll {
@@ -44,6 +41,7 @@
         overflow: visible !important;
         height: auto !important;
         padding: 0 !important;
+        margin: 0 !important;
     }
 
     /* Force each side onto a NEW PAGE */
@@ -60,35 +58,32 @@
         width: 100vw !important;
     }
 
-    /* SCALE DOWN TO FIT A4 */
+    /* SCALE FOR SAFETY MARGINS */
     .id-card {
         transform: scale(1.1) !important;
-        /* IDs can be a bit bigger */
         transform-origin: center center !important;
         margin: auto !important;
         box-shadow: none !important;
-        border: 1px solid #ddd;
     }
 
     .certificate {
-        transform: scale(0.85) !important;
-        /* Shrink aggressively to fit A4 safety margins */
+        transform: scale(0.8) !important;
+        /* Aggressive shrink to guarantee NO CUTOFF */
         transform-origin: center center !important;
         margin: auto !important;
         box-shadow: none !important;
-        border: 1px solid #ddd;
     }
 
     .editable-input,
     .editable-date,
     .editable-bio-input {
-        border-bottom: none !important;
+        border: none !important;
         background: transparent !important;
         color: inherit !important;
     }
 }
 
-/* --- PREVIEW MODAL --- */
+/* --- PREVIEW MODAL (ON SCREEN) --- */
 .printable-container {
     display: none;
 }
@@ -107,7 +102,7 @@
     overflow: hidden;
 }
 
-/* Toolbar */
+/* Toolbar (On Screen) */
 .printable-toolbar {
     width: 100%;
     padding: 15px 30px;
@@ -250,10 +245,9 @@
     margin-bottom: 5px;
 }
 
-/* EDITABLE BIO VISIBILITY */
+/* Bio Input visibility in preview */
 .editable-bio-input {
     background: rgba(255, 255, 255, 0.08);
-    /* More visible */
     border: 1px dashed rgba(255, 255, 255, 0.3);
     color: #fff;
     font-size: 0.75rem;
