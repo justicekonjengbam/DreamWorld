@@ -13,6 +13,11 @@ const PrintableCertificate = ({ dreamer, onClose }) => {
         window.print()
     }
 
+    // Use cover image for background if available
+    const bgStyle = dreamer.coverImage
+        ? { backgroundImage: `linear-gradient(rgba(10,14,26,0.85), rgba(10,14,26,0.85)), url(${dreamer.coverImage})`, backgroundSize: 'cover' }
+        : {};
+
     return (
         <div className="printable-container preview-mode">
             <div className="printable-toolbar">
@@ -23,14 +28,18 @@ const PrintableCertificate = ({ dreamer, onClose }) => {
 
             <div className="printable-content-scroll">
                 <div className="certificate-wrapper">
-                    <div className="certificate">
+                    <div className="certificate" style={bgStyle}>
                         {/* Decorative Corners */}
                         <div className="cert-corner top-left"></div>
                         <div className="cert-corner top-right"></div>
                         <div className="cert-corner bottom-left"></div>
                         <div className="cert-corner bottom-right"></div>
 
-                        <img src="/logo.png" alt="DW" className="cert-logo" />
+                        {/* Header: Avatar + Logo Watermark */}
+                        <div className="cert-visual-header">
+                            <img src={dreamer.avatar || '/logo.png'} alt="Start" className="cert-avatar" />
+                            <img src="/logo.png" alt="DW" className="cert-logo-watermark" />
+                        </div>
 
                         <div className="cert-title">DreamWorld</div>
                         <div className="cert-subtitle">Certificate of Citizenship</div>
@@ -40,7 +49,7 @@ const PrintableCertificate = ({ dreamer, onClose }) => {
                             <span className="cert-name">{dreamer.name}</span>
                             for their dedication and spirit. They are officially inducted into the realm as a
                             <br /><br />
-                            <strong style={{ color: '#FFD700', fontSize: '1.8rem', textTransform: 'uppercase' }}>
+                            <strong className="cert-role-text">
                                 {roleObj.singular}
                             </strong>
                         </div>
@@ -57,7 +66,10 @@ const PrintableCertificate = ({ dreamer, onClose }) => {
                                 <div className="sign-label">Date of Issue</div>
                             </div>
 
-                            <div className="gold-seal">DW</div>
+                            {/* Role Icon as the Seal */}
+                            <div className="role-seal">
+                                <img src={roleObj.image || '/logo.png'} alt="Seal" />
+                            </div>
 
                             <div className="sign-box">
                                 <div className="sign-line">
@@ -67,9 +79,16 @@ const PrintableCertificate = ({ dreamer, onClose }) => {
                                         onChange={(e) => setSignatory(e.target.value)}
                                     />
                                 </div>
-                                <div className="sign-label">Authorization</div>
+                                <div className="sign-label">Certified by Creator</div>
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                {/* Back Side */}
+                <div className="certificate-wrapper">
+                    <div className="certificate back" style={{ background: '#0a0e1a' }}>
+                        <img src="/logo.png" alt="DreamWorld" className="cert-back-logo" />
                     </div>
                 </div>
             </div>

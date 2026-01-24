@@ -28,7 +28,8 @@
         margin: 0;
     }
 
-    .id-card-wrapper {
+    .id-card-wrapper,
+    .certificate-wrapper {
         break-inside: avoid;
         page-break-inside: avoid;
         margin-bottom: 20px;
@@ -65,9 +66,9 @@
     right: 0;
     bottom: 0;
     background: rgba(10, 14, 26, 0.98);
-    /* Dark background */
+    /* Dark background for preview */
     z-index: 2147483640;
-    /* Max Safe Integer range to beat everything */
+    /* Max Safe Integer range */
     flex-direction: column;
     align-items: center;
 }
@@ -77,7 +78,6 @@
     width: 100%;
     padding: 15px 30px;
     background: #1a1f35;
-    /* Solid BG */
     border-bottom: 2px solid #FFD700;
     display: flex;
     justify-content: space-between;
@@ -86,7 +86,6 @@
     /* MAX Z-INDEX */
     flex-shrink: 0;
     position: fixed;
-    /* Force fixed at top */
     top: 0;
     left: 0;
 }
@@ -162,10 +161,9 @@
     height: 220px;
     background: #000;
     background-image: url('/logo.png');
-    /* Subtle watermark */
-    background-size: 150%;
+    /* Fallback */
+    background-size: cover;
     background-position: center;
-    background-blend-mode: overlay;
     border-radius: 12px;
     border: 2px solid #4CA1AF;
     box-shadow: 0 0 30px rgba(76, 161, 175, 0.2);
@@ -174,18 +172,6 @@
     position: relative;
     overflow: hidden;
     color: white;
-}
-
-/* Holographic overlay effect */
-.id-card::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(125deg,
-            rgba(255, 255, 255, 0) 30%,
-            rgba(255, 255, 255, 0.1) 40%,
-            rgba(255, 255, 255, 0) 50%);
-    pointer-events: none;
 }
 
 .id-sidebar {
@@ -211,8 +197,7 @@
     padding: 15px;
     display: flex;
     gap: 15px;
-    background: rgba(10, 14, 26, 0.9);
-    /* Darken content area */
+    /* background set in jsx */
 }
 
 .id-photo-frame {
@@ -348,23 +333,12 @@
     pointer-events: none;
 }
 
-.certificate::after {
-    content: '';
-    position: absolute;
-    top: 30px;
-    left: 30px;
-    right: 30px;
-    bottom: 30px;
-    border: 1px solid rgba(255, 215, 0, 0.5);
-    pointer-events: none;
-}
-
-/* Ornate Corners (CSS shapes) */
+/* Ornate Corners */
 .cert-corner {
     position: absolute;
     width: 100px;
     height: 100px;
-    border: 2px solid #FFD700;
+    border: 4px solid #FFD700;
     z-index: 1;
 }
 
@@ -396,34 +370,61 @@
     border-top: none;
 }
 
-.cert-logo {
-    width: 120px;
+.cert-visual-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 25px;
     margin-bottom: 20px;
-    filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6));
+}
+
+.cert-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 2px solid #FFD700;
+    object-fit: cover;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+}
+
+.cert-logo-watermark {
+    width: 90px;
+    opacity: 0.9;
+    filter: drop-shadow(0 0 15px rgba(76, 161, 175, 0.5));
 }
 
 .cert-title {
-    font-size: 4rem;
+    font-size: 3.8rem;
     color: #FFD700;
     text-transform: uppercase;
-    letter-spacing: 8px;
+    letter-spacing: 10px;
     margin-bottom: 10px;
     text-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    line-height: 1;
 }
 
 .cert-subtitle {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     color: #4CA1AF;
-    letter-spacing: 2px;
+    letter-spacing: 4px;
     text-transform: uppercase;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
 }
 
 .cert-body {
     font-size: 1.5rem;
-    line-height: 2;
-    margin-bottom: 60px;
-    max-width: 800px;
+    line-height: 1.8;
+    margin-bottom: 40px;
+    max-width: 850px;
+}
+
+.cert-role-text {
+    color: #FFD700;
+    font-size: 2.2rem;
+    text-transform: uppercase;
+    display: block;
+    margin-top: 15px;
+    letter-spacing: 2px;
 }
 
 .cert-name {
@@ -431,17 +432,19 @@
     font-size: 3.5rem;
     color: #fff;
     font-family: 'Great Vibes', cursive;
-    /* Handwritten font */
-    margin: 10px 0;
+    margin: 5px 0;
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
 
 .cert-footer {
     display: flex;
     justify-content: space-between;
-    width: 80%;
-    margin-top: 40px;
+    width: 90%;
+    margin-top: 10px;
+    /* Moves content UP */
     align-items: flex-end;
+    position: relative;
+    z-index: 10;
 }
 
 .sign-box {
@@ -456,24 +459,39 @@
 
 .sign-label {
     font-size: 0.9rem;
-    color: #888;
+    color: #aaa;
     text-transform: uppercase;
     letter-spacing: 2px;
 }
 
-.gold-seal {
-    width: 140px;
-    height: 140px;
-    background: radial-gradient(circle at 30% 30%, #FFD700, #B8860B);
-    border-radius: 50%;
+.role-seal {
+    width: 150px;
+    height: 150px;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    font-size: 3rem;
-    color: #3e2723;
-    font-weight: bold;
-    border: 4px double #3e2723;
+    filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.5));
+}
+
+.role-seal img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* Certificate Back */
+.certificate.back {
+    background: #0a0e1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #333;
+}
+
+.cert-back-logo {
+    width: 300px;
+    opacity: 0.8;
+    filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.2));
 }
 
 /* Edit Inputs */
@@ -481,10 +499,11 @@
     background: transparent;
     border: none;
     font-family: 'Great Vibes', cursive;
-    font-size: 2rem;
+    font-size: 1.8rem;
     color: #FFD700;
     text-align: center;
     width: 100%;
+    padding-bottom: 5px;
 }
 
 .editable-input:focus {

@@ -19,6 +19,11 @@ const PrintableID = ({ dreamer, onClose }) => {
         window.print()
     }
 
+    // Dynamic background style from cover image
+    const cardStyle = dreamer.coverImage
+        ? { backgroundImage: `linear-gradient(90deg, rgba(0,0,0,0.85) 25%, rgba(0,0,0,0.5)), url(${dreamer.coverImage})`, backgroundSize: 'cover' }
+        : {};
+
     return (
         <div className="printable-container preview-mode">
             <div className="printable-toolbar">
@@ -31,11 +36,11 @@ const PrintableID = ({ dreamer, onClose }) => {
                 {/* FRONT */}
                 <div className="id-card-wrapper">
                     <div className="card-label">FRONT CARD</div>
-                    <div className="id-card front">
+                    <div className="id-card front" style={cardStyle}>
                         <div className="id-sidebar">
                             <div className="id-sidebar-text">DREAMWORLD ID</div>
                         </div>
-                        <div className="id-main">
+                        <div className="id-main" style={{ background: 'rgba(10, 14, 26, 0.7)' }}>
                             <div className="id-photo-section">
                                 <div className="id-photo-frame">
                                     <img
