@@ -30,7 +30,7 @@ export const ContentProvider = ({ children }) => {
         const fetchData = async () => {
             try {
                 // Try to fetch from our Vercel KV cache bridge
-                const response = await fetch('/api/data')
+                const response = await fetch(`/api/data?t=${Date.now()}`)
 
                 if (!response.ok) {
                     throw new Error(`Cache fetch failed (Status: ${response.status})`)

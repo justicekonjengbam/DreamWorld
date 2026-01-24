@@ -68,10 +68,10 @@ export default async function handler(req, res) {
         };
 
         const globalData = {
-            quests: normalize(qData).filter(q => q.title),
-            roles: normalize(rData).filter(r => r.name),
-            characters: normalize(cData).filter(c => c.name),
-            events: normalize(eData).filter(e => e.title),
+            quests: normalize(qData).filter(q => q.title || q.id),
+            roles: normalize(rData).filter(r => r.name || r.id),
+            characters: normalize(cData).filter(c => c.name || c.id || c.title),
+            events: normalize(eData).filter(e => e.title || e.id),
             announcement: normalize(aData)[0] || {},
             lastSynced: new Date().toISOString()
         };
@@ -86,7 +86,8 @@ export default async function handler(req, res) {
                 quests: globalData.quests.length,
                 roles: globalData.roles.length,
                 members: globalData.characters.length,
-                events: globalData.events.length
+                events: globalData.events.length,
+                rawDreamers: cData.length // Diagnostic
             }
         });
     } catch (error) {
