@@ -38,7 +38,13 @@ export default async function handler(req, res) {
         const data = await response.json();
 
         if (!response.ok) {
-            console.error('RAZORPAY API ERROR:', data);
+            console.error('RAZORPAY API ERROR:', {
+                status: response.status,
+                statusText: response.statusText,
+                data: data,
+                requestedPlanId: planId,
+                keyIdUsed: keyId
+            });
             throw new Error(data.error?.description || 'Razorpay API returned an error');
         }
 
@@ -48,10 +54,17 @@ export default async function handler(req, res) {
         });
 
     } catch (error) {
-        console.error('SERVER ERROR:', error.message);
+        console.error('SERVER ERROR:', {
+            message: error.message,
+            planId: planId,
+            keyId: keyId,
+            timestamp: new Date().toISOString()
+        });
         return res.status(500).json({
-            error: `${error.message} (Target Plan ID: ${planId})`,
-            suggestion: 'Ensure this Plan ID was created in LIVE MODE on Razorpay.'
+            error: `${error.message}`,
+            planId: planId,
+            keyIdPrefix: keyId.substring(0, 13) + '...', // Show partial key for debugging
+            suggestion: 'This Plan ID does not exist in the same Razorpay account as your Key ID. Check: 1) Plan exists and is active, 2) Both created in SAME MODE (live vs test), 3) Both from SAME Razorpay account.'
         });
     }
 }
