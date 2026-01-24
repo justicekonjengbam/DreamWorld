@@ -11,17 +11,44 @@
         visibility: visible;
     }
 
+    /* Ensure toolbar and labels are hidden in print */
+    .printable-toolbar,
+    .card-label,
+    .close-preview-btn {
+        display: none !important;
+    }
+
     .printable-container {
         position: absolute;
         left: 0;
         top: 0;
         width: 100%;
-        height: 100%;
+        height: auto;
         background: white;
         /* Ensure clean background for print */
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        display: block;
+    }
+
+    .id-card-wrapper {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        margin-bottom: 50px;
+    }
+
+    .id-card,
+    .certificate {
+        transform: none !important;
+        /* Reset any preview scaling */
+        margin: 20px auto !important;
+        box-shadow: none !important;
+        border: 1px solid #ddd;
+        /* Light border for cutting guide */
+    }
+
+    .editable-input,
+    .editable-date {
+        border-bottom: none !important;
+        /* Hide input lines on print */
     }
 
     .admin-page {
@@ -42,24 +69,72 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.95);
     z-index: 10000;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
 }
 
-.close-preview-btn {
-    position: absolute;
-    top: 20px;
-    right: 20px;
+/* Toolbar Styles */
+.printable-toolbar {
+    width: 100%;
+    padding: 15px 30px;
+    background: #1a1f35;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10001;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    flex-shrink: 0;
+}
+
+.toolbar-btn {
     padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: transform 0.2s;
+}
+
+.toolbar-btn:hover {
+    transform: scale(1.05);
+}
+
+.close-btn {
     background: #ff4d4d;
     color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    z-index: 10001;
+}
+
+.print-btn {
+    background: #4CA1AF;
+    color: white;
+}
+
+.printable-content-scroll {
+    overflow-y: auto;
+    height: 100%;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 60px;
+    width: 100%;
+}
+
+.id-card-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.card-label {
+    color: #888;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
 /* --- ID CARD STYLES (Solarpunk/Sci-Fi) --- */
@@ -70,7 +145,7 @@
     background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
     border-radius: 15px;
     border: 2px solid #4CA1AF;
-    box-shadow: 0 0 20px rgba(76, 161, 175, 0.5);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
     display: flex;
     padding: 15px;
     color: white;
@@ -78,6 +153,7 @@
     /* Tech font */
     position: relative;
     overflow: hidden;
+    transition: transform 0.3s;
 }
 
 .id-card::before {
@@ -178,7 +254,87 @@
     opacity: 0.7;
 }
 
+/* ID Card Back Side */
+.id-card.back {
+    justify-content: center;
+    align-items: center;
+}
+
+.id-back-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    text-align: center;
+}
+
+.id-back-role-img {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));
+}
+
+.id-back-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #FFD700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.id-back-sub {
+    color: #4CA1AF;
+    font-size: 0.8rem;
+    letter-spacing: 5px;
+}
+
+/* Editable Inputs */
+.editable-date {
+    background: transparent;
+    border: none;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.5);
+    color: white;
+    width: 50px;
+    text-align: center;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+}
+
+.editable-date:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.editable-input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px dashed rgba(44, 30, 18, 0.3);
+    color: #2c1e12;
+    text-align: center;
+    font-family: inherit;
+    font-size: 1.5rem;
+    font-weight: bold;
+    width: 100%;
+    cursor: pointer;
+}
+
+.editable-input:focus {
+    outline: none;
+    background: rgba(0, 0, 0, 0.05);
+}
+
 /* --- CERTIFICATE STYLES (Fantasy/Ornate) --- */
+.certificate-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 100px;
+}
+
 .certificate {
     width: 1123px;
     /* A4 Landscape roughly (@96dpi) */
@@ -193,12 +349,13 @@
     /* Fantasy font */
     border: 20px solid #FFD700;
     /* Gold border */
-    box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.1);
+    box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.1), 0 0 50px rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
+    transform-origin: top center;
 }
 
 .certificate-border-inner {
@@ -278,4 +435,31 @@
     font-size: 3rem;
     box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
     border: 5px dashed #d4af37;
+}
+
+/* Responsive Preview Adjustment */
+@media screen and (max-width: 768px) {
+    .printable-content-scroll {
+        gap: 30px;
+        padding: 20px;
+    }
+
+    .id-card {
+        transform: scale(0.9);
+        transform-origin: top center;
+        margin-bottom: -20px;
+        /* Compensate for scaling gap */
+    }
+
+    .certificate {
+        transform: scale(0.35);
+        /* Fit detailed cert on phone */
+        margin-bottom: -500px !important;
+        /* Huge compensation for scaled height */
+    }
+
+    .toolbar-btn {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
 }
