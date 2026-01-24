@@ -26,12 +26,6 @@ const PrintableID = ({ dreamer, onClose }) => {
 
     return (
         <div className="printable-container preview-mode">
-            <div className="printable-toolbar">
-                <button className="toolbar-btn close-btn" onClick={onClose}>❌ Close</button>
-                <div style={{ color: 'white', fontWeight: 'bold' }}>ID PREVIEW</div>
-                <button className="toolbar-btn print-btn" onClick={handlePrint}>🖨️ Print</button>
-            </div>
-
             <div className="printable-content-scroll">
                 {/* FRONT */}
                 <div className="id-card-wrapper">
@@ -72,11 +66,28 @@ const PrintableID = ({ dreamer, onClose }) => {
                 {/* BACK */}
                 <div className="id-card-wrapper">
                     <div className="card-label">BACK CARD</div>
-                    <div className="id-card back">
-                        <img src="/logo.png" alt="DreamWorld" className="id-back-logo" />
-                        <div className="id-back-role-large">{roleObj.singular}</div>
+                    <div className="id-card back" style={cardStyle}>
+                        <div style={{
+                            position: 'absolute',
+                            inset: 0,
+                            background: 'rgba(10, 14, 26, 0.85)',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}>
+                            <img src="/logo.png" alt="DreamWorld" className="id-back-logo" />
+                            <div className="id-back-role-large">{roleObj.singular}</div>
+                        </div>
                     </div>
                 </div>
+            </div>
+
+            {/* TOOLBAR MOVED TO BOTTOM */}
+            <div className="printable-toolbar">
+                <button className="toolbar-btn close-btn" onClick={onClose}>❌ Close</button>
+                <div style={{ color: 'white', fontWeight: 'bold' }}>ID PREVIEW</div>
+                <button className="toolbar-btn print-btn" onClick={handlePrint}>🖨️ Print</button>
             </div>
         </div>
     )
