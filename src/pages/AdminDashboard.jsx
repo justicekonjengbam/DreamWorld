@@ -6,6 +6,8 @@ import Button from '../components/Button'
 import Badge from '../components/Badge'
 import ImageUpload from '../components/ImageUpload'
 import Avatar from '../components/Avatar'
+import PrintableID from '../components/PrintableID'
+import PrintableCertificate from '../components/PrintableCertificate'
 import './AdminDashboard.css'
 
 function AdminDashboard() {
@@ -36,6 +38,10 @@ function AdminDashboard() {
     const [editingId, setEditingId] = useState(null)
     const [hasUnsyncedChanges, setHasUnsyncedChanges] = useState(false)
     const [sheetData, setSheetData] = useState(null)
+
+    // Printing State
+    const [printingDreamer, setPrintingDreamer] = useState(null)
+    const [printType, setPrintType] = useState(null) // 'id' or 'cert'
 
     useEffect(() => {
         const token = localStorage.getItem('dw_admin_token')
@@ -412,6 +418,22 @@ function AdminDashboard() {
                                                 })
                                             }}>✏️</button>
                                             <button onClick={() => handleMemberDelete(c.id)}>🗑️</button>
+                                            <button
+                                                className="print-btn"
+                                                onClick={() => { setPrintingDreamer(c); setPrintType('id'); }}
+                                                title="Generate ID Card"
+                                                style={{ marginLeft: '10px' }}
+                                            >
+                                                🪪
+                                            </button>
+                                            <button
+                                                className="print-btn"
+                                                onClick={() => { setPrintingDreamer(c); setPrintType('cert'); }}
+                                                title="Generate Certificate"
+                                                style={{ marginLeft: '5px' }}
+                                            >
+                                                📜
+                                            </button>
                                         </div>
                                     </Card>
                                 ))}
@@ -509,6 +531,14 @@ function AdminDashboard() {
                     </div>
                 )}
             </div>
+
+            {/* Print Overlays */}
+            {printingDreamer && printType === 'id' && (
+                <PrintableID dreamer={printingDreamer} onClose={() => setPrintingDreamer(null)} />
+            )}
+            {printingDreamer && printType === 'cert' && (
+                <PrintableCertificate dreamer={printingDreamer} onClose={() => setPrintingDreamer(null)} />
+            )}
         </div>
     )
 }

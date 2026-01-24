@@ -82,8 +82,25 @@
 }
 
 @media (max-width: 600px) {
+    .image-upload-wrapper {
+        min-width: 0;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
     .upload-container {
         flex-direction: row;
-        padding: 8px;
+        /* Keep row but allow shrink */
+        padding: 5px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* If button text is long, let it wrap */
+    .button-secondary {
+        white-space: normal !important;
+        font-size: 0.8rem !important;
+        padding: 8px !important;
+        text-align: center;
     }
 }

@@ -1,0 +1,281 @@
+/* Printables.css */
+
+/* Hide everything else when printing */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+
+    .printable-container,
+    .printable-container * {
+        visibility: visible;
+    }
+
+    .printable-container {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: white;
+        /* Ensure clean background for print */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .admin-page {
+        display: none;
+    }
+}
+
+.printable-container {
+    display: none;
+    /* Hidden by default on screen */
+}
+
+.printable-container.preview-mode {
+    display: flex;
+    /* Show when previewing */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
+}
+
+.close-preview-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    z-index: 10001;
+}
+
+/* --- ID CARD STYLES (Solarpunk/Sci-Fi) --- */
+.id-card {
+    width: 350px;
+    /* Standard ID width */
+    height: 220px;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    border-radius: 15px;
+    border: 2px solid #4CA1AF;
+    box-shadow: 0 0 20px rgba(76, 161, 175, 0.5);
+    display: flex;
+    padding: 15px;
+    color: white;
+    font-family: 'Orbitron', sans-serif;
+    /* Tech font */
+    position: relative;
+    overflow: hidden;
+}
+
+.id-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: repeating-linear-gradient(45deg,
+            transparent,
+            transparent 10px,
+            rgba(76, 161, 175, 0.05) 10px,
+            rgba(76, 161, 175, 0.05) 20px);
+    z-index: 0;
+}
+
+.id-photo-section {
+    width: 100px;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.id-photo {
+    width: 90px;
+    height: 90px;
+    border-radius: 10px;
+    border: 2px solid #FFD700;
+    object-fit: cover;
+    background: #000;
+}
+
+.id-role-icon {
+    font-size: 1.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 5px;
+    border-radius: 50%;
+}
+
+.id-info-section {
+    flex: 1;
+    padding-left: 15px;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.id-header {
+    border-bottom: 2px solid #4CA1AF;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+}
+
+.id-title {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #4CA1AF;
+}
+
+.id-name {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #FFD700;
+    text-transform: uppercase;
+}
+
+.id-details {
+    font-size: 0.7rem;
+    color: #ccc;
+    line-height: 1.4;
+}
+
+.id-role-name {
+    color: #4FD15F;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.id-bio {
+    font-size: 0.65rem;
+    margin-top: 5px;
+    font-style: italic;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.id-footer {
+    margin-top: auto;
+    font-size: 0.5rem;
+    text-align: right;
+    opacity: 0.7;
+}
+
+/* --- CERTIFICATE STYLES (Fantasy/Ornate) --- */
+.certificate {
+    width: 1123px;
+    /* A4 Landscape roughly (@96dpi) */
+    height: 794px;
+    background: #fdfbf7;
+    /* Parchment color */
+    background-image: url("https://www.transparenttextures.com/patterns/parchment.png");
+    padding: 40px;
+    position: relative;
+    color: #2c1e12;
+    font-family: 'Cinzel', serif;
+    /* Fantasy font */
+    border: 20px solid #FFD700;
+    /* Gold border */
+    box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.certificate-border-inner {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    border: 5px double #2c1e12;
+    pointer-events: none;
+}
+
+.cert-header {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    color: #2c1e12;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    text-shadow: 2px 2px 0px rgba(255, 215, 0, 0.5);
+}
+
+.cert-subheader {
+    font-size: 1.5rem;
+    font-style: italic;
+    margin-bottom: 40px;
+    font-family: 'Playfair Display', serif;
+}
+
+.cert-body {
+    font-size: 1.8rem;
+    line-height: 1.6;
+    margin-bottom: 50px;
+    width: 80%;
+}
+
+.cert-name {
+    font-size: 3.5rem;
+    color: #d4af37;
+    /* Gold */
+    font-weight: bold;
+    display: block;
+    margin: 20px 0;
+    font-family: 'Great Vibes', cursive;
+    /* Handwritten style */
+    text-decoration: underline;
+}
+
+.cert-role {
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.cert-footer {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-top: 50px;
+}
+
+.signature-block {
+    text-align: center;
+    border-top: 2px solid #2c1e12;
+    width: 300px;
+    padding-top: 10px;
+}
+
+.seal {
+    width: 150px;
+    height: 150px;
+    background: #800000;
+    /* Wax Seal Red */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #d4af37;
+    font-size: 3rem;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+    border: 5px dashed #d4af37;
+}

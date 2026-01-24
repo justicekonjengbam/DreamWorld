@@ -167,9 +167,11 @@
 }
 
 .admin-form-card {
-    padding: 25px !important;
+    padding: 25px;
     position: sticky;
     top: 0;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .admin-form {
@@ -342,5 +344,155 @@
 @media (max-width: 1100px) {
     .admin-split-layout {
         grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-dashboard {
+        flex-direction: column;
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    .admin-dashboard * {
+        box-sizing: border-box;
+        /* Global safety for this component */
+    }
+
+    .admin-sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        border-right: none;
+        border-bottom: 1px solid rgba(76, 161, 175, 0.2);
+        padding: 20px;
+    }
+
+    .sidebar-header {
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .sidebar-header h3 {
+        margin: 0;
+    }
+
+    .sidebar-logo {
+        margin-bottom: 0;
+        width: 40px;
+    }
+
+    .admin-nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+        /* Wrap items so they don't hide off-screen */
+        justify-content: center;
+        padding-bottom: 5px;
+        margin-bottom: 20px;
+        gap: 5px;
+    }
+
+    .nav-item {
+        white-space: nowrap;
+        padding: 8px 12px;
+        font-size: 0.8rem;
+        background: rgba(255, 255, 255, 0.05);
+        /* Slight BG to make them clickable targets */
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .admin-dashboard-content {
+        margin-left: 0;
+        padding: 15px;
+        height: auto;
+        overflow-x: hidden;
+        /* Prevent horizontal scroll */
+        width: 100%;
+    }
+
+    .admin-form-card,
+    .admin-item-card,
+    .status-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        /* Ensure padding doesn't add to width */
+        margin-right: 0 !important;
+        margin-left: 0 !important;
+    }
+
+    .admin-form input,
+    .admin-form select,
+    .admin-form textarea {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Force vertical stacking for ALL form rows */
+    .form-row {
+        display: flex;
+        flex-direction: column !important;
+        gap: 15px !important;
+    }
+
+    /* Wrap the visual preview container */
+    .admin-member-visual-preview {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        text-align: center;
+    }
+
+    .admin-member-visual-preview>div {
+        width: 100%;
+    }
+
+    /* Constrain inputs */
+    .admin-form input,
+    .admin-form select,
+    .admin-form textarea {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0;
+        /* Helps flex containers shrink */
+        box-sizing: border-box;
+    }
+
+    /* Fix card sizing */
+    .admin-form-card,
+    .admin-item-card,
+    .status-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        /* Changed from 100vw to 100% to account for scrollbar */
+        padding: 15px !important;
+        box-sizing: border-box;
+        margin: 0 !important;
+    }
+
+    /* Hide footer */
+    .sidebar-footer {
+        display: none;
+    }
+
+    /* Fix image upload specifically if it has inline styles */
+    .form-row>div {
+        width: 100% !important;
+    }
+
+    /* Stack Admin Item Cards (Members list) */
+    .admin-item-card {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 15px !important;
+    }
+
+    .admin-item-actions {
+        width: 100%;
+        justify-content: flex-end;
+        /* Or space-between */
+        flex-wrap: wrap;
     }
 }
