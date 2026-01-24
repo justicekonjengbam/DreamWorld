@@ -2,24 +2,35 @@
 
 @media print {
     @page {
-        size: landscape;
-        margin: 5mm;
-        /* Small safety margin */
+        size: A4 landscape;
+        margin: 0;
     }
 
-    /* Nuclear option: hide EVERYTHING on the main site */
+    /* 1. Hide everything on the main site */
     body>*:not(.printable-container) {
         display: none !important;
     }
 
+    /* Whitelist container */
+    .printable-container,
+    .printable-container * {
+        visibility: visible !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
     .printable-container {
         display: block !important;
-        position: static !important;
-        visibility: visible !important;
-        width: 100% !important;
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 297mm !important;
+        /* EXACT A4 LANDSCAPE WIDTH */
+        height: 210mm !important;
+        /* EXACT A4 LANDSCAPE HEIGHT */
         background: white !important;
-        padding: 0 !important;
         margin: 0 !important;
+        padding: 0 !important;
     }
 
     .printable-toolbar,
@@ -32,31 +43,40 @@
         justify-content: center !important;
         align-items: center !important;
         overflow: visible !important;
-        height: 95vh !important;
-        /* Centered on the page */
+        width: 297mm !important;
+        height: 210mm !important;
         padding: 0 !important;
         margin: 0 !important;
     }
 
-    * {
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-        visibility: visible !important;
-    }
-
-    /* SCALE FOR FIT */
+    /* SCALE FOR FIT - No transform needed if we use physical units */
     .id-card {
-        transform: scale(1.4) !important;
-        /* Make single cards fill more space */
+        transform: scale(1.5) !important;
         transform-origin: center center !important;
         box-shadow: none !important;
     }
 
     .certificate {
-        transform: scale(0.85) !important;
-        /* Fits A4 Landscape perfectly */
-        transform-origin: center center !important;
+        width: 297mm !important;
+        /* FULL A4 WIDTH */
+        height: 210mm !important;
+        /* FULL A4 HEIGHT */
+        margin: 0 !important;
+        border: none !important;
+        /* Let the gold border be the edge */
         box-shadow: none !important;
+        transform: none !important;
+        /* Absolute sizing used instead */
+        padding: 20mm !important;
+        /* Proper internal spacing */
+    }
+
+    .editable-input,
+    .editable-date,
+    .editable-bio-input {
+        border: none !important;
+        background: transparent !important;
+        color: inherit !important;
     }
 }
 
@@ -79,7 +99,7 @@
     overflow: hidden;
 }
 
-/* Toolbar (On Screen) */
+/* Toolbar */
 .printable-toolbar {
     width: 100%;
     padding: 15px 30px;
@@ -146,7 +166,6 @@
     width: 100%;
 }
 
-/* --- THE REST ARE SAME AS PREVIOUS (kept for consistency) --- */
 .id-card-wrapper,
 .certificate-wrapper {
     display: flex;
@@ -251,7 +270,6 @@
     align-items: center;
     justify-content: flex-end;
     padding: 0 15px 15px 15px;
-    /* Lift text by 15px */
 }
 
 .id-back-overlay {
@@ -427,4 +445,16 @@
     color: #FFD700 !important;
     width: 70px;
     font-weight: bold;
+}
+
+/* Mobile Adjustments */
+@media screen and (max-width: 768px) {
+    .id-card {
+        transform: scale(0.9);
+    }
+
+    .certificate {
+        transform: scale(0.3);
+        margin-bottom: -550px;
+    }
 }
