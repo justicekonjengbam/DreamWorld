@@ -11,7 +11,6 @@
         visibility: visible;
     }
 
-    /* Ensure toolbar is hidden in print */
     .printable-toolbar {
         display: none !important;
     }
@@ -66,9 +65,7 @@
     right: 0;
     bottom: 0;
     background: rgba(10, 14, 26, 0.98);
-    /* Dark background for preview */
     z-index: 2147483647;
-    /* Absolute Max */
     flex-direction: column;
     align-items: center;
     overflow: hidden;
@@ -80,7 +77,6 @@
     padding: 15px 30px;
     background: #1a1f35;
     border-top: 2px solid #FFD700;
-    /* Border TOP now */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -88,7 +84,6 @@
     flex-shrink: 0;
     position: relative;
     box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
-    /* Shadow upwards */
 }
 
 .toolbar-btn {
@@ -98,14 +93,8 @@
     font-weight: bold;
     cursor: pointer;
     font-size: 1rem;
-    transition: all 0.3s ease;
     text-transform: uppercase;
     letter-spacing: 1px;
-}
-
-.toolbar-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
 .close-btn {
@@ -114,19 +103,9 @@
     color: #ff4d4d;
 }
 
-.close-btn:hover {
-    background: #ff4d4d;
-    color: white;
-}
-
 .print-btn {
     background: linear-gradient(135deg, #FFD700, #FFA500);
     color: #1a1f35;
-    box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
-}
-
-.print-btn:hover {
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
 }
 
 .printable-content-scroll {
@@ -155,7 +134,7 @@
     opacity: 0.8;
 }
 
-/* --- ID CARD STYLES (Sci-Fi/Holographic) --- */
+/* --- ID CARD STYLES --- */
 .id-card {
     width: 350px;
     height: 220px;
@@ -166,28 +145,27 @@
     border: 2px solid #4CA1AF;
     box-shadow: 0 0 30px rgba(76, 161, 175, 0.2);
     display: flex;
+    flex-direction: column;
+    /* Stack Top to Bottom */
     padding: 0;
     position: relative;
     overflow: hidden;
     color: white;
 }
 
-.id-sidebar {
-    width: 30px;
-    height: 100%;
-    background: linear-gradient(180deg, #4CA1AF, #2c3e50);
+.id-topbar {
+    width: 100%;
+    height: 30px;
+    background: linear-gradient(90deg, #4CA1AF, #2c3e50);
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.id-sidebar-text {
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
     font-family: monospace;
-    font-size: 0.7rem;
-    letter-spacing: 2px;
-    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    letter-spacing: 3px;
+    color: white;
+    font-weight: bold;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 .id-main {
@@ -195,16 +173,15 @@
     padding: 15px;
     display: flex;
     gap: 15px;
-    /* background set in jsx */
+    /* background set inline */
 }
 
 .id-photo-frame {
-    width: 90px;
-    height: 90px;
+    width: 80px;
+    height: 80px;
     border: 2px solid #FFD700;
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
 }
 
 .id-photo {
@@ -254,10 +231,6 @@
 }
 
 .id-footer-strip {
-    position: absolute;
-    bottom: 0;
-    left: 30px;
-    right: 0;
     height: 25px;
     background: rgba(76, 161, 175, 0.2);
     display: flex;
@@ -269,30 +242,26 @@
     color: #4CA1AF;
 }
 
-/* Back Side */
 .id-card.back {
-    background: #0a0e1a;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
-.id-back-logo {
-    width: 150px;
-    opacity: 0.9;
-    filter: drop-shadow(0 0 15px rgba(76, 161, 175, 0.5));
+.id-back-overlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
 }
 
 .id-back-role-large {
-    font-size: 1.2rem;
-    color: #FFD700;
-    margin-top: 10px;
-    text-transform: uppercase;
-    letter-spacing: 3px;
+    width: 120px;
+    filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.8));
 }
 
-/* --- PREMIUM CERTIFICATE STYLES (Fantasy) --- */
+/* --- COMPACT FANTASY CERTIFICATE --- */
 .certificate-wrapper {
     display: flex;
     justify-content: center;
@@ -301,10 +270,9 @@
 
 .certificate {
     width: 1123px;
-    /* A4 Landscape */
     height: 794px;
-    /* Dark Fantasy Theme */
-    background: radial-gradient(circle at center, #1a253a 0%, #0a0e1a 100%);
+    background: #0a0e1a;
+    /* Fallback */
     color: #e0e0e0;
     position: relative;
     border: 10px solid #1a1f35;
@@ -313,148 +281,136 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
-    /* Align from top now */
-    padding: 60px;
+    padding: 40px 60px;
     text-align: center;
+    /* Reduced padding to fit more vertically */
 }
 
-/* Gold Frame */
+/* Borders */
 .certificate::before {
     content: '';
     position: absolute;
-    top: 20px;
-    left: 20px;
-    right: 20px;
-    bottom: 20px;
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
     border: 2px solid #FFD700;
-    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
     pointer-events: none;
 }
 
-/* Ornate Corners */
 .cert-corner {
     position: absolute;
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     border: 4px solid #FFD700;
     z-index: 1;
 }
 
 .top-left {
-    top: 20px;
-    left: 20px;
+    top: 15px;
+    left: 15px;
     border-right: none;
     border-bottom: none;
 }
 
 .top-right {
-    top: 20px;
-    right: 20px;
+    top: 15px;
+    right: 15px;
     border-left: none;
     border-bottom: none;
 }
 
 .bottom-left {
-    bottom: 20px;
-    left: 20px;
+    bottom: 15px;
+    left: 15px;
     border-right: none;
     border-top: none;
 }
 
 .bottom-right {
-    bottom: 20px;
-    right: 20px;
+    bottom: 15px;
+    right: 15px;
     border-left: none;
     border-top: none;
 }
 
-.cert-visual-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-    margin-bottom: 20px;
-    position: relative;
-    z-index: 5;
-    margin-top: 20px;
-    /* Space from top edge */
-}
-
+/* COMPACT CONTENT STACK */
 .cert-top-role img {
-    width: 120px;
-    height: 120px;
+    width: 100px;
+    height: 100px;
     object-fit: contain;
-    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.8));
-}
-
-.cert-avatar {
-    width: 140px;
-    /* Larger */
-    height: 140px;
-    border-radius: 50%;
-    border: 3px solid #FFD700;
-    object-fit: cover;
-    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.6);
-    z-index: 10;
-}
-
-.cert-logo-watermark {
-    display: none;
-    /* Removed as replaced by role logo */
+    margin-bottom: 10px;
+    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.8));
 }
 
 .cert-title {
-    font-size: 4rem;
+    font-size: 3rem;
     color: #FFD700;
     text-transform: uppercase;
-    letter-spacing: 10px;
-    margin-bottom: 10px;
-    text-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    letter-spacing: 8px;
+    margin-bottom: 5px;
     line-height: 1;
 }
 
 .cert-subtitle {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     color: #4CA1AF;
-    letter-spacing: 4px;
+    letter-spacing: 3px;
     text-transform: uppercase;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
-.cert-body {
-    font-size: 1.5rem;
-    line-height: 1.8;
-    margin-bottom: 30px;
-    max-width: 850px;
+.cert-avatar {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    border: 3px solid #FFD700;
+    object-fit: cover;
+    margin-bottom: 20px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6);
+}
+
+/* Body Text Compact */
+.cert-body-compact {
+    font-size: 1.3rem;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    max-width: 900px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.cert-text-line {
+    margin: 5px 0;
+}
+
+.cert-name {
+    font-size: 3rem;
+    color: #fff;
+    font-family: 'Great Vibes', cursive;
+    margin: 10px 0;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    line-height: 1;
 }
 
 .cert-role-text {
     color: #FFD700;
-    font-size: 2.2rem;
+    font-size: 2rem;
     text-transform: uppercase;
     display: block;
-    margin-top: 15px;
+    margin-top: 5px;
     letter-spacing: 2px;
 }
 
-.cert-name {
-    display: block;
-    font-size: 3.5rem;
-    color: #fff;
-    font-family: 'Great Vibes', cursive;
-    margin: 5px 0;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-}
-
+/* Footer */
 .cert-footer {
     display: flex;
     justify-content: space-between;
     width: 90%;
     margin-top: auto;
-    /* Push to bottom naturally */
-    padding-bottom: 20px;
+    padding-bottom: 10px;
     align-items: flex-end;
     position: relative;
     z-index: 10;
@@ -467,34 +423,53 @@
 
 .sign-line {
     border-bottom: 1px solid #FFD700;
-    margin-top: 5px;
+    margin-top: 2px;
 }
 
-/* Label ABOVE the line */
 .sign-label-top {
-    font-size: 0.9rem;
-    color: #888;
+    font-size: 0.8rem;
+    color: #aaa;
     text-transform: uppercase;
     letter-spacing: 2px;
-    margin-bottom: 5px;
+    margin-bottom: 2px;
 }
 
 .gold-seal {
-    width: 140px;
-    height: 140px;
+    width: 120px;
+    height: 120px;
     background: radial-gradient(circle at 30% 30%, #FFD700, #B8860B);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     font-size: 3rem;
     color: #3e2723;
     font-weight: bold;
     border: 4px double #3e2723;
 }
 
-/* Editable Inputs */
+/* Back page */
+.certificate.back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cert-back-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 14, 26, 0.6);
+}
+
+.cert-back-role-img {
+    width: 400px;
+    filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.3));
+}
+
+/* Inputs */
 .editable-input {
     background: transparent;
     border: none;
@@ -503,32 +478,24 @@
     color: #FFD700;
     text-align: center;
     width: 100%;
-    padding-bottom: 5px;
+    padding-bottom: 0;
+    height: 40px;
 }
 
 .editable-input:focus {
     outline: none;
 }
 
-/* Editable Date on ID */
 .editable-date {
     background: transparent !important;
     border: none !important;
-    border-bottom: 1px dashed rgba(255, 255, 255, 0.5) !important;
     color: #FFD700 !important;
     width: 60px;
-    text-align: center;
-    font-family: inherit;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
     padding: 0;
-    margin: 0 5px;
     outline: none !important;
-    box-shadow: none !important;
 }
 
-/* Mobile Preview */
+/* Mobile */
 @media screen and (max-width: 768px) {
     .id-card {
         transform: scale(0.9);

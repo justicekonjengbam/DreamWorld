@@ -13,9 +13,9 @@ const PrintableCertificate = ({ dreamer, onClose }) => {
         window.print()
     }
 
-    // Use cover image for background if available
+    // Background style
     const bgStyle = dreamer.coverImage
-        ? { backgroundImage: `linear-gradient(rgba(10,14,26,0.85), rgba(10,14,26,0.85)), url(${dreamer.coverImage})`, backgroundSize: 'cover' }
+        ? { backgroundImage: `linear-gradient(rgba(10,14,26,0.9), rgba(10,14,26,0.9)), url(${dreamer.coverImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }
         : {};
 
     return (
@@ -29,29 +29,34 @@ const PrintableCertificate = ({ dreamer, onClose }) => {
                         <div className="cert-corner bottom-left"></div>
                         <div className="cert-corner bottom-right"></div>
 
-                        {/* Header: Role Logo Top + Avatar */}
-                        <div className="cert-visual-header">
-                            {/* Role Logo at the Top */}
-                            <div className="cert-top-role">
-                                <img src={roleObj.image || '/logo.png'} alt="Role" />
-                            </div>
-                            {/* Dreamer Avatar */}
-                            <img src={dreamer.avatar || '/logo.png'} alt="Dreamer" className="cert-avatar" />
+                        {/* 1. Role Logo Top */}
+                        <div className="cert-top-role">
+                            <img src={roleObj.image || '/logo.png'} alt="Role" />
                         </div>
 
+                        {/* 2. Text Dreamworld Title */}
                         <div className="cert-title">DreamWorld</div>
+
+                        {/* 3. Certificate of Citizenship */}
                         <div className="cert-subtitle">Certificate of Citizenship</div>
 
-                        <div className="cert-body">
-                            By the powers vested in the High Council, we hereby recognize and honor
+                        {/* 4. Photo (Avatar) */}
+                        <img src={dreamer.avatar || '/logo.png'} alt="Dreamer" className="cert-avatar" />
+
+                        {/* 5. Body Text Chain */}
+                        <div className="cert-body-compact">
+                            <div className="cert-text-line">By the powers vested in the High Council, we hereby recognize and honor</div>
+
                             <span className="cert-name">{dreamer.name}</span>
-                            for their dedication and spirit. They are officially inducted into the realm as a
-                            <br /><br />
+
+                            <div className="cert-text-line">for their dedication and spirit. They are officially inducted into the realm as</div>
+
                             <strong className="cert-role-text">
                                 {roleObj.singular}
                             </strong>
                         </div>
 
+                        {/* Footer: Date & Certified By */}
                         <div className="cert-footer">
                             <div className="sign-box">
                                 <div className="sign-label-top">Date of Issue</div>
@@ -80,25 +85,16 @@ const PrintableCertificate = ({ dreamer, onClose }) => {
                     </div>
                 </div>
 
-                {/* Back Side with Cover Image */}
+                {/* Back Side: Cover Background + Role Image Only */}
                 <div className="certificate-wrapper">
                     <div className="certificate back" style={bgStyle}>
-                        <div style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            height: '100%',
-                            background: 'rgba(10,14,26,0.6)',
-                            width: '100%'
-                        }}>
-                            <img src="/logo.png" alt="DreamWorld" className="cert-back-logo" />
+                        <div className="cert-back-content">
+                            <img src={roleObj.image || '/logo.png'} alt="Role" className="cert-back-role-img" />
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* TOOLBAR MOVED TO BOTTOM */}
             <div className="printable-toolbar">
                 <button className="toolbar-btn close-btn" onClick={onClose}>❌ Close</button>
                 <div style={{ color: 'white', fontWeight: 'bold' }}>CERTIFICATE PREVIEW</div>

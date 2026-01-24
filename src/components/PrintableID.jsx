@@ -8,7 +8,6 @@ const PrintableID = ({ dreamer, onClose }) => {
 
     const roleObj = roles.find(r => r.id === dreamer.role) || { singular: dreamer.role, image: '', description: '' }
 
-    // Truncate Bio helper
     const truncate = (str, n) => {
         return (str?.length > n) ? str.substr(0, n - 1) + '...' : str;
     }
@@ -19,9 +18,9 @@ const PrintableID = ({ dreamer, onClose }) => {
         window.print()
     }
 
-    // Dynamic background style from cover image
+    // Background style
     const cardStyle = dreamer.coverImage
-        ? { backgroundImage: `linear-gradient(90deg, rgba(0,0,0,0.85) 25%, rgba(0,0,0,0.5)), url(${dreamer.coverImage})`, backgroundSize: 'cover' }
+        ? { backgroundImage: `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url(${dreamer.coverImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }
         : {};
 
     return (
@@ -31,10 +30,12 @@ const PrintableID = ({ dreamer, onClose }) => {
                 <div className="id-card-wrapper">
                     <div className="card-label">FRONT CARD</div>
                     <div className="id-card front" style={cardStyle}>
-                        <div className="id-sidebar">
-                            <div className="id-sidebar-text">DREAMWORLD ID</div>
+                        {/* Text on TOP now */}
+                        <div className="id-topbar">
+                            DREAMWORLD ID
                         </div>
-                        <div className="id-main" style={{ background: 'rgba(10, 14, 26, 0.7)' }}>
+
+                        <div className="id-main">
                             <div className="id-photo-section">
                                 <div className="id-photo-frame">
                                     <img
@@ -67,23 +68,14 @@ const PrintableID = ({ dreamer, onClose }) => {
                 <div className="id-card-wrapper">
                     <div className="card-label">BACK CARD</div>
                     <div className="id-card back" style={cardStyle}>
-                        <div style={{
-                            position: 'absolute',
-                            inset: 0,
-                            background: 'rgba(10, 14, 26, 0.85)',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'center'
-                        }}>
-                            <img src="/logo.png" alt="DreamWorld" className="id-back-logo" />
-                            <div className="id-back-role-large">{roleObj.singular}</div>
+                        <div className="id-back-overlay">
+                            {/* Back is Cover Image (via cardStyle) + Role Image */}
+                            <img src={roleObj.image || '/logo.png'} alt="Role" className="id-back-role-large" />
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* TOOLBAR MOVED TO BOTTOM */}
             <div className="printable-toolbar">
                 <button className="toolbar-btn close-btn" onClick={onClose}>❌ Close</button>
                 <div style={{ color: 'white', fontWeight: 'bold' }}>ID PREVIEW</div>
