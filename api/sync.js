@@ -24,11 +24,7 @@ export default async function handler(req, res) {
         const [qRes, rRes, cRes, eRes, aRes] = await Promise.all([
             fetch(`${sheetApiUrl}?sheet=quests`),
             fetch(`${sheetApiUrl}?sheet=roles`),
-            fetch(`${sheetApiUrl}?sheet=quests`),
-            fetch(`${sheetApiUrl}?sheet=roles`),
-            fetch(`${sheetApiUrl}?sheet=dreamers`), // Changed from members
-            fetch(`${sheetApiUrl}?sheet=events`),
-            fetch(`${sheetApiUrl}?sheet=announcements`),
+            fetch(`${sheetApiUrl}?sheet=dreamers`),
             fetch(`${sheetApiUrl}?sheet=events`),
             fetch(`${sheetApiUrl}?sheet=announcements`)
         ]);
@@ -50,11 +46,7 @@ export default async function handler(req, res) {
         const errors = [
             checkError(qData, 'quests'),
             checkError(rData, 'roles'),
-            checkError(qData, 'quests'),
-            checkError(rData, 'roles'),
-            checkError(cData, 'dreamers'), // Changed from members
-            checkError(eData, 'events'),
-            checkError(aData, 'announcements'),
+            checkError(cData, 'dreamers'),
             checkError(eData, 'events'),
             checkError(aData, 'announcements')
         ].filter(Boolean);
@@ -80,7 +72,7 @@ export default async function handler(req, res) {
             roles: normalize(rData).filter(r => r.name),
             characters: normalize(cData).filter(c => c.name),
             events: normalize(eData).filter(e => e.title),
-            announcement: normalize([aData])[0] || {},
+            announcement: normalize(aData)[0] || {},
             lastSynced: new Date().toISOString()
         };
 
@@ -91,10 +83,10 @@ export default async function handler(req, res) {
             message: 'Sync Successful',
             lastSynced: globalData.lastSynced,
             details: {
-                quests: qData.length,
-                roles: rData.length,
-                members: cData.length,
-                events: eData.length
+                quests: globalData.quests.length,
+                roles: globalData.roles.length,
+                members: globalData.characters.length,
+                events: globalData.events.length
             }
         });
     } catch (error) {
