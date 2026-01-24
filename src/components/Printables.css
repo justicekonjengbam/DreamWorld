@@ -1,21 +1,28 @@
-/* Printables.css - Update with editable bio styles */
+/* Printables.css */
 
 @media print {
+    @page {
+        size: landscape;
+        margin: 0;
+    }
 
-    /* Hide UI elements by default */
+    /* Hide UI elements */
     .admin-sidebar,
     .admin-page,
     .admin-dashboard-content header,
-    .printable-toolbar {
+    .printable-toolbar,
+    .card-label {
         display: none !important;
     }
 
-    /* Reset body and html for full-page printing */
+    /* Reset body/html for full page */
     html,
     body {
         height: auto !important;
         overflow: visible !important;
         background: white !important;
+        margin: 0 !important;
+        padding: 0 !important;
     }
 
     .printable-container {
@@ -36,6 +43,7 @@
         display: block !important;
         overflow: visible !important;
         height: auto !important;
+        padding: 0 !important;
     }
 
     /* Force each side onto a NEW PAGE */
@@ -49,25 +57,38 @@
         justify-content: center !important;
         align-items: center !important;
         height: 100vh !important;
-        /* Fill page for centering */
+        width: 100vw !important;
     }
 
-    .id-card,
-    .certificate {
-        transform: none !important;
+    /* SCALE DOWN TO FIT A4 */
+    .id-card {
+        transform: scale(1.1) !important;
+        /* IDs can be a bit bigger */
+        transform-origin: center center !important;
         margin: auto !important;
         box-shadow: none !important;
-        border: 1px solid #eee;
-        /* Faint cutting guide */
+        border: 1px solid #ddd;
+    }
+
+    .certificate {
+        transform: scale(0.85) !important;
+        /* Shrink aggressively to fit A4 safety margins */
+        transform-origin: center center !important;
+        margin: auto !important;
+        box-shadow: none !important;
+        border: 1px solid #ddd;
     }
 
     .editable-input,
     .editable-date,
     .editable-bio-input {
         border-bottom: none !important;
+        background: transparent !important;
+        color: inherit !important;
     }
 }
 
+/* --- PREVIEW MODAL --- */
 .printable-container {
     display: none;
 }
@@ -86,7 +107,7 @@
     overflow: hidden;
 }
 
-/* Toolbar Styles */
+/* Toolbar */
 .printable-toolbar {
     width: 100%;
     padding: 15px 30px;
@@ -229,25 +250,29 @@
     margin-bottom: 5px;
 }
 
-/* EDITABLE BIO TEXTAREA */
+/* EDITABLE BIO VISIBILITY */
 .editable-bio-input {
-    background: transparent;
-    border: none;
-    color: #ccc;
-    font-size: 0.65rem;
+    background: rgba(255, 255, 255, 0.08);
+    /* More visible */
+    border: 1px dashed rgba(255, 255, 255, 0.3);
+    color: #fff;
+    font-size: 0.75rem;
     font-family: inherit;
     font-style: italic;
     width: 100%;
+    height: 60px;
     resize: none;
-    line-height: 1.3;
-    padding: 0;
-    margin: 0;
+    line-height: 1.4;
+    padding: 8px;
+    margin-top: 5px;
     outline: none;
+    border-radius: 6px;
 }
 
+.editable-bio-input:hover,
 .editable-bio-input:focus {
-    color: #fff;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: #FFD700;
 }
 
 .id-footer-strip {
@@ -365,7 +390,7 @@
     color: #4CA1AF;
     letter-spacing: 4px;
     text-transform: uppercase;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 
 .cert-avatar {
@@ -444,7 +469,7 @@
     justify-content: center;
     width: 100%;
     height: 100%;
-    background: rgba(10, 14, 26, 0.3);
+    background: rgba(10, 14, 26, 0.2);
 }
 
 .cert-back-role-img {
@@ -466,7 +491,7 @@
     background: transparent !important;
     border: none !important;
     color: #FFD700 !important;
-    width: 60px;
+    width: 70px;
     font-weight: bold;
 }
 
