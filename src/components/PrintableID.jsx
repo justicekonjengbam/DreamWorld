@@ -8,6 +8,10 @@ const PrintableID = ({ dreamer, onClose }) => {
 
     const roleObj = roles.find(r => r.id === dreamer.role) || { singular: dreamer.role, image: '', description: '' }
 
+    // Initial Bio state
+    const initialBio = dreamer.bio || roleObj.description || "A dedicated dreamer exploring the wonders of this world."
+    const [editableBio, setEditableBio] = useState(initialBio)
+
     const handlePrint = () => {
         window.print()
     }
@@ -46,7 +50,14 @@ const PrintableID = ({ dreamer, onClose }) => {
                                 </div>
                                 <div className="id-body">
                                     <div className="id-role-text">{roleObj.singular}</div>
-                                    {/* Bio and ID serial removed as requested */}
+                                    {/* Editable Bio Field */}
+                                    <textarea
+                                        className="editable-bio-input"
+                                        value={editableBio}
+                                        onChange={(e) => setEditableBio(e.target.value)}
+                                        rows="3"
+                                        placeholder="Enter custom bio..."
+                                    />
                                 </div>
                             </div>
                         </div>
