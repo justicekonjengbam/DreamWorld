@@ -1,7 +1,10 @@
+import { useContent } from '../context/ContentContext'
 import './Creator.css'
 
 
 function Creator() {
+  const { quests, roles, characters } = useContent()
+
   return (
     <div className="creator-page page">
       <div className="container">
@@ -12,14 +15,14 @@ function Creator() {
 
         <div className="creator-container">
           <div className="creator-header">
-            <img 
-              src="/Creator.png" 
-              alt="Creator Avatar" 
+            <img
+              src="/Creator.png"
+              alt="Creator Avatar"
               className="creator-avatar"
             />
             <div className="creator-intro">
               <h1>Justice Konjengbam</h1>
-              <p className="title">Creator</p>
+              <p className="title">Creator of DreamWorld</p>
               <p className="bio">
                 Building DreamWorld—where technology meets nature, and every quest brings us closer to the world we dream of creating.
               </p>
@@ -84,12 +87,16 @@ function Creator() {
             <h2>DreamWorld Stats</h2>
             <div className="stats-grid">
               <div className="stat-card">
-                <span className="stat-value">0</span>
+                <span className="stat-value">{quests.length}</span>
                 <span className="stat-label">Quests</span>
               </div>
               <div className="stat-card">
-                <span className="stat-value">9</span>
+                <span className="stat-value">{roles.length}</span>
                 <span className="stat-label">Roles</span>
+              </div>
+              <div className="stat-card">
+                <span className="stat-value">{characters.length}</span>
+                <span className="stat-label">Dreamers</span>
               </div>
               <div className="stat-card">
                 <span className="stat-value">∞</span>
