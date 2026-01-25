@@ -162,14 +162,33 @@ function Funders() {
           description: "Monthly Support Subscription",
           image: "/logo.png",
           handler: function (response) {
-            submitDonation({ ...formData, message: `[SUB_ID: ${response.razorpay_subscription_id}] ${formData.message}` })
+            submitDonation({
+              ...formData,
+              message: `[SUB_ID: ${response.razorpay_subscription_id}] ${formData.message}`,
+              status: 'success',
+              paymentMethod: formData.paymentMethod,
+              transactionId: response.razorpay_subscription_id
+            })
             setSubmitted(true)
           },
           prefill: {
             name: formData.name,
             email: formData.email
           },
-          theme: { color: "#4CA1AF" }
+          theme: { color: "#4CA1AF" },
+          modal: {
+            ondismiss: function () {
+              // Log payment cancellation
+              submitDonation({
+                ...formData,
+                status: 'failed',
+                paymentMethod: formData.paymentMethod,
+                transactionId: '',
+                message: 'Payment cancelled by user'
+              }).catch(err => console.error("Failed to log cancellation", err))
+              setIsProcessing(false)
+            }
+          }
         };
 
         const rzpSub = new window.Razorpay(subOptions);
@@ -187,7 +206,12 @@ function Funders() {
         description: "Support Contribution",
         image: "/logo.png",
         handler: function (response) {
-          submitDonation(formData).catch(err => console.error("Failed to log donation", err))
+          submitDonation({
+            ...formData,
+            status: 'success',
+            paymentMethod: formData.paymentMethod,
+            transactionId: response.razorpay_payment_id
+          }).catch(err => console.error("Failed to log donation", err))
           setSubmitted(true)
           setTimeout(() => {
             setFormData({
@@ -208,7 +232,20 @@ function Funders() {
           display_name: formData.displayName || formData.name,
           message: formData.message
         },
-        theme: { color: "#4CA1AF" }
+        theme: { color: "#4CA1AF" },
+        modal: {
+          ondismiss: function () {
+            // Log payment cancellation
+            submitDonation({
+              ...formData,
+              status: 'failed',
+              paymentMethod: formData.paymentMethod,
+              transactionId: '',
+              message: 'Payment cancelled by user'
+            }).catch(err => console.error("Failed to log cancellation", err))
+            setIsProcessing(false)
+          }
+        }
       }
 
       if (formData.paymentMethod === 'upi' && formData.upiId) {
@@ -223,6 +260,14 @@ function Funders() {
       }
     } catch (err) {
       console.error("Payment Error:", err);
+      // Log payment initialization failure
+      submitDonation({
+        ...formData,
+        status: 'failed',
+        paymentMethod: formData.paymentMethod,
+        transactionId: '',
+        message: `Error: ${err.message}`
+      }).catch(logErr => console.error("Failed to log error", logErr))
       alert("⚠️ Payment Initialization Failed: " + err.message + "\n\n(Ask Antigravity if you need help with the Secret Key!)");
     } finally {
       setIsProcessing(false)

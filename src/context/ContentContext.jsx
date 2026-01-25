@@ -279,14 +279,18 @@ export const ContentProvider = ({ children }) => {
 
     // Donation Submission
     const submitDonation = async (donationData) => {
-        // Map fields to Sheet columns: name, email, amount, type, message, date
+        // Map fields to Sheet columns: name, email, amount, type, message, date, status, paymentMethod, transactionId, timestamp
         const payload = {
             name: donationData.name,
             email: donationData.email,
             amount: donationData.amount,
             type: donationData.type,
             message: donationData.message,
-            date: new Date().toISOString()
+            date: new Date().toISOString().split('T')[0], // Just the date (YYYY-MM-DD)
+            status: donationData.status || 'success', // 'success' or 'failed'
+            paymentMethod: donationData.paymentMethod || '', // 'upi', 'gpay', 'card'
+            transactionId: donationData.transactionId || '', // Razorpay payment/subscription ID
+            timestamp: new Date().toISOString() // Full timestamp with time
         }
         await syncToApi('donations', 'POST', payload)
     }
