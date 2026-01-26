@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { useContent } from '../context/ContentContext'
 import Card from '../components/Card'
 import SectionHeader from '../components/SectionHeader'
@@ -26,11 +27,30 @@ function Funders() {
   })
   const [submitted, setSubmitted] = useState(false)
 
-  // No need for separate fetch - data is unified in context
+  const [searchParams] = useSearchParams()
+
+  // Pre-load from URL params (Direct Sponsorship Link)
   useEffect(() => {
-    // syncGlobalData() could be called if refresh is needed, 
-    // but ContentContext already does a fetch on mount.
-  }, [])
+    const type = searchParams.get('type') // 'quest' or 'event'
+    const id = searchParams.get('id')
+
+    if (type && id && sponsorships.length > 0) {
+      const sp = sponsorships.find(s => s.id === id && s.type === type)
+      if (sp) {
+        setFormData(prev => ({
+          ...prev,
+          sponsorshipType: type,
+          sponsorshipId: id,
+          sponsorshipMessage: `Supporting: ${sp.name || sp.title}`
+        }))
+
+        // Short delay to ensure rendering before scroll
+        setTimeout(() => {
+          document.querySelector('.donation-section')?.scrollIntoView({ behavior: 'smooth' })
+        }, 300)
+      }
+    }
+  }, [searchParams, sponsorships])
 
   // Filter active quests and events
   const activeQuests = (sponsorships || []).filter(s => s.fundingStatus === 'active' && s.type === 'quest')

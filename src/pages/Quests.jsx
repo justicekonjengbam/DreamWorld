@@ -109,7 +109,7 @@ function Quests() {
                     {selectedQuest.fundingStatus !== 'completed' && (
                       <Button
                         variant="secondary"
-                        onClick={() => navigate('/funders')}
+                        onClick={() => navigate(`/funders?type=quest&id=${selectedQuest.id}`)}
                       >
                         💖 Support This Goal
                       </Button>

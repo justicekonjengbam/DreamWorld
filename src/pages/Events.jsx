@@ -138,7 +138,7 @@ function Events() {
                     {selectedEvent.fundingStatus !== 'completed' && (
                       <Button
                         variant="secondary"
-                        onClick={() => navigate('/funders')}
+                        onClick={() => navigate(`/funders?type=event&id=${selectedEvent.id}`)}
                       >
                         💖 Support This Goal
                       </Button>
