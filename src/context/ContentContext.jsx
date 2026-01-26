@@ -292,6 +292,7 @@ export const ContentProvider = ({ children }) => {
             transactionId: donationData.transactionId || '', // Razorpay payment/subscription ID
             timestamp: new Date().toISOString() // Full timestamp with time
         }
+        console.log('🔍 PAYMENT TRACKING - Submitting donation:', payload)
         await syncToApi('donations', 'POST', payload)
     }
 

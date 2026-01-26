@@ -499,6 +499,160 @@ function Funders() {
               </div>
             )}
           </Card>
+
+          {/* UPI Payment Section */}
+          <Card hover={false} className="donation-form-card" style={{ marginTop: '20px' }}>
+            <h3 style={{ textAlign: 'center', marginBottom: '16px', color: 'var(--color-primary)' }}>
+              💰 Pay via UPI (Zero Fees!)
+            </h3>
+            <div style={{ textAlign: 'center' }}>
+              {/* UPI QR Code */}
+              <div style={{
+                background: 'white',
+                padding: '20px',
+                borderRadius: '12px',
+                display: 'inline-block',
+                marginBottom: '20px'
+              }}>
+                <img
+                  src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=justicekonjengbam2002@okicici&pn=DreamWorld`}
+                  alt="UPI QR Code"
+                  style={{ display: 'block', width: '200px', height: '200px' }}
+                />
+              </div>
+
+              {/* UPI ID */}
+              <div style={{
+                background: 'rgba(76, 161, 175, 0.1)',
+                padding: '16px',
+                borderRadius: '8px',
+                marginBottom: '20px'
+              }}>
+                <p style={{ margin: '0 0 8px 0', fontSize: '0.9rem', opacity: 0.8 }}>UPI ID:</p>
+                <p style={{
+                  fontFamily: 'monospace',
+                  fontSize: '1.1rem',
+                  fontWeight: 'bold',
+                  margin: '0 0 12px 0',
+                  color: 'var(--color-primary)'
+                }}>
+                  justicekonjengbam2002@okicici
+                </p>
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    navigator.clipboard.writeText('justicekonjengbam2002@okicici')
+                    alert('✅ UPI ID copied to clipboard!')
+                  }}
+                >
+                  📋 Copy UPI ID
+                </Button>
+              </div>
+
+              <p style={{ fontSize: '0.9rem', opacity: 0.8, marginBottom: '24px' }}>
+                Scan QR code or copy UPI ID to pay from GPay, PhonePe, Paytm, or any UPI app
+              </p>
+
+              {/* Payment Confirmation Form */}
+              <div style={{
+                borderTop: '1px solid rgba(76, 161, 175, 0.2)',
+                paddingTop: '24px',
+                textAlign: 'left'
+              }}>
+                <h4 style={{ marginBottom: '16px', textAlign: 'center' }}>After Payment, Confirm Below:</h4>
+                <form onSubmit={async (e) => {
+                  e.preventDefault()
+                  const formData = new FormData(e.target)
+                  const upiData = {
+                    name: formData.get('upiName'),
+                    email: formData.get('upiEmail'),
+                    amount: formData.get('upiAmount'),
+                    type: 'one-time',
+                    message: formData.get('upiMessage') || 'UPI Payment',
+                    status: 'success',
+                    paymentMethod: 'upi',
+                    transactionId: formData.get('upiTransactionId') || 'UPI-MANUAL'
+                  }
+
+                  try {
+                    await submitDonation(upiData)
+                    alert('✅ Thank you! Your payment confirmation has been recorded.')
+                    e.target.reset()
+                  } catch (err) {
+                    alert('❌ Failed to submit confirmation: ' + err.message)
+                  }
+                }}>
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label htmlFor="upiName">Your Name *</label>
+                      <input
+                        type="text"
+                        id="upiName"
+                        name="upiName"
+                        required
+                        placeholder="Enter your name"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="upiEmail">Email *</label>
+                      <input
+                        type="email"
+                        id="upiEmail"
+                        name="upiEmail"
+                        required
+                        placeholder="your@email.com"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label htmlFor="upiAmount">Amount Paid (₹) *</label>
+                      <input
+                        type="number"
+                        id="upiAmount"
+                        name="upiAmount"
+                        required
+                        min="1"
+                        placeholder="Amount you sent"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="upiTransactionId">Transaction ID (Optional)</label>
+                      <input
+                        type="text"
+                        id="upiTransactionId"
+                        name="upiTransactionId"
+                        placeholder="UPI transaction ID"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-group-full">
+                    <label htmlFor="upiMessage">Message (Optional)</label>
+                    <textarea
+                      id="upiMessage"
+                      name="upiMessage"
+                      rows="2"
+                      placeholder="Leave a message..."
+                      style={{
+                        background: 'rgba(26, 31, 53, 0.8)',
+                        border: '1px solid rgba(76, 161, 175, 0.3)',
+                        borderRadius: '8px',
+                        color: 'white',
+                        padding: '12px',
+                        width: '100%'
+                      }}
+                    />
+                  </div>
+
+                  <Button type="submit" variant="primary">
+                    Confirm Payment
+                  </Button>
+                </form>
+              </div>
+            </div>
+          </Card>
         </div>
 
         {/* This Month's Champions */}
