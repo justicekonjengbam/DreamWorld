@@ -25,7 +25,7 @@ function AdminDashboard() {
 
     const [syncing, setSyncing] = useState(false)
 
-    if (loading) return <div className="loading-state">Syncing Dashboard with Google Sheets...</div>
+    if (loading) return <div className="loading-state">Connecting to Cloud Database...</div>
 
     const [activeTab, setActiveTab] = useState('announcement')
 
@@ -62,36 +62,24 @@ function AdminDashboard() {
         }
     }, [loading, announcement])
 
-    // Live check for Google Sheets data (Layer 2)
+    // Monitor Supabase Connectivity (System Health)
     useEffect(() => {
         if (activeTab === 'status') {
-            const checkSheet = async () => {
-                const sheetApiUrl = import.meta.env.VITE_SHEET_API_URL;
-                if (!sheetApiUrl) return;
+            const checkDatabase = async () => {
                 try {
-                    const res = await fetch(`${sheetApiUrl}?sheet=announcements`);
-                    if (!res.ok) throw new Error('API Error');
-                    const data = await res.json();
+                    const { data, error } = await supabase.from('announcements').select('*').limit(1)
+                    if (error) throw error
 
-                    if (Array.isArray(data) && data.length > 0) {
-                        const rawRow = data[0];
-                        // Normalize keys for the summary
-                        const normalized = {};
-                        Object.keys(rawRow).forEach(k => { normalized[k.toLowerCase().trim()] = rawRow[k] });
-
-                        setSheetData({
-                            summary: normalized,
-                            rawKeys: Object.keys(rawRow),
-                            count: data.length
-                        });
-                    } else {
-                        setSheetData({ count: 0 });
-                    }
+                    setSheetData({
+                        summary: data[0] || 'No announcements yet',
+                        count: data.length,
+                        type: 'Supabase (Infinite)'
+                    });
                 } catch (e) {
                     setSheetData('error');
                 }
             };
-            checkSheet();
+            checkDatabase();
         }
     }, [activeTab])
 
@@ -231,7 +219,7 @@ function AdminDashboard() {
                         className={`sync-btn ${syncing ? 'syncing' : ''} ${hasUnsyncedChanges ? 'highlight' : ''}`}
                         disabled={syncing}
                     >
-                        {syncing ? '⌛ Pulling...' : '⬇️ Pull from Google Sheets'}
+                        {syncing ? '⌛ Refreshing...' : '🔄 Refresh Data'}
                     </button>
                     <button onClick={handleLogout} className="logout-btn">🚪 Logout</button>
                 </div>
@@ -562,8 +550,8 @@ function AdminDashboard() {
                     <div className="admin-section animate-fade">
                         <div className="status-grid">
                             <Card className="status-card">
-                                <h3>📦 Layer 1: Your Browser</h3>
-                                <p className="status-desc">This is what YOU see right now. It is saved locally on your computer.</p>
+                                <h3>📦 Layer 1: App Cache</h3>
+                                <p className="status-desc">This is what your browser is currenty holding in memory.</p>
                                 <div className="status-data">
                                     <pre>{JSON.stringify({
                                         announcement: announcement.title || 'EMPTY',
@@ -575,33 +563,31 @@ function AdminDashboard() {
                             </Card>
 
                             <Card className="status-card highlight">
-                                <h3>📊 Layer 2: Google Sheets</h3>
-                                <p className="status-desc">This is the "Source of Truth." If data is missing here, it won't show for visitors.</p>
-                                <a href="https://docs.google.com/spreadsheets" target="_blank" rel="noreferrer" className="status-link">Open My Google Sheet ↗</a>
+                                <h3>📊 Layer 2: Supabase DB</h3>
+                                <p className="status-desc">This is your permanent, unlimited cloud database.</p>
                                 <div className="status-data">
                                     {sheetData === 'error' ? (
-                                        <p style={{ color: '#ff6f61' }}>❌ Connection Error. Check your API URL.</p>
-                                    ) : sheetData && sheetData.count > 0 ? (
+                                        <p style={{ color: '#ff6f61' }}>❌ Supabase Connection Error. Check your Anon Key.</p>
+                                    ) : sheetData ? (
                                         <div>
+                                            <p style={{ color: 'var(--color-primary)', fontWeight: 'bold' }}>✅ All Systems Operational</p>
                                             <pre>{JSON.stringify({
-                                                "Sheet Headers Found": sheetData.rawKeys,
-                                                "Live Data (Top Row)": sheetData.summary,
+                                                "Database Type": sheetData.type,
+                                                "Connection": "Direct SQL",
+                                                "Status": "Online"
                                             }, null, 2)}</pre>
-                                            <p className="status-mini-note">Found {sheetData.count} row(s) in sheet.</p>
                                         </div>
-                                    ) : sheetData && sheetData.count === 0 ? (
-                                        <p>📭 Sheet is empty (only headers exist).</p>
                                     ) : (
-                                        <p>⏳ Loading sheet data...</p>
+                                        <p>⏳ Checking connection...</p>
                                     )}
                                 </div>
                             </Card>
 
                             <Card className="status-card">
-                                <h3>⚡ Layer 3: Global Cache</h3>
-                                <p className="status-desc">This is what your VISITORS see. Keep this updated!</p>
+                                <h3>⚡ Layer 3: Live Site</h3>
+                                <p className="status-desc">All changes are now real-time! No manual production sync needed.</p>
                                 <Button onClick={handleSync} variant="secondary" disabled={syncing}>
-                                    {syncing ? '⌛ Syncing...' : '🔄 Push to Global Cache'}
+                                    {syncing ? '⌛ Refreshing...' : '🔄 Refresh UI'}
                                 </Button>
                             </Card>
                         </div>

@@ -37,17 +37,22 @@ export const ContentProvider = ({ children }) => {
                     amountNeeded: q.amount_needed || '0',
                     amountRaised: q.amount_raised || '0',
                     fundingStatus: q.funding_status || 'not-funded',
-                    galleryImages: q.gallery_images || [],
-                    completionImages: q.completion_images || [],
+                    galleryImages: Array.isArray(q.gallery_images) ? q.gallery_images : [],
+                    completionImages: Array.isArray(q.completion_images) ? q.completion_images : [],
                     completionNote: q.completion_note || '',
                     dateCompleted: q.date_completed || '',
-                    steps: q.steps ? q.steps.split('\n') : []
+                    steps: typeof q.steps === 'string' ? q.steps.split('\n').filter(s => s.trim()) : []
                 })))
             }
 
             // 2. Fetch Roles
             const { data: rData } = await supabase.from('roles').select('*').order('created_at', { ascending: true })
-            if (rData) setRoles(rData.map(r => ({ ...r, traits: r.traits ? r.traits.split('\n') : [] })))
+            if (rData) {
+                setRoles(rData.map(r => ({
+                    ...r,
+                    traits: typeof r.traits === 'string' ? r.traits.split('\n').filter(t => t.trim()) : []
+                })))
+            }
 
             // 3. Fetch Characters (Dreamers)
             const { data: cData } = await supabase.from('dreamers').select('*').order('created_at', { ascending: false })
@@ -55,7 +60,7 @@ export const ContentProvider = ({ children }) => {
                 setCharacters(cData.map(c => ({
                     ...c,
                     coverImage: c.cover_image,
-                    themes: c.themes ? c.themes.split(',') : [],
+                    themes: typeof c.themes === 'string' ? c.themes.split(',').map(t => t.trim()).filter(Boolean) : [],
                     socials: { youtube: c.youtube, instagram: c.instagram, facebook: c.facebook, twitter: c.twitter }
                 })))
             }
@@ -68,8 +73,8 @@ export const ContentProvider = ({ children }) => {
                     amountNeeded: e.amount_needed || '0',
                     amountRaised: e.amount_raised || '0',
                     fundingStatus: e.funding_status || 'not-funded',
-                    galleryImages: e.gallery_images || [],
-                    completionImages: e.completion_images || [],
+                    galleryImages: Array.isArray(e.gallery_images) ? e.gallery_images : [],
+                    completionImages: Array.isArray(e.completion_images) ? e.completion_images : [],
                     completionNote: e.completion_note || '',
                     dateCompleted: e.date_completed || '',
                     registrationLink: e.registration_link || ''
@@ -135,26 +140,24 @@ export const ContentProvider = ({ children }) => {
     }
 
     const updateQuest = async (id, updated) => {
+        const {
+            amountNeeded, amountRaised, fundingStatus, galleryImages,
+            completionImages, completionNote, dateCompleted, steps,
+            ...rest
+        } = updated
+
         const payload = {
             id,
-            ...updated,
-            amount_needed: updated.amountNeeded ? parseFloat(updated.amountNeeded) : undefined,
-            amount_raised: updated.amountRaised ? parseFloat(updated.amountRaised) : undefined,
-            funding_status: updated.fundingStatus,
-            gallery_images: updated.galleryImages,
-            completion_images: updated.completionImages,
-            completion_note: updated.completionNote,
-            date_completed: updated.dateCompleted,
-            steps: Array.isArray(updated.steps) ? updated.steps.join('\n') : updated.steps
+            ...rest,
+            amount_needed: amountNeeded ? parseFloat(amountNeeded) : undefined,
+            amount_raised: amountRaised ? parseFloat(amountRaised) : undefined,
+            funding_status: fundingStatus,
+            gallery_images: galleryImages,
+            completion_images: completionImages,
+            completion_note: completionNote,
+            date_completed: dateCompleted,
+            steps: Array.isArray(steps) ? steps.join('\n') : steps
         }
-        // Remove virtual JS fields before SQL save
-        delete payload.amountNeeded
-        delete payload.amountRaised
-        delete payload.fundingStatus
-        delete payload.galleryImages
-        delete payload.completionImages
-        delete payload.completionNote
-        delete payload.dateCompleted
 
         if (await saveToSupabase('quests', payload)) fetchData()
     }
@@ -207,18 +210,19 @@ export const ContentProvider = ({ children }) => {
     }
 
     const updateCharacter = async (id, updated) => {
+        const { coverImage, socials, themes, ...rest } = updated
+
         const payload = {
             id,
-            ...updated,
-            cover_image: updated.coverImage,
-            themes: Array.isArray(updated.themes) ? updated.themes.join(',') : updated.themes,
-            youtube: updated.socials?.youtube,
-            instagram: updated.socials?.instagram,
-            facebook: updated.socials?.facebook,
-            twitter: updated.socials?.twitter
+            ...rest,
+            cover_image: coverImage,
+            themes: Array.isArray(themes) ? themes.join(',') : themes,
+            youtube: socials?.youtube,
+            instagram: socials?.instagram,
+            facebook: socials?.facebook,
+            twitter: socials?.twitter
         }
-        delete payload.coverImage
-        delete payload.socials
+
         if (await saveToSupabase('dreamers', payload)) fetchData()
     }
 
@@ -244,24 +248,23 @@ export const ContentProvider = ({ children }) => {
     }
 
     const updateEvent = async (id, updated) => {
+        const {
+            registrationLink, amountNeeded, amountRaised, galleryImages,
+            completionImages, completionNote, dateCompleted,
+            ...rest
+        } = updated
+
         const payload = {
             id,
-            ...updated,
-            registration_link: updated.registrationLink,
-            amount_needed: updated.amountNeeded ? parseFloat(updated.amountNeeded) : undefined,
-            amount_raised: updated.amountRaised ? parseFloat(updated.amountRaised) : undefined,
-            gallery_images: updated.galleryImages,
-            completion_images: updated.completionImages,
-            completion_note: updated.completionNote,
-            date_completed: updated.dateCompleted
+            ...rest,
+            registration_link: registrationLink,
+            amount_needed: amountNeeded ? parseFloat(amountNeeded) : undefined,
+            amount_raised: amountRaised ? parseFloat(amountRaised) : undefined,
+            gallery_images: galleryImages,
+            completion_images: completionImages,
+            completion_note: completionNote,
+            date_completed: dateCompleted
         }
-        delete payload.registrationLink
-        delete payload.amountNeeded
-        delete payload.amountRaised
-        delete payload.galleryImages
-        delete payload.completionImages
-        delete payload.completionNote
-        delete payload.dateCompleted
 
         if (await saveToSupabase('events', payload)) fetchData()
     }
