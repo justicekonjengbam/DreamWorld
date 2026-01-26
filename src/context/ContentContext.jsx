@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react'
+import { createContext, useContext, useState, useEffect, useMemo } from 'react'
 import { quests as initialQuests } from '../data/quests'
 import { roles as initialRoles, characters as initialCharacters } from '../data/characters'
 import { events as initialEvents } from '../data/events'
@@ -17,6 +17,7 @@ export const ContentProvider = ({ children }) => {
     const [roles, setRoles] = useState(initialRoles)
     const [characters, setCharacters] = useState(initialCharacters)
     const [events, setEvents] = useState(initialEvents)
+    const [legacySponsorships, setLegacySponsorships] = useState([])
     const [announcement, setAnnouncement] = useState({
         title: 'Welcome to DreamWorld! 🌟',
         date: 'January 18, 2026',
@@ -108,6 +109,22 @@ export const ContentProvider = ({ children }) => {
                             completionImages: n.completionimages ? JSON.parse(n.completionimages) : [],
                             completionNote: n.completionnote || '',
                             dateCompleted: n.datecompleted || ''
+                        }
+                    }))
+                }
+                if (data.sponsorships) {
+                    setLegacySponsorships(data.sponsorships.map(s => {
+                        const n = {}
+                        Object.keys(s).forEach(k => n[k.toLowerCase().trim()] = s[k])
+                        return {
+                            ...n,
+                            id: n.id || `sp-${Date.now()}`,
+                            type: n.type || 'quest',
+                            name: n.name || n.title || 'Untitled',
+                            description: n.description || n.purpose || '',
+                            amountNeeded: n.amountneeded || '0',
+                            amountRaised: n.amountraised || '0',
+                            fundingStatus: n.fundingstatus || 'active'
                         }
                     }))
                 }
@@ -204,13 +221,18 @@ export const ContentProvider = ({ children }) => {
 
     // Quests
     const addQuest = (newQuest) => {
-        const quest = { ...newQuest, id: `quest-${Date.now()}` }
+        const quest = {
+            ...newQuest,
+            id: `quest-${Date.now()}`,
+            steps: Array.isArray(newQuest.steps) ? newQuest.steps : []
+        }
         setQuests(prev => [...prev, quest])
         syncToApi('quests', 'POST', { ...quest, steps: quest.steps.join('\n') })
     }
     const updateQuest = (id, updated) => {
         setQuests(prev => prev.map(q => q.id === id ? { ...q, ...updated } : q))
-        syncToApi('quests', 'PUT', { ...updated, steps: Array.isArray(updated.steps) ? updated.steps.join('\n') : updated.steps }, id, 'id')
+        const stepsStr = Array.isArray(updated.steps) ? updated.steps.join('\n') : (updated.steps || '')
+        syncToApi('quests', 'PUT', { ...updated, steps: stepsStr }, id, 'id')
     }
     const deleteQuest = (id) => {
         setQuests(prev => prev.filter(q => q.id !== id))
@@ -342,15 +364,34 @@ export const ContentProvider = ({ children }) => {
     }
 
     // Sponsorships Management (Unified view of Quests and Events with funding goals)
-    const sponsorships = [
-        ...(quests || []).filter(q => parseFloat(q.amountNeeded) > 0).map(q => ({ ...q, type: 'quest' })),
-        ...(events || []).filter(e => parseFloat(e.amountNeeded) > 0).map(e => ({ ...e, type: 'event' }))
-    ]
+    const sponsorships = useMemo(() => {
+        const qSpons = (quests || []).filter(q => parseFloat(q.amountNeeded) > 0).map(q => ({
+            ...q,
+            type: 'quest',
+            name: q.title || q.name, // Ensure 'name' exists for UI
+            description: q.purpose || q.description // Ensure 'description' exists for UI
+        }));
+        const eSpons = (events || []).filter(e => parseFloat(e.amountNeeded) > 0).map(e => ({
+            ...e,
+            type: 'event',
+            name: e.title || e.name,
+            description: e.description || e.purpose
+        }));
+        // Merge legacy ones that haven't been moved yet
+        return [...qSpons, ...eSpons, ...legacySponsorships];
+    }, [quests, events, legacySponsorships]);
 
     const addSponsorship = async (data) => {
         if (data.type === 'quest') {
             await addQuest({
                 ...data,
+                title: data.name,
+                purpose: data.description,
+                steps: [],
+                difficulty: 'medium',
+                timeNeeded: 'Ongoing',
+                sharePrompt: 'Help us reach our goal!',
+                impact: 'Your contribution directy impacts this goal.',
                 amountNeeded: data.amountNeeded.toString(),
                 amountRaised: '0',
                 fundingStatus: 'active'
@@ -358,6 +399,11 @@ export const ContentProvider = ({ children }) => {
         } else {
             await addEvent({
                 ...data,
+                title: data.name,
+                host: 'DreamWorld',
+                date: new Date().toISOString().split('T')[0],
+                location: 'TBD',
+                type: 'online',
                 amountNeeded: data.amountNeeded.toString(),
                 amountRaised: '0',
                 fundingStatus: 'active'
@@ -371,7 +417,10 @@ export const ContentProvider = ({ children }) => {
         if (Array.isArray(data.galleryImages)) payload.galleryImages = JSON.stringify(data.galleryImages)
         if (Array.isArray(data.completionImages)) payload.completionImages = JSON.stringify(data.completionImages)
 
-        const sheet = id.startsWith('q-') ? 'quests' : 'events'
+        let sheet = 'sponsorships'
+        if (id.startsWith('quest-') || quests.find(q => q.id === id)) sheet = 'quests'
+        else if (id.startsWith('ev-') || events.find(e => e.id === id)) sheet = 'events'
+
         await syncToApi(sheet, 'PATCH', payload, id)
         await syncGlobalData() // Refresh everything
     }
@@ -383,13 +432,20 @@ export const ContentProvider = ({ children }) => {
             completionImages: JSON.stringify(completionData.completionImages || []),
             completionNote: completionData.completionNote || ''
         }
-        const sheet = id.startsWith('q-') ? 'quests' : 'events'
+
+        let sheet = 'sponsorships'
+        if (id.startsWith('quest-') || quests.find(q => q.id === id)) sheet = 'quests'
+        else if (id.startsWith('ev-') || events.find(e => e.id === id)) sheet = 'events'
+
         await syncToApi(sheet, 'PATCH', payload, id)
         await syncGlobalData()
     }
 
     const deleteSponsorship = async (id) => {
-        const sheet = id.startsWith('q-') ? 'quests' : 'events'
+        let sheet = 'sponsorships'
+        if (id.startsWith('quest-') || quests.find(q => q.id === id)) sheet = 'quests'
+        else if (id.startsWith('ev-') || events.find(e => e.id === id)) sheet = 'events'
+
         await syncToApi(sheet, 'DELETE', null, id)
         await syncGlobalData()
     }

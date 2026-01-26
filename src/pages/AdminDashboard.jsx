@@ -42,6 +42,7 @@ function AdminDashboard() {
         title: '', host: '', type: 'online', date: '', location: '', description: '', registrationLink: '',
         needsFunding: false, amountNeeded: '', galleryImages: [], completionImages: [], completionNote: ''
     })
+    const [sponsorshipFormData, setSponsorshipFormData] = useState({ type: 'quest', name: '', description: '', amountNeeded: '' })
 
     const [editingId, setEditingId] = useState(null)
     const [hasUnsyncedChanges, setHasUnsyncedChanges] = useState(false)
