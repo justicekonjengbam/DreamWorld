@@ -41,7 +41,8 @@ function Funders() {
           ...prev,
           sponsorshipType: type,
           sponsorshipId: id,
-          sponsorshipMessage: `Supporting: ${sp.name || sp.title}`
+          sponsorshipMessage: `Supporting: ${sp.name || sp.title}`,
+          type: 'one-time'
         }))
 
         // Short delay to ensure rendering before scroll
@@ -383,7 +384,9 @@ function Funders() {
                       onChange={handleChange}
                     >
                       <option value="one-time">One-Time Support</option>
-                      <option value="monthly">Auto Pay (₹399 Monthly)</option>
+                      {!formData.sponsorshipId && (
+                        <option value="monthly">Auto Pay (₹399 Monthly)</option>
+                      )}
                     </select>
                   </div>
                 </div>
@@ -454,7 +457,13 @@ function Funders() {
                           return;
                         }
                         const sp = sponsorships.find(s => s.id === id);
-                        setFormData(prev => ({ ...prev, sponsorshipId: id, sponsorshipType: sp.type, sponsorshipMessage: `Supporting: ${sp.name || sp.title}` }));
+                        setFormData(prev => ({
+                          ...prev,
+                          sponsorshipId: id,
+                          sponsorshipType: sp.type,
+                          sponsorshipMessage: `Supporting: ${sp.name || sp.title}`,
+                          type: 'one-time' // Logic fix: Force one-time when choosing a goal
+                        }));
                       }}
                     >
                       <option value="">General Growth Fund (Default)</option>
