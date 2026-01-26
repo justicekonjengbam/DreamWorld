@@ -20,7 +20,8 @@ function AdminDashboard() {
         characters, addCharacter, updateCharacter, deleteCharacter,
         events, addEvent, updateEvent, deleteEvent,
         announcement, updateAnnouncement,
-        syncGlobalData
+        syncGlobalData,
+        sponsorships, addSponsorship, updateSponsorship, completeSponsorship, deleteSponsorship
     } = useContent()
 
     const [syncing, setSyncing] = useState(false)
@@ -31,10 +32,16 @@ function AdminDashboard() {
 
     // Form States
     const [announcementFormData, setAnnouncementFormData] = useState(announcement)
-    const [questFormData, setQuestFormData] = useState({ title: '', purpose: '', difficulty: 'easy', timeNeeded: '', steps: '', impact: '', sharePrompt: '' })
+    const [questFormData, setQuestFormData] = useState({
+        title: '', purpose: '', difficulty: 'easy', timeNeeded: '', steps: '', impact: '', sharePrompt: '',
+        needsFunding: false, amountNeeded: '', galleryImages: [], completionImages: [], completionNote: ''
+    })
     const [roleFormData, setRoleFormData] = useState({ id: '', name: '', singular: '', description: '', color: '#4CA1AF', traits: '', philosophy: '' })
     const [memberFormData, setMemberFormData] = useState({ name: '', role: '', title: '', avatar: '', coverImage: '', bio: '', themes: '' })
-    const [eventFormData, setEventFormData] = useState({ title: '', host: '', type: 'online', date: '', location: '', description: '', registrationLink: '' })
+    const [eventFormData, setEventFormData] = useState({
+        title: '', host: '', type: 'online', date: '', location: '', description: '', registrationLink: '',
+        needsFunding: false, amountNeeded: '', galleryImages: [], completionImages: [], completionNote: ''
+    })
 
     const [editingId, setEditingId] = useState(null)
     const [hasUnsyncedChanges, setHasUnsyncedChanges] = useState(false)
@@ -117,10 +124,16 @@ function AdminDashboard() {
 
     const resetForms = () => {
         setEditingId(null)
-        setQuestFormData({ title: '', purpose: '', difficulty: 'easy', timeNeeded: '', steps: '', impact: '', sharePrompt: '' })
+        setQuestFormData({
+            title: '', purpose: '', difficulty: 'easy', timeNeeded: '', steps: '', impact: '', sharePrompt: '',
+            needsFunding: false, amountNeeded: '', galleryImages: [], completionImages: [], completionNote: ''
+        })
         setRoleFormData({ id: '', name: '', singular: '', description: '', color: '#4CA1AF', traits: '', philosophy: '' })
         setMemberFormData({ name: '', role: '', title: '', avatar: '', coverImage: '', bio: '', themes: '' })
-        setEventFormData({ title: '', host: '', type: 'online', date: '', location: '', description: '', registrationLink: '' })
+        setEventFormData({
+            title: '', host: '', type: 'online', date: '', location: '', description: '', registrationLink: '',
+            needsFunding: false, amountNeeded: '', galleryImages: [], completionImages: [], completionNote: ''
+        })
     }
 
     // Submit Handlers
@@ -137,7 +150,12 @@ function AdminDashboard() {
 
     const handleQuestSubmit = (e) => {
         e.preventDefault()
-        const data = { ...questFormData, steps: questFormData.steps.split('\n').filter(s => s.trim()) }
+        const data = {
+            ...questFormData,
+            steps: questFormData.steps.split('\n').filter(s => s.trim()),
+            amountNeeded: questFormData.needsFunding ? questFormData.amountNeeded.toString() : '0',
+            fundingStatus: questFormData.needsFunding ? (questFormData.fundingStatus || 'active') : 'not-funded'
+        }
         editingId ? updateQuest(editingId, data) : addQuest(data)
         setHasUnsyncedChanges(true)
         resetForms()
@@ -170,7 +188,12 @@ function AdminDashboard() {
 
     const handleEventSubmit = (e) => {
         e.preventDefault()
-        editingId ? updateEvent(editingId, eventFormData) : addEvent(eventFormData)
+        const data = {
+            ...eventFormData,
+            amountNeeded: eventFormData.needsFunding ? eventFormData.amountNeeded.toString() : '0',
+            fundingStatus: eventFormData.needsFunding ? (eventFormData.fundingStatus || 'active') : 'not-funded'
+        }
+        editingId ? updateEvent(editingId, data) : addEvent(eventFormData)
         setHasUnsyncedChanges(true)
         resetForms()
         alert(editingId ? 'Event updated!' : 'Event added!')
@@ -190,7 +213,7 @@ function AdminDashboard() {
                     <button className={`nav-item ${activeTab === 'roles' ? 'active' : ''}`} onClick={() => { setActiveTab('roles'); resetForms() }}>🎭 Roles</button>
                     <button className={`nav-item ${activeTab === 'members' ? 'active' : ''}`} onClick={() => { setActiveTab('members'); resetForms() }}>👥 Dreamers</button>
                     <button className={`nav-item ${activeTab === 'events' ? 'active' : ''}`} onClick={() => { setActiveTab('events'); resetForms() }}>📅 Events</button>
-                    <button className={`nav-item`} onClick={() => navigate('/admin/sponsorships')}>💰 Sponsorships</button>
+                    <button className={`nav-item ${activeTab === 'sponsorships' ? 'active' : ''}`} onClick={() => { setActiveTab('sponsorships'); resetForms() }}>💰 Sponsorships</button>
                     <button className={`nav-item ${activeTab === 'status' ? 'active' : ''}`} onClick={() => { setActiveTab('status'); resetForms() }}>🛡️ System Health</button>
                 </nav>
 
@@ -247,6 +270,31 @@ function AdminDashboard() {
                                     <div className="form-group-full"><label>Purpose</label><textarea rows="2" value={questFormData.purpose} onChange={(e) => setQuestFormData({ ...questFormData, purpose: e.target.value })} required /></div>
                                     <div className="form-group-full"><label>Steps (One per line)</label><textarea rows="4" value={questFormData.steps} onChange={(e) => setQuestFormData({ ...questFormData, steps: e.target.value })} required /></div>
                                     <div className="form-group-full"><label>Impact</label><input type="text" value={questFormData.impact} onChange={(e) => setQuestFormData({ ...questFormData, impact: e.target.value })} required /></div>
+
+                                    <div className="funding-setup" style={{ borderTop: '1px solid rgba(76, 161, 175, 0.2)', paddingTop: '15px', marginTop: '10px' }}>
+                                        <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', marginBottom: '10px' }}>
+                                            <input
+                                                type="checkbox"
+                                                checked={questFormData.needsFunding}
+                                                onChange={(e) => setQuestFormData({ ...questFormData, needsFunding: e.target.checked })}
+                                            />
+                                            <span>Needs Funding?</span>
+                                        </label>
+
+                                        {questFormData.needsFunding && (
+                                            <div className="form-group-full animate-fade">
+                                                <label>Funding Goal (₹)</label>
+                                                <input
+                                                    type="number"
+                                                    value={questFormData.amountNeeded || ''}
+                                                    onChange={(e) => setQuestFormData({ ...questFormData, amountNeeded: e.target.value })}
+                                                    placeholder="e.g. 5000"
+                                                    required
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
+
                                     <Button type="submit" variant="primary">{editingId ? 'Update' : 'Add'} Quest</Button>
                                     {editingId && <Button type="button" variant="secondary" onClick={resetForms}>Cancel</Button>}
                                 </form>
@@ -461,6 +509,31 @@ function AdminDashboard() {
                                     </div>
                                     <div className="form-group-full"><label>Description</label><textarea rows="3" value={eventFormData.description} onChange={(e) => setEventFormData({ ...eventFormData, description: e.target.value })} required /></div>
                                     <div className="form-group-full"><label>Registration Link (URL)</label><input type="text" value={eventFormData.registrationLink} onChange={(e) => setEventFormData({ ...eventFormData, registrationLink: e.target.value })} required /></div>
+
+                                    <div className="funding-setup" style={{ borderTop: '1px solid rgba(76, 161, 175, 0.2)', paddingTop: '15px', marginTop: '10px' }}>
+                                        <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', marginBottom: '10px' }}>
+                                            <input
+                                                type="checkbox"
+                                                checked={eventFormData.needsFunding}
+                                                onChange={(e) => setEventFormData({ ...eventFormData, needsFunding: e.target.checked })}
+                                            />
+                                            <span>Needs Funding?</span>
+                                        </label>
+
+                                        {eventFormData.needsFunding && (
+                                            <div className="form-group-full animate-fade">
+                                                <label>Funding Goal (₹)</label>
+                                                <input
+                                                    type="number"
+                                                    value={eventFormData.amountNeeded}
+                                                    onChange={(e) => setEventFormData({ ...eventFormData, amountNeeded: e.target.value })}
+                                                    placeholder="e.g. 10000"
+                                                    required
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
+
                                     <Button type="submit" variant="primary">{editingId ? 'Update' : 'Add'} Event</Button>
                                     {editingId && <Button type="button" variant="secondary" onClick={resetForms}>Cancel</Button>}
                                 </form>
@@ -478,6 +551,89 @@ function AdminDashboard() {
                                         </div>
                                     </Card>
                                 ))}
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {activeTab === 'sponsorships' && (
+                    <div className="admin-section animate-fade">
+                        <div className="admin-split-layout">
+                            <Card className="admin-form-card">
+                                <h3>Create Sponsoring Goal</h3>
+                                <p style={{ fontSize: '0.8rem', opacity: 0.7, marginBottom: '20px' }}>Create a new Quest or Event that needs funding. It will appear here and on the Funders page.</p>
+                                <form onSubmit={(e) => {
+                                    e.preventDefault()
+                                    addSponsorship(sponsorshipFormData)
+                                    setHasUnsyncedChanges(true)
+                                    setSponsorshipFormData({ type: 'quest', name: '', description: '', amountNeeded: '' })
+                                    alert('Sponsorship goal created! Push to Global Cache to see it live.')
+                                }} className="admin-form">
+                                    <div className="form-group">
+                                        <label>Type</label>
+                                        <select value={sponsorshipFormData.type} onChange={(e) => setSponsorshipFormData(prev => ({ ...prev, type: e.target.value }))}>
+                                            <option value="quest">🎯 Quest</option>
+                                            <option value="event">📅 Event</option>
+                                        </select>
+                                    </div>
+                                    <div className="form-group-full">
+                                        <label>Name</label>
+                                        <input type="text" value={sponsorshipFormData.name} onChange={(e) => setSponsorshipFormData(prev => ({ ...prev, name: e.target.value }))} placeholder="e.g. New Science Lab" required />
+                                    </div>
+                                    <div className="form-group-full">
+                                        <label>Description</label>
+                                        <textarea rows="3" value={sponsorshipFormData.description} onChange={(e) => setSponsorshipFormData(prev => ({ ...prev, description: e.target.value }))} placeholder="Explain why this needs funding..." required />
+                                    </div>
+                                    <div className="form-group-full">
+                                        <label>Funding Goal (₹)</label>
+                                        <input type="number" value={sponsorshipFormData.amountNeeded || ''} onChange={(e) => setSponsorshipFormData(prev => ({ ...prev, amountNeeded: e.target.value }))} required />
+                                    </div>
+                                    <Button type="submit" variant="primary">Create Sponsorship Post</Button>
+                                </form>
+                            </Card>
+
+                            <div className="admin-list">
+                                {sponsorships.length === 0 ? (
+                                    <p style={{ textAlign: 'center', padding: '40px', opacity: 0.5 }}>No active funding goals yet.</p>
+                                ) : (
+                                    sponsorships.map(sp => (
+                                        <Card key={sp.id} className="admin-item-card">
+                                            <div style={{ flex: 1 }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '5px' }}>
+                                                    <span>{sp.type === 'quest' ? '🎯' : '📅'}</span>
+                                                    <h4 style={{ margin: 0 }}>{sp.name || sp.title}</h4>
+                                                    <Badge variant={sp.fundingStatus === 'completed' ? 'success' : 'primary'}>
+                                                        {sp.fundingStatus === 'completed' ? 'Funded' : 'Active'}
+                                                    </Badge>
+                                                </div>
+                                                <div className="funding-mini-progress" style={{ width: '100%', height: '4px', background: 'rgba(255,255,255,0.1)', borderRadius: '2px', overflow: 'hidden', margin: '10px 0' }}>
+                                                    <div style={{
+                                                        width: `${Math.min((parseFloat(sp.amountRaised || 0) / parseFloat(sp.amountNeeded)) * 100, 100)}%`,
+                                                        height: '100%',
+                                                        background: 'var(--color-primary)'
+                                                    }} />
+                                                </div>
+                                                <p style={{ fontSize: '0.75rem', opacity: 0.7 }}>₹{sp.amountRaised || 0} / ₹{sp.amountNeeded}</p>
+                                            </div>
+                                            <div className="admin-item-actions">
+                                                {sp.fundingStatus !== 'completed' && (
+                                                    <button onClick={() => {
+                                                        if (window.confirm('Mark this as fully funded/completed?')) {
+                                                            completeSponsorship(sp.id, { completionNote: 'Goal Reached!' })
+                                                            setHasUnsyncedChanges(true)
+                                                        }
+                                                    }} title="Mark Complete">✅</button>
+                                                )}
+                                                <button onClick={() => {
+                                                    if (window.confirm('Delete this goal?')) {
+                                                        deleteSponsorship(sp.id)
+                                                        setHasUnsyncedChanges(true)
+                                                    }
+                                                }}>🗑️</button>
+                                            </div>
+                                        </Card>
+                                    ))
+                                )}
                             </div>
                         </div>
                     </div>

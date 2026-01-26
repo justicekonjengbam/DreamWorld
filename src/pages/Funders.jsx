@@ -238,26 +238,53 @@ function Funders() {
 
         {/* Impact Mission */}
         <div className="impact-mission">
-          <Card hover={false}>
-            <div className="impact-stats">
-              <div className="impact-stat">
-                <div className="stat-number">0</div>
-                <div className="stat-label">Quests Funded</div>
+          {/* Active Sponsorship Opportunities */}
+          <div className="sponsorship-opportunities">
+            <h2 className="section-title">✨ Active Sponsorships</h2>
+            {(activeQuests.length > 0 || activeEvents.length > 0) ? (
+              <div className="opportunities-grid">
+                {[...activeQuests, ...activeEvents].map(sp => (
+                  <Card key={sp.id} className="opportunity-card">
+                    <div className="opp-header">
+                      <span className="opp-type">{sp.type === 'quest' ? '🎯 Quest' : '📅 Event'}</span>
+                      <h3>{sp.name || sp.title}</h3>
+                    </div>
+                    <p className="opp-desc">{sp.description || sp.purpose}</p>
+
+                    <div className="opp-funding">
+                      <div className="opp-stats">
+                        <span>₹{sp.amountRaised || 0} raised</span>
+                        <span>Goal: ₹{sp.amountNeeded}</span>
+                      </div>
+                      <div className="opp-bar">
+                        <div
+                          className="opp-fill"
+                          style={{ width: `${Math.min((parseFloat(sp.amountRaised || 0) / parseFloat(sp.amountNeeded)) * 100, 100)}%` }}
+                        />
+                      </div>
+                    </div>
+
+                    <Button
+                      variant="secondary"
+                      onClick={() => {
+                        setFormData(prev => ({
+                          ...prev,
+                          sponsorshipType: sp.type,
+                          sponsorshipId: sp.id,
+                          sponsorshipMessage: `Supporting: ${sp.name || sp.title}`
+                        }))
+                        document.querySelector('.donation-section').scrollIntoView({ behavior: 'smooth' })
+                      }}
+                    >
+                      💖 Support This Goal
+                    </Button>
+                  </Card>
+                ))}
               </div>
-              <div className="impact-stat">
-                <div className="stat-number">0</div>
-                <div className="stat-label">Kits Sponsored</div>
-              </div>
-              <div className="impact-stat">
-                <div className="stat-number">0</div>
-                <div className="stat-label">Workshops Hosted</div>
-              </div>
-            </div>
-            <p className="impact-text">
-              Your support doesn't just fund a project—it empowers learners, enables quests,
-              and builds a community where everyone can grow together.
-            </p>
-          </Card>
+            ) : (
+              <p className="no-opps">No active sponsorship goals at the moment. General donations still help us grow!</p>
+            )}
+          </div>
         </div>
 
         {/* Donation Form */}
@@ -266,6 +293,14 @@ function Funders() {
           <Card hover={false} className="donation-form-card">
             {!submitted ? (
               <form onSubmit={handleSubmit} className="donation-form">
+
+                {formData.sponsorshipId && (
+                  <div className="selected-sponsorship-badge animate-fade">
+                    <span>✨ Sponsoring: <strong>{formData.sponsorshipMessage}</strong></span>
+                    <button type="button" onClick={() => setFormData(prev => ({ ...prev, sponsorshipId: '', sponsorshipType: 'general', sponsorshipMessage: '' }))}>✕</button>
+                  </div>
+                )}
+
                 <div className="form-row">
                   <div className="form-group">
                     <label htmlFor="name">Your Name</label>
@@ -386,6 +421,32 @@ function Funders() {
                   )}
                 </div>
 
+                {!formData.sponsorshipId && formData.type === 'one-time' && (
+                  <div className="form-group-full sponsorship-select-inline animate-fade">
+                    <label>Direct my donation to:</label>
+                    <select
+                      value={formData.sponsorshipId}
+                      onChange={(e) => {
+                        const id = e.target.value;
+                        if (!id) {
+                          setFormData(prev => ({ ...prev, sponsorshipId: '', sponsorshipType: 'general' }));
+                          return;
+                        }
+                        const sp = sponsorships.find(s => s.id === id);
+                        setFormData(prev => ({ ...prev, sponsorshipId: id, sponsorshipType: sp.type, sponsorshipMessage: `Supporting: ${sp.name || sp.title}` }));
+                      }}
+                    >
+                      <option value="">General Growth Fund (Default)</option>
+                      <optgroup label="Quests">
+                        {activeQuests.map(q => <option key={q.id} value={q.id}>{q.name || q.title}</option>)}
+                      </optgroup>
+                      <optgroup label="Events">
+                        {activeEvents.map(e => <option key={e.id} value={e.id}>{e.name || e.title}</option>)}
+                      </optgroup>
+                    </select>
+                  </div>
+                )}
+
                 <div className="form-group-full">
                   <label htmlFor="displayName">Display Name (if shown publicly)</label>
                   <input
@@ -436,10 +497,42 @@ function Funders() {
                   {formData.name}, you're now part of the community building DreamWorld.
                   Your {formData.type === 'monthly' ? 'Auto Pay subscription' : 'contribution'} via {formData.paymentMethod.toUpperCase()} will help create real opportunities for learning and growth!
                 </p>
+                {formData.sponsorshipId && (
+                  <p className="sponsorship-thanks">
+                    Your contribution has been directed to: <strong>{formData.sponsorshipMessage}</strong>
+                  </p>
+                )}
               </div>
             )}
           </Card>
         </div>
+
+        {/* Completed Sponsorships Wall */}
+        {completedSponsorships.length > 0 && (
+          <div className="completed-wall">
+            <h2 className="section-title">✓ Goals Achieved</h2>
+            <div className="completed-grid">
+              {completedSponsorships.map(sp => (
+                <Card key={sp.id} className="completed-card">
+                  <div className="completed-badge-top">SUCCESS</div>
+                  <h3>{sp.name || sp.title}</h3>
+                  <p className="completion-impact">{sp.completionNote || 'Fully funded and completed!'}</p>
+                  {sp.completionImages && sp.completionImages.length > 0 && (
+                    <div className="completion-gallery-mini">
+                      {sp.completionImages.slice(0, 3).map((img, idx) => (
+                        <img key={idx} src={img} alt="Impact" />
+                      ))}
+                    </div>
+                  )}
+                  <div className="completed-footer">
+                    <span>{sp.type === 'quest' ? '🎯' : '📅'} {sp.type.toUpperCase()}</span>
+                    <span>₹{sp.amountNeeded} RAISED</span>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
 
 
 
@@ -473,6 +566,5 @@ function Funders() {
     </div>
   )
 }
-
 
 export default Funders

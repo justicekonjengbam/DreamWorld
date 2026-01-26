@@ -45,6 +45,22 @@ function Quests() {
                 </Badge>
               </div>
               <p className="quest-purpose">{quest.purpose}</p>
+
+              {parseFloat(quest.amountNeeded) > 0 && (
+                <div className="quest-funding-progress">
+                  <div className="funding-stats">
+                    <span>₹{quest.amountRaised || 0} raised</span>
+                    <span>Goal: ₹{quest.amountNeeded}</span>
+                  </div>
+                  <div className="funding-bar">
+                    <div
+                      className="funding-fill"
+                      style={{ width: `${Math.min((parseFloat(quest.amountRaised || 0) / parseFloat(quest.amountNeeded)) * 100, 100)}%` }}
+                    />
+                  </div>
+                </div>
+              )}
+
               <div className="quest-meta">
                 <span className="quest-time">⏱️ {quest.timeNeeded}</span>
               </div>
@@ -71,6 +87,33 @@ function Quests() {
                 </Badge>
                 <span className="quest-time">⏱️ {selectedQuest.timeNeeded}</span>
               </div>
+
+              {parseFloat(selectedQuest.amountNeeded) > 0 && (
+                <div className="quest-modal-funding">
+                  <div className="funding-progress-large">
+                    <div className="stats">
+                      <strong>₹{selectedQuest.amountRaised || 0}</strong> raised of <strong>₹{selectedQuest.amountNeeded}</strong> goal
+                    </div>
+                    <div className="bar-large">
+                      <div
+                        className="fill-large"
+                        style={{ width: `${Math.min((parseFloat(selectedQuest.amountRaised || 0) / parseFloat(selectedQuest.amountNeeded)) * 100, 100)}%` }}
+                      />
+                    </div>
+                    <p className="funding-status-text">
+                      {selectedQuest.fundingStatus === 'completed' ? '🎉 This quest is fully funded!' : 'This quest needs your support to launch!'}
+                    </p>
+                    {selectedQuest.fundingStatus !== 'completed' && (
+                      <button
+                        className="support-btn"
+                        onClick={() => window.location.href = '/funders'}
+                      >
+                        💝 Support This Quest
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
 
               <div className="quest-section">
                 <h4>Purpose</h4>

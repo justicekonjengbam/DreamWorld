@@ -21,7 +21,6 @@ import ScrollToTop from './components/ScrollToTop'
 import { ContentProvider } from './context/ContentContext'
 import AdminLogin from './pages/AdminLogin'
 import AdminDashboard from './pages/AdminDashboard'
-import ManageSponsorships from './pages/admin/ManageSponsorships'
 import './App.css'
 
 
@@ -84,7 +83,6 @@ function App() {
               <Route path="/funders" element={<Funders />} />
               <Route path="/admin" element={<AdminLogin />} />
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
-              <Route path="/admin/sponsorships" element={<ManageSponsorships />} />
             </Routes>
           </main>
           {!isHomePage && <Footer />}

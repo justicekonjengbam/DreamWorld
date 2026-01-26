@@ -69,6 +69,21 @@ function Events() {
 
               <p className="event-description">{event.description}</p>
 
+              {parseFloat(event.amountNeeded) > 0 && (
+                <div className="event-funding-progress">
+                  <div className="funding-stats">
+                    <span>₹{event.amountRaised || 0} raised</span>
+                    <span>Goal: ₹{event.amountNeeded}</span>
+                  </div>
+                  <div className="funding-bar">
+                    <div
+                      className="funding-fill"
+                      style={{ width: `${Math.min((parseFloat(event.amountRaised || 0) / parseFloat(event.amountNeeded)) * 100, 100)}%` }}
+                    />
+                  </div>
+                </div>
+              )}
+
               <div className="event-actions">
                 <Button variant="primary" onClick={() => handleRegister(event)}>
                   Register Now
@@ -94,6 +109,33 @@ function Events() {
                 </Badge>
                 <p className="modal-host">Hosted by {selectedEvent.host}</p>
               </div>
+
+              {parseFloat(selectedEvent.amountNeeded) > 0 && (
+                <div className="event-modal-funding">
+                  <div className="funding-progress-large">
+                    <div className="stats">
+                      <strong>₹{selectedQuest.amountRaised || 0}</strong> raised of <strong>₹{selectedQuest.amountNeeded}</strong> goal
+                    </div>
+                    <div className="bar-large">
+                      <div
+                        className="fill-large"
+                        style={{ width: `${Math.min((parseFloat(selectedQuest.amountRaised || 0) / parseFloat(selectedQuest.amountNeeded)) * 100, 100)}%` }}
+                      />
+                    </div>
+                    <p className="funding-status-text">
+                      {selectedQuest.fundingStatus === 'completed' ? '🎉 This event is fully funded!' : 'Funds will be used for venue, materials, and snacks.'}
+                    </p>
+                    {selectedQuest.fundingStatus !== 'completed' && (
+                      <button
+                        className="support-btn"
+                        onClick={() => window.location.href = '/funders'}
+                      >
+                        💝 Fund This Event
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
 
               <div className="event-detail-section">
                 <h4>When</h4>

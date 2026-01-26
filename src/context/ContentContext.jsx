@@ -47,7 +47,19 @@ export const ContentProvider = ({ children }) => {
                     setQuests(data.quests.map(q => {
                         const n = {}
                         Object.keys(q).forEach(k => n[k.toLowerCase().trim()] = q[k])
-                        return { ...n, id: n.id || `q-${Date.now()}`, steps: n.steps ? String(n.steps).split('\n') : [] }
+                        return {
+                            ...n,
+                            id: n.id || `q-${Date.now()}`,
+                            steps: n.steps ? String(n.steps).split('\n') : [],
+                            // Funding fields
+                            amountNeeded: n.amountneeded || '0',
+                            amountRaised: n.amountraised || '0',
+                            fundingStatus: n.fundingstatus || 'not-funded',
+                            galleryImages: n.galleryimages ? JSON.parse(n.galleryimages) : [],
+                            completionImages: n.completionimages ? JSON.parse(n.completionimages) : [],
+                            completionNote: n.completionnote || '',
+                            dateCompleted: n.datecompleted || ''
+                        }
                     }))
                 }
                 if (data.roles) {
@@ -85,7 +97,18 @@ export const ContentProvider = ({ children }) => {
                     setEvents(data.events.map(e => {
                         const n = {}
                         Object.keys(e).forEach(k => n[k.toLowerCase().trim()] = e[k])
-                        return n
+                        return {
+                            ...n,
+                            id: n.id || `e-${Date.now()}`,
+                            // Funding fields
+                            amountNeeded: n.amountneeded || '0',
+                            amountRaised: n.amountraised || '0',
+                            fundingStatus: n.fundingstatus || 'not-funded',
+                            galleryImages: n.galleryimages ? JSON.parse(n.galleryimages) : [],
+                            completionImages: n.completionimages ? JSON.parse(n.completionimages) : [],
+                            completionNote: n.completionnote || '',
+                            dateCompleted: n.datecompleted || ''
+                        }
                     }))
                 }
                 if (data.announcement) {
@@ -301,101 +324,80 @@ export const ContentProvider = ({ children }) => {
         // If sponsoring a quest/event, update its amountRaised
         if (donationData.sponsorshipId && donationData.sponsorshipType !== 'general') {
             try {
-                // Fetch current sponsorship data
-                const response = await fetch(`${API_URL}/search?sheet=sponsorships`)
-                const sponsorships = await response.json()
-                const sponsorship = sponsorships.find(s => s.id === donationData.sponsorshipId)
+                const sheet = donationData.sponsorshipType === 'quest' ? 'quests' : 'events'
+                const response = await fetch(`${API_URL}/search?sheet=${sheet}`)
+                const items = await response.json()
+                const item = items.find(i => (i.id || i.mid) === donationData.sponsorshipId)
 
-                if (sponsorship) {
-                    const newAmountRaised = parseFloat(sponsorship.amountRaised || 0) + parseFloat(donationData.amount)
-                    await syncToApi('sponsorships', 'PATCH', {
+                if (item) {
+                    const newAmountRaised = parseFloat(item.amountRaised || 0) + parseFloat(donationData.amount)
+                    await syncToApi(sheet, 'PATCH', {
                         amountRaised: newAmountRaised.toString()
                     }, donationData.sponsorshipId)
                 }
             } catch (err) {
-                console.error('Failed to update sponsorship amount:', err)
+                console.error('Failed to update funding amount:', err)
             }
         }
     }
 
-    // Sponsorships Management
-    const [sponsorships, setSponsorships] = useState([])
+    // Sponsorships Management (Unified view of Quests and Events with funding goals)
+    const sponsorships = [
+        ...(quests || []).filter(q => parseFloat(q.amountNeeded) > 0).map(q => ({ ...q, type: 'quest' })),
+        ...(events || []).filter(e => parseFloat(e.amountNeeded) > 0).map(e => ({ ...e, type: 'event' }))
+    ]
 
-    const fetchSponsorships = async () => {
-        try {
-            const response = await fetch(`${API_URL}/search?sheet=sponsorships`)
-            if (!response.ok) throw new Error('Failed to fetch sponsorships')
-            const data = await response.json()
-
-            // Parse JSON fields
-            const parsed = data.map(s => ({
-                ...s,
-                galleryImages: s.galleryImages ? JSON.parse(s.galleryImages) : [],
-                completionImages: s.completionImages ? JSON.parse(s.completionImages) : []
-            }))
-
-            setSponsorships(parsed)
-            return parsed
-        } catch (error) {
-            console.error('Failed to fetch sponsorships:', error)
-            return []
+    const addSponsorship = async (data) => {
+        if (data.type === 'quest') {
+            await addQuest({
+                ...data,
+                amountNeeded: data.amountNeeded.toString(),
+                amountRaised: '0',
+                fundingStatus: 'active'
+            })
+        } else {
+            await addEvent({
+                ...data,
+                amountNeeded: data.amountNeeded.toString(),
+                amountRaised: '0',
+                fundingStatus: 'active'
+            })
         }
     }
 
-    const addSponsorship = async (sponsorshipData) => {
-        const payload = {
-            id: `sp-${Date.now()}`,
-            type: sponsorshipData.type, // 'quest' or 'event'
-            name: sponsorshipData.name,
-            description: sponsorshipData.description || '',
-            amountNeeded: sponsorshipData.amountNeeded.toString(),
-            amountRaised: '0',
-            status: 'active',
-            dateCreated: new Date().toISOString().split('T')[0],
-            dateCompleted: '',
-            galleryImages: JSON.stringify([]),
-            completionImages: JSON.stringify([]),
-            completionNote: ''
-        }
-        await syncToApi('sponsorships', 'POST', payload)
-        await fetchSponsorships()
-    }
-
-    const updateSponsorship = async (id, updates) => {
+    const updateSponsorship = async (id, data) => {
         // Stringify JSON fields if they're arrays
-        const payload = { ...updates }
-        if (Array.isArray(updates.galleryImages)) {
-            payload.galleryImages = JSON.stringify(updates.galleryImages)
-        }
-        if (Array.isArray(updates.completionImages)) {
-            payload.completionImages = JSON.stringify(updates.completionImages)
-        }
+        const payload = { ...data }
+        if (Array.isArray(data.galleryImages)) payload.galleryImages = JSON.stringify(data.galleryImages)
+        if (Array.isArray(data.completionImages)) payload.completionImages = JSON.stringify(data.completionImages)
 
-        await syncToApi('sponsorships', 'PATCH', payload, id)
-        await fetchSponsorships()
+        const sheet = id.startsWith('q-') ? 'quests' : 'events'
+        await syncToApi(sheet, 'PATCH', payload, id)
+        await syncGlobalData() // Refresh everything
     }
 
     const completeSponsorship = async (id, completionData) => {
         const payload = {
-            status: 'completed',
+            fundingStatus: 'completed',
             dateCompleted: new Date().toISOString().split('T')[0],
             completionImages: JSON.stringify(completionData.completionImages || []),
             completionNote: completionData.completionNote || ''
         }
-        await syncToApi('sponsorships', 'PATCH', payload, id)
-        await fetchSponsorships()
+        const sheet = id.startsWith('q-') ? 'quests' : 'events'
+        await syncToApi(sheet, 'PATCH', payload, id)
+        await syncGlobalData()
     }
 
     const deleteSponsorship = async (id) => {
-        await syncToApi('sponsorships', 'DELETE', null, id)
-        await fetchSponsorships()
+        const sheet = id.startsWith('q-') ? 'quests' : 'events'
+        await syncToApi(sheet, 'DELETE', null, id)
+        await syncGlobalData()
     }
 
-    useEffect(() => {
-        if (API_URL) {
-            fetchSponsorships()
-        }
-    }, [])
+    const fetchSponsorships = async () => {
+        await syncGlobalData()
+        return sponsorships
+    }
 
     return (
         <ContentContext.Provider value={{
