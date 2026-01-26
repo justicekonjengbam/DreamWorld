@@ -183,7 +183,12 @@ function AdminDashboard() {
     const handleQuestDelete = (id) => { if (window.confirm('Delete this quest?')) { deleteQuest(id); setHasUnsyncedChanges(true) } }
     const handleRoleDelete = (id) => { if (window.confirm('Delete this role?')) { deleteRole(id); setHasUnsyncedChanges(true) } }
     const handleMemberDelete = (id) => { if (window.confirm('Delete this member?')) { deleteCharacter(id); setHasUnsyncedChanges(true) } }
-    const handleEventDelete = (id) => { if (window.confirm('Delete this event?')) { deleteEvent(id); setHasUnsyncedChanges(true) } }
+    const handleEventDelete = (id) => {
+        if (window.confirm('Delete this event?')) {
+            deleteEvent(id);
+            setHasUnsyncedChanges(true);
+        }
+    }
 
     const handleEventSubmit = (e) => {
         e.preventDefault()
@@ -192,7 +197,7 @@ function AdminDashboard() {
             amountNeeded: eventFormData.needsFunding ? eventFormData.amountNeeded.toString() : '0',
             fundingStatus: eventFormData.needsFunding ? (eventFormData.fundingStatus || 'active') : 'not-funded'
         }
-        editingId ? updateEvent(editingId, data) : addEvent(eventFormData)
+        editingId ? updateEvent(editingId, data) : addEvent(data)
         setHasUnsyncedChanges(true)
         resetForms()
         alert(editingId ? 'Event updated!' : 'Event added!')

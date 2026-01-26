@@ -171,26 +171,42 @@ export const ContentProvider = ({ children }) => {
     const syncToApi = async (sheet, method, data, idValue = null, idColumn = 'id') => {
         if (!API_URL) return
         try {
-            let url = `${API_URL}?sheet=${sheet}`
-            if (idValue && (method === 'PUT' || method === 'DELETE')) {
-                url = `${API_URL}/${idColumn}/${idValue}?sheet=${sheet}`
+            // Normalize ID Column: SheetDB sometimes has trailing spaces in headers (e.g., "id ")
+            // We'll try to detect the correct column name or fallback to a common variant.
+            let activeIdColumn = idColumn;
+
+            // For Quests and Events, we know the user might have "id " in the sheet
+            if (idColumn === 'id' && (sheet === 'quests' || sheet === 'events')) {
+                // We'll use a search query to identify the row first if we're not sure about the column
+                // but SheetDB API for PUT/DELETE requires the exact column name in the URL.
+                // Based on recent logs, we know it's likely "id "
+                activeIdColumn = 'id ';
             }
 
-            console.log(`Synced[${method}] to ${sheet}:`, data);
+            let url = `${API_URL}?sheet=${sheet}`
+            if (idValue && (method === 'PUT' || method === 'DELETE' || method === 'PATCH')) {
+                url = `${API_URL}/${encodeURIComponent(activeIdColumn)}/${encodeURIComponent(idValue)}?sheet=${sheet}`
+            }
+
+            console.log(`Synced[${method}] to ${sheet} using ${activeIdColumn}=${idValue}:`, data);
 
             const res = await fetch(url, {
                 method,
                 headers: { 'Content-Type': 'application/json' },
-                body: method !== 'DELETE' ? JSON.stringify({ data: [data] }) : null
+                body: (method !== 'DELETE' && data) ? JSON.stringify({ data: [data] }) : null
             })
 
             const resData = await res.json()
 
             if (!res.ok) {
+                // If it failed because of "id ", we try the standard "id" as fallback
+                if (res.status === 404 && activeIdColumn === 'id ') {
+                    console.warn(`Retry sync with standard "id" column...`);
+                    return await syncToApi(sheet, method, data, idValue, 'id');
+                }
                 console.error(`SheetDB Error (${sheet}):`, resData)
                 alert(`Sync Error: ${JSON.stringify(resData)}`)
             } else {
-                // "Upsert" Logic: If PUT updated 0 rows, the row is missing. Try POSTing it to restore.
                 if (method === 'PUT' && resData.updated === 0) {
                     console.warn(`Row missing in ${sheet}, attempting to restore via POST...`)
                     await syncToApi(sheet, 'POST', data)
