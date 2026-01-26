@@ -32,9 +32,9 @@ function Funders() {
   }, [])
 
   // Filter active quests and events
-  const activeQuests = (sponsorships || []).filter(s => s.status === 'active' && s.type === 'quest')
-  const activeEvents = (sponsorships || []).filter(s => s.status === 'active' && s.type === 'event')
-  const completedSponsorships = (sponsorships || []).filter(s => s.status === 'completed')
+  const activeQuests = (sponsorships || []).filter(s => s.fundingStatus === 'active' && s.type === 'quest')
+  const activeEvents = (sponsorships || []).filter(s => s.fundingStatus === 'active' && s.type === 'event')
+  const completedSponsorships = (sponsorships || []).filter(s => s.fundingStatus === 'completed')
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target
@@ -437,12 +437,16 @@ function Funders() {
                       }}
                     >
                       <option value="">General Growth Fund (Default)</option>
-                      <optgroup label="Quests">
-                        {activeQuests.map(q => <option key={q.id} value={q.id}>{q.name || q.title}</option>)}
-                      </optgroup>
-                      <optgroup label="Events">
-                        {activeEvents.map(e => <option key={e.id} value={e.id}>{e.name || e.title}</option>)}
-                      </optgroup>
+                      {activeQuests.length > 0 && (
+                        <optgroup label="Quests">
+                          {activeQuests.map(q => <option key={q.id} value={q.id}>{q.name || q.title}</option>)}
+                        </optgroup>
+                      )}
+                      {activeEvents.length > 0 && (
+                        <optgroup label="Events">
+                          {activeEvents.map(e => <option key={e.id} value={e.id}>{e.name || e.title}</option>)}
+                        </optgroup>
+                      )}
                     </select>
                   </div>
                 )}

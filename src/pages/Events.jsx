@@ -114,18 +114,18 @@ function Events() {
                 <div className="event-modal-funding">
                   <div className="funding-progress-large">
                     <div className="stats">
-                      <strong>₹{selectedQuest.amountRaised || 0}</strong> raised of <strong>₹{selectedQuest.amountNeeded}</strong> goal
+                      <strong>₹{selectedEvent.amountRaised || 0}</strong> raised of <strong>₹{selectedEvent.amountNeeded}</strong> goal
                     </div>
                     <div className="bar-large">
                       <div
                         className="fill-large"
-                        style={{ width: `${Math.min((parseFloat(selectedQuest.amountRaised || 0) / parseFloat(selectedQuest.amountNeeded)) * 100, 100)}%` }}
+                        style={{ width: `${Math.min((parseFloat(selectedEvent.amountRaised || 0) / parseFloat(selectedEvent.amountNeeded)) * 100, 100)}%` }}
                       />
                     </div>
                     <p className="funding-status-text">
-                      {selectedQuest.fundingStatus === 'completed' ? '🎉 This event is fully funded!' : 'Funds will be used for venue, materials, and snacks.'}
+                      {selectedEvent.fundingStatus === 'completed' ? '🎉 This event is fully funded!' : 'Funds will be used for venue, materials, and snacks.'}
                     </p>
-                    {selectedQuest.fundingStatus !== 'completed' && (
+                    {selectedEvent.fundingStatus !== 'completed' && (
                       <button
                         className="support-btn"
                         onClick={() => window.location.href = '/funders'}

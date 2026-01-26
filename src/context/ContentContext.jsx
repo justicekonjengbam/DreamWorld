@@ -108,7 +108,8 @@ export const ContentProvider = ({ children }) => {
                             galleryImages: n.galleryimages ? JSON.parse(n.galleryimages) : [],
                             completionImages: n.completionimages ? JSON.parse(n.completionimages) : [],
                             completionNote: n.completionnote || '',
-                            dateCompleted: n.datecompleted || ''
+                            dateCompleted: n.datecompleted || '',
+                            registrationLink: n.registrationlink || ''
                         }
                     }))
                 }
@@ -343,19 +344,23 @@ export const ContentProvider = ({ children }) => {
         console.log('🔍 PAYMENT TRACKING - Submitting donation:', payload)
         await syncToApi('donations', 'POST', payload)
 
-        // If sponsoring a quest/event, update its amountRaised
+        // If sponsoring a quest/event/legacy, update its amountRaised
         if (donationData.sponsorshipId && donationData.sponsorshipType !== 'general') {
             try {
-                const sheet = donationData.sponsorshipType === 'quest' ? 'quests' : 'events'
-                const response = await fetch(`${API_URL}/search?sheet=${sheet}`)
+                let sheet = 'sponsorships'
+                const id = donationData.sponsorshipId;
+                if (id.startsWith('quest-')) sheet = 'quests'
+                else if (id.startsWith('ev-')) sheet = 'events'
+
+                const response = await fetch(`${API_URL}/search?id=${id}&sheet=${sheet}`)
                 const items = await response.json()
-                const item = items.find(i => (i.id || i.mid) === donationData.sponsorshipId)
+                const item = items && items.length > 0 ? items[0] : null
 
                 if (item) {
                     const newAmountRaised = parseFloat(item.amountRaised || 0) + parseFloat(donationData.amount)
                     await syncToApi(sheet, 'PATCH', {
                         amountRaised: newAmountRaised.toString()
-                    }, donationData.sponsorshipId)
+                    }, id)
                 }
             } catch (err) {
                 console.error('Failed to update funding amount:', err)
@@ -382,33 +387,14 @@ export const ContentProvider = ({ children }) => {
     }, [quests, events, legacySponsorships]);
 
     const addSponsorship = async (data) => {
-        if (data.type === 'quest') {
-            await addQuest({
-                ...data,
-                title: data.name,
-                purpose: data.description,
-                steps: [],
-                difficulty: 'medium',
-                timeNeeded: 'Ongoing',
-                sharePrompt: 'Help us reach our goal!',
-                impact: 'Your contribution directy impacts this goal.',
-                amountNeeded: data.amountNeeded.toString(),
-                amountRaised: '0',
-                fundingStatus: 'active'
-            })
-        } else {
-            await addEvent({
-                ...data,
-                title: data.name,
-                host: 'DreamWorld',
-                date: new Date().toISOString().split('T')[0],
-                location: 'TBD',
-                type: 'online',
-                amountNeeded: data.amountNeeded.toString(),
-                amountRaised: '0',
-                fundingStatus: 'active'
-            })
+        const sponsorship = {
+            ...data,
+            id: `sp-${Date.now()}`,
+            amountRaised: '0',
+            fundingStatus: 'active'
         }
+        setLegacySponsorships(prev => [...prev, sponsorship])
+        await syncToApi('sponsorships', 'POST', sponsorship)
     }
 
     const updateSponsorship = async (id, data) => {
