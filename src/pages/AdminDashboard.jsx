@@ -88,21 +88,13 @@ function AdminDashboard() {
     }
 
     const handleSync = async () => {
-        const pass = sessionStorage.getItem('dw_admin_pass')
-        if (!pass) {
-            alert('Session expired. Please log in again.')
-            handleLogout()
-            return
-        }
-
         setSyncing(true)
         try {
-            const result = await syncGlobalData(pass)
-            const { details } = result
+            await syncGlobalData()
             setHasUnsyncedChanges(false)
-            alert(`✅ Global Sync Successful! \n\nSynced:\n- ${details.quests} Quests\n- ${details.roles} Roles\n- ${details.members} Dreamers\n- ${details.events} Events\n\nLast Synced: ${new Date(result.lastSynced).toLocaleString()}`)
+            alert('✅ Data Refreshed! \n\nYour dashboard is now perfectly in sync with the cloud database.')
         } catch (error) {
-            alert(`❌ Sync Failed: ${error.message}`)
+            alert(`❌ Refresh Failed: ${error.message}`)
         } finally {
             setSyncing(false)
         }
