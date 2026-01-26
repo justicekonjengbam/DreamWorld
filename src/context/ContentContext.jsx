@@ -140,23 +140,22 @@ export const ContentProvider = ({ children }) => {
     }
 
     const updateQuest = async (id, updated) => {
-        const {
-            amountNeeded, amountRaised, fundingStatus, galleryImages,
-            completionImages, completionNote, dateCompleted, steps,
-            ...rest
-        } = updated
-
         const payload = {
             id,
-            ...rest,
-            amount_needed: amountNeeded ? parseFloat(amountNeeded) : undefined,
-            amount_raised: amountRaised ? parseFloat(amountRaised) : undefined,
-            funding_status: fundingStatus,
-            gallery_images: galleryImages,
-            completion_images: completionImages,
-            completion_note: completionNote,
-            date_completed: dateCompleted,
-            steps: Array.isArray(steps) ? steps.join('\n') : steps
+            title: updated.title,
+            purpose: updated.purpose,
+            difficulty: updated.difficulty,
+            time_needed: updated.timeNeeded,
+            impact: updated.impact,
+            share_prompt: updated.sharePrompt,
+            amount_needed: updated.amountNeeded ? parseFloat(updated.amountNeeded) : 0,
+            amount_raised: updated.amountRaised ? parseFloat(updated.amountRaised) : 0,
+            funding_status: updated.fundingStatus,
+            gallery_images: updated.galleryImages || [],
+            completion_images: updated.completionImages || [],
+            completion_note: updated.completionNote || '',
+            date_completed: updated.dateCompleted || '',
+            steps: Array.isArray(updated.steps) ? updated.steps.join('\n') : (updated.steps || '')
         }
 
         if (await saveToSupabase('quests', payload)) fetchData()
@@ -169,18 +168,26 @@ export const ContentProvider = ({ children }) => {
     const addRole = async (newRole) => {
         const id = newRole.id || `role-${Date.now()}`
         const payload = {
-            ...newRole,
             id,
-            traits: Array.isArray(newRole.traits) ? newRole.traits.join('\n') : newRole.traits
+            name: newRole.name,
+            singular: newRole.singular,
+            description: newRole.description,
+            color: newRole.color,
+            traits: Array.isArray(newRole.traits) ? newRole.traits.join('\n') : newRole.traits,
+            philosophy: newRole.philosophy
         }
         if (await saveToSupabase('roles', payload)) fetchData()
     }
 
     const updateRole = async (id, updated) => {
         const payload = {
-            ...updated,
             id,
-            traits: Array.isArray(updated.traits) ? updated.traits.join('\n') : updated.traits
+            name: updated.name,
+            singular: updated.singular,
+            description: updated.description,
+            color: updated.color,
+            traits: Array.isArray(updated.traits) ? updated.traits.join('\n') : updated.traits,
+            philosophy: updated.philosophy
         }
         if (await saveToSupabase('roles', payload)) fetchData()
     }
@@ -210,17 +217,19 @@ export const ContentProvider = ({ children }) => {
     }
 
     const updateCharacter = async (id, updated) => {
-        const { coverImage, socials, themes, ...rest } = updated
-
         const payload = {
             id,
-            ...rest,
-            cover_image: coverImage,
-            themes: Array.isArray(themes) ? themes.join(',') : themes,
-            youtube: socials?.youtube,
-            instagram: socials?.instagram,
-            facebook: socials?.facebook,
-            twitter: socials?.twitter
+            name: updated.name,
+            role: updated.role,
+            title: updated.title,
+            avatar: updated.avatar,
+            cover_image: updated.coverImage,
+            bio: updated.bio,
+            themes: Array.isArray(updated.themes) ? updated.themes.join(',') : updated.themes,
+            youtube: updated.socials?.youtube || updated.youtube || '',
+            instagram: updated.socials?.instagram || updated.instagram || '',
+            facebook: updated.socials?.facebook || updated.facebook || '',
+            twitter: updated.socials?.twitter || updated.twitter || ''
         }
 
         if (await saveToSupabase('dreamers', payload)) fetchData()
@@ -248,22 +257,22 @@ export const ContentProvider = ({ children }) => {
     }
 
     const updateEvent = async (id, updated) => {
-        const {
-            registrationLink, amountNeeded, amountRaised, galleryImages,
-            completionImages, completionNote, dateCompleted,
-            ...rest
-        } = updated
-
         const payload = {
             id,
-            ...rest,
-            registration_link: registrationLink,
-            amount_needed: amountNeeded ? parseFloat(amountNeeded) : undefined,
-            amount_raised: amountRaised ? parseFloat(amountRaised) : undefined,
-            gallery_images: galleryImages,
-            completion_images: completionImages,
-            completion_note: completionNote,
-            date_completed: dateCompleted
+            title: updated.title,
+            host: updated.host,
+            type: updated.type,
+            date: updated.date,
+            location: updated.location,
+            description: updated.description,
+            registration_link: updated.registrationLink,
+            amount_needed: updated.amountNeeded ? parseFloat(updated.amountNeeded) : 0,
+            amount_raised: updated.amountRaised ? parseFloat(updated.amountRaised) : 0,
+            funding_status: updated.fundingStatus,
+            gallery_images: updated.galleryImages || [],
+            completion_images: updated.completionImages || [],
+            completion_note: updated.completionNote || '',
+            date_completed: updated.dateCompleted || ''
         }
 
         if (await saveToSupabase('events', payload)) fetchData()
