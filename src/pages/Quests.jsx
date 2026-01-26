@@ -1,14 +1,17 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useContent } from '../context/ContentContext'
 import Card from '../components/Card'
 import SectionHeader from '../components/SectionHeader'
 import Badge from '../components/Badge'
 import Modal from '../components/Modal'
+import Button from '../components/Button'
 import './Quests.css'
 
 
 function Quests() {
   const { quests, loading } = useContent()
+  const navigate = useNavigate()
   const [selectedQuest, setSelectedQuest] = useState(null)
 
   if (loading) return <div className="loading-state">Syncing Quests with DreamWorld...</div>
@@ -104,12 +107,12 @@ function Quests() {
                       {selectedQuest.fundingStatus === 'completed' ? '🎉 This quest is fully funded!' : 'This quest needs your support to launch!'}
                     </p>
                     {selectedQuest.fundingStatus !== 'completed' && (
-                      <button
-                        className="support-btn"
-                        onClick={() => window.location.href = '/funders'}
+                      <Button
+                        variant="secondary"
+                        onClick={() => navigate('/funders')}
                       >
-                        💝 Support This Quest
-                      </button>
+                        💖 Support This Goal
+                      </Button>
                     )}
                   </div>
                 </div>

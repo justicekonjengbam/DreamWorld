@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useContent } from '../context/ContentContext'
 import Card from '../components/Card'
 import SectionHeader from '../components/SectionHeader'
@@ -10,6 +11,7 @@ import './Events.css'
 
 function Events() {
   const { events, loading } = useContent()
+  const navigate = useNavigate()
   const [selectedEvent, setSelectedEvent] = useState(null)
 
   if (loading) return <div className="loading-state">Syncing Events with DreamWorld...</div>
@@ -126,12 +128,12 @@ function Events() {
                       {selectedEvent.fundingStatus === 'completed' ? '🎉 This event is fully funded!' : 'Funds will be used for venue, materials, and snacks.'}
                     </p>
                     {selectedEvent.fundingStatus !== 'completed' && (
-                      <button
-                        className="support-btn"
-                        onClick={() => window.location.href = '/funders'}
+                      <Button
+                        variant="secondary"
+                        onClick={() => navigate('/funders')}
                       >
-                        💝 Fund This Event
-                      </button>
+                        💖 Support This Goal
+                      </Button>
                     )}
                   </div>
                 </div>
