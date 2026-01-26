@@ -20,8 +20,7 @@ function AdminDashboard() {
         characters, addCharacter, updateCharacter, deleteCharacter,
         events, addEvent, updateEvent, deleteEvent,
         announcement, updateAnnouncement,
-        syncGlobalData,
-        sponsorships, addSponsorship, updateSponsorship, completeSponsorship, deleteSponsorship
+        syncGlobalData
     } = useContent()
 
     const [syncing, setSyncing] = useState(false)
@@ -42,7 +41,6 @@ function AdminDashboard() {
         title: '', host: '', type: 'online', date: '', location: '', description: '', registrationLink: '',
         needsFunding: false, amountNeeded: '', galleryImages: [], completionImages: [], completionNote: ''
     })
-    const [sponsorshipFormData, setSponsorshipFormData] = useState({ type: 'quest', name: '', description: '', amountNeeded: '' })
 
     const [editingId, setEditingId] = useState(null)
     const [hasUnsyncedChanges, setHasUnsyncedChanges] = useState(false)
@@ -214,7 +212,6 @@ function AdminDashboard() {
                     <button className={`nav-item ${activeTab === 'roles' ? 'active' : ''}`} onClick={() => { setActiveTab('roles'); resetForms() }}>🎭 Roles</button>
                     <button className={`nav-item ${activeTab === 'members' ? 'active' : ''}`} onClick={() => { setActiveTab('members'); resetForms() }}>👥 Dreamers</button>
                     <button className={`nav-item ${activeTab === 'events' ? 'active' : ''}`} onClick={() => { setActiveTab('events'); resetForms() }}>📅 Events</button>
-                    <button className={`nav-item ${activeTab === 'sponsorships' ? 'active' : ''}`} onClick={() => { setActiveTab('sponsorships'); resetForms() }}>💰 Sponsorships</button>
                     <button className={`nav-item ${activeTab === 'status' ? 'active' : ''}`} onClick={() => { setActiveTab('status'); resetForms() }}>🛡️ System Health</button>
                 </nav>
 
@@ -551,89 +548,6 @@ function AdminDashboard() {
                                         </div>
                                     </Card>
                                 ))}
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {activeTab === 'sponsorships' && (
-                    <div className="admin-section animate-fade">
-                        <div className="admin-split-layout">
-                            <Card className="admin-form-card">
-                                <h3>Create Sponsoring Goal</h3>
-                                <p style={{ fontSize: '0.8rem', opacity: 0.7, marginBottom: '20px' }}>Create a new Quest or Event that needs funding. It will appear here and on the Funders page.</p>
-                                <form onSubmit={(e) => {
-                                    e.preventDefault()
-                                    addSponsorship(sponsorshipFormData)
-                                    setHasUnsyncedChanges(true)
-                                    setSponsorshipFormData({ type: 'quest', name: '', description: '', amountNeeded: '' })
-                                    alert('Sponsorship goal created! Push to Global Cache to see it live.')
-                                }} className="admin-form">
-                                    <div className="form-group">
-                                        <label>Type</label>
-                                        <select value={sponsorshipFormData.type} onChange={(e) => setSponsorshipFormData(prev => ({ ...prev, type: e.target.value }))}>
-                                            <option value="quest">🎯 Quest</option>
-                                            <option value="event">📅 Event</option>
-                                        </select>
-                                    </div>
-                                    <div className="form-group-full">
-                                        <label>Name</label>
-                                        <input type="text" value={sponsorshipFormData.name} onChange={(e) => setSponsorshipFormData(prev => ({ ...prev, name: e.target.value }))} placeholder="e.g. New Science Lab" required />
-                                    </div>
-                                    <div className="form-group-full">
-                                        <label>Description</label>
-                                        <textarea rows="3" value={sponsorshipFormData.description} onChange={(e) => setSponsorshipFormData(prev => ({ ...prev, description: e.target.value }))} placeholder="Explain why this needs funding..." required />
-                                    </div>
-                                    <div className="form-group-full">
-                                        <label>Funding Goal (₹)</label>
-                                        <input type="number" value={sponsorshipFormData.amountNeeded || ''} onChange={(e) => setSponsorshipFormData(prev => ({ ...prev, amountNeeded: e.target.value }))} required />
-                                    </div>
-                                    <Button type="submit" variant="primary">Create Sponsorship Post</Button>
-                                </form>
-                            </Card>
-
-                            <div className="admin-list">
-                                {sponsorships.length === 0 ? (
-                                    <p style={{ textAlign: 'center', padding: '40px', opacity: 0.5 }}>No active funding goals yet.</p>
-                                ) : (
-                                    sponsorships.map(sp => (
-                                        <Card key={sp.id} className="admin-item-card">
-                                            <div style={{ flex: 1 }}>
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '5px' }}>
-                                                    <span>{sp.type === 'quest' ? '🎯' : '📅'}</span>
-                                                    <h4 style={{ margin: 0 }}>{sp.name || sp.title}</h4>
-                                                    <Badge variant={sp.fundingStatus === 'completed' ? 'success' : 'primary'}>
-                                                        {sp.fundingStatus === 'completed' ? 'Funded' : 'Active'}
-                                                    </Badge>
-                                                </div>
-                                                <div className="funding-mini-progress" style={{ width: '100%', height: '4px', background: 'rgba(255,255,255,0.1)', borderRadius: '2px', overflow: 'hidden', margin: '10px 0' }}>
-                                                    <div style={{
-                                                        width: `${Math.min((parseFloat(sp.amountRaised || 0) / parseFloat(sp.amountNeeded)) * 100, 100)}%`,
-                                                        height: '100%',
-                                                        background: 'var(--color-primary)'
-                                                    }} />
-                                                </div>
-                                                <p style={{ fontSize: '0.75rem', opacity: 0.7 }}>₹{sp.amountRaised || 0} / ₹{sp.amountNeeded}</p>
-                                            </div>
-                                            <div className="admin-item-actions">
-                                                {sp.fundingStatus !== 'completed' && (
-                                                    <button onClick={() => {
-                                                        if (window.confirm('Mark this as fully funded/completed?')) {
-                                                            completeSponsorship(sp.id, { completionNote: 'Goal Reached!' })
-                                                            setHasUnsyncedChanges(true)
-                                                        }
-                                                    }} title="Mark Complete">✅</button>
-                                                )}
-                                                <button onClick={() => {
-                                                    if (window.confirm('Delete this goal?')) {
-                                                        deleteSponsorship(sp.id)
-                                                        setHasUnsyncedChanges(true)
-                                                    }
-                                                }}>🗑️</button>
-                                            </div>
-                                        </Card>
-                                    ))
-                                )}
                             </div>
                         </div>
                     </div>

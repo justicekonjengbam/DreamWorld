@@ -9,7 +9,7 @@ import './Funders.css'
 
 
 function Funders() {
-  const { submitDonation, sponsorships, fetchSponsorships } = useContent()
+  const { submitDonation, sponsorships } = useContent()
   const [formData, setFormData] = useState({
     name: '',
     displayName: '',
@@ -26,9 +26,10 @@ function Funders() {
   })
   const [submitted, setSubmitted] = useState(false)
 
-  // Fetch active sponsorships on mount
+  // No need for separate fetch - data is unified in context
   useEffect(() => {
-    fetchSponsorships()
+    // syncGlobalData() could be called if refresh is needed, 
+    // but ContentContext already does a fetch on mount.
   }, [])
 
   // Filter active quests and events
