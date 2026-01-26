@@ -290,11 +290,112 @@ export const ContentProvider = ({ children }) => {
             status: donationData.status || 'success', // 'success' or 'failed'
             paymentMethod: donationData.paymentMethod || '', // 'upi', 'gpay', 'card'
             transactionId: donationData.transactionId || '', // Razorpay payment/subscription ID
-            timestamp: new Date().toISOString() // Full timestamp with time
+            timestamp: new Date().toISOString(), // Full timestamp with time
+            sponsorshipType: donationData.sponsorshipType || 'general', // 'general', 'quest', 'event'
+            sponsorshipId: donationData.sponsorshipId || '', // ID of quest/event if sponsored
+            sponsorshipMessage: donationData.sponsorshipMessage || '' // Custom sponsor message
         }
         console.log('🔍 PAYMENT TRACKING - Submitting donation:', payload)
         await syncToApi('donations', 'POST', payload)
+
+        // If sponsoring a quest/event, update its amountRaised
+        if (donationData.sponsorshipId && donationData.sponsorshipType !== 'general') {
+            try {
+                // Fetch current sponsorship data
+                const response = await fetch(`${API_URL}/search?sheet=sponsorships`)
+                const sponsorships = await response.json()
+                const sponsorship = sponsorships.find(s => s.id === donationData.sponsorshipId)
+
+                if (sponsorship) {
+                    const newAmountRaised = parseFloat(sponsorship.amountRaised || 0) + parseFloat(donationData.amount)
+                    await syncToApi('sponsorships', 'PATCH', {
+                        amountRaised: newAmountRaised.toString()
+                    }, donationData.sponsorshipId)
+                }
+            } catch (err) {
+                console.error('Failed to update sponsorship amount:', err)
+            }
+        }
     }
+
+    // Sponsorships Management
+    const [sponsorships, setSponsorships] = useState([])
+
+    const fetchSponsorships = async () => {
+        try {
+            const response = await fetch(`${API_URL}/search?sheet=sponsorships`)
+            if (!response.ok) throw new Error('Failed to fetch sponsorships')
+            const data = await response.json()
+
+            // Parse JSON fields
+            const parsed = data.map(s => ({
+                ...s,
+                galleryImages: s.galleryImages ? JSON.parse(s.galleryImages) : [],
+                completionImages: s.completionImages ? JSON.parse(s.completionImages) : []
+            }))
+
+            setSponsorships(parsed)
+            return parsed
+        } catch (error) {
+            console.error('Failed to fetch sponsorships:', error)
+            return []
+        }
+    }
+
+    const addSponsorship = async (sponsorshipData) => {
+        const payload = {
+            id: `sp-${Date.now()}`,
+            type: sponsorshipData.type, // 'quest' or 'event'
+            name: sponsorshipData.name,
+            description: sponsorshipData.description || '',
+            amountNeeded: sponsorshipData.amountNeeded.toString(),
+            amountRaised: '0',
+            status: 'active',
+            dateCreated: new Date().toISOString().split('T')[0],
+            dateCompleted: '',
+            galleryImages: JSON.stringify([]),
+            completionImages: JSON.stringify([]),
+            completionNote: ''
+        }
+        await syncToApi('sponsorships', 'POST', payload)
+        await fetchSponsorships()
+    }
+
+    const updateSponsorship = async (id, updates) => {
+        // Stringify JSON fields if they're arrays
+        const payload = { ...updates }
+        if (Array.isArray(updates.galleryImages)) {
+            payload.galleryImages = JSON.stringify(updates.galleryImages)
+        }
+        if (Array.isArray(updates.completionImages)) {
+            payload.completionImages = JSON.stringify(updates.completionImages)
+        }
+
+        await syncToApi('sponsorships', 'PATCH', payload, id)
+        await fetchSponsorships()
+    }
+
+    const completeSponsorship = async (id, completionData) => {
+        const payload = {
+            status: 'completed',
+            dateCompleted: new Date().toISOString().split('T')[0],
+            completionImages: JSON.stringify(completionData.completionImages || []),
+            completionNote: completionData.completionNote || ''
+        }
+        await syncToApi('sponsorships', 'PATCH', payload, id)
+        await fetchSponsorships()
+    }
+
+    const deleteSponsorship = async (id) => {
+        await syncToApi('sponsorships', 'DELETE', null, id)
+        await fetchSponsorships()
+    }
+
+    useEffect(() => {
+        if (API_URL) {
+            fetchSponsorships()
+        }
+    }, [])
 
     return (
         <ContentContext.Provider value={{
@@ -306,7 +407,8 @@ export const ContentProvider = ({ children }) => {
             announcement, updateAnnouncement,
             syncGlobalData,
             submitDreamerApplication,
-            submitDonation
+            submitDonation,
+            sponsorships, fetchSponsorships, addSponsorship, updateSponsorship, completeSponsorship, deleteSponsorship
         }}>
             {children}
         </ContentContext.Provider>

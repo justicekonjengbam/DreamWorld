@@ -190,6 +190,7 @@ function AdminDashboard() {
                     <button className={`nav-item ${activeTab === 'roles' ? 'active' : ''}`} onClick={() => { setActiveTab('roles'); resetForms() }}>🎭 Roles</button>
                     <button className={`nav-item ${activeTab === 'members' ? 'active' : ''}`} onClick={() => { setActiveTab('members'); resetForms() }}>👥 Dreamers</button>
                     <button className={`nav-item ${activeTab === 'events' ? 'active' : ''}`} onClick={() => { setActiveTab('events'); resetForms() }}>📅 Events</button>
+                    <button className={`nav-item`} onClick={() => navigate('/admin/sponsorships')}>💰 Sponsorships</button>
                     <button className={`nav-item ${activeTab === 'status' ? 'active' : ''}`} onClick={() => { setActiveTab('status'); resetForms() }}>🛡️ System Health</button>
                 </nav>
 

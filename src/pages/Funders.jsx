@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useContent } from '../context/ContentContext'
 import Card from '../components/Card'
 import SectionHeader from '../components/SectionHeader'
@@ -7,8 +7,9 @@ import Badge from '../components/Badge'
 import './Funders.css'
 
 
+
 function Funders() {
-  const { submitDonation } = useContent()
+  const { submitDonation, sponsorships, fetchSponsorships } = useContent()
   const [formData, setFormData] = useState({
     name: '',
     displayName: '',
@@ -18,9 +19,20 @@ function Funders() {
     showPublicly: true,
     message: '',
     paymentMethod: 'upi',
-    upiId: ''
+    upiId: '',
+    sponsorshipType: 'general',  // 'general', 'quest', 'event'
+    sponsorshipId: '',
+    sponsorshipMessage: ''
   })
   const [submitted, setSubmitted] = useState(false)
+
+  // Fetch active sponsorships on mount
+  useEffect(() => {
+    fetchSponsorships()
+  }, [])
+
+  // Filter active quests and events
+  const activeQuests = sponsorships.filter(s => s.status === 'active' && s.type === 'quest')
 
   // Hall of Fame - All-time impact leaders (static, celebrate achievements)
   const hallOfFame = [
