@@ -23,10 +23,6 @@ function AdminDashboard() {
         syncGlobalData
     } = useContent()
 
-    const [syncing, setSyncing] = useState(false)
-
-    if (loading) return <div className="loading-state">Connecting to Cloud Database...</div>
-
     const [activeTab, setActiveTab] = useState('announcement')
 
     // Form States
@@ -49,6 +45,7 @@ function AdminDashboard() {
     // Printing State
     const [printingDreamer, setPrintingDreamer] = useState(null)
     const [printType, setPrintType] = useState(null) // 'id' or 'cert'
+    const [syncing, setSyncing] = useState(false)
 
     useEffect(() => {
         const token = localStorage.getItem('dw_admin_token')
@@ -82,6 +79,8 @@ function AdminDashboard() {
             checkDatabase();
         }
     }, [activeTab])
+
+    if (loading) return <div className="loading-state">Connecting to Cloud Database...</div>
 
     const handleLogout = () => {
         localStorage.removeItem('dw_admin_token')
