@@ -486,7 +486,7 @@ function AdminDashboard() {
                                         <div className="form-group"><label>Type (e.g. Online, Workshop)</label><input type="text" value={eventFormData.type} onChange={(e) => setEventFormData({ ...eventFormData, type: e.target.value })} required /></div>
                                     </div>
                                     <div className="form-row">
-                                        <div className="form-group"><label>Date/Time</label><input type="text" value={eventFormData.date} onChange={(e) => setEventFormData({ ...eventFormData, date: e.target.value })} required /></div>
+                                        <div className="form-group"><label>Date</label><input type="date" value={eventFormData.date} onChange={(e) => setEventFormData({ ...eventFormData, date: e.target.value })} required /></div>
                                         <div className="form-group"><label>Location</label><input type="text" value={eventFormData.location} onChange={(e) => setEventFormData({ ...eventFormData, location: e.target.value })} required /></div>
                                     </div>
                                     <div className="form-group-full"><label>Description</label><textarea rows="3" value={eventFormData.description} onChange={(e) => setEventFormData({ ...eventFormData, description: e.target.value })} required /></div>

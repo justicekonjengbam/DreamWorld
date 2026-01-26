@@ -154,7 +154,7 @@ export const ContentProvider = ({ children }) => {
             gallery_images: updated.galleryImages || [],
             completion_images: updated.completionImages || [],
             completion_note: updated.completionNote || '',
-            date_completed: updated.dateCompleted || '',
+            date_completed: updated.dateCompleted || null,
             steps: Array.isArray(updated.steps) ? updated.steps.join('\n') : (updated.steps || '')
         }
 
@@ -272,7 +272,7 @@ export const ContentProvider = ({ children }) => {
             gallery_images: updated.galleryImages || [],
             completion_images: updated.completionImages || [],
             completion_note: updated.completionNote || '',
-            date_completed: updated.dateCompleted || ''
+            date_completed: updated.dateCompleted || null
         }
 
         if (await saveToSupabase('events', payload)) fetchData()

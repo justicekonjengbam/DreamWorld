@@ -17,15 +17,23 @@ function Events() {
   if (loading) return <div className="loading-state">Syncing Events with DreamWorld...</div>
 
   const formatDate = (dateString) => {
+    if (!dateString) return 'TBA'
+
+    // Try parsing the date
     const date = new Date(dateString)
-    return date.toLocaleDateString('en-US', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    })
+
+    // If it's a valid date, format it nicely
+    if (!isNaN(date.getTime())) {
+      return date.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      })
+    }
+
+    // If it's not a valid date format (e.g. "To be decided"), just return the text
+    return dateString
   }
 
   const handleRegister = (event) => {
