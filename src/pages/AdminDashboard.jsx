@@ -509,7 +509,6 @@ function AdminDashboard() {
                                         <div className="form-group"><label>Location</label><input type="text" value={eventFormData.location} onChange={(e) => setEventFormData({ ...eventFormData, location: e.target.value })} required /></div>
                                     </div>
                                     <div className="form-group-full"><label>Description</label><textarea rows="3" value={eventFormData.description} onChange={(e) => setEventFormData({ ...eventFormData, description: e.target.value })} required /></div>
-                                    <div className="form-group-full"><label>Registration Link (URL)</label><input type="text" value={eventFormData.registrationLink} onChange={(e) => setEventFormData({ ...eventFormData, registrationLink: e.target.value })} required /></div>
 
                                     <div className="funding-setup" style={{ borderTop: '1px solid rgba(76, 161, 175, 0.2)', paddingTop: '15px', marginTop: '10px' }}>
                                         <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', marginBottom: '10px' }}>

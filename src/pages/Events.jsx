@@ -27,7 +27,7 @@ function Events() {
   }
 
   const handleRegister = (event) => {
-    window.location.href = event.registrationLink
+    // window.location.href = event.registrationLink
   }
 
   return (
@@ -85,9 +85,9 @@ function Events() {
               )}
 
               <div className="event-actions">
-                <Button variant="primary" onClick={() => handleRegister(event)}>
+                {/* <Button variant="primary" onClick={() => handleRegister(event)}>
                   Register Now
-                </Button>
+                </Button> */}
                 <Button variant="ghost" onClick={() => setSelectedEvent(event)}>
                   Learn More
                 </Button>
@@ -152,11 +152,11 @@ function Events() {
                 <p>{selectedEvent.description}</p>
               </div>
 
-              <div className="modal-register">
+              {/* <div className="modal-register">
                 <Button variant="primary" onClick={() => handleRegister(selectedEvent)}>
                   Register for This Event
                 </Button>
-              </div>
+              </div> */}
             </div>
           )}
         </Modal>
