@@ -452,6 +452,27 @@ function AdminDashboard() {
                                         <div className="form-group"><label>Facebook URL</label><input type="text" placeholder="https://facebook.com/..." value={memberFormData.facebook || ''} onChange={(e) => setMemberFormData(prev => ({ ...prev, facebook: e.target.value }))} /></div>
                                         <div className="form-group"><label>Twitter URL</label><input type="text" placeholder="https://twitter.com/..." value={memberFormData.twitter || ''} onChange={(e) => setMemberFormData(prev => ({ ...prev, twitter: e.target.value }))} /></div>
                                     </div>
+
+                                    <div className="form-checkbox" style={{ margin: '10px 0', padding: '10px', background: 'rgba(255, 215, 0, 0.1)', border: '1px solid rgba(255, 215, 0, 0.3)', borderRadius: '8px' }}>
+                                        <input
+                                            type="checkbox"
+                                            id="royalTribute"
+                                            checked={memberFormData.themes.split(',').map(t => t.trim()).includes('Royal')}
+                                            onChange={(e) => {
+                                                const isChecked = e.target.checked;
+                                                let currentThemes = memberFormData.themes.split(',').map(t => t.trim()).filter(Boolean);
+                                                if (isChecked) {
+                                                    if (!currentThemes.includes('Royal')) currentThemes.push('Royal');
+                                                } else {
+                                                    currentThemes = currentThemes.filter(t => t !== 'Royal');
+                                                }
+                                                setMemberFormData({ ...memberFormData, themes: currentThemes.join(', ') });
+                                            }}
+                                        />
+                                        <label htmlFor="royalTribute" style={{ color: '#FFD700', fontWeight: 'bold' }}>
+                                            👑 Royal Tribute? (Display in Wall of Gratitude)
+                                        </label>
+                                    </div>
                                     <div className="form-group-full"><label>Themes (Comma separated)</label><input type="text" placeholder="Future, Solar, Community" value={memberFormData.themes} onChange={(e) => setMemberFormData(prev => ({ ...prev, themes: e.target.value }))} required /></div>
                                     <Button type="submit" variant="primary">{editingId ? 'Update' : 'Add'} Dreamer</Button>
                                     {editingId && <Button type="button" variant="secondary" onClick={resetForms}>Cancel</Button>}

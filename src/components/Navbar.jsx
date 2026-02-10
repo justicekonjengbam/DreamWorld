@@ -53,6 +53,7 @@ function Navbar() {
           <li><Link to="/events" className={isActive('/events')} onClick={closeMenu}>Events</Link></li>
           <li><Link to="/join" className={isActive('/join')} onClick={closeMenu}>Join</Link></li>
           <li><Link to="/funders" className={isActive('/funders')} onClick={closeMenu}>Support</Link></li>
+          <li><Link to="/thanks" className={isActive('/thanks')} onClick={closeMenu}>Sponsors</Link></li>
         </ul>
 
 

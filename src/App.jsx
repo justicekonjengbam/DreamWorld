@@ -21,6 +21,7 @@ import ScrollToTop from './components/ScrollToTop'
 import { ContentProvider } from './context/ContentContext'
 import AdminLogin from './pages/AdminLogin'
 import AdminDashboard from './pages/AdminDashboard'
+import SpecialThanks from './pages/SpecialThanks'
 import './App.css'
 
 
@@ -83,6 +84,7 @@ function App() {
               <Route path="/funders" element={<Funders />} />
               <Route path="/admin" element={<AdminLogin />} />
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
+              <Route path="/thanks" element={<SpecialThanks />} />
             </Routes>
           </main>
           {!isHomePage && <Footer />}

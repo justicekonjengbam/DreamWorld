@@ -1,0 +1,235 @@
+.special-thanks {
+    padding-top: 80px;
+    min-height: 100vh;
+    background: radial-gradient(circle at top, #1a1f35 0%, #0f1220 100%);
+}
+
+/* --- Hero Section --- */
+.thanks-hero {
+    text-align: center;
+    padding: 60px 20px;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), transparent);
+}
+
+.thanks-hero h1 {
+    font-size: 3.5rem;
+    background: linear-gradient(135deg, #FFD700 0%, #FDB931 50%, #FFD700 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.3));
+}
+
+.thanks-hero p {
+    font-size: 1.2rem;
+    color: var(--color-text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* --- Royal Tribute Section --- */
+.royal-section {
+    max-width: 1000px;
+    margin: 0 auto 80px;
+    padding: 0 20px;
+}
+
+.royal-card {
+    background: linear-gradient(145deg, rgba(20, 20, 30, 0.9), rgba(10, 10, 20, 0.95));
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 215, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 40px;
+}
+
+.royal-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, #FFD700, transparent);
+}
+
+.royal-header {
+    background: linear-gradient(to right, rgba(255, 215, 0, 0.1), transparent);
+    padding: 15px 30px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+}
+
+.crown-icon {
+    font-size: 1.5rem;
+    filter: drop-shadow(0 0 5px #FFD700);
+}
+
+.royal-header h2 {
+    color: #FFD700;
+    margin: 0;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.royal-content {
+    display: flex;
+    padding: 40px;
+    gap: 40px;
+    align-items: center;
+}
+
+.royal-image-frame {
+    flex-shrink: 0;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    padding: 5px;
+    background: linear-gradient(135deg, #FFD700, #FDB931, #996515);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+    position: relative;
+}
+
+.royal-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #1a1f35;
+}
+
+.royal-info {
+    flex: 1;
+}
+
+.royal-info h3 {
+    font-size: 2.5rem;
+    color: #fff;
+    margin-bottom: 10px;
+    font-family: 'Cinzel', serif;
+    /* Or your main font */
+}
+
+.royal-title {
+    display: inline-block;
+    padding: 5px 15px;
+    background: rgba(255, 215, 0, 0.15);
+    color: #FFD700;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.royal-bio {
+    color: #e0e0e0;
+    line-height: 1.8;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+}
+
+.royal-quote {
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.6);
+    border-left: 3px solid #FFD700;
+    padding-left: 15px;
+}
+
+/* --- Standard Sponsors Grid --- */
+.sponsors-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+}
+
+.section-title-divider {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.section-title-divider span {
+    color: var(--color-text-secondary);
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.divider-line {
+    flex: 1;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.sponsors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.sponsor-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 25px;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.sponsor-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.sponsor-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: 0 auto 15px;
+    object-fit: cover;
+    border: 2px solid var(--color-primary);
+}
+
+.sponsor-name {
+    font-size: 1.2rem;
+    color: white;
+    margin-bottom: 5px;
+}
+
+.sponsor-role {
+    color: var(--color-primary);
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+.sponsor-bio {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .royal-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .royal-quote {
+        text-align: left;
+    }
+
+    .thanks-hero h1 {
+        font-size: 2.5rem;
+    }
+}
