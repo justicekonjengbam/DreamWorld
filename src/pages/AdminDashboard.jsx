@@ -178,16 +178,6 @@ function AdminDashboard() {
         alert(editingId ? 'Sponsor updated!' : 'Sponsor added!')
     }
 
-    const handleReorder = async (table, item, direction, allItems) => {
-        // Prevent clicking if at boundary
-        const index = allItems.findIndex(i => i.id === item.id)
-        if (direction === 'up' && index === 0) return
-        if (direction === 'down' && index === allItems.length - 1) return
-
-        await reorderItem(table, item, direction, allItems)
-        // No need to setHasUnsyncedChanges because this saves immediately to DB
-    }
-
     const handleQuestDelete = (id) => { if (window.confirm('Delete this quest?')) { deleteQuest(id); setHasUnsyncedChanges(true) } }
     const handleRoleDelete = (id) => { if (window.confirm('Delete this role?')) { deleteRole(id); setHasUnsyncedChanges(true) } }
     const handleMemberDelete = (id) => { if (window.confirm('Delete this member?')) { deleteCharacter(id); setHasUnsyncedChanges(true) } }
@@ -393,10 +383,6 @@ function AdminDashboard() {
                                     <Card key={r.id} className="admin-item-card">
                                         <div><h4>{r.name}</h4><Badge>{r.singular}</Badge></div>
                                         <div className="admin-item-actions">
-                                            <div style={{ display: 'flex', flexDirection: 'column', marginRight: '10px' }}>
-                                                <button onClick={() => handleReorder('roles', r, 'up', roles)} style={{ fontSize: '0.8rem', padding: '2px 5px' }}>▲</button>
-                                                <button onClick={() => handleReorder('roles', r, 'down', roles)} style={{ fontSize: '0.8rem', padding: '2px 5px' }}>▼</button>
-                                            </div>
                                             <button onClick={() => { setEditingId(r.id); setRoleFormData({ ...r, traits: r.traits.join('\n') }) }}>✏️</button>
                                             <button onClick={() => handleRoleDelete(r.id)}>🗑️</button>
                                         </div>
@@ -497,10 +483,6 @@ function AdminDashboard() {
                                             <div><h4>{c.name}</h4><Badge>{c.role}</Badge></div>
                                         </div>
                                         <div className="admin-item-actions">
-                                            <div style={{ display: 'flex', flexDirection: 'column', marginRight: '10px' }}>
-                                                <button onClick={() => handleReorder('dreamers', c, 'up', characters)} style={{ fontSize: '0.8rem', padding: '2px 5px' }}>▲</button>
-                                                <button onClick={() => handleReorder('dreamers', c, 'down', characters)} style={{ fontSize: '0.8rem', padding: '2px 5px' }}>▼</button>
-                                            </div>
                                             <button onClick={() => {
                                                 setEditingId(c.id);
                                                 setMemberFormData({
@@ -600,10 +582,6 @@ function AdminDashboard() {
                                             </div>
                                         </div>
                                         <div className="admin-item-actions">
-                                            <div style={{ display: 'flex', flexDirection: 'column', marginRight: '10px' }}>
-                                                <button onClick={() => handleReorder('sponsors', s, 'up', sponsors)} style={{ fontSize: '0.8rem', padding: '2px 5px' }}>▲</button>
-                                                <button onClick={() => handleReorder('sponsors', s, 'down', sponsors)} style={{ fontSize: '0.8rem', padding: '2px 5px' }}>▼</button>
-                                            </div>
                                             <button onClick={() => {
                                                 setEditingId(s.id);
                                                 setSponsorFormData({
