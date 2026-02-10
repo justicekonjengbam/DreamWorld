@@ -246,7 +246,7 @@ export const ContentProvider = ({ children }) => {
             title: newEvent.title,
             host: newEvent.host,
             type: newEvent.type,
-            date: newEvent.date,
+            date: newEvent.date || null, // Handle optional date
             location: newEvent.location,
             description: newEvent.description,
             registration_link: newEvent.registrationLink,
@@ -262,7 +262,7 @@ export const ContentProvider = ({ children }) => {
             title: updated.title,
             host: updated.host,
             type: updated.type,
-            date: updated.date,
+            date: updated.date || null, // Handle optional date
             location: updated.location,
             description: updated.description,
             registration_link: updated.registrationLink,

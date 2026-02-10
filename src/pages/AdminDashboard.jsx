@@ -20,7 +20,8 @@ function AdminDashboard() {
         characters, addCharacter, updateCharacter, deleteCharacter,
         events, addEvent, updateEvent, deleteEvent,
         announcement, updateAnnouncement,
-        syncGlobalData
+        syncGlobalData,
+        submitDonation
     } = useContent()
 
     const [activeTab, setActiveTab] = useState('announcement')
@@ -36,6 +37,9 @@ function AdminDashboard() {
     const [eventFormData, setEventFormData] = useState({
         title: '', host: '', type: 'online', date: '', location: '', description: '', registrationLink: '',
         needsFunding: false, amountNeeded: '', galleryImages: [], completionImages: [], completionNote: ''
+    })
+    const [donationFormData, setDonationFormData] = useState({
+        name: '', amount: '', type: 'manual', sponsorshipId: '', sponsorshipType: 'general', message: ''
     })
 
     const [editingId, setEditingId] = useState(null)
@@ -112,6 +116,9 @@ function AdminDashboard() {
             title: '', host: '', type: 'online', date: '', location: '', description: '', registrationLink: '',
             needsFunding: false, amountNeeded: '', galleryImages: [], completionImages: [], completionNote: ''
         })
+        setDonationFormData({
+            name: '', amount: '', type: 'manual', sponsorshipId: '', sponsorshipType: 'general', message: ''
+        })
     }
 
     // Submit Handlers
@@ -182,6 +189,29 @@ function AdminDashboard() {
         alert(editingId ? 'Event updated!' : 'Event added!')
     }
 
+    const handleDonationSubmit = async (e) => {
+        e.preventDefault()
+        try {
+            await submitDonation({
+                name: donationFormData.name,
+                email: 'admin-manual@entry', // Placeholder for manual entries
+                amount: donationFormData.amount,
+                type: 'one-time', // Manual donations are single entries
+                paymentMethod: 'manual', // Explicitly mark as manual/offline
+                status: 'success',
+                message: donationFormData.message || 'Manual entry via Admin Panel',
+                transactionId: `MANUAL-${Date.now()}`,
+                sponsorshipType: donationFormData.sponsorshipType,
+                sponsorshipId: donationFormData.sponsorshipId
+            })
+            setHasUnsyncedChanges(true)
+            resetForms()
+            alert('✅ Manual Donation Recorded!')
+        } catch (error) {
+            alert(`Error: ${error.message}`)
+        }
+    }
+
     return (
         <div className="admin-dashboard page">
             <div className="admin-sidebar">
@@ -196,6 +226,7 @@ function AdminDashboard() {
                     <button className={`nav-item ${activeTab === 'roles' ? 'active' : ''}`} onClick={() => { setActiveTab('roles'); resetForms() }}>🎭 Roles</button>
                     <button className={`nav-item ${activeTab === 'members' ? 'active' : ''}`} onClick={() => { setActiveTab('members'); resetForms() }}>👥 Dreamers</button>
                     <button className={`nav-item ${activeTab === 'events' ? 'active' : ''}`} onClick={() => { setActiveTab('events'); resetForms() }}>📅 Events</button>
+                    <button className={`nav-item ${activeTab === 'donations' ? 'active' : ''}`} onClick={() => { setActiveTab('donations'); resetForms() }}>💰 Donations</button>
                     <button className={`nav-item ${activeTab === 'status' ? 'active' : ''}`} onClick={() => { setActiveTab('status'); resetForms() }}>🛡️ System Health</button>
                 </nav>
 
@@ -486,7 +517,7 @@ function AdminDashboard() {
                                         <div className="form-group"><label>Type (e.g. Online, Workshop)</label><input type="text" value={eventFormData.type} onChange={(e) => setEventFormData({ ...eventFormData, type: e.target.value })} required /></div>
                                     </div>
                                     <div className="form-row">
-                                        <div className="form-group"><label>Date</label><input type="date" value={eventFormData.date} onChange={(e) => setEventFormData({ ...eventFormData, date: e.target.value })} required /></div>
+                                        <div className="form-group"><label>Date</label><input type="date" value={eventFormData.date} onChange={(e) => setEventFormData({ ...eventFormData, date: e.target.value })} /></div>
                                         <div className="form-group"><label>Location</label><input type="text" value={eventFormData.location} onChange={(e) => setEventFormData({ ...eventFormData, location: e.target.value })} required /></div>
                                     </div>
                                     <div className="form-group-full"><label>Description</label><textarea rows="3" value={eventFormData.description} onChange={(e) => setEventFormData({ ...eventFormData, description: e.target.value })} required /></div>
@@ -534,6 +565,57 @@ function AdminDashboard() {
                                 ))}
                             </div>
                         </div>
+                    </div>
+                )}
+
+                {activeTab === 'donations' && (
+                    <div className="admin-section animate-fade">
+                        <Card className="admin-form-card">
+                            <h3>Record Manual Donation</h3>
+                            <p style={{ color: 'var(--color-gray)', fontSize: '0.9rem', marginBottom: '15px' }}>
+                                Use this to record offline payments (Cash, Direct UPI, Bank Transfer) so they reflect in the fundraising goals.
+                            </p>
+                            <form onSubmit={handleDonationSubmit} className="admin-form">
+                                <div className="form-row">
+                                    <div className="form-group"><label>Donor Name</label><input type="text" value={donationFormData.name} onChange={(e) => setDonationFormData({ ...donationFormData, name: e.target.value })} required /></div>
+                                    <div className="form-group"><label>Amount (₹)</label><input type="number" value={donationFormData.amount} onChange={(e) => setDonationFormData({ ...donationFormData, amount: e.target.value })} required /></div>
+                                </div>
+
+                                <div className="form-group-full">
+                                    <label>Contribution Target</label>
+                                    <select
+                                        value={donationFormData.sponsorshipId}
+                                        onChange={(e) => {
+                                            const id = e.target.value
+                                            if (!id) {
+                                                setDonationFormData(prev => ({ ...prev, sponsorshipId: '', sponsorshipType: 'general' }))
+                                            } else {
+                                                const quest = quests.find(q => q.id === id)
+                                                const event = events.find(ev => ev.id === id)
+                                                const type = quest ? 'quest' : (event ? 'event' : 'general')
+                                                setDonationFormData(prev => ({ ...prev, sponsorshipId: id, sponsorshipType: type }))
+                                            }
+                                        }}
+                                    >
+                                        <option value="">General Fund (No specific target)</option>
+                                        <optgroup label="Quests">
+                                            {quests.filter(q => q.fundingStatus === 'active').map(q => (
+                                                <option key={q.id} value={q.id}>{q.title}</option>
+                                            ))}
+                                        </optgroup>
+                                        <optgroup label="Events">
+                                            {events.filter(e => e.fundingStatus === 'active').map(e => (
+                                                <option key={e.id} value={e.id}>{e.title}</option>
+                                            ))}
+                                        </optgroup>
+                                    </select>
+                                </div>
+
+                                <div className="form-group-full"><label>Private Note (Optional)</label><textarea rows="2" value={donationFormData.message} onChange={(e) => setDonationFormData({ ...donationFormData, message: e.target.value })} /></div>
+
+                                <Button type="submit" variant="primary">Record Donation</Button>
+                            </form>
+                        </Card>
                     </div>
                 )}
 
