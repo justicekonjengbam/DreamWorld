@@ -393,6 +393,10 @@ function AdminDashboard() {
                                     <Card key={r.id} className="admin-item-card">
                                         <div><h4>{r.name}</h4><Badge>{r.singular}</Badge></div>
                                         <div className="admin-item-actions">
+                                            <div style={{ display: 'flex', flexDirection: 'column', marginRight: '10px' }}>
+                                                <button onClick={() => handleReorder('roles', r, 'up', roles)} style={{ fontSize: '0.8rem', padding: '2px 5px' }}>▲</button>
+                                                <button onClick={() => handleReorder('roles', r, 'down', roles)} style={{ fontSize: '0.8rem', padding: '2px 5px' }}>▼</button>
+                                            </div>
                                             <button onClick={() => { setEditingId(r.id); setRoleFormData({ ...r, traits: r.traits.join('\n') }) }}>✏️</button>
                                             <button onClick={() => handleRoleDelete(r.id)}>🗑️</button>
                                         </div>
