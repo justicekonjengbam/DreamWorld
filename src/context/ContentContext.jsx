@@ -15,6 +15,7 @@ export const ContentProvider = ({ children }) => {
     const [quests, setQuests] = useState(initialQuests)
     const [roles, setRoles] = useState(initialRoles)
     const [characters, setCharacters] = useState(initialCharacters)
+    const [sponsors, setSponsors] = useState([])
     const [events, setEvents] = useState(initialEvents)
     const [announcement, setAnnouncement] = useState({
         title: 'Welcome to DreamWorld! 🌟',
@@ -62,6 +63,15 @@ export const ContentProvider = ({ children }) => {
                     coverImage: c.cover_image,
                     themes: typeof c.themes === 'string' ? c.themes.split(',').map(t => t.trim()).filter(Boolean) : [],
                     socials: { youtube: c.youtube, instagram: c.instagram, facebook: c.facebook, twitter: c.twitter }
+                })))
+            }
+
+            // 3b. Fetch Sponsors (Dedicated Table)
+            const { data: sData } = await supabase.from('sponsors').select('*').order('created_at', { ascending: false })
+            if (sData) {
+                setSponsors(sData.map(s => ({
+                    ...s,
+                    themes: typeof s.themes === 'string' ? s.themes.split(',').map(t => t.trim()).filter(Boolean) : []
                 })))
             }
 
@@ -239,6 +249,36 @@ export const ContentProvider = ({ children }) => {
         if (await saveToSupabase('dreamers', null, true, id)) fetchData()
     }
 
+    // --- Sponsor Actions ---
+    const addSponsor = async (newSponsor) => {
+        const id = newSponsor.id || `sp-${Date.now()}`
+        const payload = {
+            id,
+            name: newSponsor.name,
+            title: newSponsor.title,
+            avatar: newSponsor.avatar, // Same as photo URL/Logo
+            bio: newSponsor.bio,
+            themes: Array.isArray(newSponsor.themes) ? newSponsor.themes.join(',') : newSponsor.themes
+        }
+        if (await saveToSupabase('sponsors', payload)) fetchData()
+    }
+
+    const updateSponsor = async (id, updated) => {
+        const payload = {
+            id,
+            name: updated.name,
+            title: updated.title,
+            avatar: updated.avatar,
+            bio: updated.bio,
+            themes: Array.isArray(updated.themes) ? updated.themes.join(',') : updated.themes
+        }
+        if (await saveToSupabase('sponsors', payload)) fetchData()
+    }
+
+    const deleteSponsor = async (id) => {
+        if (await saveToSupabase('sponsors', null, true, id)) fetchData()
+    }
+
     const addEvent = async (newEvent) => {
         const id = `ev-${Date.now()}`
         const payload = {
@@ -349,6 +389,7 @@ export const ContentProvider = ({ children }) => {
             quests, addQuest, updateQuest, deleteQuest,
             roles, addRole, updateRole, deleteRole,
             characters, addCharacter, updateCharacter, deleteCharacter,
+            sponsors, addSponsor, updateSponsor, deleteSponsor,
             events, addEvent, updateEvent, deleteEvent,
             announcement, updateAnnouncement,
             syncGlobalData: fetchData, // Reuse fetchData as a refresh for UI consistency

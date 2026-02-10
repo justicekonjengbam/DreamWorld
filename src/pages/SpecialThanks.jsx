@@ -3,21 +3,16 @@ import Avatar from '../components/Avatar'
 import './SpecialThanks.css'
 
 function SpecialThanks() {
-    const { characters } = useContent()
+    const { sponsors } = useContent()
 
-    // 1. Royal Tributes: Check for 'Royal' in themes
-    // We also explicitly look for Peter Saam if he exists, to ensure he is top of the list if there are multiple.
-    const royalTributes = characters.filter(c =>
-        (c.themes && c.themes.includes('Royal')) ||
-        (c.name.toLowerCase().includes('peter saam')) // Fallback to ensure Peter is always Royal if not tagged
+    // 1. Royal Tributes: Check for 'Royal' in themes from the Sponsors list
+    const royalTributes = sponsors.filter(s =>
+        (s.themes && s.themes.includes('Royal')) ||
+        (s.name.toLowerCase().includes('peter saam'))
     )
 
-    // 2. Pillars/Sponsors: standard sponsors (Role = Patron/Sponsor) but NOT in the royal list
-    const sponsors = characters.filter(c => {
-        const isRoyal = royalTributes.some(r => r.id === c.id)
-        const isSponsorRole = ['sponsor', 'patron', 'funder', 'donor'].includes(c.role.toLowerCase())
-        return isSponsorRole && !isRoyal
-    })
+    // 2. Standard Sponsors: All other sponsors
+    const standardSponsors = sponsors.filter(s => !royalTributes.some(r => r.id === s.id))
 
     return (
         <div className="special-thanks">
@@ -45,9 +40,9 @@ function SpecialThanks() {
                                 </div>
                                 <div className="royal-info">
                                     <h3>{royal.name}</h3>
-                                    <span className="royal-title">{royal.title || 'Director of Agriculture, Manipur'}</span>
+                                    <span className="royal-title">{royal.title || 'Patron'}</span>
                                     <p className="royal-bio">
-                                        {royal.bio || "A beacon of hope and support. Generously empowering the next generation of dreamers through education and technology."}
+                                        {royal.bio || "A beacon of hope and support."}
                                     </p>
                                     <div className="royal-quote">
                                         "Standing with DreamWorld since the beginning."
@@ -58,13 +53,13 @@ function SpecialThanks() {
                     ))
                 ) : (
                     <div style={{ textAlign: 'center', color: 'rgba(255,255,255,0.5)' }}>
-                        <p>No Royal Tributes found. Add a Dreamer with the "Royal" theme in Admin Panel.</p>
+                        <p>No Royal Tributes yet.</p>
                     </div>
                 )}
             </div>
 
             {/* --- Pillars of Support --- */}
-            {sponsors.length > 0 && (
+            {standardSponsors.length > 0 && (
                 <div className="sponsors-section animate-fade">
                     <div className="section-title-divider">
                         <div className="divider-line"></div>
@@ -73,7 +68,7 @@ function SpecialThanks() {
                     </div>
 
                     <div className="sponsors-grid">
-                        {sponsors.map(sponsor => (
+                        {standardSponsors.map(sponsor => (
                             <div key={sponsor.id} className="sponsor-card">
                                 <Avatar
                                     src={sponsor.avatar}
@@ -81,7 +76,7 @@ function SpecialThanks() {
                                     className="sponsor-avatar"
                                 />
                                 <h4 className="sponsor-name">{sponsor.name}</h4>
-                                <div className="sponsor-role">{sponsor.title || 'Patron'}</div>
+                                <div className="sponsor-role">{sponsor.title || 'Sponsor'}</div>
                                 <p className="sponsor-bio">{sponsor.bio}</p>
                             </div>
                         ))}

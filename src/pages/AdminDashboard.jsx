@@ -18,6 +18,7 @@ function AdminDashboard() {
         quests, addQuest, updateQuest, deleteQuest,
         roles, addRole, updateRole, deleteRole,
         characters, addCharacter, updateCharacter, deleteCharacter,
+        sponsors, addSponsor, updateSponsor, deleteSponsor,
         events, addEvent, updateEvent, deleteEvent,
         announcement, updateAnnouncement,
         syncGlobalData,
@@ -34,6 +35,7 @@ function AdminDashboard() {
     })
     const [roleFormData, setRoleFormData] = useState({ id: '', name: '', singular: '', description: '', color: '#4CA1AF', traits: '', philosophy: '' })
     const [memberFormData, setMemberFormData] = useState({ name: '', role: '', title: '', avatar: '', coverImage: '', bio: '', themes: '' })
+    const [sponsorFormData, setSponsorFormData] = useState({ name: '', title: '', avatar: '', bio: '', themes: '' })
     const [eventFormData, setEventFormData] = useState({
         title: '', host: '', type: 'online', date: '', location: '', description: '', registrationLink: '',
         needsFunding: false, amountNeeded: '', galleryImages: [], completionImages: [], completionNote: ''
@@ -112,6 +114,7 @@ function AdminDashboard() {
         })
         setRoleFormData({ id: '', name: '', singular: '', description: '', color: '#4CA1AF', traits: '', philosophy: '' })
         setMemberFormData({ name: '', role: '', title: '', avatar: '', coverImage: '', bio: '', themes: '' })
+        setSponsorFormData({ name: '', title: '', avatar: '', bio: '', themes: '' })
         setEventFormData({
             title: '', host: '', type: 'online', date: '', location: '', description: '', registrationLink: '',
             needsFunding: false, amountNeeded: '', galleryImages: [], completionImages: [], completionNote: ''
@@ -166,9 +169,19 @@ function AdminDashboard() {
         alert(editingId ? 'Member updated!' : 'Member added!')
     }
 
+    const handleSponsorSubmit = (e) => {
+        e.preventDefault()
+        const data = { ...sponsorFormData, themes: sponsorFormData.themes.split(',').map(t => t.trim()) }
+        editingId ? updateSponsor(editingId, data) : addSponsor(data)
+        setHasUnsyncedChanges(true)
+        resetForms()
+        alert(editingId ? 'Sponsor updated!' : 'Sponsor added!')
+    }
+
     const handleQuestDelete = (id) => { if (window.confirm('Delete this quest?')) { deleteQuest(id); setHasUnsyncedChanges(true) } }
     const handleRoleDelete = (id) => { if (window.confirm('Delete this role?')) { deleteRole(id); setHasUnsyncedChanges(true) } }
     const handleMemberDelete = (id) => { if (window.confirm('Delete this member?')) { deleteCharacter(id); setHasUnsyncedChanges(true) } }
+    const handleSponsorDelete = (id) => { if (window.confirm('Delete this sponsor?')) { deleteSponsor(id); setHasUnsyncedChanges(true) } }
     const handleEventDelete = (id) => {
         if (window.confirm('Delete this event?')) {
             deleteEvent(id);
@@ -225,6 +238,7 @@ function AdminDashboard() {
                     <button className={`nav-item ${activeTab === 'quests' ? 'active' : ''}`} onClick={() => { setActiveTab('quests'); resetForms() }}>🎯 Quests</button>
                     <button className={`nav-item ${activeTab === 'roles' ? 'active' : ''}`} onClick={() => { setActiveTab('roles'); resetForms() }}>🎭 Roles</button>
                     <button className={`nav-item ${activeTab === 'members' ? 'active' : ''}`} onClick={() => { setActiveTab('members'); resetForms() }}>👥 Dreamers</button>
+                    <button className={`nav-item ${activeTab === 'sponsors' ? 'active' : ''}`} onClick={() => { setActiveTab('sponsors'); resetForms() }}>🤝 Sponsors</button>
                     <button className={`nav-item ${activeTab === 'events' ? 'active' : ''}`} onClick={() => { setActiveTab('events'); resetForms() }}>📅 Events</button>
                     <button className={`nav-item ${activeTab === 'donations' ? 'active' : ''}`} onClick={() => { setActiveTab('donations'); resetForms() }}>💰 Donations</button>
                     <button className={`nav-item ${activeTab === 'status' ? 'active' : ''}`} onClick={() => { setActiveTab('status'); resetForms() }}>🛡️ System Health</button>
@@ -452,27 +466,6 @@ function AdminDashboard() {
                                         <div className="form-group"><label>Facebook URL</label><input type="text" placeholder="https://facebook.com/..." value={memberFormData.facebook || ''} onChange={(e) => setMemberFormData(prev => ({ ...prev, facebook: e.target.value }))} /></div>
                                         <div className="form-group"><label>Twitter URL</label><input type="text" placeholder="https://twitter.com/..." value={memberFormData.twitter || ''} onChange={(e) => setMemberFormData(prev => ({ ...prev, twitter: e.target.value }))} /></div>
                                     </div>
-
-                                    <div className="form-checkbox" style={{ margin: '10px 0', padding: '10px', background: 'rgba(255, 215, 0, 0.1)', border: '1px solid rgba(255, 215, 0, 0.3)', borderRadius: '8px' }}>
-                                        <input
-                                            type="checkbox"
-                                            id="royalTribute"
-                                            checked={memberFormData.themes.split(',').map(t => t.trim()).includes('Royal')}
-                                            onChange={(e) => {
-                                                const isChecked = e.target.checked;
-                                                let currentThemes = memberFormData.themes.split(',').map(t => t.trim()).filter(Boolean);
-                                                if (isChecked) {
-                                                    if (!currentThemes.includes('Royal')) currentThemes.push('Royal');
-                                                } else {
-                                                    currentThemes = currentThemes.filter(t => t !== 'Royal');
-                                                }
-                                                setMemberFormData({ ...memberFormData, themes: currentThemes.join(', ') });
-                                            }}
-                                        />
-                                        <label htmlFor="royalTribute" style={{ color: '#FFD700', fontWeight: 'bold' }}>
-                                            👑 Royal Tribute? (Display in Wall of Gratitude)
-                                        </label>
-                                    </div>
                                     <div className="form-group-full"><label>Themes (Comma separated)</label><input type="text" placeholder="Future, Solar, Community" value={memberFormData.themes} onChange={(e) => setMemberFormData(prev => ({ ...prev, themes: e.target.value }))} required /></div>
                                     <Button type="submit" variant="primary">{editingId ? 'Update' : 'Add'} Dreamer</Button>
                                     {editingId && <Button type="button" variant="secondary" onClick={resetForms}>Cancel</Button>}
@@ -518,6 +511,85 @@ function AdminDashboard() {
                                             >
                                                 📜
                                             </button>
+                                        </div>
+                                    </Card>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {activeTab === 'sponsors' && (
+                    <div className="admin-section animate-fade">
+                        <div className="admin-split-layout">
+                            <Card className="admin-form-card">
+                                <h3>{editingId ? 'Edit Sponsor' : 'Add New Sponsor'}</h3>
+                                <form onSubmit={handleSponsorSubmit} className="admin-form">
+                                    <div className="form-group-full"><label>Organization / Name</label><input type="text" value={sponsorFormData.name} onChange={(e) => setSponsorFormData({ ...sponsorFormData, name: e.target.value })} required /></div>
+                                    <div className="form-group-full"><label>Title (e.g. Director of Agriculture)</label><input type="text" value={sponsorFormData.title} onChange={(e) => setSponsorFormData({ ...sponsorFormData, title: e.target.value })} required /></div>
+
+                                    <ImageUpload
+                                        label="Sponsor Logo/Avatar"
+                                        onUploadComplete={(url) => setSponsorFormData(prev => ({ ...prev, avatar: url }))}
+                                        defaultImage={sponsorFormData.avatar}
+                                        folder="sponsors"
+                                    />
+
+                                    <div className="form-group-full"><label>Bio/Description</label><textarea rows="3" value={sponsorFormData.bio} onChange={(e) => setSponsorFormData(prev => ({ ...prev, bio: e.target.value }))} required /></div>
+
+                                    <div className="form-checkbox" style={{ margin: '15px 0', padding: '15px', background: 'rgba(255, 215, 0, 0.1)', border: '1px solid rgba(255, 215, 0, 0.3)', borderRadius: '8px' }}>
+                                        <input
+                                            type="checkbox"
+                                            id="royalTribute"
+                                            checked={sponsorFormData.themes.split(',').map(t => t.trim()).includes('Royal')}
+                                            onChange={(e) => {
+                                                const isChecked = e.target.checked;
+                                                let currentThemes = sponsorFormData.themes.split(',').map(t => t.trim()).filter(Boolean);
+                                                if (isChecked) {
+                                                    if (!currentThemes.includes('Royal')) currentThemes.push('Royal');
+                                                } else {
+                                                    currentThemes = currentThemes.filter(t => t !== 'Royal');
+                                                }
+                                                setSponsorFormData({ ...sponsorFormData, themes: currentThemes.join(', ') });
+                                            }}
+                                        />
+                                        <label htmlFor="royalTribute" style={{ color: '#FFD700', fontWeight: 'bold' }}>
+                                            👑 Royal Tribute? (Display in Wall of Gratitude)
+                                        </label>
+                                        <p style={{ fontSize: '0.8rem', color: '#ccc', marginLeft: '25px', marginTop: '5px' }}>
+                                            Check this box for top-tier sponsors like Peter Saam to give them a premium gold display.
+                                        </p>
+                                    </div>
+
+                                    <Button type="submit" variant="primary">{editingId ? 'Update' : 'Add'} Sponsor</Button>
+                                    {editingId && <Button type="button" variant="secondary" onClick={resetForms}>Cancel</Button>}
+                                </form>
+                            </Card>
+                            <div className="admin-list">
+                                {sponsors.map(s => (
+                                    <Card key={s.id} className="admin-item-card">
+                                        <div className="admin-member-preview">
+                                            <Avatar
+                                                src={s.avatar}
+                                                name={s.name}
+                                                style={{ width: 40, height: 40, borderRadius: '50%' }}
+                                            />
+                                            <div>
+                                                <h4>{s.name}</h4>
+                                                <Badge variant={s.themes.includes('Royal') ? 'active' : 'secondary'}>
+                                                    {s.themes.includes('Royal') ? '👑 Royal' : 'Sponsor'}
+                                                </Badge>
+                                            </div>
+                                        </div>
+                                        <div className="admin-item-actions">
+                                            <button onClick={() => {
+                                                setEditingId(s.id);
+                                                setSponsorFormData({
+                                                    ...s,
+                                                    themes: Array.isArray(s.themes) ? s.themes.join(', ') : (s.themes || '')
+                                                })
+                                            }}>✏️</button>
+                                            <button onClick={() => handleSponsorDelete(s.id)}>🗑️</button>
                                         </div>
                                     </Card>
                                 ))}
