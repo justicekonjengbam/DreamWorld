@@ -52,7 +52,7 @@ function SpecialThanks() {
                         </div>
                     ))
                 ) : (
-                    <div style={{ textAlign: 'center', color: 'rgba(255,255,255,0.5)' }}>
+                    <div style={{ textAlign: 'center', color: 'var(--color-text-sub)' }}>
                         <p>No Royal Tributes yet.</p>
                     </div>
                 )}

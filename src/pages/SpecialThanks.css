@@ -1,7 +1,8 @@
 .special-thanks {
     padding-top: 80px;
     min-height: 100vh;
-    background: radial-gradient(circle at top, #1a1f35 0%, #0f1220 100%);
+    /* Allow global background to show through, or use theme var if needed */
+    background: transparent;
 }
 
 /* --- Hero Section --- */
@@ -13,19 +14,19 @@
 
 .thanks-hero h1 {
     font-size: 3.5rem;
-    background: linear-gradient(135deg, #FFD700 0%, #FDB931 50%, #FFD700 100%);
+    background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-gold) 50%, var(--color-accent) 100%);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     margin-bottom: 0.5rem;
     text-transform: uppercase;
     letter-spacing: 2px;
-    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.3));
+    filter: drop-shadow(0 0 10px var(--glow-accent));
 }
 
 .thanks-hero p {
     font-size: 1.2rem;
-    color: var(--color-text-secondary);
+    color: var(--color-text-sub);
     max-width: 600px;
     margin: 0 auto;
 }
@@ -42,8 +43,8 @@
 }
 
 .royal-card {
-    background: linear-gradient(145deg, rgba(20, 20, 30, 0.9), rgba(10, 10, 20, 0.95));
-    border: 1px solid rgba(255, 215, 0, 0.3);
+    background: var(--color-card-bg);
+    border: 1px solid var(--glow-accent);
     border-radius: 20px;
     overflow: hidden;
     position: relative;
@@ -60,25 +61,25 @@
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, transparent, #FFD700, transparent);
+    background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
 }
 
 .royal-header {
-    background: linear-gradient(to right, rgba(255, 215, 0, 0.1), transparent);
+    background: linear-gradient(to right, var(--glow-accent), transparent);
     padding: 15px 30px;
     display: flex;
     align-items: center;
     gap: 10px;
-    border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+    border-bottom: 1px solid var(--glow-accent);
 }
 
 .crown-icon {
     font-size: 1.5rem;
-    filter: drop-shadow(0 0 5px #FFD700);
+    filter: drop-shadow(0 0 5px var(--color-accent));
 }
 
 .royal-header h2 {
-    color: #FFD700;
+    color: var(--color-accent);
     margin: 0;
     font-size: 1.2rem;
     text-transform: uppercase;
@@ -101,8 +102,8 @@
     height: 160px;
     border-radius: 50%;
     padding: 5px;
-    background: linear-gradient(135deg, #FFD700, #FDB931, #996515);
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+    background: linear-gradient(135deg, var(--color-accent), var(--color-gold), var(--color-accent));
+    box-shadow: 0 0 20px var(--glow-accent);
     position: relative;
 }
 
@@ -123,7 +124,7 @@
 
 .royal-info h3 {
     font-size: 2rem;
-    color: #fff;
+    color: var(--color-text);
     margin-bottom: 10px;
     font-family: 'Cinzel', serif;
 }
@@ -131,16 +132,16 @@
 .royal-title {
     display: inline-block;
     padding: 5px 15px;
-    background: rgba(255, 215, 0, 0.15);
-    color: #FFD700;
+    background: var(--glow-accent);
+    color: var(--color-accent);
     border-radius: 50px;
     font-size: 0.9rem;
     margin-bottom: 15px;
-    border: 1px solid rgba(255, 215, 0, 0.3);
+    border: 1px solid var(--glow-accent);
 }
 
 .royal-bio {
-    color: #e0e0e0;
+    color: var(--color-text-sub);
     line-height: 1.6;
     font-size: 1rem;
     margin-bottom: 20px;
@@ -148,8 +149,8 @@
 
 .royal-quote {
     font-style: italic;
-    color: rgba(255, 255, 255, 0.6);
-    border-top: 1px solid rgba(255, 215, 0, 0.3);
+    color: var(--color-text-sub);
+    border-top: 1px solid var(--glow-accent);
     padding-top: 15px;
     margin-top: auto;
     width: 100%;
@@ -170,7 +171,7 @@
 }
 
 .section-title-divider span {
-    color: var(--color-text-secondary);
+    color: var(--color-text-sub);
     font-size: 1.2rem;
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -179,7 +180,8 @@
 .divider-line {
     flex: 1;
     height: 1px;
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--color-text-sub);
+    opacity: 0.2;
 }
 
 .sponsors-grid {
@@ -189,8 +191,8 @@
 }
 
 .sponsor-card {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--color-card-bg);
+    border: 1px solid var(--glow-primary);
     border-radius: 12px;
     padding: 25px;
     text-align: center;
@@ -199,7 +201,8 @@
 
 .sponsor-card:hover {
     transform: translateY(-5px);
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--color-card-bg);
+    box-shadow: 0 5px 15px var(--glow-primary);
 }
 
 .sponsor-avatar {
@@ -213,7 +216,7 @@
 
 .sponsor-name {
     font-size: 1.2rem;
-    color: white;
+    color: var(--color-text);
     margin-bottom: 5px;
 }
 
@@ -225,7 +228,7 @@
 
 .sponsor-bio {
     font-size: 0.9rem;
-    color: var(--color-text-secondary);
+    color: var(--color-text-sub);
     line-height: 1.5;
 }
 

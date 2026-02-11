@@ -1,25 +1,26 @@
 .card {
-  background: rgba(26, 31, 53, 0.6);
+  background: var(--color-card-bg);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(76, 161, 175, 0.3);
+  border: 1px solid var(--glow-primary);
   border-radius: 15px;
   padding: 25px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
+  color: var(--color-text);
 }
 
 .card-hover:hover {
   transform: translateY(-5px);
-  box-shadow: 0 12px 35px rgba(76, 161, 175, 0.4);
-  border-color: var(--color-cyan);
+  box-shadow: 0 12px 35px var(--glow-primary);
+  border-color: var(--color-primary);
 }
 
 .card h3 {
-  color: var(--color-gold);
+  color: var(--color-accent);
   margin-bottom: 10px;
 }
 
 .card p {
-  color: var(--color-gray);
+  color: var(--color-text-sub);
   line-height: 1.6;
 }

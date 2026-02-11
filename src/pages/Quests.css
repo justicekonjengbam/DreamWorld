@@ -227,3 +227,117 @@
   box-shadow: 0 6px 20px rgba(76, 161, 175, 0.6);
   filter: brightness(1.1);
 }
+
+/* --- Search & Filter Styles --- */
+.quests-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  background: var(--color-card-bg);
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.search-wrapper {
+  position: relative;
+  flex: 1;
+  min-width: 280px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.7;
+}
+
+.quest-search-input {
+  width: 100%;
+  padding: 12px 15px 12px 45px;
+  border-radius: 25px;
+  border: 1px solid var(--color-text-sub);
+  background: var(--color-background);
+  color: var(--color-text);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.quest-search-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--glow-primary);
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--color-text-sub);
+  background: transparent;
+  color: var(--color-text-sub);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 600;
+}
+
+.filter-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-text);
+}
+
+.filter-btn.active {
+  background: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 10px var(--glow-primary);
+}
+
+.no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--color-text-sub);
+}
+
+.no-results h3 {
+  color: var(--color-text);
+  margin-bottom: 10px;
+}
+
+.reset-btn {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background: var(--color-accent);
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.reset-btn:hover {
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .quests-filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-buttons {
+    justify-content: center;
+  }
+}

@@ -13,12 +13,12 @@
 .story-container {
   width: 100%;
   max-width: 100%;
-  background: rgba(25, 30, 45, 0.98);
-  border: 1px solid rgba(76, 161, 175, 0.25);
+  background: var(--color-card-bg);
+  border: 1px solid var(--glow-primary);
   border-radius: 6px;
   padding: 45px 35px;
-  box-shadow: 
-    0 2px 10px rgba(0, 0, 0, 0.3),
+  box-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
   position: relative;
   line-height: 1.65;
@@ -43,13 +43,13 @@
   text-align: center;
   margin-bottom: 25px;
   padding-bottom: 18px;
-  border-bottom: 1px solid rgba(76, 161, 175, 0.2);
+  border-bottom: 1px solid var(--glow-primary);
 }
 
 
 .story-header h1 {
   font-size: 1.9rem;
-  color: var(--color-gold);
+  color: var(--color-accent);
   margin-bottom: 8px;
   font-weight: 700;
   letter-spacing: 0.5px;
@@ -57,7 +57,7 @@
 
 
 .story-tagline {
-  color: var(--color-cyan);
+  color: var(--color-primary);
   font-size: 0.9rem;
   font-style: italic;
   margin: 0;
@@ -69,7 +69,7 @@
 .story-section {
   margin-bottom: 20px;
   padding-bottom: 18px;
-  border-bottom: 1px solid rgba(76, 161, 175, 0.1);
+  border-bottom: 1px solid var(--glow-primary);
 }
 
 
@@ -81,7 +81,7 @@
 
 .story-section h2 {
   font-size: 1.25rem;
-  color: var(--color-gold);
+  color: var(--color-accent);
   margin-bottom: 10px;
   font-weight: 600;
   letter-spacing: 0.3px;
@@ -89,7 +89,7 @@
 
 
 .story-section p {
-  color: rgba(184, 197, 214, 0.95);
+  color: var(--color-text-sub);
   font-size: 0.95rem;
   line-height: 1.65;
   margin-bottom: 10px;
@@ -106,7 +106,7 @@
 .story-section p:first-of-type::first-letter {
   font-size: 1.4rem;
   font-weight: 700;
-  color: var(--color-gold);
+  color: var(--color-accent);
   float: left;
   line-height: 1;
   margin-right: 4px;
@@ -118,13 +118,13 @@
 .lore-cta {
   margin-top: 25px;
   padding-top: 20px;
-  border-top: 1px solid rgba(76, 161, 175, 0.2);
+  border-top: 1px solid var(--glow-primary);
   text-align: center;
 }
 
 
 .lore-cta p {
-  color: rgba(184, 197, 214, 0.95);
+  color: var(--color-text-sub);
   font-size: 0.95rem;
   line-height: 1.65;
   margin-bottom: 20px;

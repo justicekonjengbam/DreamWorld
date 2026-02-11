@@ -25,6 +25,8 @@ import SpecialThanks from './pages/SpecialThanks'
 import './App.css'
 
 
+import { useTheme } from './context/ThemeContext'
+
 function App() {
   const location = useLocation()
   const isHomePage = location.pathname === '/'
@@ -43,6 +45,7 @@ function App() {
   // Global click sound for all clickable elements
   useEffect(() => {
     const handleClick = (e) => {
+      // ... existing click handler ...
       if (isSoundMuted) return // Don't play if muted
 
       const clickable = e.target.closest('a, button, [role="button"], .card, .character-link, .role-card')

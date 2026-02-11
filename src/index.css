@@ -12,16 +12,32 @@
 }
 
 :root {
+  /* Default Night Mode (base) */
   --color-background: #0A0E1A;
   --color-card-bg: rgba(20, 25, 40, 0.8);
+  --color-text: #FFFFFF;
+  --color-text-sub: #B8C5D6;
+  --color-primary: #4CA1AF;
+  --color-accent: #FFD700;
+  --color-success: #4FD15F;
+  --glow-primary: rgba(76, 161, 175, 0.5);
+  --glow-accent: rgba(255, 215, 0, 0.5);
+
+  /* Shared Defaults */
   --color-white: #FFFFFF;
-  --color-gray: #B8C5D6;
-  --color-cyan: #4CA1AF;
-  --color-gold: #FFD700;
-  --color-leaf: #4FD15F;
+  --transition-speed: 0.3s;
+
+  /* Legacy/Aliases (Restored) */
+  --color-gray: var(--color-text-sub);
+  --color-cyan: var(--color-primary);
+  --color-gold: var(--color-accent);
+  --color-leaf: var(--color-success);
   --color-green: #5fd65f;
-  --glow-cyan: rgba(76, 161, 175, 0.5);
-  --glow-gold: rgba(255, 215, 0, 0.5);
+  /* Keeping original green for gradients if needed */
+  --glow-cyan: var(--glow-primary);
+  --glow-gold: var(--glow-accent);
+  --color-dark: var(--color-background);
+  /* Alias for backward compatibility */
 }
 
 * {
@@ -33,9 +49,10 @@
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   background: var(--color-background);
-  color: var(--color-white);
+  color: var(--color-text);
   line-height: 1.6;
   overflow-x: hidden;
+  transition: background-color var(--transition-speed), color var(--transition-speed);
 }
 
 .page {
@@ -89,8 +106,8 @@ button {
   justify-content: center;
   min-height: 100vh;
   font-size: 1.5rem;
-  color: var(--color-gold);
-  text-shadow: 0 0 15px var(--glow-gold);
+  color: var(--color-accent);
+  text-shadow: 0 0 15px var(--glow-accent);
   letter-spacing: 2px;
   animation: pulse 2s infinite;
 }

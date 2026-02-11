@@ -14,6 +14,10 @@ function Quests() {
   const navigate = useNavigate()
   const [selectedQuest, setSelectedQuest] = useState(null)
 
+  // Filter States
+  const [searchTerm, setSearchTerm] = useState('')
+  const [filterDifficulty, setFilterDifficulty] = useState('all') // all, easy, medium, hard
+
   if (loading) return <div className="loading-state">Syncing Quests with DreamWorld...</div>
 
   const getDifficultyVariant = (difficulty) => {
@@ -24,6 +28,14 @@ function Quests() {
     }
     return variants[difficulty] || 'default'
   }
+
+  // Filter Logic
+  const filteredQuests = quests.filter(quest => {
+    const matchesSearch = quest.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      quest.purpose.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesDifficulty = filterDifficulty === 'all' || quest.difficulty.toLowerCase() === filterDifficulty
+    return matchesSearch && matchesDifficulty
+  })
 
   return (
     <div className="quests page">
@@ -38,43 +50,92 @@ function Quests() {
           subtitle="Small actions, big impact. Choose a quest and start building better habits today."
         />
 
+        {/* Search & Filter Bar */}
+        <div className="quests-filter-bar">
+          <div className="search-wrapper">
+            <span className="search-icon">🔍</span>
+            <input
+              type="text"
+              placeholder="Search quests..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="quest-search-input"
+            />
+          </div>
+
+          <div className="filter-buttons">
+            <button
+              className={`filter-btn ${filterDifficulty === 'all' ? 'active' : ''}`}
+              onClick={() => setFilterDifficulty('all')}
+            >
+              All
+            </button>
+            <button
+              className={`filter-btn ${filterDifficulty === 'easy' ? 'active' : ''}`}
+              onClick={() => setFilterDifficulty('easy')}
+            >
+              Easy
+            </button>
+            <button
+              className={`filter-btn ${filterDifficulty === 'medium' ? 'active' : ''}`}
+              onClick={() => setFilterDifficulty('medium')}
+            >
+              Medium
+            </button>
+            <button
+              className={`filter-btn ${filterDifficulty === 'hard' ? 'active' : ''}`}
+              onClick={() => setFilterDifficulty('hard')}
+            >
+              Hard
+            </button>
+          </div>
+        </div>
+
         <div className="quests-grid">
-          {quests.map((quest) => (
-            <Card key={quest.id}>
-              <div className="quest-header">
-                <h3>{quest.title}</h3>
-                <Badge variant={getDifficultyVariant(quest.difficulty)}>
-                  {quest.difficulty}
-                </Badge>
-              </div>
-              <p className="quest-purpose">{quest.purpose}</p>
-
-              {parseFloat(quest.amountNeeded) > 0 && (
-                <div className="quest-funding-progress">
-                  <div className="funding-stats">
-                    <span>₹{quest.amountRaised || 0} raised</span>
-                    <span>Goal: ₹{quest.amountNeeded}</span>
-                  </div>
-                  <div className="funding-bar">
-                    <div
-                      className="funding-fill"
-                      style={{ width: `${Math.min((parseFloat(quest.amountRaised || 0) / parseFloat(quest.amountNeeded)) * 100, 100)}%` }}
-                    />
-                  </div>
+          {filteredQuests.length > 0 ? (
+            filteredQuests.map((quest) => (
+              <Card key={quest.id}>
+                <div className="quest-header">
+                  <h3>{quest.title}</h3>
+                  <Badge variant={getDifficultyVariant(quest.difficulty)}>
+                    {quest.difficulty}
+                  </Badge>
                 </div>
-              )}
+                <p className="quest-purpose">{quest.purpose}</p>
 
-              <div className="quest-meta">
-                <span className="quest-time">⏱️ {quest.timeNeeded}</span>
-              </div>
-              <button
-                className="quest-details-btn"
-                onClick={() => setSelectedQuest(quest)}
-              >
-                View Quest Details
-              </button>
-            </Card>
-          ))}
+                {parseFloat(quest.amountNeeded) > 0 && (
+                  <div className="quest-funding-progress">
+                    <div className="funding-stats">
+                      <span>₹{quest.amountRaised || 0} raised</span>
+                      <span>Goal: ₹{quest.amountNeeded}</span>
+                    </div>
+                    <div className="funding-bar">
+                      <div
+                        className="funding-fill"
+                        style={{ width: `${Math.min((parseFloat(quest.amountRaised || 0) / parseFloat(quest.amountNeeded)) * 100, 100)}%` }}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                <div className="quest-meta">
+                  <span className="quest-time">⏱️ {quest.timeNeeded}</span>
+                </div>
+                <button
+                  className="quest-details-btn"
+                  onClick={() => setSelectedQuest(quest)}
+                >
+                  View Quest Details
+                </button>
+              </Card>
+            ))
+          ) : (
+            <div className="no-results">
+              <h3>No quests found</h3>
+              <p>Try adjusting your search or filters to find new adventures.</p>
+              <button className="reset-btn" onClick={() => { setSearchTerm(''); setFilterDifficulty('all') }}>Clear Filters</button>
+            </div>
+          )}
         </div>
 
         <Modal

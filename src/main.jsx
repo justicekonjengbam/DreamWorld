@@ -12,5 +12,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <App />
       </AudioProvider>
     </BrowserRouter>
-  </React.StrictMode>,
+  </React.StrictMode >,
 )
