@@ -31,7 +31,7 @@ export const ContentProvider = ({ children }) => {
             setLoading(true)
 
             // 1. Fetch Quests
-            const { data: qData } = await supabase.from('quests').select('*').order('created_at', { ascending: false })
+            const { data: qData } = await supabase.from('quests').select('*').order('created_at', { ascending: true })
             if (qData) {
                 setQuests(qData.map(q => ({
                     ...q,
@@ -56,7 +56,7 @@ export const ContentProvider = ({ children }) => {
             }
 
             // 3. Fetch Characters (Dreamers)
-            const { data: cData } = await supabase.from('dreamers').select('*').order('created_at', { ascending: false })
+            const { data: cData } = await supabase.from('dreamers').select('*').order('created_at', { ascending: true })
             if (cData) {
                 setCharacters(cData.map(c => ({
                     ...c,
@@ -67,7 +67,7 @@ export const ContentProvider = ({ children }) => {
             }
 
             // 3b. Fetch Sponsors (Dedicated Table)
-            const { data: sData } = await supabase.from('sponsors').select('*').order('created_at', { ascending: false })
+            const { data: sData } = await supabase.from('sponsors').select('*').order('created_at', { ascending: true })
             if (sData) {
                 setSponsors(sData.map(s => ({
                     ...s,
@@ -76,7 +76,7 @@ export const ContentProvider = ({ children }) => {
             }
 
             // 4. Fetch Events
-            const { data: eData } = await supabase.from('events').select('*').order('created_at', { ascending: false })
+            const { data: eData } = await supabase.from('events').select('*').order('created_at', { ascending: true })
             if (eData) {
                 setEvents(eData.map(e => ({
                     ...e,
