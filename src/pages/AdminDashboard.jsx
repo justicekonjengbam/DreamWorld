@@ -725,6 +725,124 @@ function AdminDashboard() {
                                 <Button type="submit" variant="primary">Record Donation</Button>
                             </form>
                         </Card>
+
+                        <div className="admin-section-header" style={{ marginTop: '40px', marginBottom: '20px' }}>
+                            <h3>Manage Active Funds</h3>
+                            <p style={{ color: 'var(--color-gray)' }}>Adjust or correct funding totals for active quests and events.</p>
+                        </div>
+
+                        <div className="admin-list">
+                            {/* Quests with Funding */}
+                            {quests.filter(q => q.amountNeeded && parseFloat(q.amountNeeded) > 0).map(q => (
+                                <Card key={q.id} className="admin-item-card" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: '15px' }}>
+                                    <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <div>
+                                            <h4>{q.title} <Badge variant="primary">Quest</Badge></h4>
+                                            <p style={{ fontSize: '0.9rem', color: 'var(--color-cyan)', marginTop: '5px' }}>
+                                                Raised: ₹{q.amountRaised || 0} / ₹{q.amountNeeded}
+                                            </p>
+                                        </div>
+                                        <div className="admin-item-actions">
+                                            <button
+                                                onClick={() => {
+                                                    const amount = prompt(`Subtract amount from "${q.title}":\nCurrent Total: ₹${q.amountRaised || 0}`);
+                                                    if (amount && !isNaN(amount)) {
+                                                        const newTotal = Math.max(0, parseFloat(q.amountRaised || 0) - parseFloat(amount));
+                                                        if (window.confirm(`Reduce by ₹${amount}?\nNew Total will be: ₹${newTotal}`)) {
+                                                            updateQuest(q.id, { ...q, amountRaised: newTotal.toString() });
+                                                            setHasUnsyncedChanges(true); // Ensure sync warning triggers
+                                                        }
+                                                    }
+                                                }}
+                                                title="Subtract Funds"
+                                                style={{ fontSize: '0.9rem', marginRight: '10px' }}
+                                            >
+                                                ➖ Subtract
+                                            </button>
+                                            <button
+                                                onClick={() => {
+                                                    if (window.confirm(`⚠️ CLEAR ALL FUNDS for "${q.title}"?\n\nThis will reset the amount raised to ₹0.\nThis action cannot be undone.`)) {
+                                                        updateQuest(q.id, { ...q, amountRaised: '0' });
+                                                        setHasUnsyncedChanges(true);
+                                                    }
+                                                }}
+                                                title="Reset to 0"
+                                                style={{ fontSize: '0.9rem', color: '#ff6f61' }}
+                                            >
+                                                ❌ Clear
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div className="fund-progress-bar" style={{ width: '100%', height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px', overflow: 'hidden' }}>
+                                        <div style={{
+                                            width: `${Math.min(100, (parseFloat(q.amountRaised || 0) / parseFloat(q.amountNeeded)) * 100)}%`,
+                                            height: '100%',
+                                            background: 'var(--color-gold)',
+                                            transition: 'width 0.3s ease'
+                                        }}></div>
+                                    </div>
+                                </Card>
+                            ))}
+
+                            {/* Events with Funding */}
+                            {events.filter(e => e.amountNeeded && parseFloat(e.amountNeeded) > 0).map(e => (
+                                <Card key={e.id} className="admin-item-card" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: '15px' }}>
+                                    <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <div>
+                                            <h4>{e.title} <Badge variant="secondary">Event</Badge></h4>
+                                            <p style={{ fontSize: '0.9rem', color: 'var(--color-cyan)', marginTop: '5px' }}>
+                                                Raised: ₹{e.amountRaised || 0} / ₹{e.amountNeeded}
+                                            </p>
+                                        </div>
+                                        <div className="admin-item-actions">
+                                            <button
+                                                onClick={() => {
+                                                    const amount = prompt(`Subtract amount from "${e.title}":\nCurrent Total: ₹${e.amountRaised || 0}`);
+                                                    if (amount && !isNaN(amount)) {
+                                                        const newTotal = Math.max(0, parseFloat(e.amountRaised || 0) - parseFloat(amount));
+                                                        if (window.confirm(`Reduce by ₹${amount}?\nNew Total will be: ₹${newTotal}`)) {
+                                                            updateEvent(e.id, { ...e, amountRaised: newTotal.toString() });
+                                                            setHasUnsyncedChanges(true);
+                                                        }
+                                                    }
+                                                }}
+                                                title="Subtract Funds"
+                                                style={{ fontSize: '0.9rem', marginRight: '10px' }}
+                                            >
+                                                ➖ Subtract
+                                            </button>
+                                            <button
+                                                onClick={() => {
+                                                    if (window.confirm(`⚠️ CLEAR ALL FUNDS for "${e.title}"?\n\nThis will reset the amount raised to ₹0.\nThis action cannot be undone.`)) {
+                                                        updateEvent(e.id, { ...e, amountRaised: '0' });
+                                                        setHasUnsyncedChanges(true);
+                                                    }
+                                                }}
+                                                title="Reset to 0"
+                                                style={{ fontSize: '0.9rem', color: '#ff6f61' }}
+                                            >
+                                                ❌ Clear
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div className="fund-progress-bar" style={{ width: '100%', height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px', overflow: 'hidden' }}>
+                                        <div style={{
+                                            width: `${Math.min(100, (parseFloat(e.amountRaised || 0) / parseFloat(e.amountNeeded)) * 100)}%`,
+                                            height: '100%',
+                                            background: 'var(--color-primary)',
+                                            transition: 'width 0.3s ease'
+                                        }}></div>
+                                    </div>
+                                </Card>
+                            ))}
+
+                            {/* Empty State */}
+                            {quests.filter(q => q.amountNeeded && parseFloat(q.amountNeeded) > 0).length === 0 && events.filter(e => e.amountNeeded && parseFloat(e.amountNeeded) > 0).length === 0 && (
+                                <p style={{ textAlign: 'center', color: 'var(--color-gray)', padding: '20px' }}>
+                                    No active fundraisers found. Enable "Needs Funding" on a Quest or Event to see it here.
+                                </p>
+                            )}
+                        </div>
                     </div>
                 )}
 
