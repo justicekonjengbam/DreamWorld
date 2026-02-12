@@ -17,6 +17,7 @@ export const ContentProvider = ({ children }) => {
     const [characters, setCharacters] = useState(initialCharacters)
     const [sponsors, setSponsors] = useState([])
     const [events, setEvents] = useState(initialEvents)
+    const [donations, setDonations] = useState([]) // New state for donations
     const [announcement, setAnnouncement] = useState({
         title: 'Welcome to DreamWorld! 🌟',
         date: 'January 18, 2026',
@@ -102,6 +103,12 @@ export const ContentProvider = ({ children }) => {
                     linkText: aData[0].link_text,
                     linkTo: aData[0].link_to
                 })
+            }
+
+            // 6. Fetch Recent Donations (Limit 50 for admin performance)
+            const { data: dData } = await supabase.from('donations').select('*').order('created_at', { ascending: false }).limit(50)
+            if (dData) {
+                setDonations(dData)
             }
 
             setLoading(false)
@@ -368,17 +375,56 @@ export const ContentProvider = ({ children }) => {
             sponsorship_id: donationData.sponsorshipId || '',
             sponsorship_message: donationData.sponsorshipMessage || ''
         }
-        await saveToSupabase('donations', payload)
+
+        const { data, error } = await supabase.from('donations').insert(payload).select()
+        if (error) {
+            console.error('Error saving donation:', error)
+            throw error
+        }
 
         // Update target quest/event funding
         if (donationData.sponsorshipId && donationData.sponsorshipType !== 'general') {
             const table = donationData.sponsorshipType === 'quest' ? 'quests' : 'events'
-            const { data } = await supabase.from(table).select('amount_raised').eq('id', donationData.sponsorshipId).single()
-            if (data) {
-                const newAmount = (parseFloat(data.amount_raised || 0) + parseFloat(donationData.amount)).toString()
+            const { data: targetData } = await supabase.from(table).select('amount_raised').eq('id', donationData.sponsorshipId).single()
+            if (targetData) {
+                const currentAmount = parseFloat(targetData.amount_raised || 0)
+                const newAmount = (currentAmount + parseFloat(donationData.amount)).toString()
                 await supabase.from(table).update({ amount_raised: newAmount }).eq('id', donationData.sponsorshipId)
-                fetchData() // Refresh UI
             }
+        }
+        fetchData() // Refresh UI to show new donation
+    }
+
+    const deleteDonation = async (id) => {
+        try {
+            // 1. Get donation details before deleting to know what to refund
+            const { data: donation, error: fetchError } = await supabase.from('donations').select('*').eq('id', id).single()
+            if (fetchError || !donation) throw new Error('Donation not found')
+
+            // 2. Delete the record
+            const { error: deleteError } = await supabase.from('donations').delete().eq('id', id)
+            if (deleteError) throw deleteError
+
+            // 3. Revert funds if applicable
+            if (donation.sponsorship_id && donation.sponsorship_type !== 'general') {
+                const table = donation.sponsorship_type === 'quest' ? 'quests' : 'events'
+                const { data: target } = await supabase.from(table).select('amount_raised').eq('id', donation.sponsorship_id).single()
+
+                if (target) {
+                    const currentRaised = parseFloat(target.amount_raised || 0)
+                    const refundAmount = parseFloat(donation.amount || 0)
+                    // Ensure we don't go below zero
+                    const newAmount = Math.max(0, currentRaised - refundAmount).toString()
+
+                    await supabase.from(table).update({ amount_raised: newAmount }).eq('id', donation.sponsorship_id)
+                }
+            }
+            fetchData()
+            return true
+        } catch (error) {
+            console.error('Error deleting donation:', error)
+            alert(`Failed to delete donation: ${error.message}`)
+            return false
         }
     }
 
@@ -399,7 +445,9 @@ export const ContentProvider = ({ children }) => {
             announcement, updateAnnouncement,
             syncGlobalData: fetchData, // Reuse fetchData as a refresh for UI consistency
             submitDreamerApplication,
+            donations, // Export donations state
             submitDonation,
+            deleteDonation, // Export delete function
             sponsorships
         }}>
             {children}

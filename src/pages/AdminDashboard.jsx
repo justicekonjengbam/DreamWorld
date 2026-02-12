@@ -22,7 +22,8 @@ function AdminDashboard() {
         events, addEvent, updateEvent, deleteEvent,
         announcement, updateAnnouncement,
         syncGlobalData,
-        submitDonation
+        submitDonation,
+        donations, deleteDonation
     } = useContent()
 
     const [activeTab, setActiveTab] = useState('announcement')
@@ -727,10 +728,63 @@ function AdminDashboard() {
                         </Card>
 
                         <div className="admin-section-header" style={{ marginTop: '40px', marginBottom: '20px' }}>
+                            <h3>Recent Donations (Last 50)</h3>
+                            <p style={{ color: 'var(--color-gray)' }}>View and manage recent contributions. Deleting a record here will effectively "refund" it from the system.</p>
+                        </div>
+
+                        <div className="admin-list">
+                            {donations.length === 0 ? (
+                                <p style={{ textAlign: 'center', color: 'var(--color-gray)', padding: '20px' }}>No donations recorded yet.</p>
+                            ) : (
+                                donations.map(d => (
+                                    <Card key={d.id} className="admin-item-card" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: '10px' }}>
+                                        <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                            <div>
+                                                <h4>₹{d.amount} <span style={{ fontWeight: 'normal', color: 'var(--color-gray)' }}>from {d.name}</span></h4>
+                                                <div style={{ display: 'flex', gap: '8px', fontSize: '0.8rem', marginTop: '4px', flexWrap: 'wrap' }}>
+                                                    <span style={{ color: 'var(--color-accent)' }}>{new Date(d.date).toLocaleDateString()}</span>
+                                                    {d.sponsorship_type !== 'general' && (
+                                                        <Badge variant="secondary">
+                                                            For {d.sponsorship_type === 'quest' ? 'Quest' : 'Event'}
+                                                        </Badge>
+                                                    )}
+                                                    {d.payment_method === 'manual' && <Badge variant="outline">Manual</Badge>}
+                                                </div>
+                                            </div>
+                                            <div className="admin-item-actions">
+                                                <button
+                                                    onClick={() => {
+                                                        const targetName = d.sponsorship_type === 'general' ? 'General Fund' : (
+                                                            d.sponsorship_type === 'quest'
+                                                                ? (quests.find(q => q.id === d.sponsorship_id)?.title || 'Unknown Quest')
+                                                                : (events.find(e => e.id === d.sponsorship_id)?.title || 'Unknown Event')
+                                                        );
+
+                                                        if (window.confirm(`⚠️ DELETE DONATION?\n\nDonor: ${d.name}\nAmount: ₹${d.amount}\nTarget: ${targetName}\n\nDeleting this will REMOVE the record and DEDUCT ₹${d.amount} from the target fundraiser.\n\nAre you sure?`)) {
+                                                            deleteDonation(d.id);
+                                                            setHasUnsyncedChanges(true);
+                                                        }
+                                                    }}
+                                                    title="Delete & Refund"
+                                                    style={{ color: '#ff6f61', fontSize: '1rem' }}
+                                                >
+                                                    🗑️
+                                                </button>
+                                            </div>
+                                        </div>
+                                        {d.message && (
+                                            <div style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.7)', background: 'rgba(255,255,255,0.05)', padding: '8px', borderRadius: '4px', width: '100%' }}>
+                                                "{d.message}"
+                                            </div>
+                                        )}
+                                    </Card>
+                                ))
+                            )}
+                        </div>
+                        <div className="admin-section-header" style={{ marginTop: '40px', marginBottom: '20px' }}>
                             <h3>Manage Active Funds</h3>
                             <p style={{ color: 'var(--color-gray)' }}>Adjust or correct funding totals for active quests and events.</p>
                         </div>
-
                         <div className="admin-list">
                             {/* Quests with Funding */}
                             {quests.filter(q => q.amountNeeded && parseFloat(q.amountNeeded) > 0).map(q => (
@@ -896,15 +950,19 @@ function AdminDashboard() {
             </div>
 
             {/* Print Overlays (Portals make them direct children of body for safe printing) */}
-            {printingDreamer && printType === 'id' && createPortal(
-                <PrintableID dreamer={printingDreamer} onClose={() => setPrintingDreamer(null)} />,
-                document.body
-            )}
-            {printingDreamer && printType === 'cert' && createPortal(
-                <PrintableCertificate dreamer={printingDreamer} onClose={() => setPrintingDreamer(null)} />,
-                document.body
-            )}
-        </div>
+            {
+                printingDreamer && printType === 'id' && createPortal(
+                    <PrintableID dreamer={printingDreamer} onClose={() => setPrintingDreamer(null)} />,
+                    document.body
+                )
+            }
+            {
+                printingDreamer && printType === 'cert' && createPortal(
+                    <PrintableCertificate dreamer={printingDreamer} onClose={() => setPrintingDreamer(null)} />,
+                    document.body
+                )
+            }
+        </div >
     )
 }
 
