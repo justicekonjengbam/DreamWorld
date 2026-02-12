@@ -75,51 +75,111 @@ function Home() {
       </section>
 
 
-      <section className="features container">
-        <h2 className="animate-on-scroll features-title">Discover Your Path</h2>
-        <div className="features-grid">
-          <div className="animate-on-scroll delay-1">
-            <Card>
-              <div className="feature-icon" style={{ background: 'linear-gradient(135deg, #4CAF50, #4CA1AF)' }}>
-                <span className="icon-text">📚</span>
-              </div>
-              <h3>Learn</h3>
-              <p>
-                Explore knowledge from technology to nature, from coding to gardening.
-                Our community shares resources, tutorials, and guidance for beginners and experts alike.
-              </p>
-              <Link to="/about" className="feature-link">Discover the lore →</Link>
-            </Card>
-          </div>
+      <section className="features">
+        <div className="features-ambient-bg">
+          <div className="ambient-blob blob-1"></div>
+          <div className="ambient-blob blob-2"></div>
+          <div className="ambient-blob blob-3"></div>
+        </div>
 
+        <div className="container">
+          <h2 className="animate-on-scroll features-title">Discover Your Path</h2>
+          <div className="features-grid">
+            {/* Card 1: The Lore */}
+            <div className="animate-on-scroll delay-1 feature-wrapper">
+              <Link to="/about" className="feature-card lore-card">
+                <div className="feature-icon-wrapper">
+                  <div className="feature-icon lore-icon">
+                    <span className="icon-text">📜</span>
+                  </div>
+                </div>
+                <h3>The Lore</h3>
+                <p>
+                  Uncover the Vision. Read the story of DreamWorld, our philosophy, and the future we are building together.
+                </p>
+                <span className="feature-cta">Read the Story →</span>
+              </Link>
+            </div>
 
-          <div className="animate-on-scroll delay-2">
-            <Card>
-              <div className="feature-icon" style={{ background: 'linear-gradient(135deg, #FFD700, #FF6F61)' }}>
-                <span className="icon-text">✨</span>
-              </div>
-              <h3>Characters</h3>
-              <p>
-                Meet the guides of DreamWorld—The Guardian, The Florist, The Hooper—each
-                bringing unique wisdom and inspiration to our community.
-              </p>
-              <Link to="/characters" className="feature-link">Meet the characters →</Link>
-            </Card>
-          </div>
+            {/* Card 2: The Dreamers */}
+            <div className="animate-on-scroll delay-2 feature-wrapper">
+              <Link to="/characters" className="feature-card dreamers-card">
+                <div className="feature-icon-wrapper">
+                  <div className="feature-icon dreamers-icon">
+                    <span className="icon-text">✨</span>
+                  </div>
+                </div>
+                <h3>The Dreamers</h3>
+                <p>
+                  Meet the Community. Explore profiles, check <strong>Dream Levels</strong>, and see who is leading the change.
+                </p>
+                <span className="feature-cta">Meet the Members →</span>
+              </Link>
+            </div>
 
+            {/* Card 3: The Journey */}
+            <div className="animate-on-scroll delay-3 feature-wrapper">
+              <Link to="/quests" className="feature-card journey-card">
+                <div className="feature-icon-wrapper">
+                  <div className="feature-icon journey-icon">
+                    <span className="icon-text">⚔️</span>
+                  </div>
+                </div>
+                <h3>The Journey</h3>
+                <p>
+                  Start Your Adventure. Complete Quests to earn <strong>XP</strong>, level up, and make a real-world impact.
+                </p>
+                <span className="feature-cta">Start a Quest →</span>
+              </Link>
+            </div>
 
-          <div className="animate-on-scroll delay-3">
-            <Card>
-              <div className="feature-icon" style={{ background: 'linear-gradient(135deg, #1D2671, #C33764)' }}>
-                <span className="icon-text">🎯</span>
-              </div>
-              <h3>Quests & Events</h3>
-              <p>
-                Take on weekly quests and join live events. Small, achievable actions that build
-                skills, strengthen community, and create positive change in the world.
-              </p>
-              <Link to="/quests" className="feature-link">See active quests →</Link>
-            </Card>
+            {/* Card 4: The Architect */}
+            <div className="animate-on-scroll delay-1 feature-wrapper">
+              <Link to="/creator" className="feature-card creator-card">
+                <div className="feature-icon-wrapper">
+                  <div className="feature-icon creator-icon">
+                    <span className="icon-text">👁️</span>
+                  </div>
+                </div>
+                <h3>The Architect</h3>
+                <p>
+                  Meet the Creator. Explore the mind behind the dream and the origin of this universe.
+                </p>
+                <span className="feature-cta">Meet Justice →</span>
+              </Link>
+            </div>
+
+            {/* Card 5: The Gathering */}
+            <div className="animate-on-scroll delay-2 feature-wrapper">
+              <Link to="/events" className="feature-card gathering-card">
+                <div className="feature-icon-wrapper">
+                  <div className="feature-icon gathering-icon">
+                    <span className="icon-text">🔥</span>
+                  </div>
+                </div>
+                <h3>The Gathering</h3>
+                <p>
+                  Join the Assembly. Participate in live events, workshops, and community celebrations.
+                </p>
+                <span className="feature-cta">View Events →</span>
+              </Link>
+            </div>
+
+            {/* Card 6: The Pillars */}
+            <div className="animate-on-scroll delay-3 feature-wrapper">
+              <Link to="/thanks" className="feature-card pillars-card">
+                <div className="feature-icon-wrapper">
+                  <div className="feature-icon pillars-icon">
+                    <span className="icon-text">💎</span>
+                  </div>
+                </div>
+                <h3>The Pillars</h3>
+                <p>
+                  Honor the Supporters. See the visionaries and patrons fueling the dream.
+                </p>
+                <span className="feature-cta">View Wall of Gratitude →</span>
+              </Link>
+            </div>
           </div>
         </div>
       </section>

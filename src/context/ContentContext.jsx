@@ -62,7 +62,10 @@ export const ContentProvider = ({ children }) => {
                     ...c,
                     coverImage: c.cover_image,
                     themes: typeof c.themes === 'string' ? c.themes.split(',').map(t => t.trim()).filter(Boolean) : [],
-                    socials: { youtube: c.youtube, instagram: c.instagram, facebook: c.facebook, twitter: c.twitter }
+                    themes: typeof c.themes === 'string' ? c.themes.split(',').map(t => t.trim()).filter(Boolean) : [],
+                    socials: { youtube: c.youtube, instagram: c.instagram, facebook: c.facebook, twitter: c.twitter },
+                    level: Math.floor((c.points || 0) / 100),
+                    points: c.points || 0
                 })))
             }
 
@@ -221,7 +224,8 @@ export const ContentProvider = ({ children }) => {
             youtube: newChar.socials?.youtube || '',
             instagram: newChar.socials?.instagram || '',
             facebook: newChar.socials?.facebook || '',
-            twitter: newChar.socials?.twitter || ''
+            twitter: newChar.socials?.twitter || '',
+            points: parseInt(newChar.points || 0)
         }
         if (await saveToSupabase('dreamers', payload)) fetchData()
     }
@@ -239,7 +243,8 @@ export const ContentProvider = ({ children }) => {
             youtube: updated.socials?.youtube || updated.youtube || '',
             instagram: updated.socials?.instagram || updated.instagram || '',
             facebook: updated.socials?.facebook || updated.facebook || '',
-            twitter: updated.socials?.twitter || updated.twitter || ''
+            twitter: updated.socials?.twitter || updated.twitter || '',
+            points: parseInt(updated.points || 0)
         }
 
         if (await saveToSupabase('dreamers', payload)) fetchData()

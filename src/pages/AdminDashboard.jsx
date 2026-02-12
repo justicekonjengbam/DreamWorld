@@ -467,6 +467,13 @@ function AdminDashboard() {
                                         <div className="form-group"><label>Twitter URL</label><input type="text" placeholder="https://twitter.com/..." value={memberFormData.twitter || ''} onChange={(e) => setMemberFormData(prev => ({ ...prev, twitter: e.target.value }))} /></div>
                                     </div>
                                     <div className="form-group-full"><label>Themes (Comma separated)</label><input type="text" placeholder="Future, Solar, Community" value={memberFormData.themes} onChange={(e) => setMemberFormData(prev => ({ ...prev, themes: e.target.value }))} required /></div>
+                                    <div className="form-row">
+                                        <div className="form-group" style={{ opacity: 0.7 }}>
+                                            <label>Dream Level (Calculated)</label>
+                                            <input type="text" value={Math.floor((memberFormData.points || 0) / 100)} disabled style={{ cursor: 'not-allowed' }} />
+                                        </div>
+                                        <div className="form-group"><label>XP Points</label><input type="number" min="0" value={memberFormData.points || 0} onChange={(e) => setMemberFormData(prev => ({ ...prev, points: e.target.value }))} /></div>
+                                    </div>
                                     <Button type="submit" variant="primary">{editingId ? 'Update' : 'Add'} Dreamer</Button>
                                     {editingId && <Button type="button" variant="secondary" onClick={resetForms}>Cancel</Button>}
                                 </form>
@@ -480,7 +487,13 @@ function AdminDashboard() {
                                                 name={c.name}
                                                 style={{ width: 40, height: 40, borderRadius: '50%' }}
                                             />
-                                            <div><h4>{c.name}</h4><Badge>{c.role}</Badge></div>
+                                            <div>
+                                                <h4>{c.name}</h4>
+                                                <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
+                                                    <Badge>{c.role}</Badge>
+                                                    <span style={{ fontSize: '0.8rem', color: 'var(--color-accent)', fontWeight: 'bold' }}>Lvl {c.level || 0}</span>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div className="admin-item-actions">
                                             <button onClick={() => {
@@ -491,7 +504,10 @@ function AdminDashboard() {
                                                     youtube: c.socials?.youtube || '',
                                                     instagram: c.socials?.instagram || '',
                                                     facebook: c.socials?.facebook || '',
-                                                    twitter: c.socials?.twitter || ''
+                                                    twitter: c.socials?.twitter || '',
+                                                    twitter: c.socials?.twitter || '',
+                                                    level: c.level || 0,
+                                                    points: c.points || 0
                                                 })
                                             }}>✏️</button>
                                             <button onClick={() => handleMemberDelete(c.id)}>🗑️</button>

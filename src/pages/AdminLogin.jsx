@@ -34,7 +34,7 @@ function AdminLogin() {
                         <h2>Admin Portal</h2>
                         <p className="login-subtitle">Please enter your password to continue</p>
 
-                        <form onSubmit={handleLogin} className="login-form">
+                        <form onSubmit={handleLogin} className="login-form" autoComplete="off">
                             <div className="form-group">
                                 <input
                                     type="password"
@@ -43,6 +43,8 @@ function AdminLogin() {
                                     placeholder="Password"
                                     required
                                     autoFocus
+                                    autoComplete="new-password"
+                                    name="admin-password-field"
                                 />
                             </div>
 

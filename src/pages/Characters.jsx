@@ -83,6 +83,10 @@ function Characters() {
                       }}
                     />
                   </div>
+                  <div className="character-level-badge" title={`Dream Level: ${character.level || 0}`}>
+                    <span className="level-label">DREAM LVL</span>
+                    <span className="level-value">{character.level || 0}</span>
+                  </div>
                 </div>
                 <h3>{character.name}</h3>
                 <p className="character-role-title">{character.title}</p>

@@ -86,6 +86,17 @@ function CharacterDetail() {
               </Link>
             )}
 
+            <div className="character-stats-row">
+              <div className="stat-pill level">
+                <span className="label">DREAM LEVEL</span>
+                <span className="value">{character.level || 0}</span>
+              </div>
+              <div className="stat-pill points">
+                <span className="value">{character.points || 0}</span>
+                <span className="label">XP</span>
+              </div>
+            </div>
+
             <div className="character-themes-large">
               {character.themes && character.themes.map((theme, index) => (
                 <Badge key={index}>{theme}</Badge>
