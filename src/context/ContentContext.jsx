@@ -58,12 +58,12 @@ export const ContentProvider = ({ children }) => {
             }
 
             // 3. Fetch Characters (Dreamers)
-            const { data: cData } = await supabase.from('dreamers').select('*').order('created_at', { ascending: true })
+            const { data: cData } = await supabase.from('dreamers').select('*').order('order_index', { ascending: true })
             if (cData) {
                 setCharacters(cData.map(c => ({
                     ...c,
                     coverImage: c.cover_image,
-                    themes: typeof c.themes === 'string' ? c.themes.split(',').map(t => t.trim()).filter(Boolean) : [],
+                    joinedDate: c.joined_date,
                     themes: typeof c.themes === 'string' ? c.themes.split(',').map(t => t.trim()).filter(Boolean) : [],
                     socials: { youtube: c.youtube, instagram: c.instagram, facebook: c.facebook, twitter: c.twitter },
                     level: Math.floor((c.points || 0) / 100),
@@ -232,12 +232,13 @@ export const ContentProvider = ({ children }) => {
             cover_image: newChar.coverImage,
             bio: newChar.bio,
             themes: Array.isArray(newChar.themes) ? newChar.themes.join(',') : newChar.themes,
-            joined_date: new Date().toISOString().split('T')[0],
+            joined_date: newChar.joinedDate || new Date().toISOString().split('T')[0],
             youtube: newChar.socials?.youtube || '',
             instagram: newChar.socials?.instagram || '',
             facebook: newChar.socials?.facebook || '',
             twitter: newChar.socials?.twitter || '',
-            points: parseInt(newChar.points || 0)
+            points: parseInt(newChar.points || 0),
+            order_index: characters.length
         }
         if (await saveToSupabase('dreamers', payload)) fetchData()
     }
@@ -252,11 +253,13 @@ export const ContentProvider = ({ children }) => {
             cover_image: updated.coverImage,
             bio: updated.bio,
             themes: Array.isArray(updated.themes) ? updated.themes.join(',') : updated.themes,
+            joined_date: updated.joinedDate,
             youtube: updated.socials?.youtube || updated.youtube || '',
             instagram: updated.socials?.instagram || updated.instagram || '',
             facebook: updated.socials?.facebook || updated.facebook || '',
             twitter: updated.socials?.twitter || updated.twitter || '',
-            points: parseInt(updated.points || 0)
+            points: parseInt(updated.points || 0),
+            order_index: updated.order_index
         }
 
         if (await saveToSupabase('dreamers', payload)) fetchData()
@@ -433,6 +436,29 @@ export const ContentProvider = ({ children }) => {
         }
     }
 
+    const reorderCharacter = async (id, direction) => {
+        const index = characters.findIndex(c => c.id === id)
+        if (index === -1) return
+
+        const newIndex = direction === 'up' ? index - 1 : index + 1
+        if (newIndex < 0 || newIndex >= characters.length) return
+
+        const itemA = characters[index]
+        const itemB = characters[newIndex]
+
+        try {
+            // Swap order_index
+            const { error } = await supabase.from('dreamers').upsert([
+                { id: itemA.id, order_index: itemB.order_index || newIndex },
+                { id: itemB.id, order_index: itemA.order_index || index }
+            ])
+            if (error) throw error
+            fetchData()
+        } catch (error) {
+            console.error('Error reordering character:', error)
+        }
+    }
+
     const sponsorships = useMemo(() => {
         const qSpons = quests.filter(q => parseFloat(q.amountNeeded) > 0).map(q => ({ ...q, type: 'quest', name: q.title, description: q.purpose }));
         const eSpons = events.filter(e => parseFloat(e.amountNeeded) > 0).map(e => ({ ...e, type: 'event', name: e.title, description: e.description }));
@@ -453,6 +479,7 @@ export const ContentProvider = ({ children }) => {
             donations, // Export donations state
             submitDonation,
             deleteDonation, // Export delete function
+            reorderCharacter,
             sponsorships
         }}>
             {children}

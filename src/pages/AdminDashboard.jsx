@@ -35,7 +35,7 @@ function AdminDashboard() {
         needsFunding: false, amountNeeded: '', galleryImages: [], completionImages: [], completionNote: ''
     })
     const [roleFormData, setRoleFormData] = useState({ id: '', name: '', singular: '', description: '', color: '#4CA1AF', traits: '', philosophy: '', isExclusive: false })
-    const [memberFormData, setMemberFormData] = useState({ name: '', role: '', title: '', avatar: '', coverImage: '', bio: '', themes: '' })
+    const [memberFormData, setMemberFormData] = useState({ name: '', role: '', title: '', avatar: '', coverImage: '', bio: '', themes: '', joinedDate: '', order_index: 0 })
     const [sponsorFormData, setSponsorFormData] = useState({ name: '', title: '', avatar: '', bio: '', themes: '' })
     const [eventFormData, setEventFormData] = useState({
         title: '', host: '', type: 'online', date: '', location: '', description: '', registrationLink: '',
@@ -114,7 +114,7 @@ function AdminDashboard() {
             needsFunding: false, amountNeeded: '', galleryImages: [], completionImages: [], completionNote: ''
         })
         setRoleFormData({ id: '', name: '', singular: '', description: '', color: '#4CA1AF', traits: '', philosophy: '', isExclusive: false })
-        setMemberFormData({ name: '', role: '', title: '', avatar: '', coverImage: '', bio: '', themes: '' })
+        setMemberFormData({ name: '', role: '', title: '', avatar: '', coverImage: '', bio: '', themes: '', joinedDate: '', order_index: 0 })
         setSponsorFormData({ name: '', title: '', avatar: '', bio: '', themes: '' })
         setEventFormData({
             title: '', host: '', type: 'online', date: '', location: '', description: '', registrationLink: '',
@@ -485,10 +485,7 @@ function AdminDashboard() {
                                     </div>
                                     <div className="form-group-full"><label>Themes (Comma separated)</label><input type="text" placeholder="Future, Solar, Community" value={memberFormData.themes} onChange={(e) => setMemberFormData(prev => ({ ...prev, themes: e.target.value }))} required /></div>
                                     <div className="form-row">
-                                        <div className="form-group" style={{ opacity: 0.7 }}>
-                                            <label>Dream Level (Calculated)</label>
-                                            <input type="text" value={Math.floor((memberFormData.points || 0) / 100)} disabled style={{ cursor: 'not-allowed' }} />
-                                        </div>
+                                        <div className="form-group"><label>Dreaming Since</label><input type="date" value={memberFormData.joinedDate || ''} onChange={(e) => setMemberFormData(prev => ({ ...prev, joinedDate: e.target.value }))} required /></div>
                                         <div className="form-group"><label>XP Points</label><input type="number" min="0" value={memberFormData.points || 0} onChange={(e) => setMemberFormData(prev => ({ ...prev, points: e.target.value }))} /></div>
                                     </div>
                                     <Button type="submit" variant="primary">{editingId ? 'Update' : 'Add'} Dreamer</Button>
@@ -524,10 +521,16 @@ function AdminDashboard() {
                                                     twitter: c.socials?.twitter || '',
                                                     twitter: c.socials?.twitter || '',
                                                     level: c.level || 0,
-                                                    points: c.points || 0
+                                                    points: c.points || 0,
+                                                    joinedDate: c.joinedDate || '',
+                                                    order_index: c.order_index || 0
                                                 })
                                             }}>✏️</button>
                                             <button onClick={() => handleMemberDelete(c.id)}>🗑️</button>
+                                            <div className="order-controls" style={{ display: 'inline-flex', gap: '2px', marginLeft: '5px' }}>
+                                                <button onClick={() => reorderCharacter(c.id, 'up')} title="Move Up">🔼</button>
+                                                <button onClick={() => reorderCharacter(c.id, 'down')} title="Move Down">🔽</button>
+                                            </div>
                                             <button
                                                 className="print-btn"
                                                 onClick={() => { setPrintingDreamer(c); setPrintType('id'); }}
