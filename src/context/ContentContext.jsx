@@ -52,7 +52,8 @@ export const ContentProvider = ({ children }) => {
             if (rData) {
                 setRoles(rData.map(r => ({
                     ...r,
-                    traits: typeof r.traits === 'string' ? r.traits.split('\n').filter(t => t.trim()) : []
+                    traits: typeof r.traits === 'string' ? r.traits.split('\n').filter(t => t.trim()) : [],
+                    is_exclusive: r.is_exclusive === true || r.is_exclusive === 'true'
                 })))
             }
 

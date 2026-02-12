@@ -219,7 +219,7 @@ function Join() {
                       className={dreamerErrors.role ? 'error' : ''}
                     >
                       <option value="">Select a role...</option>
-                      {roles.filter(r => !r.is_exclusive).map(role => (
+                      {roles.filter(r => r.is_exclusive !== true && r.is_exclusive !== 'true').map(role => (
                         <option key={role.id} value={role.id}>
                           {role.singular} - {role.description.substring(0, 50)}...
                         </option>
