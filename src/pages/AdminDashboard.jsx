@@ -34,7 +34,7 @@ function AdminDashboard() {
         title: '', purpose: '', difficulty: 'easy', timeNeeded: '', steps: '', impact: '', sharePrompt: '',
         needsFunding: false, amountNeeded: '', galleryImages: [], completionImages: [], completionNote: ''
     })
-    const [roleFormData, setRoleFormData] = useState({ id: '', name: '', singular: '', description: '', color: '#4CA1AF', traits: '', philosophy: '' })
+    const [roleFormData, setRoleFormData] = useState({ id: '', name: '', singular: '', description: '', color: '#4CA1AF', traits: '', philosophy: '', isExclusive: false })
     const [memberFormData, setMemberFormData] = useState({ name: '', role: '', title: '', avatar: '', coverImage: '', bio: '', themes: '' })
     const [sponsorFormData, setSponsorFormData] = useState({ name: '', title: '', avatar: '', bio: '', themes: '' })
     const [eventFormData, setEventFormData] = useState({
@@ -113,7 +113,7 @@ function AdminDashboard() {
             title: '', purpose: '', difficulty: 'easy', timeNeeded: '', steps: '', impact: '', sharePrompt: '',
             needsFunding: false, amountNeeded: '', galleryImages: [], completionImages: [], completionNote: ''
         })
-        setRoleFormData({ id: '', name: '', singular: '', description: '', color: '#4CA1AF', traits: '', philosophy: '' })
+        setRoleFormData({ id: '', name: '', singular: '', description: '', color: '#4CA1AF', traits: '', philosophy: '', isExclusive: false })
         setMemberFormData({ name: '', role: '', title: '', avatar: '', coverImage: '', bio: '', themes: '' })
         setSponsorFormData({ name: '', title: '', avatar: '', bio: '', themes: '' })
         setEventFormData({
@@ -375,6 +375,22 @@ function AdminDashboard() {
                                     <div className="form-group-full"><label>Description</label><textarea rows="3" value={roleFormData.description} onChange={(e) => setRoleFormData({ ...roleFormData, description: e.target.value })} required /></div>
                                     <div className="form-group-full"><label>Traits (One per line)</label><textarea rows="4" value={roleFormData.traits} onChange={(e) => setRoleFormData({ ...roleFormData, traits: e.target.value })} required /></div>
                                     <div className="form-group-full"><label>Philosophy</label><textarea rows="3" value={roleFormData.philosophy} onChange={(e) => setRoleFormData({ ...roleFormData, philosophy: e.target.value })} required /></div>
+
+                                    <div className="form-checkbox" style={{ margin: '15px 0', padding: '15px', background: 'rgba(255, 69, 0, 0.1)', border: '1px solid rgba(255, 69, 0, 0.3)', borderRadius: '8px' }}>
+                                        <input
+                                            type="checkbox"
+                                            id="roleExclusive"
+                                            checked={roleFormData.isExclusive || false}
+                                            onChange={(e) => setRoleFormData({ ...roleFormData, isExclusive: e.target.checked })}
+                                        />
+                                        <label htmlFor="roleExclusive" style={{ color: '#ff6f61', fontWeight: 'bold' }}>
+                                            🔒 Exclusive / Admin Only?
+                                        </label>
+                                        <p style={{ fontSize: '0.8rem', color: '#ccc', marginLeft: '25px', marginTop: '5px' }}>
+                                            If checked, this role will NOT appear in the "Join" form. Use this for special roles like "Architect".
+                                        </p>
+                                    </div>
+
                                     <Button type="submit" variant="primary">{editingId ? 'Update' : 'Add'} Role</Button>
                                     {editingId && <Button type="button" variant="secondary" onClick={resetForms}>Cancel</Button>}
                                 </form>
@@ -384,7 +400,7 @@ function AdminDashboard() {
                                     <Card key={r.id} className="admin-item-card">
                                         <div><h4>{r.name}</h4><Badge>{r.singular}</Badge></div>
                                         <div className="admin-item-actions">
-                                            <button onClick={() => { setEditingId(r.id); setRoleFormData({ ...r, traits: r.traits.join('\n') }) }}>✏️</button>
+                                            <button onClick={() => { setEditingId(r.id); setRoleFormData({ ...r, traits: r.traits.join('\n'), isExclusive: r.is_exclusive || false }) }}>✏️</button>
                                             <button onClick={() => handleRoleDelete(r.id)}>🗑️</button>
                                         </div>
                                     </Card>
