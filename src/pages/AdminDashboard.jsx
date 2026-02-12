@@ -528,8 +528,8 @@ function AdminDashboard() {
                                             }}>✏️</button>
                                             <button onClick={() => handleMemberDelete(c.id)}>🗑️</button>
                                             <div className="order-controls" style={{ display: 'inline-flex', gap: '2px', marginLeft: '5px' }}>
-                                                <button onClick={() => reorderCharacter(c.id, 'up')} title="Move Up">🔼</button>
-                                                <button onClick={() => reorderCharacter(c.id, 'down')} title="Move Down">🔽</button>
+                                                {characters.indexOf(c) > 0 && <button onClick={() => reorderCharacter(c.id, 'up')} title="Move Up">🔼</button>}
+                                                {characters.indexOf(c) < characters.length - 1 && <button onClick={() => reorderCharacter(c.id, 'down')} title="Move Down">🔽</button>}
                                             </div>
                                             <button
                                                 className="print-btn"
