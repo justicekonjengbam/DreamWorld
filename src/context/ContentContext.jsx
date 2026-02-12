@@ -449,8 +449,8 @@ export const ContentProvider = ({ children }) => {
         try {
             // Swap order_index
             const { error } = await supabase.from('dreamers').upsert([
-                { id: itemA.id, order_index: itemB.order_index || newIndex },
-                { id: itemB.id, order_index: itemA.order_index || index }
+                { id: itemA.id, order_index: itemB.order_index ?? newIndex },
+                { id: itemB.id, order_index: itemA.order_index ?? index }
             ])
             if (error) throw error
             fetchData()

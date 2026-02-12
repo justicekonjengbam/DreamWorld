@@ -17,7 +17,7 @@ function AdminDashboard() {
         loading,
         quests, addQuest, updateQuest, deleteQuest,
         roles, addRole, updateRole, deleteRole,
-        characters, addCharacter, updateCharacter, deleteCharacter,
+        characters, addCharacter, updateCharacter, deleteCharacter, reorderCharacter,
         sponsors, addSponsor, updateSponsor, deleteSponsor,
         events, addEvent, updateEvent, deleteEvent,
         announcement, updateAnnouncement,
