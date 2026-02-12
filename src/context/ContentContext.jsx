@@ -195,7 +195,8 @@ export const ContentProvider = ({ children }) => {
             color: newRole.color,
             traits: Array.isArray(newRole.traits) ? newRole.traits.join('\n') : newRole.traits,
             philosophy: newRole.philosophy,
-            is_exclusive: newRole.isExclusive || false
+            is_exclusive: newRole.isExclusive || false,
+            image: newRole.image
         }
         if (await saveToSupabase('roles', payload)) fetchData()
     }
@@ -209,7 +210,8 @@ export const ContentProvider = ({ children }) => {
             color: updated.color,
             traits: Array.isArray(updated.traits) ? updated.traits.join('\n') : updated.traits,
             philosophy: updated.philosophy,
-            is_exclusive: updated.isExclusive || false
+            is_exclusive: updated.isExclusive || false,
+            image: updated.image
         }
         if (await saveToSupabase('roles', payload)) fetchData()
     }
