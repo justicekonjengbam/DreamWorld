@@ -443,19 +443,42 @@ export const ContentProvider = ({ children }) => {
         const newIndex = direction === 'up' ? index - 1 : index + 1
         if (newIndex < 0 || newIndex >= characters.length) return
 
-        const itemA = characters[index]
-        const itemB = characters[newIndex]
+        // 1. Optimistic Update: Create a new array with the swapped items
+        const newCharacters = [...characters]
+        const [movedItem] = newCharacters.splice(index, 1)
+        newCharacters.splice(newIndex, 0, movedItem)
+
+        // Update local state immediately
+        setCharacters(newCharacters)
 
         try {
-            // Swap order_index
+            // 2. Background Sync: Swap order_index in Supabase
+            // We use the item at the *new* index (which is our moved item)
+            // and the item at the *old* index (which is the one we swapped with)
+            const itemA = characters[index] // valid from original state closure
+            const itemB = characters[newIndex] // valid from original state closure
+
+            // We want to swap their order_indices. 
+            // NOTE: The previous logic might have been relying on order_index being strictly 0, 1, 2...
+            // It is safer to swap the *values* of order_index between the two rows.
+
+            const indexA = itemA.order_index ?? index
+            const indexB = itemB.order_index ?? newIndex
+
             const { error } = await supabase.from('dreamers').upsert([
-                { id: itemA.id, order_index: itemB.order_index ?? newIndex },
-                { id: itemB.id, order_index: itemA.order_index ?? index }
+                { id: itemA.id, order_index: indexB },
+                { id: itemB.id, order_index: indexA }
             ])
+
             if (error) throw error
-            fetchData()
+
+            // Success: Do NOTHING. The UI is already correct. 
+            // valid re-fetch is not needed unless we suspect concurrent edits.
         } catch (error) {
             console.error('Error reordering character:', error)
+            // Revert state on error
+            setCharacters(characters)
+            alert("Failed to save new order. Please try again.")
         }
     }
 
