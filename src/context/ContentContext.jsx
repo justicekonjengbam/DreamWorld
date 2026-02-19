@@ -443,42 +443,37 @@ export const ContentProvider = ({ children }) => {
         const newIndex = direction === 'up' ? index - 1 : index + 1
         if (newIndex < 0 || newIndex >= characters.length) return
 
-        // 1. Optimistic Update: Create a new array with the swapped items
+        // 1. Optimistic Update: Move item in local array
         const newCharacters = [...characters]
         const [movedItem] = newCharacters.splice(index, 1)
         newCharacters.splice(newIndex, 0, movedItem)
 
+        // 2. Re-assign order_index to match new array order (0, 1, 2...)
+        // This ensures CLEAN indices and fixes duplicates/nulls.
+        const optimizedCharacters = newCharacters.map((c, i) => ({
+            ...c,
+            order_index: i
+        }))
+
         // Update local state immediately
-        setCharacters(newCharacters)
+        setCharacters(optimizedCharacters)
 
         try {
-            // 2. Background Sync: Swap order_index in Supabase
-            // We use the item at the *new* index (which is our moved item)
-            // and the item at the *old* index (which is the one we swapped with)
-            const itemA = characters[index] // valid from original state closure
-            const itemB = characters[newIndex] // valid from original state closure
+            // 3. Background Sync: Update ALL indices to guarantee consistency
+            // Using upsert with just ID and order_index
+            const updates = optimizedCharacters.map(c => ({
+                id: c.id,
+                order_index: c.order_index
+            }))
 
-            // We want to swap their order_indices. 
-            // NOTE: The previous logic might have been relying on order_index being strictly 0, 1, 2...
-            // It is safer to swap the *values* of order_index between the two rows.
-
-            const indexA = itemA.order_index ?? index
-            const indexB = itemB.order_index ?? newIndex
-
-            const { error } = await supabase.from('dreamers').upsert([
-                { id: itemA.id, order_index: indexB },
-                { id: itemB.id, order_index: indexA }
-            ])
+            const { error } = await supabase.from('dreamers').upsert(updates)
 
             if (error) throw error
-
-            // Success: Do NOTHING. The UI is already correct. 
-            // valid re-fetch is not needed unless we suspect concurrent edits.
         } catch (error) {
             console.error('Error reordering character:', error)
             // Revert state on error
             setCharacters(characters)
-            alert("Failed to save new order. Please try again.")
+            alert(`Failed to save order: ${error.message}`)
         }
     }
 
