@@ -76,13 +76,6 @@ function Navbar() {
 
         {/* Mobile Drawer */}
         <div className={`navbar-drawer ${isOpen ? 'open' : ''}`}>
-          <ul className="drawer-links">
-            {links.map(({ to, label, exact }) => (
-              <li key={to + label}>
-                <Link to={to} className={isActive(to, exact)} onClick={closeMenu}>{label}</Link>
-              </li>
-            ))}
-          </ul>
           <div className="drawer-cross-link">
             {isAcademyPage ? (
               <Link to="/" onClick={closeMenu}>← Back to DreamWorld</Link>
@@ -90,6 +83,13 @@ function Navbar() {
               <Link to="/academy" onClick={closeMenu}>🏫 Explore Academy</Link>
             )}
           </div>
+          <ul className="drawer-links">
+            {links.map(({ to, label, exact }) => (
+              <li key={to + label}>
+                <Link to={to} className={isActive(to, exact)} onClick={closeMenu}>{label}</Link>
+              </li>
+            ))}
+          </ul>
         </div>
 
         {isOpen && <div className="overlay" onClick={closeMenu} />}
