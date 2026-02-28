@@ -8,11 +8,13 @@
 
 .main-content {
   flex: 1;
-  padding-top: 80px;
+  padding-top: 64px;
   position: relative;
   z-index: 1;
   /* Above particles (-1) */
 }
+
+
 
 .main-app-content {
   opacity: 0;

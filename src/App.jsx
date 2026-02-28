@@ -22,7 +22,13 @@ import { ContentProvider } from './context/ContentContext'
 import AdminLogin from './pages/AdminLogin'
 import AdminDashboard from './pages/AdminDashboard'
 import SpecialThanks from './pages/SpecialThanks'
+import Academy from './pages/Academy'
+import AcademyStudents from './pages/AcademyStudents'
+import AcademyStudentDetail from './pages/AcademyStudentDetail'
+import AcademyEnroll from './pages/AcademyEnroll'
 import './App.css'
+
+
 
 
 import { useTheme } from './context/ThemeContext'
@@ -88,6 +94,12 @@ function App() {
               <Route path="/admin" element={<AdminLogin />} />
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
               <Route path="/thanks" element={<SpecialThanks />} />
+              <Route path="/academy" element={<Academy />} />
+              <Route path="/academy/enroll" element={<AcademyEnroll />} />
+              <Route path="/academy/students" element={<AcademyStudents />} />
+              <Route path="/academy/students/:id" element={<AcademyStudentDetail />} />
+
+
             </Routes>
           </main>
           {!isHomePage && <Footer />}

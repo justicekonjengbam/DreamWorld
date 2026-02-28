@@ -4,6 +4,7 @@ import { quests as initialQuests } from '../data/quests'
 import { roles as initialRoles, characters as initialCharacters } from '../data/characters'
 import { events as initialEvents } from '../data/events'
 
+
 const ContentContext = createContext()
 
 export const useContent = () => useContext(ContentContext)
@@ -18,6 +19,10 @@ export const ContentProvider = ({ children }) => {
     const [sponsors, setSponsors] = useState([])
     const [events, setEvents] = useState(initialEvents)
     const [donations, setDonations] = useState([]) // New state for donations
+
+    // Academy states
+    const [academyApplications, setAcademyApplications] = useState([])
+    const [academyStudents, setAcademyStudents] = useState([])
     const [announcement, setAnnouncement] = useState({
         title: 'Welcome to DreamWorld! 🌟',
         date: 'January 18, 2026',
@@ -110,6 +115,21 @@ export const ContentProvider = ({ children }) => {
             const { data: dData } = await supabase.from('donations').select('*').order('created_at', { ascending: false }).limit(50)
             if (dData) {
                 setDonations(dData)
+            }
+
+            // 7. Fetch Academy Applications
+            const { data: aaData } = await supabase.from('academy_applications').select('*').order('created_at', { ascending: false })
+            if (aaData) {
+                setAcademyApplications(aaData)
+            }
+
+            // 8. Fetch Academy Students
+            const { data: asData } = await supabase.from('academy_students').select('*').order('order_index', { ascending: true })
+            if (asData) {
+                setAcademyStudents(asData.map(s => ({
+                    ...s,
+                    level: Math.floor((s.points || 0) / 100)
+                })))
             }
 
             setLoading(false)
@@ -403,6 +423,146 @@ export const ContentProvider = ({ children }) => {
         fetchData() // Refresh UI to show new donation
     }
 
+    // --- Academy Actions ---
+
+    const submitAcademyApplication = async (formData) => {
+        const id = `acad-app-${Date.now()}`
+        const basePayload = {
+            id,
+            name: formData.name,
+            class: formData.class,
+            school_name: formData.schoolName || '',
+            age: parseInt(formData.age),
+            gender: formData.gender,
+            hobbies: formData.hobbies,
+            favourite_colour: formData.favouriteColour,
+            favourite_animal: formData.favouriteAnimal,
+            aim_in_life: formData.aimInLife,
+            status: 'pending'
+        }
+
+        // Try with phone + email first; fall back without them if columns don't exist
+        let result = await supabase.from('academy_applications').upsert({
+            ...basePayload,
+            phone: formData.phone || '',
+            email: formData.email || ''
+        })
+
+        if (result.error) {
+            // If it's a column error, retry without phone/email
+            if (result.error.message?.includes('phone') || result.error.message?.includes('email') || result.error.code === '42703') {
+                result = await supabase.from('academy_applications').upsert(basePayload)
+            }
+            if (result.error) {
+                throw new Error(result.error.message)
+            }
+        }
+
+        fetchData()
+    }
+
+
+
+    const acceptApplication = async (appId) => {
+        try {
+            // 1. Get the application
+            const app = academyApplications.find(a => a.id === appId)
+            if (!app) throw new Error('Application not found')
+
+            // 2. Create a student record from the application
+            const studentId = `acad-stu-${Date.now()}`
+            const studentPayload = {
+                id: studentId,
+                name: app.name,
+                class: app.class,
+                school_name: app.school_name,
+                age: app.age,
+                gender: app.gender,
+                hobbies: app.hobbies,
+                favourite_colour: app.favourite_colour,
+                favourite_animal: app.favourite_animal,
+                aim_in_life: app.aim_in_life,
+                points: 0,
+                order_index: academyStudents.length,
+                joined_date: new Date().toISOString().split('T')[0]
+            }
+            await saveToSupabase('academy_students', studentPayload)
+
+            // 3. Update application status to accepted
+            const { error } = await supabase
+                .from('academy_applications')
+                .update({ status: 'accepted' })
+                .eq('id', appId)
+            if (error) throw error
+
+            fetchData()
+            return true
+        } catch (error) {
+            console.error('Error accepting application:', error)
+            alert(`Failed to accept: ${error.message}`)
+            return false
+        }
+    }
+
+    const declineApplication = async (appId) => {
+        try {
+            const { error } = await supabase
+                .from('academy_applications')
+                .update({ status: 'declined' })
+                .eq('id', appId)
+            if (error) throw error
+            fetchData()
+            return true
+        } catch (error) {
+            console.error('Error declining application:', error)
+            alert(`Failed to decline: ${error.message}`)
+            return false
+        }
+    }
+
+    const deleteAcademyApplication = async (appId) => {
+        try {
+            const { error } = await supabase
+                .from('academy_applications')
+                .delete()
+                .eq('id', appId)
+            if (error) throw error
+            fetchData()
+            return true
+        } catch (error) {
+            console.error('Error deleting application:', error)
+            alert(`Failed to delete: ${error.message}`)
+            return false
+        }
+    }
+
+
+
+    const updateAcademyStudent = async (id, updated) => {
+        const payload = {
+            id,
+            name: updated.name,
+            class: updated.class,
+            school_name: updated.schoolName || updated.school_name || '',
+            age: parseInt(updated.age || 0),
+            gender: updated.gender,
+            hobbies: updated.hobbies,
+            favourite_colour: updated.favourite_colour,
+            favourite_animal: updated.favourite_animal,
+            aim_in_life: updated.aim_in_life,
+            avatar: updated.avatar || '',
+            cover_image: updated.coverImage || updated.cover_image || '',
+            points: parseInt(updated.points || 0),
+            order_index: updated.order_index || 0,
+            joined_date: updated.joined_date
+        }
+        if (await saveToSupabase('academy_students', payload)) fetchData()
+    }
+
+    const deleteAcademyStudent = async (id) => {
+        if (await saveToSupabase('academy_students', null, true, id)) fetchData()
+    }
+
     const deleteDonation = async (id) => {
         try {
             // 1. Get donation details before deleting to know what to refund
@@ -492,14 +652,24 @@ export const ContentProvider = ({ children }) => {
             sponsors, addSponsor, updateSponsor, deleteSponsor,
             events, addEvent, updateEvent, deleteEvent,
             announcement, updateAnnouncement,
-            syncGlobalData: fetchData, // Reuse fetchData as a refresh for UI consistency
+            syncGlobalData: fetchData,
             submitDreamerApplication,
-            donations, // Export donations state
+            donations,
             submitDonation,
-            deleteDonation, // Export delete function
+            deleteDonation,
             reorderCharacter,
-            sponsorships
+            sponsorships,
+            // Academy
+            academyApplications,
+            academyStudents,
+            submitAcademyApplication,
+            acceptApplication,
+            declineApplication,
+            deleteAcademyApplication,
+            updateAcademyStudent,
+            deleteAcademyStudent
         }}>
+
             {children}
         </ContentContext.Provider>
     )

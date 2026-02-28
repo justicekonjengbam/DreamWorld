@@ -11,9 +11,10 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  margin-top: -80px;
-  padding-top: 80px;
+  margin-top: -64px;
+  padding-top: 64px;
 }
+
 
 
 .hero-background {
@@ -161,8 +162,53 @@
   transition-delay: 0.8s;
 }
 
+.delay-5 {
+  transition-delay: 1.0s;
+}
+
 
 /* ===== END ANIMATIONS ===== */
+
+
+/* ===== Academy Explore Button ===== */
+.hero-academy-btn {
+  margin-top: 20px;
+  position: relative;
+  z-index: 11;
+}
+
+.academy-explore-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 26px;
+  background: rgba(46, 107, 158, 0.18);
+  border: 1px solid rgba(106, 141, 195, 0.4);
+  border-radius: 50px;
+  color: rgba(168, 216, 234, 0.9);
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  letter-spacing: 0.3px;
+}
+
+.academy-explore-btn:hover {
+  background: rgba(46, 107, 158, 0.32);
+  border-color: rgba(106, 141, 195, 0.7);
+  color: #c4e5f5;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(46, 107, 158, 0.25);
+}
+
+.acad-btn-icon {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 4px rgba(76, 161, 175, 0.5));
+}
+
 
 
 /* Sections with reduced padding */

@@ -122,15 +122,14 @@ function Join() {
       <div className="container">
         <SectionHeader
           title="Join DreamWorld"
-          subtitle="Start your journey with us. Choose your path below."
+          subtitle="Apply to become a Dreamer and bring your character to life."
         />
+
 
         {/* DREAMER REGISTRATION */}
         <div className="join-section">
           <h2 className="section-title">⭐ Become a Dreamer</h2>
-          <p className="section-description">
-            Choose your role and become a Dreamer with a character in DreamWorld.
-          </p>
+          <p className="section-description">Choose your role and become a Dreamer with a character in DreamWorld.</p>
 
           <div className="join-content">
             <Card className="join-form-card">

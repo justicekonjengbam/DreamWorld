@@ -2,66 +2,100 @@ import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import './Navbar.css'
 
+const DREAMWORLD_LINKS = [
+  { to: '/', label: 'Home', exact: true },
+  { to: '/about', label: 'Story' },
+  { to: '/creator', label: 'Creator' },
+  { to: '/roles', label: 'Roles' },
+  { to: '/characters', label: 'Dreamers' },
+  { to: '/quests', label: 'Quests' },
+  { to: '/events', label: 'Events' },
+  { to: '/join', label: 'Join' },
+  { to: '/funders', label: 'Support' },
+  { to: '/thanks', label: 'Sponsors' },
+]
+
+const ACADEMY_LINKS = [
+  { to: '/academy', label: 'Home', exact: true },
+  { to: '/academy/students', label: 'Students' },
+  { to: '/academy/enroll', label: 'Enroll' },
+]
 
 function Navbar() {
-  const [isOpen, setIsOpen] = useState(false)
   const location = useLocation()
+  const [isOpen, setIsOpen] = useState(false)
 
+  const isAcademyPage = location.pathname.startsWith('/academy')
+  const links = isAcademyPage ? ACADEMY_LINKS : DREAMWORLD_LINKS
 
-  const isActive = (path) => {
-    return location.pathname === path ? 'active' : ''
+  const isActive = (path, exact) => {
+    if (exact) return location.pathname === path ? 'active' : ''
+    return location.pathname.startsWith(path) ? 'active' : ''
   }
 
-
-  const toggleMenu = () => {
-    setIsOpen(!isOpen)
-  }
-
-
-  const closeMenu = () => {
-    setIsOpen(false)
-  }
-
+  const closeMenu = () => setIsOpen(false)
 
   return (
-    <nav className="navbar">
+    <nav className={`navbar ${isAcademyPage ? 'navbar-academy' : ''}`}>
       <div className="navbar-container">
+
+        {/* Logo — always DreamWorld */}
         <Link to="/" className="navbar-logo" onClick={closeMenu}>
           <img src="/logo.png" alt="DreamWorld Logo" className="logo-image" />
-          <span>DreamWorld</span>
+          <span className="logo-text">DreamWorld</span>
         </Link>
 
 
+        {/* Hamburger */}
         <button
           className={`hamburger ${isOpen ? 'active' : ''}`}
-          onClick={toggleMenu}
+          onClick={() => setIsOpen(!isOpen)}
           aria-label="Toggle menu"
         >
-          <span></span>
-          <span></span>
-          <span></span>
+          <span /><span /><span />
         </button>
 
-
-        <ul className={`navbar-menu ${isOpen ? 'active' : ''}`}>
-          <li><Link to="/" className={isActive('/')} onClick={closeMenu}>Home</Link></li>
-          <li><Link to="/about" className={isActive('/about')} onClick={closeMenu}>Story</Link></li>
-          <li><Link to="/creator" className={isActive('/creator')} onClick={closeMenu}>Creator</Link></li>
-          <li><Link to="/roles" className={isActive('/roles')} onClick={closeMenu}>Roles</Link></li>
-          <li><Link to="/characters" className={isActive('/characters')} onClick={closeMenu}>Dreamers</Link></li>
-          <li><Link to="/quests" className={isActive('/quests')} onClick={closeMenu}>Quests</Link></li>
-          <li><Link to="/events" className={isActive('/events')} onClick={closeMenu}>Events</Link></li>
-          <li><Link to="/join" className={isActive('/join')} onClick={closeMenu}>Join</Link></li>
-          <li><Link to="/funders" className={isActive('/funders')} onClick={closeMenu}>Support</Link></li>
-          <li><Link to="/thanks" className={isActive('/thanks')} onClick={closeMenu}>Sponsors</Link></li>
+        {/* Desktop Links */}
+        <ul className="navbar-menu">
+          {links.map(({ to, label, exact }) => (
+            <li key={to + label}>
+              <Link to={to} className={isActive(to, exact)}>{label}</Link>
+            </li>
+          ))}
+          {/* Cross-link pill */}
+          {isAcademyPage ? (
+            <li>
+              <Link to="/" className="cross-link">← DreamWorld</Link>
+            </li>
+          ) : (
+            <li>
+              <Link to="/academy" className="cross-link">🏫 Academy</Link>
+            </li>
+          )}
         </ul>
 
+        {/* Mobile Drawer */}
+        <div className={`navbar-drawer ${isOpen ? 'open' : ''}`}>
+          <ul className="drawer-links">
+            {links.map(({ to, label, exact }) => (
+              <li key={to + label}>
+                <Link to={to} className={isActive(to, exact)} onClick={closeMenu}>{label}</Link>
+              </li>
+            ))}
+          </ul>
+          <div className="drawer-cross-link">
+            {isAcademyPage ? (
+              <Link to="/" onClick={closeMenu}>← Back to DreamWorld</Link>
+            ) : (
+              <Link to="/academy" onClick={closeMenu}>🏫 Explore Academy</Link>
+            )}
+          </div>
+        </div>
 
-        {isOpen && <div className="overlay" onClick={closeMenu}></div>}
+        {isOpen && <div className="overlay" onClick={closeMenu} />}
       </div>
     </nav>
   )
 }
-
 
 export default Navbar

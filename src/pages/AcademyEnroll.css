@@ -1,0 +1,335 @@
+/* Academy Enroll Page */
+
+.acad-enroll.page {
+    padding-top: 0;
+    padding-bottom: 80px;
+}
+
+/* Header */
+.acad-enroll-header {
+    padding: 52px 20px 36px;
+    text-align: center;
+    border-bottom: 1px solid rgba(76, 161, 175, 0.12);
+    background: radial-gradient(ellipse at center top, rgba(46, 107, 158, 0.14) 0%, transparent 65%);
+}
+
+.acad-enroll-header-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    max-width: 560px;
+    margin: 0 auto;
+}
+
+.enroll-badge {
+    width: 130px;
+    height: 130px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 24px rgba(76, 161, 175, 0.55));
+    animation: floatBadge 4s ease-in-out infinite;
+    margin-bottom: 12px;
+}
+
+@keyframes floatBadge {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-6px);
+    }
+}
+
+.enroll-tagline {
+    font-size: 0.78rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--color-accent, #4CA1AF);
+    margin: 0;
+}
+
+.enroll-title {
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 800;
+    background: linear-gradient(135deg, #7ec8e3 0%, #ffffff 50%, #a8d8ea 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0;
+}
+
+.enroll-desc {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Body layout */
+.acad-enroll-body {
+    padding-top: 40px;
+}
+
+.acad-enroll-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 28px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* Form card */
+.enroll-form-card {
+    padding: 32px 36px;
+}
+
+.enroll-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.ef-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.ef-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.ef-group label {
+    font-size: 0.82rem;
+    color: #7ec8e3;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+}
+
+.ef-optional {
+    color: rgba(255, 255, 255, 0.35);
+    font-weight: 400;
+    font-size: 0.75rem;
+}
+
+.ef-group input,
+.ef-group select,
+.ef-group textarea {
+    background: rgba(20, 25, 50, 0.8);
+    border: 1px solid rgba(76, 161, 175, 0.28);
+    border-radius: 9px;
+    color: white;
+    padding: 11px 14px;
+    font-size: 0.88rem;
+    font-family: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+.ef-group input:focus,
+.ef-group select:focus,
+.ef-group textarea:focus {
+    outline: none;
+    border-color: #4CA1AF;
+    box-shadow: 0 0 0 3px rgba(76, 161, 175, 0.12);
+}
+
+.ef-group input.ef-error,
+.ef-group select.ef-error,
+.ef-group textarea.ef-error {
+    border-color: #ff6f61;
+}
+
+.ef-err-msg {
+    font-size: 0.75rem;
+    color: #ff9090;
+}
+
+/* Contact section highlight */
+.ef-contact-section {
+    background: rgba(76, 161, 175, 0.05);
+    border: 1px solid rgba(76, 161, 175, 0.15);
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ef-contact-note {
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.45);
+    margin: 0;
+}
+
+/* Inline submission feedback */
+.ef-inline-warn {
+    background: rgba(255, 180, 50, 0.1);
+    border: 1px solid rgba(255, 180, 50, 0.35);
+    border-radius: 10px;
+    padding: 13px 16px;
+    font-size: 0.87rem;
+    color: #ffd580;
+    line-height: 1.55;
+    margin-bottom: 4px;
+}
+
+.ef-inline-error {
+    background: rgba(255, 80, 80, 0.1);
+    border: 1px solid rgba(255, 80, 80, 0.3);
+    border-radius: 10px;
+    padding: 13px 16px;
+    font-size: 0.87rem;
+    color: #ff9090;
+    line-height: 1.55;
+    margin-bottom: 4px;
+}
+
+/* Full-page success screen */
+.enroll-success-page {
+    min-height: calc(100vh - 64px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    background: radial-gradient(circle at 40% 40%, rgba(46, 107, 158, 0.18), transparent 60%),
+        radial-gradient(circle at 70% 70%, rgba(76, 161, 175, 0.12), transparent 60%);
+}
+
+.enroll-success-inner {
+    text-align: center;
+    max-width: 520px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.success-badge-img {
+    width: 110px;
+    height: 110px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 22px rgba(76, 161, 175, 0.55));
+    animation: floatBadge 4s ease-in-out infinite;
+}
+
+.enroll-success-inner h2 {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight: 800;
+    background: linear-gradient(135deg, #7ec8e3, #fff, #a8d8ea);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0;
+}
+
+.enroll-success-inner p {
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.75;
+    font-size: 1rem;
+    margin: 0;
+}
+
+.success-note-sub {
+    font-size: 0.85rem !important;
+    color: rgba(255, 255, 255, 0.4) !important;
+}
+
+.success-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 8px;
+}
+
+
+
+/* Sidebar */
+.enroll-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.enroll-info-card {
+    padding: 24px;
+}
+
+.enroll-info-card h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #7ec8e3;
+    margin-bottom: 16px;
+}
+
+.enroll-benefit {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 14px;
+    align-items: flex-start;
+}
+
+.benefit-icon {
+    font-size: 1.3rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.enroll-benefit h4 {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 3px;
+}
+
+.enroll-benefit p {
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.5);
+    line-height: 1.5;
+    margin: 0;
+}
+
+.enroll-note-card {
+    padding: 20px 24px;
+}
+
+.enroll-note-card h4 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #a8d8ea;
+    margin-bottom: 12px;
+}
+
+.enroll-steps {
+    padding-left: 20px;
+    margin: 0;
+}
+
+.enroll-steps li {
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.55);
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+    .acad-enroll-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .enroll-form-card {
+        padding: 22px 18px;
+    }
+
+    .ef-row {
+        grid-template-columns: 1fr;
+    }
+}

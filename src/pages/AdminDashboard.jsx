@@ -9,7 +9,10 @@ import ImageUpload from '../components/ImageUpload'
 import Avatar from '../components/Avatar'
 import PrintableID from '../components/PrintableID'
 import PrintableCertificate from '../components/PrintableCertificate'
+import StudentIDCard from '../components/StudentIDCard'
+import StudentCertificate from '../components/StudentCertificate'
 import './AdminDashboard.css'
+
 
 function AdminDashboard() {
     const navigate = useNavigate()
@@ -23,8 +26,13 @@ function AdminDashboard() {
         announcement, updateAnnouncement,
         syncGlobalData,
         submitDonation,
-        donations, deleteDonation
+        donations, deleteDonation,
+        academyApplications, academyStudents,
+        acceptApplication, declineApplication,
+        deleteAcademyApplication,
+        updateAcademyStudent, deleteAcademyStudent
     } = useContent()
+
 
     const [activeTab, setActiveTab] = useState('announcement')
 
@@ -53,6 +61,20 @@ function AdminDashboard() {
     const [printingDreamer, setPrintingDreamer] = useState(null)
     const [printType, setPrintType] = useState(null) // 'id' or 'cert'
     const [syncing, setSyncing] = useState(false)
+
+    // Academy printing state
+    const [printingStudent, setPrintingStudent] = useState(null)
+    const [studentPrintType, setStudentPrintType] = useState(null) // 'id' or 'cert'
+
+    // Academy student edit form
+    const [editingStudentId, setEditingStudentId] = useState(null)
+    const [studentFormData, setStudentFormData] = useState({
+        name: '', class: '', school_name: '', age: '', gender: '',
+        hobbies: '', favourite_colour: '', favourite_animal: '', aim_in_life: '',
+        avatar: '', coverImage: '', points: 0, order_index: 0, joined_date: ''
+    })
+    const [appFilter, setAppFilter] = useState('pending') // 'pending', 'accepted', 'declined'
+
 
     useEffect(() => {
         const token = localStorage.getItem('dw_admin_token')
@@ -242,8 +264,20 @@ function AdminDashboard() {
                     <button className={`nav-item ${activeTab === 'sponsors' ? 'active' : ''}`} onClick={() => { setActiveTab('sponsors'); resetForms() }}>🤝 Sponsors</button>
                     <button className={`nav-item ${activeTab === 'events' ? 'active' : ''}`} onClick={() => { setActiveTab('events'); resetForms() }}>📅 Events</button>
                     <button className={`nav-item ${activeTab === 'donations' ? 'active' : ''}`} onClick={() => { setActiveTab('donations'); resetForms() }}>💰 Donations</button>
+                    <div style={{ borderTop: '1px solid rgba(76,161,175,0.2)', margin: '8px 0' }} />
+                    <button className={`nav-item ${activeTab === 'acad-apps' ? 'active' : ''}`} onClick={() => { setActiveTab('acad-apps'); resetForms() }}
+                        style={{ color: '#7ec8e3' }}>🏫 Acad. Applications
+                        {academyApplications.filter(a => a.status === 'pending').length > 0 && (
+                            <span style={{ marginLeft: 6, background: '#4CA1AF', color: 'white', borderRadius: '50%', width: 18, height: 18, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem', fontWeight: 'bold' }}>
+                                {academyApplications.filter(a => a.status === 'pending').length}
+                            </span>
+                        )}
+                    </button>
+                    <button className={`nav-item ${activeTab === 'acad-students' ? 'active' : ''}`} onClick={() => { setActiveTab('acad-students'); resetForms() }}
+                        style={{ color: '#7ec8e3' }}>🎓 Academy Students</button>
                     <button className={`nav-item ${activeTab === 'status' ? 'active' : ''}`} onClick={() => { setActiveTab('status'); resetForms() }}>🛡️ System Health</button>
                 </nav>
+
 
                 <div className="sidebar-footer">
                     {hasUnsyncedChanges && (
@@ -919,6 +953,226 @@ function AdminDashboard() {
                     </div>
                 )}
 
+                {/* ======= ACADEMY APPLICATIONS TAB ======= */}
+                {activeTab === 'acad-apps' && (
+                    <div className="admin-section animate-fade">
+                        <div style={{ display: 'flex', gap: '10px', marginBottom: '20px', flexWrap: 'wrap' }}>
+                            {['pending', 'accepted', 'declined'].map(f => (
+                                <button
+                                    key={f}
+                                    onClick={() => setAppFilter(f)}
+                                    style={{
+                                        padding: '6px 18px', borderRadius: '20px', border: '1px solid',
+                                        cursor: 'pointer', fontWeight: 600, fontSize: '0.82rem', transition: 'all 0.2s',
+                                        borderColor: appFilter === f ? '#4CA1AF' : 'rgba(76,161,175,0.3)',
+                                        background: appFilter === f ? 'rgba(76,161,175,0.25)' : 'transparent',
+                                        color: appFilter === f ? '#7ec8e3' : 'rgba(255,255,255,0.55)'
+                                    }}
+                                >
+                                    {f === 'pending' ? '⏳' : f === 'accepted' ? '✅' : '❌'} {f.charAt(0).toUpperCase() + f.slice(1)}
+                                    {' '}({academyApplications.filter(a => a.status === f).length})
+                                </button>
+                            ))}
+                        </div>
+
+                        <div className="admin-list">
+                            {academyApplications.filter(a => a.status === appFilter).length === 0 ? (
+                                <p style={{ textAlign: 'center', color: 'var(--color-gray)', padding: '40px' }}>
+                                    No {appFilter} applications.
+                                </p>
+                            ) : academyApplications.filter(a => a.status === appFilter).map(app => (
+                                <Card key={app.id} style={{ flexDirection: 'column', gap: 0, padding: '20px 22px', borderRadius: 14, marginBottom: 14 }}>
+
+                                    {/* ── Row 1: Name + Buttons ── */}
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 10, marginBottom: 10 }}>
+                                        <div>
+                                            <h4 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 700 }}>{app.name}</h4>
+                                            <p style={{ margin: '3px 0 0', fontSize: '0.75rem', color: 'rgba(255,255,255,0.3)' }}>
+                                                Submitted: {new Date(app.created_at).toLocaleDateString()}
+                                            </p>
+                                        </div>
+                                        <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+                                            {app.status === 'pending' ? (
+                                                <>
+                                                    <button onClick={async () => { if (window.confirm(`✅ Accept ${app.name} into DreamWorld Academy?`)) await acceptApplication(app.id) }}
+                                                        style={{ background: 'rgba(100,200,100,0.18)', border: '1px solid rgba(100,200,100,0.4)', color: '#90e0a0', borderRadius: 8, padding: '7px 16px', cursor: 'pointer', fontWeight: 700, fontSize: '0.83rem', whiteSpace: 'nowrap' }}>
+                                                        ✅ Accept
+                                                    </button>
+                                                    <button onClick={async () => { if (window.confirm(`❌ Decline ${app.name}'s application?`)) await declineApplication(app.id) }}
+                                                        style={{ background: 'rgba(255,100,100,0.13)', border: '1px solid rgba(255,100,100,0.35)', color: '#ff9090', borderRadius: 8, padding: '7px 16px', cursor: 'pointer', fontWeight: 700, fontSize: '0.83rem', whiteSpace: 'nowrap' }}>
+                                                        ❌ Decline
+                                                    </button>
+                                                </>
+                                            ) : (
+                                                <Badge variant={app.status === 'accepted' ? 'active' : 'secondary'}>
+                                                    {app.status === 'accepted' ? '✅ Accepted' : '❌ Declined'}
+                                                </Badge>
+                                            )}
+                                            <button onClick={async () => { if (window.confirm(`🗑️ Permanently delete ${app.name}'s application?`)) await deleteAcademyApplication(app.id) }}
+                                                title="Delete application"
+                                                style={{ background: 'rgba(180,60,60,0.13)', border: '1px solid rgba(180,60,60,0.28)', color: 'rgba(255,120,120,0.7)', borderRadius: 8, padding: '7px 10px', cursor: 'pointer', fontSize: '0.9rem' }}>
+                                                🗑️
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {/* ── Row 2: Info chips ── */}
+                                    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 12 }}>
+                                        {[
+                                            `📚 ${app.class}`,
+                                            app.school_name && `🏫 ${app.school_name}`,
+                                            `🎂 Age ${app.age}`,
+                                            `⚧ ${app.gender}`
+                                        ].filter(Boolean).map((chip, i) => (
+                                            <span key={i} style={{ background: 'rgba(76,161,175,0.1)', border: '1px solid rgba(76,161,175,0.18)', borderRadius: 20, padding: '3px 11px', fontSize: '0.78rem', color: 'rgba(255,255,255,0.65)' }}>
+                                                {chip}
+                                            </span>
+                                        ))}
+                                    </div>
+
+                                    {/* ── Row 3: Private contact ── */}
+                                    {(app.phone || app.email) && (
+                                        <div style={{ background: 'rgba(76,161,175,0.06)', border: '1px solid rgba(76,161,175,0.15)', borderRadius: 10, padding: '10px 14px', marginBottom: 12, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                                            <span style={{ fontSize: '0.68rem', textTransform: 'uppercase', letterSpacing: '1px', color: 'rgba(255,255,255,0.3)' }}>🔒 Private Contact</span>
+                                            <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>
+                                                {app.phone && <a href={`tel:${app.phone}`} style={{ color: '#7ec8e3', textDecoration: 'none', fontSize: '0.88rem', fontWeight: 600 }}>📞 {app.phone}</a>}
+                                                {app.email && <a href={`mailto:${app.email}`} style={{ color: '#a8d8ea', textDecoration: 'none', fontSize: '0.88rem', fontWeight: 600 }}>✉️ {app.email}</a>}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* ── Row 4: Colour & Animal ── */}
+                                    <div style={{ display: 'flex', gap: 20, marginBottom: 8, flexWrap: 'wrap' }}>
+                                        <span style={{ fontSize: '0.83rem', color: 'rgba(255,255,255,0.55)' }}>🎨 <strong style={{ color: 'rgba(255,255,255,0.8)' }}>{app.favourite_colour}</strong></span>
+                                        <span style={{ fontSize: '0.83rem', color: 'rgba(255,255,255,0.55)' }}>🐾 <strong style={{ color: 'rgba(255,255,255,0.8)' }}>{app.favourite_animal}</strong></span>
+                                    </div>
+
+                                    {/* ── Row 5: Hobbies ── */}
+                                    {app.hobbies && (
+                                        <div style={{ marginBottom: 8 }}>
+                                            <span style={{ fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.8px', color: 'rgba(255,255,255,0.3)', display: 'block', marginBottom: 3 }}>Interests</span>
+                                            <p style={{ margin: 0, fontSize: '0.85rem', color: 'rgba(255,255,255,0.6)', lineHeight: 1.5 }}>⚡ {app.hobbies}</p>
+                                        </div>
+                                    )}
+
+                                    {/* ── Row 6: Aim ── */}
+                                    {app.aim_in_life && (
+                                        <div style={{ background: 'rgba(120,80,200,0.06)', border: '1px solid rgba(120,80,200,0.15)', borderRadius: 10, padding: '10px 14px' }}>
+                                            <span style={{ fontSize: '0.68rem', textTransform: 'uppercase', letterSpacing: '0.8px', color: 'rgba(255,255,255,0.3)', display: 'block', marginBottom: 4 }}>Dream & Aim</span>
+                                            <p style={{ margin: 0, fontSize: '0.88rem', color: '#c4b5f5', fontStyle: 'italic', lineHeight: 1.6 }}>🌟 "{app.aim_in_life}"</p>
+                                        </div>
+                                    )}
+
+                                </Card>
+                            ))}
+
+
+                        </div>
+                    </div>
+                )}
+
+                {/* ======= ACADEMY STUDENTS TAB ======= */}
+                {activeTab === 'acad-students' && (
+                    <div className="admin-section animate-fade">
+                        <div className="admin-split-layout">
+                            {/* Edit Form */}
+                            <Card className="admin-form-card">
+                                <h3>{editingStudentId ? 'Edit Student' : 'Academy Students'}</h3>
+                                {editingStudentId ? (
+                                    <form className="admin-form" onSubmit={async (e) => {
+                                        e.preventDefault()
+                                        await updateAcademyStudent(editingStudentId, studentFormData)
+                                        setEditingStudentId(null)
+                                    }}>
+                                        <div className="form-row">
+                                            <div className="form-group"><label>Full Name</label><input type="text" value={studentFormData.name} onChange={e => setStudentFormData(p => ({ ...p, name: e.target.value }))} required /></div>
+                                            <div className="form-group"><label>Class</label><input type="text" value={studentFormData.class} onChange={e => setStudentFormData(p => ({ ...p, class: e.target.value }))} required /></div>
+                                        </div>
+                                        <div className="form-group-full"><label>School Name</label><input type="text" value={studentFormData.school_name} onChange={e => setStudentFormData(p => ({ ...p, school_name: e.target.value }))} /></div>
+                                        <div className="form-row">
+                                            <div className="form-group"><label>Age</label><input type="number" value={studentFormData.age} onChange={e => setStudentFormData(p => ({ ...p, age: e.target.value }))} /></div>
+                                            <div className="form-group"><label>XP Points</label><input type="number" min="0" value={studentFormData.points} onChange={e => setStudentFormData(p => ({ ...p, points: e.target.value }))} /></div>
+                                        </div>
+                                        <div className="form-row" style={{ gap: '20px' }}>
+                                            <ImageUpload
+                                                label="Student Avatar"
+                                                onUploadComplete={(url) => setStudentFormData(p => ({ ...p, avatar: url }))}
+                                                defaultImage={studentFormData.avatar}
+                                                folder="academy/students"
+                                            />
+                                            <ImageUpload
+                                                label="Cover Image"
+                                                onUploadComplete={(url) => setStudentFormData(p => ({ ...p, coverImage: url }))}
+                                                defaultImage={studentFormData.coverImage}
+                                                folder="academy/covers"
+                                            />
+                                        </div>
+                                        <div className="admin-member-visual-preview" style={{ margin: '10px 0', padding: '12px', background: 'rgba(0,0,0,0.2)', borderRadius: 8, display: 'flex', gap: 16, alignItems: 'center' }}>
+                                            <div style={{ textAlign: 'center' }}>
+                                                <p style={{ fontSize: '0.7rem', color: 'var(--color-gray)', marginBottom: 4 }}>Avatar</p>
+                                                <Avatar src={studentFormData.avatar} name={studentFormData.name} style={{ width: 50, height: 50, borderRadius: '50%' }} />
+                                            </div>
+                                            <div style={{ flex: 1 }}>
+                                                <p style={{ fontSize: '0.7rem', color: 'var(--color-gray)', marginBottom: 4 }}>Cover</p>
+                                                <div style={{ height: 50, width: '100%', borderRadius: 4, backgroundImage: studentFormData.coverImage ? `url("${studentFormData.coverImage}")` : 'none', backgroundSize: 'cover', backgroundPosition: 'center', border: '1px solid rgba(76,161,175,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-gray)', fontSize: '0.8rem' }}>
+                                                    {!studentFormData.coverImage && 'No Cover'}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <Button type="submit" variant="primary">💾 Save Student</Button>
+                                        <Button type="button" variant="secondary" onClick={() => setEditingStudentId(null)}>Cancel</Button>
+                                    </form>
+                                ) : (
+                                    <div style={{ textAlign: 'center', padding: '20px', color: 'var(--color-gray)' }}>
+                                        <img src="/DreamWorldAcademy.png" alt="Academy" style={{ width: 60, marginBottom: 12, opacity: 0.6 }} />
+                                        <p>Select a student from the list to edit their profile.</p>
+                                        <p style={{ fontSize: '0.8rem', marginTop: 8, color: 'rgba(255,255,255,0.3)' }}>{academyStudents.length} student(s) enrolled</p>
+                                    </div>
+                                )}
+                            </Card>
+
+                            {/* Student List */}
+                            <div className="admin-list">
+                                {academyStudents.length === 0 ? (
+                                    <p style={{ textAlign: 'center', color: 'var(--color-gray)', padding: '40px' }}>No students yet. Accept applications to see them here.</p>
+                                ) : academyStudents.map(s => (
+                                    <Card key={s.id} className="admin-item-card">
+                                        <div className="admin-member-preview">
+                                            <Avatar src={s.avatar} name={s.name} style={{ width: 40, height: 40, borderRadius: '50%' }} />
+                                            <div>
+                                                <h4>{s.name}</h4>
+                                                <div style={{ display: 'flex', gap: 5, alignItems: 'center', fontSize: '0.8rem' }}>
+                                                    <span style={{ color: 'var(--color-gray)' }}>{s.class}</span>
+                                                    <span style={{ color: 'var(--color-accent)', fontWeight: 'bold' }}>Lvl {s.level || 0}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="admin-item-actions">
+                                            <button onClick={() => {
+                                                setEditingStudentId(s.id)
+                                                setStudentFormData({ ...s, coverImage: s.cover_image || '' })
+                                            }}>✏️</button>
+                                            <button onClick={() => {
+                                                if (window.confirm(`Remove ${s.name} from the Academy?`)) deleteAcademyStudent(s.id)
+                                            }}>🗑️</button>
+                                            <button
+                                                title="Generate Student ID Card"
+                                                style={{ marginLeft: 8 }}
+                                                onClick={() => { setPrintingStudent(s); setStudentPrintType('id') }}
+                                            >🪪</button>
+                                            <button
+                                                title="Generate Enrollment Certificate"
+                                                style={{ marginLeft: 4 }}
+                                                onClick={() => { setPrintingStudent(s); setStudentPrintType('cert') }}
+                                            >📜</button>
+                                        </div>
+                                    </Card>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 {activeTab === 'status' && (
                     <div className="admin-section animate-fade">
                         <div className="status-grid">
@@ -968,7 +1222,7 @@ function AdminDashboard() {
                 )}
             </div>
 
-            {/* Print Overlays (Portals make them direct children of body for safe printing) */}
+            {/* Dreamer Print Overlays */}
             {
                 printingDreamer && printType === 'id' && createPortal(
                     <PrintableID dreamer={printingDreamer} onClose={() => setPrintingDreamer(null)} />,
@@ -978,6 +1232,19 @@ function AdminDashboard() {
             {
                 printingDreamer && printType === 'cert' && createPortal(
                     <PrintableCertificate dreamer={printingDreamer} onClose={() => setPrintingDreamer(null)} />,
+                    document.body
+                )
+            }
+            {/* Academy Student Print Overlays */}
+            {
+                printingStudent && studentPrintType === 'id' && createPortal(
+                    <StudentIDCard student={printingStudent} onClose={() => setPrintingStudent(null)} />,
+                    document.body
+                )
+            }
+            {
+                printingStudent && studentPrintType === 'cert' && createPortal(
+                    <StudentCertificate student={printingStudent} onClose={() => setPrintingStudent(null)} />,
                     document.body
                 )
             }

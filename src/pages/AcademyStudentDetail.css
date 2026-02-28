@@ -1,0 +1,217 @@
+/* ===============================
+   Academy Student Detail Page CSS
+   =============================== */
+
+.academy-detail.page {
+    padding-top: 0;
+    padding-bottom: 80px;
+}
+
+/* Cover */
+.academy-detail-cover {
+    height: 260px;
+    background: linear-gradient(135deg, #0d2040, #1a3a5c);
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.cover-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 40%, var(--color-bg) 100%);
+}
+
+/* Header */
+.academy-detail-header {
+    display: flex;
+    align-items: flex-end;
+    gap: 28px;
+    margin-top: -80px;
+    position: relative;
+    z-index: 2;
+    padding: 0 20px;
+    margin-bottom: 40px;
+}
+
+.academy-detail-avatar-wrap {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.academy-detail-avatar {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    border: 4px solid rgba(76, 161, 175, 0.6);
+    object-fit: cover;
+    background: #0d2040;
+    box-shadow: 0 0 30px rgba(76, 161, 175, 0.3);
+}
+
+.academy-detail-badge-icon {
+    position: absolute;
+    bottom: 4px;
+    right: 0;
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
+}
+
+.academy-detail-info {
+    padding-bottom: 10px;
+}
+
+.detail-academy-label {
+    font-size: 0.78rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #7ec8e3;
+    margin-bottom: 6px;
+}
+
+.detail-name {
+    font-size: 2rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 6px;
+}
+
+.detail-class {
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.65);
+    margin-bottom: 4px;
+}
+
+.detail-joined {
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* Level card */
+.detail-level-card {
+    background: rgba(76, 161, 175, 0.08);
+    border: 1px solid rgba(76, 161, 175, 0.2);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-bottom: 28px;
+}
+
+.level-number {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #7ec8e3;
+    margin-bottom: 12px;
+}
+
+.level-xp-bar {
+    height: 8px;
+    background: rgba(76, 161, 175, 0.15);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.level-xp-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4CA1AF, #7ec8e3);
+    border-radius: 10px;
+    transition: width 0.6s ease;
+}
+
+.level-xp-text {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Facts grid */
+.detail-facts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 14px;
+    margin-bottom: 32px;
+}
+
+.detail-fact-card {
+    background: rgba(20, 25, 50, 0.7);
+    border: 1px solid rgba(76, 161, 175, 0.15);
+    border-radius: 12px;
+    padding: 18px 16px;
+    text-align: center;
+}
+
+.fact-icon {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+}
+
+.fact-label {
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.45);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 5px;
+}
+
+.fact-value {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #a8d8ea;
+}
+
+/* Sections */
+.detail-section {
+    margin-bottom: 30px;
+}
+
+.detail-section-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #7ec8e3;
+    margin-bottom: 12px;
+}
+
+.detail-section-text {
+    color: rgba(255, 255, 255, 0.75);
+    line-height: 1.7;
+    font-size: 0.95rem;
+}
+
+/* Aim quote */
+.detail-aim {
+    background: rgba(76, 161, 175, 0.06);
+    border-left: 4px solid #4CA1AF;
+    border-radius: 0 14px 14px 0;
+    padding: 24px 28px;
+}
+
+.aim-quote {
+    font-size: 1.05rem;
+    font-style: italic;
+    color: #d0eaf5;
+    line-height: 1.7;
+    margin: 0;
+}
+
+.detail-back-link {
+    margin-top: 40px;
+}
+
+@media (max-width: 600px) {
+    .academy-detail-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        margin-top: -60px;
+    }
+
+    .academy-detail-avatar {
+        width: 100px;
+        height: 100px;
+    }
+
+    .detail-name {
+        font-size: 1.6rem;
+    }
+}
