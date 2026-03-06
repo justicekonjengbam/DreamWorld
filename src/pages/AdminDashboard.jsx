@@ -74,6 +74,7 @@ function AdminDashboard() {
         avatar: '', coverImage: '', points: 0, order_index: 0, joined_date: ''
     })
     const [appFilter, setAppFilter] = useState('pending') // 'pending', 'accepted', 'declined'
+    const [xpAdjustAmount, setXpAdjustAmount] = useState(10);
 
 
     useEffect(() => {
@@ -520,7 +521,54 @@ function AdminDashboard() {
                                     <div className="form-group-full"><label>Themes (Comma separated)</label><input type="text" placeholder="Future, Solar, Community" value={memberFormData.themes} onChange={(e) => setMemberFormData(prev => ({ ...prev, themes: e.target.value }))} required /></div>
                                     <div className="form-row">
                                         <div className="form-group"><label>Dreaming Since</label><input type="date" value={memberFormData.joinedDate || ''} onChange={(e) => setMemberFormData(prev => ({ ...prev, joinedDate: e.target.value }))} required /></div>
-                                        <div className="form-group"><label>XP Points</label><input type="number" min="0" value={memberFormData.points || 0} onChange={(e) => setMemberFormData(prev => ({ ...prev, points: e.target.value }))} /></div>
+                                        <div className="form-group">
+                                            <label>Dream Level</label>
+                                            <input
+                                                type="number"
+                                                min="0"
+                                                value={Math.floor((parseInt(memberFormData.points) || 0) / 108)}
+                                                onChange={(e) => {
+                                                    let valStr = e.target.value;
+                                                    if (valStr.startsWith('0') && valStr.length > 1) valStr = valStr.substring(1);
+                                                    const newLevel = parseInt(valStr) || 0;
+                                                    const currentXp = (parseInt(memberFormData.points) || 0) % 108;
+                                                    setMemberFormData(prev => ({ ...prev, points: Math.max(0, (newLevel * 108) + currentXp) }));
+                                                }}
+                                            />
+                                        </div>
+                                        <div className="form-group">
+                                            <label>XP (Current Level)</label>
+                                            <input
+                                                type="number"
+                                                value={(parseInt(memberFormData.points) || 0) % 108}
+                                                onChange={(e) => {
+                                                    let valStr = e.target.value;
+                                                    if (valStr.startsWith('0') && valStr.length > 1) valStr = valStr.substring(1);
+                                                    const currentLevel = Math.floor((parseInt(memberFormData.points) || 0) / 108);
+                                                    const newXp = parseInt(valStr) || 0;
+                                                    setMemberFormData(prev => ({ ...prev, points: Math.max(0, (currentLevel * 108) + newXp) }));
+                                                }}
+                                            />
+                                            <div style={{ fontSize: '0.75rem', color: 'var(--color-gray)', marginTop: '4px', textAlign: 'right' }}>
+                                                Total XP: <strong style={{ color: 'var(--color-accent)' }}>{memberFormData.points || 0}</strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="form-row" style={{ alignItems: 'flex-end', marginTop: '-10px', marginBottom: '15px', background: 'rgba(0,0,0,0.15)', padding: '10px', borderRadius: '8px' }}>
+                                        <div className="form-group" style={{ flex: 1, margin: 0 }}>
+                                            <label style={{ color: 'rgba(255,255,255,0.6)' }}>Quick Adjust Total XP</label>
+                                            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                                                <input
+                                                    type="number"
+                                                    placeholder="Amount"
+                                                    value={xpAdjustAmount}
+                                                    onChange={(e) => setXpAdjustAmount(e.target.value)}
+                                                    style={{ width: '100px', background: 'rgba(255,255,255,0.05)' }}
+                                                />
+                                                <button type="button" onClick={() => setMemberFormData(p => ({ ...p, points: (parseInt(p.points) || 0) + (parseInt(xpAdjustAmount) || 0) }))} style={{ padding: '6px 12px', fontSize: '0.85rem', borderRadius: '6px', background: 'rgba(76, 161, 175, 0.1)', cursor: 'pointer', border: '1px solid rgba(76, 161, 175, 0.3)', color: '#7ec8e3', outline: 'none' }}>+ Add XP</button>
+                                                <button type="button" onClick={() => setMemberFormData(p => ({ ...p, points: Math.max(0, (parseInt(p.points) || 0) - (parseInt(xpAdjustAmount) || 0)) }))} style={{ padding: '6px 12px', fontSize: '0.85rem', borderRadius: '6px', background: 'rgba(255, 100, 100, 0.1)', cursor: 'pointer', border: '1px solid rgba(255, 100, 100, 0.3)', color: '#ff9090', outline: 'none' }}>- Subtract XP</button>
+                                            </div>
+                                        </div>
                                     </div>
                                     <Button type="submit" variant="primary">{editingId ? 'Update' : 'Add'} Dreamer</Button>
                                     {editingId && <Button type="button" variant="secondary" onClick={resetForms}>Cancel</Button>}
@@ -1091,7 +1139,54 @@ function AdminDashboard() {
                                         <div className="form-group-full"><label>School Name</label><input type="text" value={studentFormData.school_name} onChange={e => setStudentFormData(p => ({ ...p, school_name: e.target.value }))} /></div>
                                         <div className="form-row">
                                             <div className="form-group"><label>Age</label><input type="number" value={studentFormData.age} onChange={e => setStudentFormData(p => ({ ...p, age: e.target.value }))} /></div>
-                                            <div className="form-group"><label>XP Points</label><input type="number" min="0" value={studentFormData.points} onChange={e => setStudentFormData(p => ({ ...p, points: e.target.value }))} /></div>
+                                            <div className="form-group">
+                                                <label>Dream Level</label>
+                                                <input
+                                                    type="number"
+                                                    min="0"
+                                                    value={Math.floor((parseInt(studentFormData.points) || 0) / 108)}
+                                                    onChange={(e) => {
+                                                        let valStr = e.target.value;
+                                                        if (valStr.startsWith('0') && valStr.length > 1) valStr = valStr.substring(1);
+                                                        const newLevel = parseInt(valStr) || 0;
+                                                        const currentXp = (parseInt(studentFormData.points) || 0) % 108;
+                                                        setStudentFormData(prev => ({ ...prev, points: Math.max(0, (newLevel * 108) + currentXp) }));
+                                                    }}
+                                                />
+                                            </div>
+                                            <div className="form-group">
+                                                <label>XP (Current Level)</label>
+                                                <input
+                                                    type="number"
+                                                    value={(parseInt(studentFormData.points) || 0) % 108}
+                                                    onChange={(e) => {
+                                                        let valStr = e.target.value;
+                                                        if (valStr.startsWith('0') && valStr.length > 1) valStr = valStr.substring(1);
+                                                        const currentLevel = Math.floor((parseInt(studentFormData.points) || 0) / 108);
+                                                        const newXp = parseInt(valStr) || 0;
+                                                        setStudentFormData(prev => ({ ...prev, points: Math.max(0, (currentLevel * 108) + newXp) }));
+                                                    }}
+                                                />
+                                                <div style={{ fontSize: '0.75rem', color: 'var(--color-gray)', marginTop: '4px', textAlign: 'right' }}>
+                                                    Total XP: <strong style={{ color: 'var(--color-accent)' }}>{studentFormData.points || 0}</strong>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="form-row" style={{ alignItems: 'flex-end', marginTop: '-10px', marginBottom: '15px', background: 'rgba(0,0,0,0.15)', padding: '10px', borderRadius: '8px' }}>
+                                            <div className="form-group" style={{ flex: 1, margin: 0 }}>
+                                                <label style={{ color: 'rgba(255,255,255,0.6)' }}>Quick Adjust Total XP</label>
+                                                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                                                    <input
+                                                        type="number"
+                                                        placeholder="Amount"
+                                                        value={xpAdjustAmount}
+                                                        onChange={(e) => setXpAdjustAmount(e.target.value)}
+                                                        style={{ width: '100px', background: 'rgba(255,255,255,0.05)' }}
+                                                    />
+                                                    <button type="button" onClick={() => setStudentFormData(p => ({ ...p, points: (parseInt(p.points) || 0) + (parseInt(xpAdjustAmount) || 0) }))} style={{ padding: '6px 12px', fontSize: '0.85rem', borderRadius: '6px', background: 'rgba(76, 161, 175, 0.1)', cursor: 'pointer', border: '1px solid rgba(76, 161, 175, 0.3)', color: '#7ec8e3', outline: 'none' }}>+ Add XP</button>
+                                                    <button type="button" onClick={() => setStudentFormData(p => ({ ...p, points: Math.max(0, (parseInt(p.points) || 0) - (parseInt(xpAdjustAmount) || 0)) }))} style={{ padding: '6px 12px', fontSize: '0.85rem', borderRadius: '6px', background: 'rgba(255, 100, 100, 0.1)', cursor: 'pointer', border: '1px solid rgba(255, 100, 100, 0.3)', color: '#ff9090', outline: 'none' }}>- Subtract XP</button>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div className="form-row" style={{ gap: '20px' }}>
                                             <ImageUpload

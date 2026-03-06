@@ -40,6 +40,8 @@ function AcademyEnroll() {
         if (!form.class) err.class = 'Class is required'
         if (!form.age) err.age = 'Age is required'
         if (!form.gender) err.gender = 'Gender is required'
+        if (!form.phone.trim()) err.phone = 'Phone number is required'
+        if (!form.email.trim()) err.email = 'Email address is required'
         if (!form.hobbies.trim()) err.hobbies = 'Please share your interests'
         if (!form.favouriteColour.trim()) err.favouriteColour = 'Required'
         if (!form.favouriteAnimal.trim()) err.favouriteAnimal = 'Required'
@@ -177,7 +179,6 @@ function AcademyEnroll() {
                                         <option value="">Select...</option>
                                         <option value="Male">Male</option>
                                         <option value="Female">Female</option>
-                                        <option value="Other">Other</option>
                                     </select>
                                     {errors.gender && <span className="ef-err-msg">{errors.gender}</span>}
                                 </div>
@@ -188,14 +189,16 @@ function AcademyEnroll() {
                                 <p className="ef-contact-note">🔒 Contact details are private — only the Academy admin can see them.</p>
                                 <div className="ef-row">
                                     <div className="ef-group">
-                                        <label htmlFor="e-phone">Phone Number <span className="ef-optional">(Optional)</span></label>
+                                        <label htmlFor="e-phone">Phone Number *</label>
                                         <input id="e-phone" type="tel" name="phone" value={form.phone} onChange={handleChange}
-                                            placeholder="e.g. +91 98765 43210" />
+                                            placeholder="e.g. +91 98765 43210" className={errors.phone ? 'ef-error' : ''} />
+                                        {errors.phone && <span className="ef-err-msg">{errors.phone}</span>}
                                     </div>
                                     <div className="ef-group">
-                                        <label htmlFor="e-email">Email Address <span className="ef-optional">(Optional)</span></label>
+                                        <label htmlFor="e-email">Email Address *</label>
                                         <input id="e-email" type="email" name="email" value={form.email} onChange={handleChange}
-                                            placeholder="your@email.com" />
+                                            placeholder="your@email.com" className={errors.email ? 'ef-error' : ''} />
+                                        {errors.email && <span className="ef-err-msg">{errors.email}</span>}
                                     </div>
                                 </div>
                             </div>

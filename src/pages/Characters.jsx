@@ -100,7 +100,16 @@ function Characters() {
                     <Badge key={index}>{theme}</Badge>
                   ))}
                 </div>
-                <div className="character-cta">View profile →</div>
+                <div className="character-xp-bar" style={{ marginTop: '15px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--color-gray)', marginBottom: '4px' }}>
+                    <span>Lvl {Math.floor((character.points || 0) / 108)}</span>
+                    <span>{(character.points || 0) % 108} / 108 XP</span>
+                  </div>
+                  <div style={{ width: '100%', height: '4px', background: 'rgba(255,255,255,0.1)', borderRadius: '2px', overflow: 'hidden' }}>
+                    <div style={{ width: `${(((character.points || 0) % 108) / 108) * 100}%`, height: '100%', background: 'var(--color-accent)', transition: 'width 0.3s' }}></div>
+                  </div>
+                </div>
+                <div className="character-cta" style={{ marginTop: '15px' }}>View profile →</div>
               </Card>
             </Link>
           ))}

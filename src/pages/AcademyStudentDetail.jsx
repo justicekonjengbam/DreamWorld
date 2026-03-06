@@ -1,11 +1,21 @@
+import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useContent } from '../context/ContentContext'
 import Button from '../components/Button'
+import ImageModal from '../components/ImageModal'
 import './AcademyStudentDetail.css'
 
 function AcademyStudentDetail() {
     const { id } = useParams()
     const { academyStudents, loading } = useContent()
+    const [modalOpen, setModalOpen] = useState(false)
+    const [modalImage, setModalImage] = useState('')
+
+    const openLightbox = (src) => {
+        if (!src) return
+        setModalImage(src)
+        setModalOpen(true)
+    }
 
     if (loading) return <div className="loading-state">Loading student profile...</div>
 
@@ -23,19 +33,29 @@ function AcademyStudentDetail() {
         )
     }
 
-    const level = Math.floor((student.points || 0) / 100)
-    const xpInCurrentLevel = (student.points || 0) % 100
+    const level = Math.floor((student.points || 0) / 108)
+    const xpInCurrentLevel = (student.points || 0) % 108
 
     return (
         <div className="academy-detail page">
             {/* Cover */}
             <div
                 className="academy-detail-cover"
-                style={{ backgroundImage: `url(/AcademyBackground.png)` }}
-
+                style={{
+                    backgroundImage: `url(/AcademyBackground.png)`,
+                    cursor: 'zoom-in'
+                }}
+                onClick={() => openLightbox('/AcademyBackground.png')}
             >
                 <div className="cover-overlay" />
             </div>
+
+            <ImageModal
+                src={modalImage}
+                alt={student.name}
+                isOpen={modalOpen}
+                onClose={() => setModalOpen(false)}
+            />
 
             <div className="container">
                 <div className="academy-detail-header">
@@ -44,6 +64,11 @@ function AcademyStudentDetail() {
                             src={student.avatar || '/DreamWorldAcademy.png'}
                             alt={student.name}
                             className="academy-detail-avatar"
+                            style={{ cursor: 'zoom-in' }}
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                openLightbox(student.avatar || '/DreamWorldAcademy.png')
+                            }}
                             onError={(e) => { e.target.src = '/DreamWorldAcademy.png' }}
                         />
                         <img src="/DreamWorldAcademy.png" alt="Academy" className="academy-detail-badge-icon" />
@@ -63,9 +88,9 @@ function AcademyStudentDetail() {
                 <div className="detail-level-card">
                     <div className="level-number">Dream Level {level}</div>
                     <div className="level-xp-bar">
-                        <div className="level-xp-fill" style={{ width: `${xpInCurrentLevel}%` }} />
+                        <div className="level-xp-fill" style={{ width: `${(xpInCurrentLevel / 108) * 100}%` }} />
                     </div>
-                    <p className="level-xp-text">{student.points || 0} XP total · {xpInCurrentLevel} / 100 XP to next level</p>
+                    <p className="level-xp-text">{student.points || 0} XP total · {xpInCurrentLevel} / 108 XP to next level</p>
                 </div>
 
                 {/* Facts Grid */}

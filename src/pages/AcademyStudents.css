@@ -45,6 +45,8 @@
 .student-card-link {
     text-decoration: none;
     color: inherit;
+    display: block;
+    height: 100%;
 }
 
 .student-card {
@@ -56,6 +58,7 @@
     display: flex;
     flex-direction: column;
     cursor: pointer;
+    height: 100%;
 }
 
 .student-card:hover {

@@ -30,7 +30,7 @@ function AcademyStudents() {
                 ) : (
                     <div className="academy-students-grid">
                         {academyStudents.map(student => {
-                            const level = Math.floor((student.points || 0) / 100)
+                            const level = Math.floor((student.points || 0) / 108)
                             return (
                                 <Link
                                     to={`/academy/students/${student.id}`}
@@ -80,7 +80,7 @@ function AcademyStudents() {
                                                 <div className="level-track">
                                                     <div
                                                         className="level-fill"
-                                                        style={{ width: `${((student.points || 0) % 100)}%` }}
+                                                        style={{ width: `${(((student.points || 0) % 108) / 108) * 100}%` }}
                                                     />
                                                 </div>
                                             </div>
