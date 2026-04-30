@@ -279,6 +279,11 @@
   border: 2px solid #FFD700;
   box-shadow: 0 0 20px rgba(255, 215, 0, 0.15);
   z-index: 3;
+  order: 2;
+  transform: scale(1.05) translateY(-15px);
+}
+.rank-gold:hover {
+  transform: scale(1.05) translateY(-20px);
 }
 .rank-gold .rank-badge {
   background: linear-gradient(135deg, #FFF8DC, #FFD700, #DAA520);
@@ -288,6 +293,7 @@
   border: 2px solid #C0C0C0;
   box-shadow: 0 0 15px rgba(192, 192, 192, 0.15);
   z-index: 2;
+  order: 1;
 }
 .rank-silver .rank-badge {
   background: linear-gradient(135deg, #FFFFFF, #C0C0C0, #A9A9A9);
@@ -297,6 +303,7 @@
   border: 2px solid #CD7F32;
   box-shadow: 0 0 15px rgba(205, 127, 50, 0.15);
   z-index: 1;
+  order: 3;
 }
 .rank-bronze .rank-badge {
   background: linear-gradient(135deg, #FFE4C4, #CD7F32, #8B4513);
@@ -349,6 +356,13 @@
     width: 100%;
     max-width: 300px;
     height: auto !important; /* Reset height for mobile stack */
+  }
+  .rank-gold, .rank-silver, .rank-bronze {
+    order: unset;
+    transform: none;
+  }
+  .rank-gold:hover {
+    transform: translateY(-5px);
   }
 }
 

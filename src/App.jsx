@@ -37,12 +37,15 @@ function App() {
   const location = useLocation()
   const isHomePage = location.pathname === '/'
 
-  const [hasEntered, setHasEntered] = useState(false)
+  const [hasEntered, setHasEntered] = useState(() => {
+    return sessionStorage.getItem('dreamworld_entered') === 'true'
+  })
   const [shouldStartAudio, setShouldStartAudio] = useState(false)
   const { isSoundMuted } = useAudio()
 
 
   const handleEnterDreamWorld = () => {
+    sessionStorage.setItem('dreamworld_entered', 'true')
     setHasEntered(true)
     setShouldStartAudio(true)
   }

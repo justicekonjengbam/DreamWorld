@@ -63,11 +63,11 @@ function Academy() {
                 </div>
             </section>
 
-            {/* Students */}
-            <section className="container academy-students-section">
+            {/* Students Preview */}
+            <section className="container academy-students-section" style={{ paddingBottom: '60px' }}>
                 <SectionHeader
-                    title="🎓 Our Students"
-                    subtitle={loading ? 'Loading...' : `${academyStudents.length} student${academyStudents.length !== 1 ? 's' : ''} currently enrolled`}
+                    title="🎓 Newest Enrollees"
+                    subtitle={loading ? 'Loading...' : `Join ${academyStudents.length} other young dreamers!`}
                 />
 
                 {!loading && academyStudents.length === 0 ? (
@@ -77,20 +77,21 @@ function Academy() {
                     </div>
 
                 ) : (
-                    <div className="academy-students-grid">
-                        {academyStudents.map(student => {
-                            const level = Math.floor((student.points || 0) / 100)
+                    <>
+                    <div className="academy-students-grid" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '24px' }}>
+                        {academyStudents.slice(-4).reverse().map(student => {
+                            const xp = ((student.points || 0) % 108) / 108 * 100;
                             return (
                                 <Link
                                     to={`/academy/students/${student.id}`}
                                     key={student.id}
                                     className="student-card-link"
+                                    style={{ width: '100%', maxWidth: '280px' }}
                                 >
                                     <div className="student-card">
                                         <div
                                             className="student-card-cover"
                                             style={{ backgroundImage: `url(/AcademyBackground.png)` }}
-
                                         />
                                         <div className="student-card-avatar-wrap">
                                             <img
@@ -110,11 +111,11 @@ function Academy() {
                                             </div>
                                             <div className="student-level-bar">
                                                 <div className="level-label">
-                                                    <span>Dream Level {level}</span>
+                                                    <span>Dream Level {student.level || 0}</span>
                                                     <span>{student.points || 0} XP</span>
                                                 </div>
                                                 <div className="level-track">
-                                                    <div className="level-fill" style={{ width: `${(student.points || 0) % 100}%` }} />
+                                                    <div className="level-fill" style={{ width: `${xp}%` }} />
                                                 </div>
                                             </div>
                                         </div>
@@ -126,6 +127,10 @@ function Academy() {
                             )
                         })}
                     </div>
+                    <div style={{ textAlign: 'center', marginTop: '30px' }}>
+                        <Link to="/academy/students"><Button variant="secondary">View All Students →</Button></Link>
+                    </div>
+                    </>
                 )}
             </section>
         </div>
