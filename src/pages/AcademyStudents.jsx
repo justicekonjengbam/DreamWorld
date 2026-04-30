@@ -28,9 +28,35 @@ function AcademyStudents() {
                         <Link to="/academy" className="academy-enroll-link">📜 Enroll Now</Link>
                     </div>
                 ) : (
-                    <div className="academy-students-grid">
+                    <>
+                        <div className="leaderboard-section">
+                            <h2 className="leaderboard-title">Top Students</h2>
+                            <div className="leaderboard-podium">
+                                {[...academyStudents]
+                                    .sort((a, b) => (b.points || 0) - (a.points || 0))
+                                    .slice(0, 3)
+                                    .map((student, index) => {
+                                        const rankClass = index === 0 ? 'rank-gold' : index === 1 ? 'rank-silver' : 'rank-bronze';
+                                        const xp = ((student.points || 0) % 108) / 108 * 100;
+                                        return (
+                                            <Link to={`/academy/students/${student.id}`} key={`top-${student.id}`} className={`leaderboard-card ${rankClass}`}>
+                                                <div className="rank-badge">#{index + 1}</div>
+                                                <img src={student.avatar || '/DreamWorldAcademy.png'} alt={student.name} className="leaderboard-avatar" onError={(e) => { e.target.src = '/DreamWorldAcademy.png' }} />
+                                                <div className="leaderboard-info">
+                                                    <h3>{student.name}</h3>
+                                                    <p className="leaderboard-role">{student.class}</p>
+                                                    <div className="leaderboard-level">Lvl {student.level || 0}</div>
+                                                    <div className="xp-bar-container">
+                                                        <div className="xp-bar-fill" style={{ width: `${xp}%` }}></div>
+                                                    </div>
+                                                </div>
+                                            </Link>
+                                        );
+                                    })}
+                            </div>
+                        </div>
+                        <div className="academy-students-grid">
                         {academyStudents.map(student => {
-                            const level = Math.floor((student.points || 0) / 108)
                             return (
                                 <Link
                                     to={`/academy/students/${student.id}`}
@@ -74,7 +100,7 @@ function AcademyStudents() {
                                             {/* Level bar */}
                                             <div className="student-level-bar">
                                                 <div className="level-label">
-                                                    <span>Dream Level {level}</span>
+                                                    <span>Dream Level {student.level || 0}</span>
                                                     <span>{student.points || 0} XP</span>
                                                 </div>
                                                 <div className="level-track">
@@ -94,6 +120,7 @@ function AcademyStudents() {
                             )
                         })}
                     </div>
+                    </>
                 )}
 
                 <div className="academy-cta">

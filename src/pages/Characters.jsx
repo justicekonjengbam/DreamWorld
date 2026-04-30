@@ -49,6 +49,35 @@ function Characters() {
           onClose={() => setModalOpen(false)}
         />
 
+        {characters.length > 0 && (
+          <div className="leaderboard-section">
+            <h2 className="leaderboard-title">Top Dreamers</h2>
+            <div className="leaderboard-podium">
+              {[...characters]
+                .sort((a, b) => (b.points || 0) - (a.points || 0))
+                .slice(0, 3)
+                .map((character, index) => {
+                  const rankClass = index === 0 ? 'rank-gold' : index === 1 ? 'rank-silver' : 'rank-bronze';
+                  const xp = ((character.points || 0) % 108) / 108 * 100;
+                  return (
+                    <Link to={`/characters/${character.id}`} key={`top-${character.id}`} className={`leaderboard-card ${rankClass}`}>
+                      <div className="rank-badge">#{index + 1}</div>
+                      <Avatar src={character.avatar} name={character.name} className="leaderboard-avatar" />
+                      <div className="leaderboard-info">
+                        <h3>{character.name}</h3>
+                        <p className="leaderboard-role">{character.title}</p>
+                        <div className="leaderboard-level">Lvl {character.level || 0}</div>
+                        <div className="xp-bar-container">
+                          <div className="xp-bar-fill" style={{ width: `${xp}%` }}></div>
+                        </div>
+                      </div>
+                    </Link>
+                  );
+                })}
+            </div>
+          </div>
+        )}
+
         <div className="characters-grid">
           {characters.map((character) => (
             <Link to={`/characters/${character.id}`} key={character.id} className="character-link">
@@ -102,7 +131,7 @@ function Characters() {
                 </div>
                 <div className="character-xp-bar" style={{ marginTop: '15px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--color-gray)', marginBottom: '4px' }}>
-                    <span>Lvl {Math.floor((character.points || 0) / 108)}</span>
+                    <span>Lvl {character.level || 0}</span>
                     <span>{(character.points || 0) % 108} / 108 XP</span>
                   </div>
                   <div style={{ width: '100%', height: '4px', background: 'rgba(255,255,255,0.1)', borderRadius: '2px', overflow: 'hidden' }}>
