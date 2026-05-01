@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom'
 import { useContent } from '../context/ContentContext'
 import Button from '../components/Button'
 import ImageModal from '../components/ImageModal'
+import StatGraph from '../components/StatGraph'
 import './AcademyStudentDetail.css'
 
 function AcademyStudentDetail() {
@@ -93,6 +94,7 @@ function AcademyStudentDetail() {
                     <p className="level-xp-text">{student.points || 0} XP total · {xpInCurrentLevel} / 108 XP to next level</p>
                 </div>
 
+
                 {/* Facts Grid */}
                 <div className="detail-facts-grid">
                     <div className="detail-fact-card">
@@ -132,6 +134,12 @@ function AcademyStudentDetail() {
                         <blockquote className="aim-quote">"{student.aim_in_life}"</blockquote>
                     </div>
                 )}
+
+                {/* Profile Stats */}
+                <div className="detail-section" style={{ textAlign: 'center', marginTop: '40px' }}>
+                    <h2 className="detail-section-title" style={{ color: 'var(--color-cyan)', fontSize: '1.4rem' }}>Profile Stats</h2>
+                    <StatGraph stats={student.stats} />
+                </div>
 
                 <div className="detail-back-link">
                     <Link to="/academy/students">

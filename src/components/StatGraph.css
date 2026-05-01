@@ -1,0 +1,121 @@
+.stat-graph-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+    background: rgba(20, 25, 40, 0.4);
+    border: 1px solid rgba(76, 161, 175, 0.2);
+    border-radius: 16px;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Add a subtle magical glow behind the chart */
+.stat-graph-container::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(76, 161, 175, 0.15) 0%, transparent 70%);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.recharts-wrapper {
+    z-index: 1;
+}
+
+.recharts-polar-grid-angle line,
+.recharts-polar-grid-concentric-polygon {
+    stroke: rgba(126, 200, 227, 0.2);
+}
+
+.stat-sliders-container {
+    margin-top: 15px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(76, 161, 175, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+    z-index: 2;
+}
+
+.stat-slider-row {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.stat-slider-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+}
+
+.stat-slider-name {
+    font-weight: 600;
+    color: #a8d8ea;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+}
+
+.stat-slider-value {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.stat-slider-track {
+    width: 100%;
+    height: 6px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.stat-slider-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4CA1AF, #7ec8e3);
+    border-radius: 10px;
+    width: 0;
+    animation: fillSlider 1s cubic-bezier(0.1, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes fillSlider {
+    0% { width: 0; }
+    100% { width: var(--target-width); }
+}
+
+/* Tablet & Desktop Layout */
+@media (min-width: 850px) {
+    .stat-graph-container {
+        flex-direction: row;
+        align-items: center;
+        padding: 30px;
+        gap: 40px;
+    }
+
+    .stat-graph-chart-wrapper {
+        flex: 1;
+        min-width: 300px;
+    }
+
+    .stat-sliders-container {
+        flex: 1.2;
+        margin-top: 0;
+        padding-top: 0;
+        border-top: none;
+        border-left: 1px solid rgba(76, 161, 175, 0.2);
+        padding-left: 40px;
+        justify-content: center;
+    }
+}

@@ -6,6 +6,7 @@ import Badge from '../components/Badge'
 import Button from '../components/Button'
 import ImageModal from '../components/ImageModal'
 import Avatar from '../components/Avatar'
+import StatGraph from '../components/StatGraph'
 import './CharacterDetail.css'
 
 function CharacterDetail() {
@@ -146,7 +147,8 @@ function CharacterDetail() {
           </div>
 
           <div className="character-sidebar">
-            {/* Future sidebar content like achievements or recent quests could go here */}
+            <h3 style={{ color: 'var(--color-cyan)', textAlign: 'center', marginBottom: '15px' }}>Profile Stats</h3>
+            <StatGraph stats={character.stats} />
           </div>
         </div>
       </div>

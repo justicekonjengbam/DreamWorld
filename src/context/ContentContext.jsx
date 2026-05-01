@@ -72,7 +72,17 @@ export const ContentProvider = ({ children }) => {
                     themes: typeof c.themes === 'string' ? c.themes.split(',').map(t => t.trim()).filter(Boolean) : [],
                     socials: { youtube: c.youtube, instagram: c.instagram, facebook: c.facebook, twitter: c.twitter },
                     level: Math.floor((c.points || 0) / 100),
-                    points: c.points || 0
+                    points: c.points || 0,
+                    stats: {
+                        knowledge: c.stat_knowledge || 50,
+                        discipline: c.stat_discipline || 50,
+                        charisma: c.stat_charisma || 50,
+                        creativity: c.stat_creativity || 50,
+                        courage: c.stat_courage || 50,
+                        physique: c.stat_physique || 50,
+                        empathy: c.stat_empathy || 50,
+                        essence: c.stat_essence || 50
+                    }
                 })))
             }
 
@@ -128,7 +138,17 @@ export const ContentProvider = ({ children }) => {
             if (asData) {
                 setAcademyStudents(asData.map(s => ({
                     ...s,
-                    level: Math.floor((s.points || 0) / 100)
+                    level: Math.floor((s.points || 0) / 100),
+                    stats: {
+                        knowledge: s.stat_knowledge || 50,
+                        discipline: s.stat_discipline || 50,
+                        charisma: s.stat_charisma || 50,
+                        creativity: s.stat_creativity || 50,
+                        courage: s.stat_courage || 50,
+                        physique: s.stat_physique || 50,
+                        empathy: s.stat_empathy || 50,
+                        essence: s.stat_essence || 50
+                    }
                 })))
             }
 
