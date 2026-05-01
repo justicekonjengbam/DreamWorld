@@ -43,7 +43,7 @@ function AdminDashboard() {
         needsFunding: false, amountNeeded: '', galleryImages: [], completionImages: [], completionNote: ''
     })
     const [roleFormData, setRoleFormData] = useState({ id: '', name: '', singular: '', description: '', color: '#4CA1AF', traits: '', philosophy: '', isExclusive: false })
-    const [memberFormData, setMemberFormData] = useState({ name: '', role: '', title: '', avatar: '', coverImage: '', bio: '', themes: '', joinedDate: '', order_index: 0, stat_knowledge: 50, stat_discipline: 50, stat_charisma: 50, stat_creativity: 50, stat_courage: 50, stat_physique: 50, stat_empathy: 50, stat_essence: 50 })
+    const [memberFormData, setMemberFormData] = useState({ name: '', role: '', title: '', avatar: '', coverImage: '', bio: '', themes: '', joinedDate: '', order_index: 0, stat_knowledge: 50, stat_discipline: 50, stat_charisma: 50, stat_creativity: 50, stat_courage: 50, stat_physique: 50, stat_empathy: 50, stat_essence: 50, passcode: '', theme_color: '#141932', daily_task: '' })
     const [sponsorFormData, setSponsorFormData] = useState({ name: '', title: '', avatar: '', bio: '', themes: '' })
     const [eventFormData, setEventFormData] = useState({
         title: '', host: '', type: 'online', date: '', location: '', description: '', registrationLink: '',
@@ -72,7 +72,8 @@ function AdminDashboard() {
         name: '', class: '', school_name: '', age: '', gender: '',
         hobbies: '', favourite_colour: '', favourite_animal: '', aim_in_life: '',
         avatar: '', coverImage: '', points: 0, order_index: 0, joined_date: '',
-        stat_knowledge: 50, stat_discipline: 50, stat_charisma: 50, stat_creativity: 50, stat_courage: 50, stat_physique: 50, stat_empathy: 50, stat_essence: 50
+        stat_knowledge: 50, stat_discipline: 50, stat_charisma: 50, stat_creativity: 50, stat_courage: 50, stat_physique: 50, stat_empathy: 50, stat_essence: 50,
+        passcode: '', theme_color: '#141932', daily_task: ''
     })
     const [appFilter, setAppFilter] = useState('pending') // 'pending', 'accepted', 'declined'
     const [xpAdjustAmount, setXpAdjustAmount] = useState(10);
@@ -569,6 +570,17 @@ function AdminDashboard() {
                                                 <button type="button" onClick={() => setMemberFormData(p => ({ ...p, points: (parseInt(p.points) || 0) + (parseInt(xpAdjustAmount) || 0) }))} style={{ padding: '6px 12px', fontSize: '0.85rem', borderRadius: '6px', background: 'rgba(76, 161, 175, 0.1)', cursor: 'pointer', border: '1px solid rgba(76, 161, 175, 0.3)', color: '#7ec8e3', outline: 'none' }}>+ Add XP</button>
                                                 <button type="button" onClick={() => setMemberFormData(p => ({ ...p, points: Math.max(0, (parseInt(p.points) || 0) - (parseInt(xpAdjustAmount) || 0)) }))} style={{ padding: '6px 12px', fontSize: '0.85rem', borderRadius: '6px', background: 'rgba(255, 100, 100, 0.1)', cursor: 'pointer', border: '1px solid rgba(255, 100, 100, 0.3)', color: '#ff9090', outline: 'none' }}>- Subtract XP</button>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div className="admin-stats-editor" style={{ background: 'rgba(76, 161, 175, 0.1)', padding: '15px', borderRadius: '8px', margin: '15px 0', border: '1px solid rgba(76, 161, 175, 0.3)' }}>
+                                        <h4 style={{ color: '#7ec8e3', marginBottom: '10px' }}>PWA Portal Access (Sandbox)</h4>
+                                        <div className="form-row">
+                                            <div className="form-group"><label>Portal Passcode</label><input type="text" placeholder="e.g. SECRET123" value={memberFormData.passcode || ''} onChange={(e) => setMemberFormData({ ...memberFormData, passcode: e.target.value })} /></div>
+                                            <div className="form-group"><label>Theme Color (Hex)</label><input type="text" placeholder="#141932" value={memberFormData.theme_color || ''} onChange={(e) => setMemberFormData({ ...memberFormData, theme_color: e.target.value })} /></div>
+                                        </div>
+                                        <div className="form-group-full">
+                                            <label>Daily Task for Portal</label>
+                                            <input type="text" placeholder="e.g. Read Chapter 2 of Advanced Magic..." value={memberFormData.daily_task || ''} onChange={(e) => setMemberFormData({ ...memberFormData, daily_task: e.target.value })} />
                                         </div>
                                     </div>
                                     <div className="admin-stats-editor" style={{ background: 'rgba(0,0,0,0.2)', padding: '15px', borderRadius: '8px', margin: '15px 0' }}>
@@ -1236,6 +1248,17 @@ function AdminDashboard() {
                                                 </div>
                                             </div>
                                         </div>
+                                        <div className="admin-stats-editor" style={{ background: 'rgba(76, 161, 175, 0.1)', padding: '15px', borderRadius: '8px', margin: '15px 0', border: '1px solid rgba(76, 161, 175, 0.3)' }}>
+                                            <h4 style={{ color: '#7ec8e3', marginBottom: '10px' }}>PWA Portal Access (Sandbox)</h4>
+                                            <div className="form-row">
+                                                <div className="form-group"><label>Portal Passcode</label><input type="text" placeholder="e.g. SECRET123" value={studentFormData.passcode || ''} onChange={(e) => setStudentFormData({ ...studentFormData, passcode: e.target.value })} /></div>
+                                                <div className="form-group"><label>Theme Color (Hex)</label><input type="text" placeholder="#141932" value={studentFormData.theme_color || ''} onChange={(e) => setStudentFormData({ ...studentFormData, theme_color: e.target.value })} /></div>
+                                            </div>
+                                            <div className="form-group-full">
+                                                <label>Daily Task for Portal</label>
+                                                <input type="text" placeholder="e.g. Read Chapter 2 of Advanced Magic..." value={studentFormData.daily_task || ''} onChange={(e) => setStudentFormData({ ...studentFormData, daily_task: e.target.value })} />
+                                            </div>
+                                        </div>
                                         <div className="admin-stats-editor" style={{ background: 'rgba(0,0,0,0.2)', padding: '15px', borderRadius: '8px', margin: '15px 0' }}>
                                             <h4 style={{ color: 'var(--color-cyan)', marginBottom: '10px' }}>Dreamer Stats (1-100)</h4>
                                             <div className="form-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
@@ -1290,7 +1313,10 @@ function AdminDashboard() {
                                                     stat_courage: s.stats?.courage || 50,
                                                     stat_physique: s.stats?.physique || 50,
                                                     stat_empathy: s.stats?.empathy || 50,
-                                                    stat_essence: s.stats?.essence || 50
+                                                    stat_essence: s.stats?.essence || 50,
+                                                    passcode: s.passcode || '',
+                                                    theme_color: s.theme_color || '#141932',
+                                                    daily_task: s.daily_task || ''
                                                 })
                                             }}>✏️</button>
                                             <button onClick={() => {

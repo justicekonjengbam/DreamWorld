@@ -24,6 +24,9 @@ import AdminDashboard from './pages/AdminDashboard'
 import SpecialThanks from './pages/SpecialThanks'
 import Academy from './pages/Academy'
 import AcademyStudents from './pages/AcademyStudents'
+import PortalLayout from './portal/PortalLayout'
+import PortalLogin from './portal/PortalLogin'
+import PortalDashboard from './portal/PortalDashboard'
 import AcademyStudentDetail from './pages/AcademyStudentDetail'
 import AcademyEnroll from './pages/AcademyEnroll'
 import './App.css'
@@ -96,13 +99,21 @@ function App() {
               <Route path="/funders" element={<Funders />} />
               <Route path="/admin" element={<AdminLogin />} />
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
-              <Route path="/thanks" element={<SpecialThanks />} />
+
+              {/* Sandbox PWA Portal Routes */}
+              <Route path="/portal" element={<PortalLayout />}>
+                <Route index element={<PortalLogin />} />
+                <Route path="dashboard" element={<PortalDashboard />} />
+              </Route>
+
               <Route path="/academy" element={<Academy />} />
               <Route path="/academy/enroll" element={<AcademyEnroll />} />
               <Route path="/academy/students" element={<AcademyStudents />} />
               <Route path="/academy/students/:id" element={<AcademyStudentDetail />} />
+              <Route path="/thanks" element={<SpecialThanks />} />
 
-
+              {/* 404 Route */}
+              <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </main>
           {!isHomePage && <Footer />}

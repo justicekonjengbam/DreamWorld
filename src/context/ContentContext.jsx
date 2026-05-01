@@ -286,7 +286,10 @@ export const ContentProvider = ({ children }) => {
             stat_courage: parseInt(newChar.stat_courage || 50),
             stat_physique: parseInt(newChar.stat_physique || 50),
             stat_empathy: parseInt(newChar.stat_empathy || 50),
-            stat_essence: parseInt(newChar.stat_essence || 50)
+            stat_essence: parseInt(newChar.stat_essence || 50),
+            passcode: newChar.passcode || null,
+            theme_color: newChar.theme_color || null,
+            daily_task: newChar.daily_task || null
         }
         if (await saveToSupabase('dreamers', payload)) fetchData()
     }
@@ -315,7 +318,10 @@ export const ContentProvider = ({ children }) => {
             stat_courage: parseInt(updated.stat_courage || 50),
             stat_physique: parseInt(updated.stat_physique || 50),
             stat_empathy: parseInt(updated.stat_empathy || 50),
-            stat_essence: parseInt(updated.stat_essence || 50)
+            stat_essence: parseInt(updated.stat_essence || 50),
+            passcode: updated.passcode || null,
+            theme_color: updated.theme_color || null,
+            daily_task: updated.daily_task || null
         }
 
         if (await saveToSupabase('dreamers', payload)) fetchData()
@@ -528,7 +534,10 @@ export const ContentProvider = ({ children }) => {
                 stat_courage: 50,
                 stat_physique: 50,
                 stat_empathy: 50,
-                stat_essence: 50
+                stat_essence: 50,
+                passcode: null,
+                theme_color: null,
+                daily_task: null
             }
             await saveToSupabase('academy_students', studentPayload)
 
@@ -606,7 +615,10 @@ export const ContentProvider = ({ children }) => {
             stat_courage: parseInt(updated.stat_courage || 50),
             stat_physique: parseInt(updated.stat_physique || 50),
             stat_empathy: parseInt(updated.stat_empathy || 50),
-            stat_essence: parseInt(updated.stat_essence || 50)
+            stat_essence: parseInt(updated.stat_essence || 50),
+            passcode: updated.passcode || null,
+            theme_color: updated.theme_color || null,
+            daily_task: updated.daily_task || null
         }
         if (await saveToSupabase('academy_students', payload)) fetchData()
     }
