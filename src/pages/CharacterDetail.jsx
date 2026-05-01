@@ -147,7 +147,7 @@ function CharacterDetail() {
           </div>
 
           <div className="character-sidebar">
-            <h3 style={{ color: 'var(--color-cyan)', textAlign: 'center', marginBottom: '15px' }}>Profile Stats</h3>
+            <h3 style={{ color: 'var(--color-cyan)', textAlign: 'center', marginBottom: '15px' }}>Dreamer Stats</h3>
             <StatGraph stats={character.stats} />
           </div>
         </div>

@@ -137,7 +137,7 @@ function AcademyStudentDetail() {
 
                 {/* Profile Stats */}
                 <div className="detail-section" style={{ textAlign: 'center', marginTop: '40px' }}>
-                    <h2 className="detail-section-title" style={{ color: 'var(--color-cyan)', fontSize: '1.4rem' }}>Profile Stats</h2>
+                    <h2 className="detail-section-title" style={{ color: 'var(--color-cyan)', fontSize: '1.4rem' }}>Dreamer Stats</h2>
                     <StatGraph stats={student.stats} />
                 </div>
 

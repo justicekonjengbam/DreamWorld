@@ -71,7 +71,7 @@ export const ContentProvider = ({ children }) => {
                     joinedDate: c.joined_date,
                     themes: typeof c.themes === 'string' ? c.themes.split(',').map(t => t.trim()).filter(Boolean) : [],
                     socials: { youtube: c.youtube, instagram: c.instagram, facebook: c.facebook, twitter: c.twitter },
-                    level: Math.floor((c.points || 0) / 100),
+                    level: Math.floor((c.points || 0) / 108),
                     points: c.points || 0,
                     stats: {
                         knowledge: c.stat_knowledge || 50,
@@ -138,7 +138,7 @@ export const ContentProvider = ({ children }) => {
             if (asData) {
                 setAcademyStudents(asData.map(s => ({
                     ...s,
-                    level: Math.floor((s.points || 0) / 100),
+                    level: Math.floor((s.points || 0) / 108),
                     stats: {
                         knowledge: s.stat_knowledge || 50,
                         discipline: s.stat_discipline || 50,
@@ -278,7 +278,15 @@ export const ContentProvider = ({ children }) => {
             facebook: newChar.socials?.facebook || '',
             twitter: newChar.socials?.twitter || '',
             points: parseInt(newChar.points || 0),
-            order_index: characters.length
+            order_index: characters.length,
+            stat_knowledge: parseInt(newChar.stat_knowledge || 50),
+            stat_discipline: parseInt(newChar.stat_discipline || 50),
+            stat_charisma: parseInt(newChar.stat_charisma || 50),
+            stat_creativity: parseInt(newChar.stat_creativity || 50),
+            stat_courage: parseInt(newChar.stat_courage || 50),
+            stat_physique: parseInt(newChar.stat_physique || 50),
+            stat_empathy: parseInt(newChar.stat_empathy || 50),
+            stat_essence: parseInt(newChar.stat_essence || 50)
         }
         if (await saveToSupabase('dreamers', payload)) fetchData()
     }
@@ -299,7 +307,15 @@ export const ContentProvider = ({ children }) => {
             facebook: updated.socials?.facebook || updated.facebook || '',
             twitter: updated.socials?.twitter || updated.twitter || '',
             points: parseInt(updated.points || 0),
-            order_index: updated.order_index
+            order_index: updated.order_index || 0,
+            stat_knowledge: parseInt(updated.stat_knowledge || 50),
+            stat_discipline: parseInt(updated.stat_discipline || 50),
+            stat_charisma: parseInt(updated.stat_charisma || 50),
+            stat_creativity: parseInt(updated.stat_creativity || 50),
+            stat_courage: parseInt(updated.stat_courage || 50),
+            stat_physique: parseInt(updated.stat_physique || 50),
+            stat_empathy: parseInt(updated.stat_empathy || 50),
+            stat_essence: parseInt(updated.stat_essence || 50)
         }
 
         if (await saveToSupabase('dreamers', payload)) fetchData()
@@ -504,7 +520,15 @@ export const ContentProvider = ({ children }) => {
                 aim_in_life: app.aim_in_life,
                 points: 0,
                 order_index: academyStudents.length,
-                joined_date: new Date().toISOString().split('T')[0]
+                joined_date: new Date().toISOString().split('T')[0],
+                stat_knowledge: 50,
+                stat_discipline: 50,
+                stat_charisma: 50,
+                stat_creativity: 50,
+                stat_courage: 50,
+                stat_physique: 50,
+                stat_empathy: 50,
+                stat_essence: 50
             }
             await saveToSupabase('academy_students', studentPayload)
 
@@ -574,7 +598,15 @@ export const ContentProvider = ({ children }) => {
             cover_image: updated.coverImage || updated.cover_image || '',
             points: parseInt(updated.points || 0),
             order_index: updated.order_index || 0,
-            joined_date: updated.joined_date
+            joined_date: updated.joined_date,
+            stat_knowledge: parseInt(updated.stat_knowledge || 50),
+            stat_discipline: parseInt(updated.stat_discipline || 50),
+            stat_charisma: parseInt(updated.stat_charisma || 50),
+            stat_creativity: parseInt(updated.stat_creativity || 50),
+            stat_courage: parseInt(updated.stat_courage || 50),
+            stat_physique: parseInt(updated.stat_physique || 50),
+            stat_empathy: parseInt(updated.stat_empathy || 50),
+            stat_essence: parseInt(updated.stat_essence || 50)
         }
         if (await saveToSupabase('academy_students', payload)) fetchData()
     }

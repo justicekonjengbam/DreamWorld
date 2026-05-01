@@ -62,8 +62,9 @@ function AcademyStudents() {
                                     to={`/academy/students/${student.id}`}
                                     key={student.id}
                                     className="student-card-link"
+                                    style={{ display: 'flex', flexDirection: 'column' }}
                                 >
-                                    <div className="student-card">
+                                    <div className="student-card" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
                                         {/* Cover banner */}
                                         <div
                                             className="student-card-cover"

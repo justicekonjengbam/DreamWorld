@@ -43,7 +43,7 @@ function AdminDashboard() {
         needsFunding: false, amountNeeded: '', galleryImages: [], completionImages: [], completionNote: ''
     })
     const [roleFormData, setRoleFormData] = useState({ id: '', name: '', singular: '', description: '', color: '#4CA1AF', traits: '', philosophy: '', isExclusive: false })
-    const [memberFormData, setMemberFormData] = useState({ name: '', role: '', title: '', avatar: '', coverImage: '', bio: '', themes: '', joinedDate: '', order_index: 0 })
+    const [memberFormData, setMemberFormData] = useState({ name: '', role: '', title: '', avatar: '', coverImage: '', bio: '', themes: '', joinedDate: '', order_index: 0, stat_knowledge: 50, stat_discipline: 50, stat_charisma: 50, stat_creativity: 50, stat_courage: 50, stat_physique: 50, stat_empathy: 50, stat_essence: 50 })
     const [sponsorFormData, setSponsorFormData] = useState({ name: '', title: '', avatar: '', bio: '', themes: '' })
     const [eventFormData, setEventFormData] = useState({
         title: '', host: '', type: 'online', date: '', location: '', description: '', registrationLink: '',
@@ -71,7 +71,8 @@ function AdminDashboard() {
     const [studentFormData, setStudentFormData] = useState({
         name: '', class: '', school_name: '', age: '', gender: '',
         hobbies: '', favourite_colour: '', favourite_animal: '', aim_in_life: '',
-        avatar: '', coverImage: '', points: 0, order_index: 0, joined_date: ''
+        avatar: '', coverImage: '', points: 0, order_index: 0, joined_date: '',
+        stat_knowledge: 50, stat_discipline: 50, stat_charisma: 50, stat_creativity: 50, stat_courage: 50, stat_physique: 50, stat_empathy: 50, stat_essence: 50
     })
     const [appFilter, setAppFilter] = useState('pending') // 'pending', 'accepted', 'declined'
     const [xpAdjustAmount, setXpAdjustAmount] = useState(10);
@@ -137,7 +138,7 @@ function AdminDashboard() {
             needsFunding: false, amountNeeded: '', galleryImages: [], completionImages: [], completionNote: ''
         })
         setRoleFormData({ id: '', name: '', singular: '', description: '', color: '#4CA1AF', traits: '', philosophy: '', isExclusive: false })
-        setMemberFormData({ name: '', role: '', title: '', avatar: '', coverImage: '', bio: '', themes: '', joinedDate: '', order_index: 0 })
+        setMemberFormData({ name: '', role: '', title: '', avatar: '', coverImage: '', bio: '', themes: '', joinedDate: '', order_index: 0, stat_knowledge: 50, stat_discipline: 50, stat_charisma: 50, stat_creativity: 50, stat_courage: 50, stat_physique: 50, stat_empathy: 50, stat_essence: 50 })
         setSponsorFormData({ name: '', title: '', avatar: '', bio: '', themes: '' })
         setEventFormData({
             title: '', host: '', type: 'online', date: '', location: '', description: '', registrationLink: '',
@@ -570,6 +571,19 @@ function AdminDashboard() {
                                             </div>
                                         </div>
                                     </div>
+                                    <div className="admin-stats-editor" style={{ background: 'rgba(0,0,0,0.2)', padding: '15px', borderRadius: '8px', margin: '15px 0' }}>
+                                        <h4 style={{ color: 'var(--color-cyan)', marginBottom: '10px' }}>Dreamer Stats (1-100)</h4>
+                                        <div className="form-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
+                                            <div className="form-group" style={{ margin: 0 }}><label style={{ fontSize: '0.75rem' }}>Knowledge</label><input type="number" min="0" max="100" value={memberFormData.stat_knowledge} onChange={(e) => setMemberFormData({ ...memberFormData, stat_knowledge: e.target.value })} /></div>
+                                            <div className="form-group" style={{ margin: 0 }}><label style={{ fontSize: '0.75rem' }}>Discipline</label><input type="number" min="0" max="100" value={memberFormData.stat_discipline} onChange={(e) => setMemberFormData({ ...memberFormData, stat_discipline: e.target.value })} /></div>
+                                            <div className="form-group" style={{ margin: 0 }}><label style={{ fontSize: '0.75rem' }}>Charisma</label><input type="number" min="0" max="100" value={memberFormData.stat_charisma} onChange={(e) => setMemberFormData({ ...memberFormData, stat_charisma: e.target.value })} /></div>
+                                            <div className="form-group" style={{ margin: 0 }}><label style={{ fontSize: '0.75rem' }}>Creativity</label><input type="number" min="0" max="100" value={memberFormData.stat_creativity} onChange={(e) => setMemberFormData({ ...memberFormData, stat_creativity: e.target.value })} /></div>
+                                            <div className="form-group" style={{ margin: 0 }}><label style={{ fontSize: '0.75rem' }}>Courage</label><input type="number" min="0" max="100" value={memberFormData.stat_courage} onChange={(e) => setMemberFormData({ ...memberFormData, stat_courage: e.target.value })} /></div>
+                                            <div className="form-group" style={{ margin: 0 }}><label style={{ fontSize: '0.75rem' }}>Physique</label><input type="number" min="0" max="100" value={memberFormData.stat_physique} onChange={(e) => setMemberFormData({ ...memberFormData, stat_physique: e.target.value })} /></div>
+                                            <div className="form-group" style={{ margin: 0 }}><label style={{ fontSize: '0.75rem' }}>Empathy</label><input type="number" min="0" max="100" value={memberFormData.stat_empathy} onChange={(e) => setMemberFormData({ ...memberFormData, stat_empathy: e.target.value })} /></div>
+                                            <div className="form-group" style={{ margin: 0 }}><label style={{ fontSize: '0.75rem' }}>Essence</label><input type="number" min="0" max="100" value={memberFormData.stat_essence} onChange={(e) => setMemberFormData({ ...memberFormData, stat_essence: e.target.value })} /></div>
+                                        </div>
+                                    </div>
                                     <Button type="submit" variant="primary">{editingId ? 'Update' : 'Add'} Dreamer</Button>
                                     {editingId && <Button type="button" variant="secondary" onClick={resetForms}>Cancel</Button>}
                                 </form>
@@ -605,7 +619,15 @@ function AdminDashboard() {
                                                     level: c.level || 0,
                                                     points: c.points || 0,
                                                     joinedDate: c.joinedDate || '',
-                                                    order_index: c.order_index || 0
+                                                    order_index: c.order_index || 0,
+                                                    stat_knowledge: c.stats?.knowledge || 50,
+                                                    stat_discipline: c.stats?.discipline || 50,
+                                                    stat_charisma: c.stats?.charisma || 50,
+                                                    stat_creativity: c.stats?.creativity || 50,
+                                                    stat_courage: c.stats?.courage || 50,
+                                                    stat_physique: c.stats?.physique || 50,
+                                                    stat_empathy: c.stats?.empathy || 50,
+                                                    stat_essence: c.stats?.essence || 50
                                                 })
                                             }}>✏️</button>
                                             <button onClick={() => handleMemberDelete(c.id)}>🗑️</button>
@@ -1214,6 +1236,19 @@ function AdminDashboard() {
                                                 </div>
                                             </div>
                                         </div>
+                                        <div className="admin-stats-editor" style={{ background: 'rgba(0,0,0,0.2)', padding: '15px', borderRadius: '8px', margin: '15px 0' }}>
+                                            <h4 style={{ color: 'var(--color-cyan)', marginBottom: '10px' }}>Dreamer Stats (1-100)</h4>
+                                            <div className="form-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
+                                                <div className="form-group" style={{ margin: 0 }}><label style={{ fontSize: '0.75rem' }}>Knowledge</label><input type="number" min="0" max="100" value={studentFormData.stat_knowledge} onChange={(e) => setStudentFormData({ ...studentFormData, stat_knowledge: e.target.value })} /></div>
+                                                <div className="form-group" style={{ margin: 0 }}><label style={{ fontSize: '0.75rem' }}>Discipline</label><input type="number" min="0" max="100" value={studentFormData.stat_discipline} onChange={(e) => setStudentFormData({ ...studentFormData, stat_discipline: e.target.value })} /></div>
+                                                <div className="form-group" style={{ margin: 0 }}><label style={{ fontSize: '0.75rem' }}>Charisma</label><input type="number" min="0" max="100" value={studentFormData.stat_charisma} onChange={(e) => setStudentFormData({ ...studentFormData, stat_charisma: e.target.value })} /></div>
+                                                <div className="form-group" style={{ margin: 0 }}><label style={{ fontSize: '0.75rem' }}>Creativity</label><input type="number" min="0" max="100" value={studentFormData.stat_creativity} onChange={(e) => setStudentFormData({ ...studentFormData, stat_creativity: e.target.value })} /></div>
+                                                <div className="form-group" style={{ margin: 0 }}><label style={{ fontSize: '0.75rem' }}>Courage</label><input type="number" min="0" max="100" value={studentFormData.stat_courage} onChange={(e) => setStudentFormData({ ...studentFormData, stat_courage: e.target.value })} /></div>
+                                                <div className="form-group" style={{ margin: 0 }}><label style={{ fontSize: '0.75rem' }}>Physique</label><input type="number" min="0" max="100" value={studentFormData.stat_physique} onChange={(e) => setStudentFormData({ ...studentFormData, stat_physique: e.target.value })} /></div>
+                                                <div className="form-group" style={{ margin: 0 }}><label style={{ fontSize: '0.75rem' }}>Empathy</label><input type="number" min="0" max="100" value={studentFormData.stat_empathy} onChange={(e) => setStudentFormData({ ...studentFormData, stat_empathy: e.target.value })} /></div>
+                                                <div className="form-group" style={{ margin: 0 }}><label style={{ fontSize: '0.75rem' }}>Essence</label><input type="number" min="0" max="100" value={studentFormData.stat_essence} onChange={(e) => setStudentFormData({ ...studentFormData, stat_essence: e.target.value })} /></div>
+                                            </div>
+                                        </div>
                                         <Button type="submit" variant="primary">💾 Save Student</Button>
                                         <Button type="button" variant="secondary" onClick={() => setEditingStudentId(null)}>Cancel</Button>
                                     </form>
@@ -1245,7 +1280,18 @@ function AdminDashboard() {
                                         <div className="admin-item-actions">
                                             <button onClick={() => {
                                                 setEditingStudentId(s.id)
-                                                setStudentFormData({ ...s, coverImage: s.cover_image || '' })
+                                                setStudentFormData({ 
+                                                    ...s, 
+                                                    coverImage: s.cover_image || '',
+                                                    stat_knowledge: s.stats?.knowledge || 50,
+                                                    stat_discipline: s.stats?.discipline || 50,
+                                                    stat_charisma: s.stats?.charisma || 50,
+                                                    stat_creativity: s.stats?.creativity || 50,
+                                                    stat_courage: s.stats?.courage || 50,
+                                                    stat_physique: s.stats?.physique || 50,
+                                                    stat_empathy: s.stats?.empathy || 50,
+                                                    stat_essence: s.stats?.essence || 50
+                                                })
                                             }}>✏️</button>
                                             <button onClick={() => {
                                                 if (window.confirm(`Remove ${s.name} from the Academy?`)) deleteAcademyStudent(s.id)

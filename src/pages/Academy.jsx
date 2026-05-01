@@ -78,7 +78,7 @@ function Academy() {
 
                 ) : (
                     <>
-                    <div className="academy-students-grid" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '24px' }}>
+                    <div className="academy-students-grid" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'stretch', gap: '24px' }}>
                         {academyStudents.slice(-4).reverse().map(student => {
                             const xp = ((student.points || 0) % 108) / 108 * 100;
                             return (
@@ -86,9 +86,9 @@ function Academy() {
                                     to={`/academy/students/${student.id}`}
                                     key={student.id}
                                     className="student-card-link"
-                                    style={{ width: '100%', maxWidth: '280px' }}
+                                    style={{ width: '100%', maxWidth: '280px', display: 'flex', flexDirection: 'column', height: '100%' }}
                                 >
-                                    <div className="student-card">
+                                    <div className="student-card" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
                                         <div
                                             className="student-card-cover"
                                             style={{ backgroundImage: `url(/AcademyBackground.png)` }}
