@@ -32,7 +32,7 @@ export default function PortalLogin() {
     return (
         <div className="portal-login">
             <div className="portal-login-card">
-                <img src="/DreamWorldAcademy.png" alt="DreamWorld" className="portal-logo" />
+                <img src="/logo.png" alt="DreamWorld" className="portal-logo" />
                 <h1>DreamWorld Portal</h1>
                 <p>Enter your unique passcode to enter.</p>
                 

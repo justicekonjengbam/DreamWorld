@@ -12,16 +12,18 @@ export default defineConfig({
         name: 'DreamWorld',
         short_name: 'DW',
         description: 'DreamWorld Portal',
+        start_url: '/portal',
+        display: 'standalone',
         theme_color: '#141932',
         background_color: '#0d1326',
         icons: [
           {
-            src: '/DreamWorldAcademy.png',
+            src: '/logo.png',
             sizes: '192x192',
             type: 'image/png'
           },
           {
-            src: '/DreamWorldAcademy.png',
+            src: '/logo.png',
             sizes: '512x512',
             type: 'image/png'
           }
