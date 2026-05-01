@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Routes, Route, useLocation } from 'react-router-dom'
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom'
 import { useAudio } from './context/AudioContext'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
