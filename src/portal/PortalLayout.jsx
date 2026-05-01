@@ -1,4 +1,4 @@
-import { Outlet } from 'react'
+import { Outlet } from 'react-router-dom'
 import { PortalProvider } from '../context/PortalContext'
 import './Portal.css'
 
