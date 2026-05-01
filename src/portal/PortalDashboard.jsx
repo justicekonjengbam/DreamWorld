@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { usePortal } from '../context/PortalContext'
-import SpiderGraph from '../components/SpiderGraph'
+import StatGraph from '../components/StatGraph'
 
 export default function PortalDashboard() {
     const { user, loading, logout } = usePortal()
@@ -77,7 +77,7 @@ export default function PortalDashboard() {
                 <div className="portal-card">
                     <h3>📊 Profile Stats</h3>
                     <div style={{ padding: '20px 0' }}>
-                        <SpiderGraph data={statsData} height={250} />
+                        <StatGraph data={statsData} height={250} />
                     </div>
                     
                     <div style={{ marginTop: 20 }}>

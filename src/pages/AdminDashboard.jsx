@@ -627,7 +627,6 @@ function AdminDashboard() {
                                                     instagram: c.socials?.instagram || '',
                                                     facebook: c.socials?.facebook || '',
                                                     twitter: c.socials?.twitter || '',
-                                                    twitter: c.socials?.twitter || '',
                                                     level: c.level || 0,
                                                     points: c.points || 0,
                                                     joinedDate: c.joinedDate || '',
