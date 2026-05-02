@@ -83,7 +83,7 @@ function App() {
 
         {!isPortal && <ParticlesBackground />}
 
-        <div className={`main-app-content ${!isPortal && hasEntered ? 'fade-in' : ''}`}>
+        <div className={`main-app-content ${!isPortal && hasEntered ? 'fade-in' : ''} ${isPortal ? 'portal-visible' : ''}`}>
           {!isPortal && <Navbar />}
           <main className="main-content">
             <Routes>

@@ -25,6 +25,15 @@
   opacity: 1;
 }
 
+.main-app-content.portal-visible {
+  opacity: 1;
+}
+
+/* Remove top padding on portal pages since there's no navbar */
+.main-app-content.portal-visible .main-content {
+  padding-top: 0;
+}
+
 /* Universal page logo styling */
 .page-hero {
   text-align: center;

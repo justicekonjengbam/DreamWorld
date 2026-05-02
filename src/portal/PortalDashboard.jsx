@@ -42,6 +42,8 @@ export default function PortalDashboard() {
         : [user.hobbies, user.favourite_colour ? `Fav: ${user.favourite_colour}` : ''].filter(Boolean)
 
     const themeColor = user.theme_color || '#4CA1AF'
+    // XP bar always uses a bright accent, not the (possibly dark) theme bg color
+    const xpBarColor = '#4CA1AF'
 
     // Build a dreamer-shaped object for PrintableID and PrintableCertificate
     const dreamerForPrint = {
@@ -52,7 +54,7 @@ export default function PortalDashboard() {
     }
 
     return (
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: '100vh', paddingBottom: '70px' }}>
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: '100vh', paddingBottom: '70px', background: `linear-gradient(160deg, ${themeColor}22 0%, #0d1326 40%)` }}>
 
             {/* ===== PROFILE TAB ===== */}
             {activeTab === 'profile' && (
@@ -81,7 +83,7 @@ export default function PortalDashboard() {
                                 <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.85rem' }}>{xpRemainder} / 108 XP</span>
                             </div>
                             <div className="portal-xp-track">
-                                <div className="portal-xp-fill" style={{ width: `${xpPercent}%`, backgroundColor: themeColor }} />
+                                <div className="portal-xp-fill" style={{ width: `${xpPercent}%`, backgroundColor: xpBarColor, boxShadow: `0 0 10px ${xpBarColor}88` }} />
                             </div>
                             <p style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.3)', marginTop: 6, textAlign: 'right' }}>Total XP: {user.points || 0}</p>
                         </div>
@@ -237,10 +239,8 @@ export default function PortalDashboard() {
             </nav>
 
             {/* Printable ID Modal */}
-            {showID && <PrintableID dreamer={dreamerForPrint} onClose={() => setShowID(false)} />}
-
-            {/* Printable Certificate Modal */}
-            {showCert && <PrintableCertificate dreamer={dreamerForPrint} onClose={() => setShowCert(false)} />}
+            {showID && <PrintableID dreamer={dreamerForPrint} onClose={() => setShowID(false)} readOnly />}
+            {showCert && <PrintableCertificate dreamer={dreamerForPrint} onClose={() => setShowCert(false)} readOnly />}
         </div>
     )
 }

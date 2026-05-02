@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useContent } from '../context/ContentContext'
 import './Printables.css'
 
-const PrintableCertificate = ({ dreamer, onClose }) => {
+const PrintableCertificate = ({ dreamer, onClose, readOnly = false }) => {
     const { roles } = useContent()
     const [activeSide, setActiveSide] = useState('front') // 'front' or 'back'
     const roleObj = roles.find(r => r.id === dreamer.role) || { singular: dreamer.role }
@@ -49,14 +49,14 @@ const PrintableCertificate = ({ dreamer, onClose }) => {
                                 <div className="sign-box">
                                     <div className="sign-label-top">Date of Issue</div>
                                     <div className="sign-line">
-                                        <input className="editable-input" value={issueDate} onChange={(e) => setIssueDate(e.target.value)} />
+                                        {readOnly ? <span style={{ fontWeight: 700 }}>{issueDate}</span> : <input className="editable-input" value={issueDate} onChange={(e) => setIssueDate(e.target.value)} />}
                                     </div>
                                 </div>
                                 <div className="gold-seal">DW</div>
                                 <div className="sign-box">
                                     <div className="sign-label-top">Certified by</div>
                                     <div className="sign-line">
-                                        <input className="editable-input" value={signatory} onChange={(e) => setSignatory(e.target.value)} />
+                                        {readOnly ? <span style={{ fontWeight: 700 }}>{signatory}</span> : <input className="editable-input" value={signatory} onChange={(e) => setSignatory(e.target.value)} />}
                                     </div>
                                 </div>
                             </div>

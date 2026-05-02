@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useContent } from '../context/ContentContext'
 import './Printables.css'
 
-const PrintableID = ({ dreamer, onClose }) => {
+const PrintableID = ({ dreamer, onClose, readOnly = false }) => {
     const { roles } = useContent()
     const [validTill, setValidTill] = useState('2026')
     const [activeSide, setActiveSide] = useState('front') // 'front' or 'back'
@@ -47,17 +47,18 @@ const PrintableID = ({ dreamer, onClose }) => {
                                     </div>
                                     <div className="id-body">
                                         <div className="id-role-text">{roleObj.singular}</div>
-                                        <textarea
-                                            className="editable-bio-input"
-                                            value={editableBio}
-                                            onChange={(e) => setEditableBio(e.target.value)}
-                                            rows="3"
-                                        />
+                                        {readOnly
+                                            ? <p style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.8)', lineHeight: 1.5, margin: 0 }}>{editableBio}</p>
+                                            : <textarea className="editable-bio-input" value={editableBio} onChange={(e) => setEditableBio(e.target.value)} rows="3" />
+                                        }
                                     </div>
                                 </div>
                             </div>
                             <div className="id-footer-strip">
-                                VALID UNTIL <input className="editable-date" value={validTill} onChange={(e) => setValidTill(e.target.value)} />
+                                VALID UNTIL {readOnly
+                                    ? <span style={{ marginLeft: 6, fontWeight: 700 }}>{validTill}</span>
+                                    : <input className="editable-date" value={validTill} onChange={(e) => setValidTill(e.target.value)} />
+                                }
                             </div>
                         </div>
                     </div>
