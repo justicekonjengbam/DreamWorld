@@ -35,8 +35,14 @@ export const PortalProvider = ({ children }) => {
             if (error) throw error
 
             if (data) {
-                setUser({ ...data, type })
-            }
+                    const isCreator = type === 'dreamer' && (
+                        data.name?.toLowerCase().includes('justice') ||
+                        data.name?.toLowerCase().includes('creator') ||
+                        data.is_creator === true ||
+                        data.role === 'admin'
+                    )
+                    setUser({ ...data, type, isCreator })
+                }
         } catch (error) {
             console.error('Failed to fetch portal user:', error)
             localStorage.removeItem('dw_portal_user_id')
