@@ -81,7 +81,7 @@ function App() {
         <ScrollToTop />
         {!isPortal && !hasEntered && <WelcomeOverlay onEnter={handleEnterDreamWorld} />}
 
-        {!isPortal && <ParticlesBackground />}
+        <ParticlesBackground />
 
         <div className={`main-app-content ${!isPortal && hasEntered ? 'fade-in' : ''} ${isPortal ? 'portal-visible' : ''}`}>
           {!isPortal && <Navbar />}

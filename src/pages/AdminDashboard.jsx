@@ -260,12 +260,34 @@ function AdminDashboard() {
                 </div>
 
                 {localStorage.getItem('dw_portal_user_id') && (
-                    <button
-                        onClick={() => navigate('/portal/dashboard')}
-                        style={{ margin: '8px 12px 0', padding: '9px 14px', background: 'rgba(76,161,175,0.15)', border: '1px solid rgba(76,161,175,0.3)', borderRadius: 10, color: '#4CA1AF', fontSize: '0.82rem', fontWeight: 700, cursor: 'pointer', width: 'calc(100% - 24px)', textAlign: 'left' }}
-                    >
-                        ← Back to My Portal
-                    </button>
+                    <>
+                        <div style={{ padding: '0 12px', marginBottom: '10px' }}>
+                            <button
+                                onClick={() => navigate('/portal/dashboard')}
+                                style={{ 
+                                    padding: '10px 14px', 
+                                    background: 'rgba(76,161,175,0.1)', 
+                                    border: '1px solid rgba(76,161,175,0.25)', 
+                                    borderRadius: 12, 
+                                    color: '#7ec8e3', 
+                                    fontSize: '0.8rem', 
+                                    fontWeight: 700, 
+                                    cursor: 'pointer', 
+                                    width: '100%', 
+                                    textAlign: 'left',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '8px',
+                                    transition: 'all 0.2s ease'
+                                }}
+                                onMouseOver={(e) => e.currentTarget.style.background = 'rgba(76,161,175,0.2)'}
+                                onMouseOut={(e) => e.currentTarget.style.background = 'rgba(76,161,175,0.1)'}
+                            >
+                                <span style={{ fontSize: '1rem' }}>🏰</span> Back to Portal
+                            </button>
+                        </div>
+                        <div style={{ borderTop: '1px solid rgba(255,255,255,0.05)', margin: '0 12px 15px' }} />
+                    </>
                 )}
                 <nav className="admin-nav">
                     <button className={`nav-item ${activeTab === 'announcement' ? 'active' : ''}`} onClick={() => { setActiveTab('announcement'); resetForms() }}>📢 Announcement</button>
