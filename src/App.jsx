@@ -39,6 +39,7 @@ import { useTheme } from './context/ThemeContext'
 function App() {
   const location = useLocation()
   const isHomePage = location.pathname === '/'
+  const isPortal = location.pathname.startsWith('/portal')
 
   const [hasEntered, setHasEntered] = useState(() => {
     return sessionStorage.getItem('dreamworld_entered') === 'true'
@@ -78,12 +79,12 @@ function App() {
     <ContentProvider>
       <div className="app">
         <ScrollToTop />
-        {!hasEntered && <WelcomeOverlay onEnter={handleEnterDreamWorld} />}
+        {!isPortal && !hasEntered && <WelcomeOverlay onEnter={handleEnterDreamWorld} />}
 
-        <ParticlesBackground />
+        {!isPortal && <ParticlesBackground />}
 
-        <div className={`main-app-content ${hasEntered ? 'fade-in' : ''}`}>
-          <Navbar />
+        <div className={`main-app-content ${!isPortal && hasEntered ? 'fade-in' : ''}`}>
+          {!isPortal && <Navbar />}
           <main className="main-content">
             <Routes>
               <Route path="/" element={<Home />} />
@@ -116,10 +117,10 @@ function App() {
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </main>
-          {!isHomePage && <Footer />}
+          {!isPortal && !isHomePage && <Footer />}
         </div>
 
-        <AudioPlayer shouldStart={shouldStartAudio} />
+        {!isPortal && <AudioPlayer shouldStart={shouldStartAudio} />}
       </div>
     </ContentProvider>
   )
