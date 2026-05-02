@@ -396,13 +396,13 @@
 
 /* ===== PORTAL AUDIO OVERRIDE ===== */
 /* Push audio controls above the portal bottom nav */
-.portal-visible .audio-controls {
+.portal-mode .audio-controls {
     bottom: 82px;
     right: 12px;
     gap: 6px;
 }
 
-.portal-visible .audio-btn {
+.portal-mode .audio-btn {
     width: 36px;
     height: 36px;
     font-size: 0.85rem;
@@ -411,7 +411,7 @@
     box-shadow: none;
 }
 
-.portal-visible .audio-btn:hover {
+.portal-mode .audio-btn:hover {
     background: rgba(255,255,255,0.1);
     transform: none;
     border-color: rgba(255,255,255,0.4);

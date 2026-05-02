@@ -13,7 +13,6 @@ export default function PortalDashboard() {
     const [activeTab, setActiveTab] = useState('profile')
     const [showID, setShowID] = useState(false)
     const [showCert, setShowCert] = useState(false)
-    const [showWebsite, setShowWebsite] = useState(false)
 
     useEffect(() => {
         if (!loading && !user) navigate('/portal')
@@ -52,32 +51,19 @@ export default function PortalDashboard() {
         joinedDate: user.joined_date || user.joinedDate || '',
     }
 
-    // If showing website in iframe
-    if (showWebsite) {
-        return (
-            <div style={{ position: 'fixed', inset: 0, zIndex: 1000, background: '#0d1326', display: 'flex', flexDirection: 'column' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 16px', background: 'rgba(0,0,0,0.5)', borderBottom: '1px solid rgba(255,255,255,0.1)', flexShrink: 0 }}>
-                    <button
-                        onClick={() => setShowWebsite(false)}
-                        style={{ background: themeColor, border: 'none', color: '#0d1326', fontWeight: 700, fontSize: '0.85rem', padding: '7px 14px', borderRadius: 8, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}
-                    >
-                        ← Back to Portal
-                    </button>
-                    <span style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.5)' }}>dreamworld.vercel.app</span>
-                </div>
-                <iframe
-                    src="/"
-                    style={{ flex: 1, border: 'none', width: '100%' }}
-                    title="DreamWorld Website"
-                />
-            </div>
-        )
-    }
-
     return (
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: '100vh', paddingBottom: '70px' }}>
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: '100vh', paddingBottom: '70px', background: '#0d1326' }}>
 
             {/* ===== PROFILE TAB ===== */}
+            {/* Fixed website shortcut - top right, never overlaps bottom nav */}
+            <button
+                onClick={() => window.open('https://abeautifuldream.in', '_blank')}
+                title="Visit DreamWorld Website"
+                style={{ position: 'fixed', top: 12, right: 14, zIndex: 200, background: 'rgba(0,0,0,0.5)', border: `1px solid ${themeColor}66`, color: themeColor, borderRadius: 8, padding: '5px 10px', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', gap: 5 }}
+            >
+                🌐 Website
+            </button>
+
             {activeTab === 'profile' && (
                 <div>
                     {/* Cover Hero */}
@@ -166,14 +152,6 @@ export default function PortalDashboard() {
                                 </button>
                             </div>
                         )}
-
-                        {/* Visit Website */}
-                        <div className="portal-card">
-                            <p className="portal-card-title">🌐 Visit Website</p>
-                            <button onClick={() => setShowWebsite(true)} className="portal-doc-btn" style={{ borderColor: themeColor, color: themeColor }}>
-                                🌐 Open DreamWorld Website
-                            </button>
-                        </div>
                     </div>
                 </div>
             )}

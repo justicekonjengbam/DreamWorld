@@ -77,7 +77,7 @@ function App() {
 
   return (
     <ContentProvider>
-      <div className="app">
+      <div className={`app ${isPortal ? 'portal-mode' : ''}`}>
         <ScrollToTop />
         {!isPortal && !hasEntered && <WelcomeOverlay onEnter={handleEnterDreamWorld} />}
 
