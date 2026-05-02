@@ -6,6 +6,7 @@ function AudioPlayer({ shouldStart }) {
   const audio1Ref = useRef(null)
   const audio2Ref = useRef(null)
   const [isPlaying, setIsPlaying] = useState(false)
+  const hasStartedRef = useRef(false) // prevent double-play on re-renders
   const { isSoundMuted, setIsSoundMuted } = useAudio()
 
   useEffect(() => {
@@ -22,11 +23,12 @@ function AudioPlayer({ shouldStart }) {
 
     audio1.addEventListener('ended', handleMusic1End)
 
-    // Start music when shouldStart is true
-    if (shouldStart) {
+    // Start music when shouldStart becomes true, but only once
+    if (shouldStart && !hasStartedRef.current) {
+      hasStartedRef.current = true
       audio1.play().then(() => {
         setIsPlaying(true)
-      })
+      }).catch(() => {}) // ignore autoplay block errors
     }
 
     return () => {

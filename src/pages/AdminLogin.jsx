@@ -31,6 +31,14 @@ function AdminLogin() {
 
                 <div className="login-container">
                     <Card className="login-card">
+                        {localStorage.getItem('dw_portal_user_id') && (
+                            <button 
+                                onClick={() => navigate('/portal/dashboard')}
+                                style={{ background: 'none', border: 'none', color: 'var(--color-primary)', cursor: 'pointer', marginBottom: '15px', padding: 0, fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '5px' }}
+                            >
+                                ← Back to Portal
+                            </button>
+                        )}
                         <h2>Admin Portal</h2>
                         <p className="login-subtitle">Please enter your password to continue</p>
 

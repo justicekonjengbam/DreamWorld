@@ -259,6 +259,14 @@ function AdminDashboard() {
                     <h3>Admin Panel</h3>
                 </div>
 
+                {localStorage.getItem('dw_portal_user_id') && (
+                    <button
+                        onClick={() => navigate('/portal/dashboard')}
+                        style={{ margin: '8px 12px 0', padding: '9px 14px', background: 'rgba(76,161,175,0.15)', border: '1px solid rgba(76,161,175,0.3)', borderRadius: 10, color: '#4CA1AF', fontSize: '0.82rem', fontWeight: 700, cursor: 'pointer', width: 'calc(100% - 24px)', textAlign: 'left' }}
+                    >
+                        ← Back to My Portal
+                    </button>
+                )}
                 <nav className="admin-nav">
                     <button className={`nav-item ${activeTab === 'announcement' ? 'active' : ''}`} onClick={() => { setActiveTab('announcement'); resetForms() }}>📢 Announcement</button>
                     <button className={`nav-item ${activeTab === 'quests' ? 'active' : ''}`} onClick={() => { setActiveTab('quests'); resetForms() }}>🎯 Quests</button>

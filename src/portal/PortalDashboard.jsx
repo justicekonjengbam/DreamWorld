@@ -6,8 +6,6 @@ import StatGraph from '../components/StatGraph'
 import PrintableID from '../components/PrintableID'
 import PrintableCertificate from '../components/PrintableCertificate'
 
-const ADMIN_PORTAL_PASSWORD = 'DreamWorld2026' // Creator's portal admin password
-
 export default function PortalDashboard() {
     const { user, loading } = usePortal()
     const { quests, events, announcement } = useContent()
@@ -59,7 +57,11 @@ export default function PortalDashboard() {
     const today = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
 
     const handleAdminAccess = () => {
-        if (adminPassword === ADMIN_PORTAL_PASSWORD || adminPassword === user.passcode) {
+        const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || 'dreamworld2026'
+        if (adminPassword === ADMIN_PASSWORD) {
+            // Auto-set the admin token so AdminLogin is bypassed
+            localStorage.setItem('dw_admin_token', 'logged_in_' + Date.now())
+            sessionStorage.setItem('dw_admin_pass', adminPassword)
             setShowAdminModal(false)
             setAdminPassword('')
             setAdminPasswordError('')
