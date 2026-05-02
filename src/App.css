@@ -11,7 +11,7 @@
   padding-top: 64px;
   position: relative;
   z-index: 1;
-  /* Above particles (-1) */
+  /* Particles are now at z-index: 5 to be visible on top of backgrounds */
 }
 
 
