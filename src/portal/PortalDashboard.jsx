@@ -7,12 +7,13 @@ import PrintableID from '../components/PrintableID'
 import PrintableCertificate from '../components/PrintableCertificate'
 
 export default function PortalDashboard() {
-    const { user, loading, logout } = usePortal()
-    const { quests, events, announcement, roles } = useContent()
+    const { user, loading } = usePortal()
+    const { quests, events, announcement } = useContent()
     const navigate = useNavigate()
     const [activeTab, setActiveTab] = useState('profile')
     const [showID, setShowID] = useState(false)
     const [showCert, setShowCert] = useState(false)
+    const [showWebsite, setShowWebsite] = useState(false)
 
     useEffect(() => {
         if (!loading && !user) navigate('/portal')
@@ -42,10 +43,8 @@ export default function PortalDashboard() {
         : [user.hobbies, user.favourite_colour ? `Fav: ${user.favourite_colour}` : ''].filter(Boolean)
 
     const themeColor = user.theme_color || '#4CA1AF'
-    // XP bar always uses a bright accent, not the (possibly dark) theme bg color
     const xpBarColor = '#4CA1AF'
 
-    // Build a dreamer-shaped object for PrintableID and PrintableCertificate
     const dreamerForPrint = {
         ...user,
         role: user.role || '',
@@ -53,8 +52,30 @@ export default function PortalDashboard() {
         joinedDate: user.joined_date || user.joinedDate || '',
     }
 
+    // If showing website in iframe
+    if (showWebsite) {
+        return (
+            <div style={{ position: 'fixed', inset: 0, zIndex: 1000, background: '#0d1326', display: 'flex', flexDirection: 'column' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 16px', background: 'rgba(0,0,0,0.5)', borderBottom: '1px solid rgba(255,255,255,0.1)', flexShrink: 0 }}>
+                    <button
+                        onClick={() => setShowWebsite(false)}
+                        style={{ background: themeColor, border: 'none', color: '#0d1326', fontWeight: 700, fontSize: '0.85rem', padding: '7px 14px', borderRadius: 8, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}
+                    >
+                        ← Back to Portal
+                    </button>
+                    <span style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.5)' }}>dreamworld.vercel.app</span>
+                </div>
+                <iframe
+                    src="/"
+                    style={{ flex: 1, border: 'none', width: '100%' }}
+                    title="DreamWorld Website"
+                />
+            </div>
+        )
+    }
+
     return (
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: '100vh', paddingBottom: '70px', background: `linear-gradient(160deg, ${themeColor}22 0%, #0d1326 40%)` }}>
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: '100vh', paddingBottom: '70px' }}>
 
             {/* ===== PROFILE TAB ===== */}
             {activeTab === 'profile' && (
@@ -63,7 +84,7 @@ export default function PortalDashboard() {
                     <div className="portal-profile-hero" style={{
                         backgroundImage: user.cover_image
                             ? `linear-gradient(to bottom, rgba(0,0,0,0.15), rgba(13,19,38,0.95)), url(${user.cover_image})`
-                            : `linear-gradient(135deg, ${themeColor}33 0%, #0d1326 100%)`
+                            : `linear-gradient(135deg, ${themeColor}66 0%, #0d1326 100%)`
                     }}>
                         <div className="portal-profile-hero-content">
                             <img src={user.avatar || '/logo.png'} alt={user.name} className="portal-profile-avatar" style={{ borderColor: themeColor }} />
@@ -133,7 +154,7 @@ export default function PortalDashboard() {
                             <StatGraph stats={stats} />
                         </div>
 
-                        {/* ID & Certificate Download */}
+                        {/* ID & Certificate */}
                         {user.type === 'dreamer' && (
                             <div className="portal-card">
                                 <p className="portal-card-title">🪪 Documents</p>
@@ -145,6 +166,14 @@ export default function PortalDashboard() {
                                 </button>
                             </div>
                         )}
+
+                        {/* Visit Website */}
+                        <div className="portal-card">
+                            <p className="portal-card-title">🌐 Visit Website</p>
+                            <button onClick={() => setShowWebsite(true)} className="portal-doc-btn" style={{ borderColor: themeColor, color: themeColor }}>
+                                🌐 Open DreamWorld Website
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}
@@ -207,10 +236,10 @@ export default function PortalDashboard() {
                             <h3 style={{ marginTop: 0, color: themeColor, fontSize: '1.1rem' }}>{announcement.title}</h3>
                             <p style={{ lineHeight: 1.72, color: 'rgba(255,255,255,0.82)', fontSize: '0.93rem', marginBottom: announcement.linkText ? 16 : 0 }}>{announcement.content}</p>
                             {announcement.linkText && announcement.linkTo && (
-                                <Link to={announcement.linkTo}
+                                <a href={announcement.linkTo}
                                     style={{ display: 'inline-block', padding: '10px 20px', background: themeColor, color: '#0d1326', borderRadius: 10, fontWeight: 700, fontSize: '0.9rem', textDecoration: 'none' }}>
                                     {announcement.linkText}
-                                </Link>
+                                </a>
                             )}
                         </div>
                     ) : (
@@ -238,7 +267,6 @@ export default function PortalDashboard() {
                 ))}
             </nav>
 
-            {/* Printable ID Modal */}
             {showID && <PrintableID dreamer={dreamerForPrint} onClose={() => setShowID(false)} readOnly />}
             {showCert && <PrintableCertificate dreamer={dreamerForPrint} onClose={() => setShowCert(false)} readOnly />}
         </div>

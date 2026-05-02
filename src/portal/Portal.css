@@ -328,6 +328,96 @@
 .portal-quest-medium { background: rgba(255,193,7,0.2); color: #FFD54F; border: 1px solid rgba(255,193,7,0.3); }
 .portal-quest-hard { background: rgba(244,67,54,0.2); color: #EF9A9A; border: 1px solid rgba(244,67,54,0.3); }
 
+/* ===== DREAMERS GRID ===== */
+.portal-dreamers-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.portal-dreamer-card {
+    border-radius: 16px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.portal-dreamer-card:active { transform: scale(0.97); }
+
+.portal-dreamer-card-cover {
+    position: relative;
+    height: 100px;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.portal-dreamer-card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.55));
+}
+
+.portal-dreamer-avatar {
+    position: relative;
+    z-index: 1;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.3);
+    object-fit: cover;
+}
+
+.portal-dreamer-card-info {
+    padding: 10px;
+}
+
+.portal-dreamer-card-info h3 {
+    margin: 0 0 3px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.portal-dreamer-card-info p {
+    margin: 0;
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.45);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ===== PORTAL AUDIO OVERRIDE ===== */
+/* Push audio controls above the portal bottom nav */
+.portal-visible .audio-controls {
+    bottom: 82px;
+    right: 12px;
+    gap: 6px;
+}
+
+.portal-visible .audio-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 0.85rem;
+    border-color: rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.6);
+    box-shadow: none;
+}
+
+.portal-visible .audio-btn:hover {
+    background: rgba(255,255,255,0.1);
+    transform: none;
+    border-color: rgba(255,255,255,0.4);
+    color: white;
+    box-shadow: none;
+}
 .portal-quest-title {
     font-size: 1rem;
     font-weight: 700;

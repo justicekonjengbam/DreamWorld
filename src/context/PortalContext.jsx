@@ -24,11 +24,15 @@ export const PortalProvider = ({ children }) => {
     // Apply theme whenever user changes
     useEffect(() => {
         if (user && user.theme_color) {
+            // Set both the body background and CSS variable
+            document.documentElement.style.setProperty('--color-background', user.theme_color)
             document.documentElement.style.setProperty('--color-bg', user.theme_color)
-            // Can calculate secondary colors based on hex if needed, for now just setting bg
+            document.body.style.background = `linear-gradient(160deg, ${user.theme_color}44 0%, #0d1326 50%)`
         } else {
             // Reset to default if logged out
+            document.documentElement.style.setProperty('--color-background', '#0d1326')
             document.documentElement.style.setProperty('--color-bg', '#0d1326')
+            document.body.style.background = ''
         }
     }, [user])
 
@@ -97,6 +101,8 @@ export const PortalProvider = ({ children }) => {
         setUser(null)
         localStorage.removeItem('dw_portal_user_id')
         localStorage.removeItem('dw_portal_user_type')
+        document.documentElement.style.setProperty('--color-background', '#0d1326')
+        document.body.style.background = ''
     }
 
     return (

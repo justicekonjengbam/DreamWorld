@@ -47,10 +47,6 @@ const PrintableID = ({ dreamer, onClose, readOnly = false }) => {
                                     </div>
                                     <div className="id-body">
                                         <div className="id-role-text">{roleObj.singular}</div>
-                                        {readOnly
-                                            ? <p style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.8)', lineHeight: 1.5, margin: 0 }}>{editableBio}</p>
-                                            : <textarea className="editable-bio-input" value={editableBio} onChange={(e) => setEditableBio(e.target.value)} rows="3" />
-                                        }
                                     </div>
                                 </div>
                             </div>

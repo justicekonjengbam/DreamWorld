@@ -120,7 +120,7 @@ function App() {
           {!isPortal && !isHomePage && <Footer />}
         </div>
 
-        {!isPortal && <AudioPlayer shouldStart={shouldStartAudio} />}
+        <AudioPlayer shouldStart={isPortal ? true : shouldStartAudio} />
       </div>
     </ContentProvider>
   )
