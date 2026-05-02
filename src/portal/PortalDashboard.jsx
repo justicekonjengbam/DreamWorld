@@ -6,6 +6,8 @@ import StatGraph from '../components/StatGraph'
 import PrintableID from '../components/PrintableID'
 import PrintableCertificate from '../components/PrintableCertificate'
 
+const ADMIN_PORTAL_PASSWORD = 'DreamWorld2026' // Creator's portal admin password
+
 export default function PortalDashboard() {
     const { user, loading } = usePortal()
     const { quests, events, announcement } = useContent()
@@ -13,6 +15,9 @@ export default function PortalDashboard() {
     const [activeTab, setActiveTab] = useState('profile')
     const [showID, setShowID] = useState(false)
     const [showCert, setShowCert] = useState(false)
+    const [showAdminModal, setShowAdminModal] = useState(false)
+    const [adminPassword, setAdminPassword] = useState('')
+    const [adminPasswordError, setAdminPasswordError] = useState('')
 
     useEffect(() => {
         if (!loading && !user) navigate('/portal')
@@ -51,26 +56,47 @@ export default function PortalDashboard() {
         joinedDate: user.joined_date || user.joinedDate || '',
     }
 
+    const today = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
+
+    const handleAdminAccess = () => {
+        if (adminPassword === ADMIN_PORTAL_PASSWORD || adminPassword === user.passcode) {
+            setShowAdminModal(false)
+            setAdminPassword('')
+            setAdminPasswordError('')
+            navigate('/admin/dashboard')
+        } else {
+            setAdminPasswordError('Incorrect password. Try again.')
+        }
+    }
+
+    const tabs = [
+        { id: 'profile', icon: '👤', label: 'Profile' },
+        { id: 'daily', icon: '📜', label: 'Daily' },
+        { id: 'quests', icon: '⚔️', label: 'Quests' },
+        { id: 'events', icon: '📅', label: 'Events' },
+        { id: 'notice', icon: '📣', label: 'Notice' },
+        ...(user.isCreator ? [{ id: 'admin', icon: '👑', label: 'Admin' }] : [])
+    ]
+
     return (
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: '100vh', paddingBottom: '70px', background: '#0d1326' }}>
 
-            {/* ===== PROFILE TAB ===== */}
-            {/* Fixed website shortcut - top right, never overlaps bottom nav */}
+            {/* Fixed top-right website button */}
             <button
                 onClick={() => window.open('https://abeautifuldream.in', '_blank')}
                 title="Visit DreamWorld Website"
-                style={{ position: 'fixed', top: 12, right: 14, zIndex: 200, background: 'rgba(0,0,0,0.5)', border: `1px solid ${themeColor}66`, color: themeColor, borderRadius: 8, padding: '5px 10px', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', gap: 5 }}
+                style={{ position: 'fixed', top: 12, right: 14, zIndex: 200, background: 'rgba(0,0,0,0.5)', border: `1px solid ${themeColor}66`, color: themeColor, borderRadius: 8, padding: '5px 11px', fontSize: '0.72rem', fontWeight: 700, cursor: 'pointer', backdropFilter: 'blur(8px)' }}
             >
-                🌐 Website
+                🌐 Go to DreamWorld
             </button>
 
+            {/* ===== PROFILE TAB ===== */}
             {activeTab === 'profile' && (
                 <div>
-                    {/* Cover Hero */}
                     <div className="portal-profile-hero" style={{
                         backgroundImage: user.cover_image
-                            ? `linear-gradient(to bottom, rgba(0,0,0,0.15), rgba(13,19,38,0.95)), url(${user.cover_image})`
-                            : `linear-gradient(135deg, ${themeColor}66 0%, #0d1326 100%)`
+                            ? `linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(13,19,38,0.92)), url(${user.cover_image})`
+                            : `linear-gradient(160deg, ${themeColor}55 0%, #0d1326 100%)`
                     }}>
                         <div className="portal-profile-hero-content">
                             <img src={user.avatar || '/logo.png'} alt={user.name} className="portal-profile-avatar" style={{ borderColor: themeColor }} />
@@ -83,7 +109,6 @@ export default function PortalDashboard() {
                     </div>
 
                     <div className="portal-content">
-                        {/* Level XP */}
                         <div className="portal-card">
                             <div className="portal-xp-row">
                                 <span style={{ color: themeColor, fontWeight: 700, fontSize: '1rem' }}>Dream Level {level}</span>
@@ -95,26 +120,6 @@ export default function PortalDashboard() {
                             <p style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.3)', marginTop: 6, textAlign: 'right' }}>Total XP: {user.points || 0}</p>
                         </div>
 
-                        {/* Creator Tools */}
-                        {user.isCreator && (
-                            <div className="portal-card" style={{ borderLeft: `3px solid ${themeColor}` }}>
-                                <h3 style={{ color: themeColor, marginTop: 0, marginBottom: 12, fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: 1 }}>👑 Creator Tools</h3>
-                                <Link to="/admin/dashboard" className="portal-admin-link">
-                                    <span>Open Admin Dashboard</span><span>→</span>
-                                </Link>
-                            </div>
-                        )}
-
-                        {/* Daily Task */}
-                        <div className="portal-card">
-                            <p className="portal-card-title">📜 Daily Task</p>
-                            {user.daily_task
-                                ? <div className="portal-task" style={{ borderLeftColor: themeColor }}>{user.daily_task}</div>
-                                : <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '0.9rem', margin: 0 }}>No task assigned yet. Rest well, Dreamer!</p>
-                            }
-                        </div>
-
-                        {/* Bio */}
                         {bio && (
                             <div className="portal-card">
                                 <p className="portal-card-title">📖 About</p>
@@ -122,7 +127,6 @@ export default function PortalDashboard() {
                             </div>
                         )}
 
-                        {/* Themes */}
                         {rawThemes.length > 0 && (
                             <div className="portal-card">
                                 <p className="portal-card-title">✨ Themes</p>
@@ -134,13 +138,11 @@ export default function PortalDashboard() {
                             </div>
                         )}
 
-                        {/* Stats */}
                         <div className="portal-card">
                             <p className="portal-card-title">📊 Dreamer Stats</p>
                             <StatGraph stats={stats} />
                         </div>
 
-                        {/* ID & Certificate */}
                         {user.type === 'dreamer' && (
                             <div className="portal-card">
                                 <p className="portal-card-title">🪪 Documents</p>
@@ -150,6 +152,27 @@ export default function PortalDashboard() {
                                 <button onClick={() => setShowCert(true)} className="portal-doc-btn" style={{ borderColor: themeColor, color: themeColor, marginTop: 8 }}>
                                     🏅 View & Print Certificate
                                 </button>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
+
+            {/* ===== DAILY TASK TAB ===== */}
+            {activeTab === 'daily' && (
+                <div className="portal-content">
+                    <h2 className="portal-tab-title" style={{ color: themeColor }}>📜 Daily Scroll</h2>
+                    <div className="portal-scroll-wrap">
+                        {user.daily_task ? (
+                            <div className="portal-scroll">
+                                <div className="portal-scroll-date">{today}</div>
+                                <div className="portal-scroll-body">{user.daily_task}</div>
+                                <div className="portal-scroll-seal">— The Creator, DreamWorld —</div>
+                            </div>
+                        ) : (
+                            <div className="portal-empty-state">
+                                <span>📜</span>
+                                <p>No task has been assigned yet. Rest and prepare, Dreamer.</p>
                             </div>
                         )}
                     </div>
@@ -227,23 +250,60 @@ export default function PortalDashboard() {
             )}
 
             {/* Bottom Navigation */}
-            <nav className="portal-bottom-nav">
-                {[
-                    { id: 'profile', icon: '👤', label: 'My Profile' },
-                    { id: 'quests', icon: '⚔️', label: 'Quests' },
-                    { id: 'events', icon: '📅', label: 'Events' },
-                    { id: 'notice', icon: '📣', label: 'Notice' },
-                ].map(tab => (
+            <nav className={`portal-bottom-nav ${tabs.length >= 5 ? 'five-tabs' : ''}`}>
+                {tabs.map(tab => (
                     <button key={tab.id}
                         className={`portal-nav-btn ${activeTab === tab.id ? 'portal-nav-active' : ''}`}
-                        style={{ '--tab-color': themeColor }}
-                        onClick={() => setActiveTab(tab.id)}
+                        style={{ '--tab-color': tab.id === 'admin' ? '#ff6f61' : themeColor }}
+                        onClick={() => {
+                            if (tab.id === 'admin') {
+                                setAdminPassword('')
+                                setAdminPasswordError('')
+                                setShowAdminModal(true)
+                            } else {
+                                setActiveTab(tab.id)
+                            }
+                        }}
                     >
                         <span className="portal-nav-icon">{tab.icon}</span>
                         <span className="portal-nav-label">{tab.label}</span>
                     </button>
                 ))}
             </nav>
+
+            {/* Admin Password Modal */}
+            {showAdminModal && (
+                <div className="portal-admin-modal" onClick={(e) => { if (e.target === e.currentTarget) { setShowAdminModal(false); setAdminPassword('') } }}>
+                    <div className="portal-admin-modal-box">
+                        <div style={{ fontSize: '2rem', marginBottom: 12 }}>👑</div>
+                        <h3 style={{ color: '#ff6f61', marginBottom: 6, fontSize: '1.1rem' }}>Creator Access</h3>
+                        <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.85rem', marginBottom: 20 }}>Enter your admin password to continue.</p>
+                        <input
+                            type="password"
+                            className="portal-input"
+                            placeholder="Admin Password"
+                            value={adminPassword}
+                            onChange={e => { setAdminPassword(e.target.value); setAdminPasswordError('') }}
+                            onKeyDown={e => e.key === 'Enter' && handleAdminAccess()}
+                            autoFocus
+                            style={{ letterSpacing: 2, marginBottom: 12 }}
+                        />
+                        {adminPasswordError && <p className="portal-error">{adminPasswordError}</p>}
+                        <button
+                            onClick={handleAdminAccess}
+                            style={{ width: '100%', padding: '13px', background: 'linear-gradient(135deg, #ff6f61, #ff9a8b)', border: 'none', borderRadius: 12, color: '#1a0a08', fontWeight: 800, fontSize: '0.95rem', cursor: 'pointer', marginTop: 4 }}
+                        >
+                            Enter Admin Panel →
+                        </button>
+                        <button
+                            onClick={() => { setShowAdminModal(false); setAdminPassword('') }}
+                            style={{ marginTop: 12, background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.4)', fontSize: '0.85rem', cursor: 'pointer' }}
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            )}
 
             {showID && <PrintableID dreamer={dreamerForPrint} onClose={() => setShowID(false)} readOnly />}
             {showCert && <PrintableCertificate dreamer={dreamerForPrint} onClose={() => setShowCert(false)} readOnly />}

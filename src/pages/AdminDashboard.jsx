@@ -579,8 +579,20 @@ function AdminDashboard() {
                                             <div className="form-group"><label>Theme Color (Hex)</label><input type="text" placeholder="#141932" value={memberFormData.theme_color || ''} onChange={(e) => setMemberFormData({ ...memberFormData, theme_color: e.target.value })} /></div>
                                         </div>
                                         <div className="form-group-full">
-                                            <label>Daily Task for Portal</label>
-                                            <input type="text" placeholder="e.g. Read Chapter 2 of Advanced Magic..." value={memberFormData.daily_task || ''} onChange={(e) => setMemberFormData({ ...memberFormData, daily_task: e.target.value })} />
+                                            <label>Daily Task / Letter for Portal</label>
+                                            <textarea
+                                                placeholder="Write a task or letter to this Dreamer...
+You can write multiple lines here.
+Each line will show as a new paragraph.
+
+Example:
+Dear Justice,
+Your task today is to complete Chapter 2 of Advanced Magic. Focus on the breathing techniques."
+                                                value={memberFormData.daily_task || ''}
+                                                onChange={(e) => setMemberFormData({ ...memberFormData, daily_task: e.target.value })}
+                                                rows={10}
+                                                style={{ fontFamily: 'Georgia, serif', lineHeight: 1.8, resize: 'vertical', fontSize: '0.95rem' }}
+                                            />
                                         </div>
                                     </div>
                                     <div className="admin-stats-editor" style={{ background: 'rgba(0,0,0,0.2)', padding: '15px', borderRadius: '8px', margin: '15px 0' }}>
@@ -1254,8 +1266,14 @@ function AdminDashboard() {
                                                 <div className="form-group"><label>Theme Color (Hex)</label><input type="text" placeholder="#141932" value={studentFormData.theme_color || ''} onChange={(e) => setStudentFormData({ ...studentFormData, theme_color: e.target.value })} /></div>
                                             </div>
                                             <div className="form-group-full">
-                                                <label>Daily Task for Portal</label>
-                                                <input type="text" placeholder="e.g. Read Chapter 2 of Advanced Magic..." value={studentFormData.daily_task || ''} onChange={(e) => setStudentFormData({ ...studentFormData, daily_task: e.target.value })} />
+                                                <label>Daily Task / Letter for Portal</label>
+                                                <textarea
+                                                    placeholder="Write a task or letter to this Student..."
+                                                    value={studentFormData.daily_task || ''}
+                                                    onChange={(e) => setStudentFormData({ ...studentFormData, daily_task: e.target.value })}
+                                                    rows={8}
+                                                    style={{ fontFamily: 'Georgia, serif', lineHeight: 1.8, resize: 'vertical', fontSize: '0.95rem' }}
+                                                />
                                             </div>
                                         </div>
                                         <div className="admin-stats-editor" style={{ background: 'rgba(0,0,0,0.2)', padding: '15px', borderRadius: '8px', margin: '15px 0' }}>
