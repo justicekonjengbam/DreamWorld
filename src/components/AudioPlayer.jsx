@@ -75,13 +75,6 @@ function AudioPlayer({ shouldStart }) {
       
       <div className="audio-controls">
         <button 
-          onClick={togglePlay} 
-          className="audio-btn"
-          aria-label={isPlaying ? 'Pause music' : 'Play music'}
-        >
-          {isPlaying ? '⏸' : '▶️'}
-        </button>
-        <button 
           onClick={toggleMute} 
           className="audio-btn"
           aria-label={isSoundMuted ? 'Unmute all sounds' : 'Mute all sounds'}
