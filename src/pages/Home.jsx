@@ -46,8 +46,7 @@ function Home() {
           <img src="/logo.png" alt="DreamWorld Logo" className="hero-logo animate-on-scroll delay-1" />
           {/* <h1 className="hero-title animate-on-scroll delay-2">DreamWorld</h1> */}
           <p className="hero-description animate-on-scroll delay-3">
-            A universe where nature, technology, and mystical wonder live in harmony.
-            Learn together. Build together. Make the world better, one quest at a time.
+            A vision of a future civilization where nature, knowledge, technology, kindness, creativity, and human growth exist in harmony.
           </p>
           <div className="hero-buttons animate-on-scroll delay-4">
             <Link to="/about"><Button variant="primary">Explore DreamWorld</Button></Link>
@@ -66,18 +65,17 @@ function Home() {
 
 
       <section className="mission container">
-        <h2 className="animate-on-scroll mission-title">Our Mission</h2>
-        <p className="animate-on-scroll delay-1 mission-subtitle">Education, community, and action—building a brighter future together</p>
+        <h2 className="animate-on-scroll mission-title">Our Vision & Core Lore</h2>
+        <p className="animate-on-scroll delay-1 mission-subtitle">A fantasy-futuristic civilization where advanced technology blends beautifully with nature</p>
         <div className="mission-content animate-on-scroll delay-2">
           <p>
-            DreamWorld is more than a fantasy universe—it's a living community dedicated to
-            continuous learning and positive impact. We believe that when people learn together,
-            create together, and support each other, extraordinary things happen.
+            DreamWorld is a vision of a future civilization where nature, knowledge, technology, kindness, creativity, and human growth exist in harmony. It is a peaceful, living world centered around a massive ancient World Tree, illuminated by bioluminescent forests and golden magical particles under a soft glowing atmosphere.
           </p>
           <p>
-            Every week, we embark on small "quests"—simple actions that improve our skills,
-            our spaces, and our communities. From planting a seed to learning a new skill
-            to helping someone in need, every quest brings us closer to the world we want to live in.
+            In this world, we avoid the conflicts of generic fantasy RPGs—there are no swords, dragons, or combat. Instead, our society thrives on crystal-powered knowledge structures, living architecture integrated directly into the ecosystems, and floating islands that represent the heights of human imagination and technological benevolence.
+          </p>
+          <p>
+            Every week, we embark on small "quests"—mindful acts of creation, environmental stewardship, learning, and mutual support. From nurturing a seed of bioluminescent flora to building open-source knowledge libraries, every step is designed to bring us closer to a beautiful dream.
           </p>
         </div>
       </section>
@@ -98,14 +96,14 @@ function Home() {
               <Link to="/about" className="feature-card lore-card">
                 <div className="feature-icon-wrapper">
                   <div className="feature-icon lore-icon">
-                    <span className="icon-text">📜</span>
+                    <span className="icon-text">🌿</span>
                   </div>
                 </div>
                 <h3>The Lore</h3>
                 <p>
-                  Uncover the Vision. Read the story of DreamWorld, our philosophy, and the future we are building together.
+                  Uncover the Vision. Read the chronicle of our future civilization where nature and advanced technology thrive in perfect symbiosis.
                 </p>
-                <span className="feature-cta">Read the Story →</span>
+                <span className="feature-cta">Read the Chronicle →</span>
               </Link>
             </div>
 
@@ -119,9 +117,9 @@ function Home() {
                 </div>
                 <h3>The Dreamers</h3>
                 <p>
-                  Meet the Community. Explore profiles, check <strong>Dream Levels</strong>, and see who is leading the change.
+                  Meet the Citizens. Explore profiles, check <strong>Dream Levels</strong>, and see who is anchoring the future of the civilization.
                 </p>
-                <span className="feature-cta">Meet the Members →</span>
+                <span className="feature-cta">Meet the Citizens →</span>
               </Link>
             </div>
 
@@ -130,14 +128,14 @@ function Home() {
               <Link to="/quests" className="feature-card journey-card">
                 <div className="feature-icon-wrapper">
                   <div className="feature-icon journey-icon">
-                    <span className="icon-text">⚔️</span>
+                    <span className="icon-text">🌱</span>
                   </div>
                 </div>
                 <h3>The Journey</h3>
                 <p>
-                  Start Your Adventure. Complete Quests to earn <strong>XP</strong>, level up, and make a real-world impact.
+                  Cultivate Growth. Embark on mindful quests to build your skills, nurture the environment, and uplift the community.
                 </p>
-                <span className="feature-cta">Start a Quest →</span>
+                <span className="feature-cta">Cultivate Harmony →</span>
               </Link>
             </div>
 
@@ -146,12 +144,12 @@ function Home() {
               <Link to="/creator" className="feature-card creator-card">
                 <div className="feature-icon-wrapper">
                   <div className="feature-icon creator-icon">
-                    <span className="icon-text">👁️</span>
+                    <span className="icon-text">🏛️</span>
                   </div>
                 </div>
                 <h3>The Architect</h3>
                 <p>
-                  Meet the Creator. Explore the mind behind the dream and the origin of this universe.
+                  Meet the Creator. Explore the blueprints of living architecture and the philosophy that shaped this beautiful dream.
                 </p>
                 <span className="feature-cta">Meet Justice →</span>
               </Link>
@@ -162,14 +160,14 @@ function Home() {
               <Link to="/events" className="feature-card gathering-card">
                 <div className="feature-icon-wrapper">
                   <div className="feature-icon gathering-icon">
-                    <span className="icon-text">🔥</span>
+                    <span className="icon-text">🌟</span>
                   </div>
                 </div>
                 <h3>The Gathering</h3>
                 <p>
-                  Join the Assembly. Participate in live events, workshops, and community celebrations.
+                  Join the Assembly. Participate in collaborative circles, design labs, and celebrations of human growth.
                 </p>
-                <span className="feature-cta">View Events →</span>
+                <span className="feature-cta">View Gatherings →</span>
               </Link>
             </div>
 
@@ -178,12 +176,12 @@ function Home() {
               <Link to="/thanks" className="feature-card pillars-card">
                 <div className="feature-icon-wrapper">
                   <div className="feature-icon pillars-icon">
-                    <span className="icon-text">💎</span>
+                    <span className="icon-text">🔮</span>
                   </div>
                 </div>
                 <h3>The Pillars</h3>
                 <p>
-                  Honor the Supporters. See the visionaries and patrons fueling the dream.
+                  Honor the Supporters. Discover the patrons and visionaries who are anchoring the foundations of this living world.
                 </p>
                 <span className="feature-cta">View Wall of Gratitude →</span>
               </Link>
