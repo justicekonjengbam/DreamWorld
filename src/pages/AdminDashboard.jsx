@@ -494,7 +494,7 @@ function AdminDashboard() {
                                         </div>
                                     </div>
                                     <div className="form-group-full"><label>Title (e.g. Lead Artist)</label><input type="text" value={memberFormData.title} onChange={(e) => setMemberFormData({ ...memberFormData, title: e.target.value })} required /></div>
-                                    <div className="form-row" style={{ gap: '20px' }}>
+                                    <div className="form-row admin-uploaders-row" style={{ gap: '20px' }}>
                                         <ImageUpload
                                             label="Avatar Image"
                                             onUploadComplete={(url) => setMemberFormData(prev => ({ ...prev, avatar: url }))}
@@ -1263,7 +1263,7 @@ Your task today is to complete Chapter 2 of Advanced Magic. Focus on the breathi
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="form-row" style={{ gap: '20px' }}>
+                                        <div className="form-row admin-uploaders-row" style={{ gap: '20px' }}>
                                             <ImageUpload
                                                 label="Student Avatar"
                                                 onUploadComplete={(url) => setStudentFormData(p => ({ ...p, avatar: url }))}

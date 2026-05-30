@@ -281,6 +281,13 @@
     margin-top: 10px;
 }
 
+/* Stack dual image uploaders vertically on all screens to prevent overlapping */
+.admin-uploaders-row {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 15px !important;
+}
+
 
 /* Split Layout */
 .admin-split-layout {
