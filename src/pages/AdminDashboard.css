@@ -238,7 +238,7 @@
     border: 1px solid rgba(255, 215, 120, 0.28);
     border-radius: 8px;
     color: #e2b3ff; /* Gorgeous soft lavender value font color from the screenshot */
-    font-family: var(--font-fancy), var(--font-body), 'Georgia', serif;
+    font-family: var(--font-body), 'Georgia', serif;
     font-style: italic;
     font-size: 1.15rem;
     font-weight: 500;
