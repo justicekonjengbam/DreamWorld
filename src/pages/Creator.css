@@ -344,3 +344,52 @@
     font-size: 1.3rem;
   }
 }
+
+/* ========================================================
+   LIGHT MODE DESIGN SYSTEM OVERRIDES
+   ======================================================== */
+.light-mode .creator-container {
+  background: var(--color-card-bg, rgba(255, 255, 255, 0.9)) !important;
+  border-color: rgba(170, 128, 16, 0.35) !important;
+  box-shadow: 0 8px 30px rgba(32, 21, 56, 0.05), 0 0 20px var(--glow-accent) !important;
+  color: var(--color-text) !important;
+}
+
+.light-mode .creator-intro .bio,
+.light-mode .creator-section p,
+.light-mode .creator-section li,
+.light-mode .stat-label {
+  color: var(--color-text-sub) !important;
+}
+
+.light-mode .creator-header {
+  border-bottom: 1px solid rgba(170, 128, 16, 0.25) !important;
+}
+
+.light-mode .creator-avatar {
+  border-color: var(--color-accent) !important;
+  box-shadow: 0 4px 15px var(--glow-accent) !important;
+}
+
+.light-mode .creator-section {
+  border-bottom: 1px solid rgba(170, 128, 16, 0.15) !important;
+}
+
+.light-mode .stat-card {
+  background: var(--glow-primary, rgba(170, 128, 16, 0.05)) !important;
+  border: 1px solid rgba(170, 128, 16, 0.2) !important;
+}
+
+.light-mode .social-link {
+  background: var(--glow-primary, rgba(170, 128, 16, 0.06)) !important;
+  border: 1px solid rgba(170, 128, 16, 0.2) !important;
+  color: var(--color-primary, #aa8010) !important;
+}
+
+.light-mode .social-link:hover {
+  background: var(--glow-accent, rgba(184, 58, 136, 0.1)) !important;
+  border-color: var(--color-accent) !important;
+  color: var(--color-accent) !important;
+  box-shadow: 0 0 12px var(--glow-accent) !important;
+}
+

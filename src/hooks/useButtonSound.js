@@ -2,14 +2,18 @@ import { useCallback } from 'react'
 import { useAudio } from '../context/AudioContext'
 
 export const useButtonSound = () => {
-  const { isSoundMuted } = useAudio() || { isSoundMuted: false }
+  const { isSoundMuted, buttonVolume } = useAudio() || { isSoundMuted: false, buttonVolume: 0.7 }
 
-  const playSound = useCallback(() => {
+  const playSound = useCallback((e) => {
+    if (e) {
+      e._soundPlayed = true
+    }
     if (isSoundMuted) return
     const audio = new Audio('/ButtonAudio.mp3')
-    audio.volume = 0.7
+    audio.volume = buttonVolume
     audio.play().catch(err => console.log('Audio play failed:', err))
-  }, [isSoundMuted])
+  }, [isSoundMuted, buttonVolume])
 
   return playSound
 }
+

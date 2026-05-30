@@ -29,6 +29,7 @@ import PortalLogin from './portal/PortalLogin'
 import PortalDashboard from './portal/PortalDashboard'
 import AcademyStudentDetail from './pages/AcademyStudentDetail'
 import AcademyEnroll from './pages/AcademyEnroll'
+import Settings from './pages/Settings'
 import './App.css'
 
 
@@ -45,7 +46,7 @@ function App() {
     return sessionStorage.getItem('dreamworld_entered') === 'true'
   })
   const [shouldStartAudio, setShouldStartAudio] = useState(false)
-  const { isSoundMuted } = useAudio()
+  const { isSoundMuted, buttonVolume } = useAudio()
 
 
   const handleEnterDreamWorld = () => {
@@ -58,13 +59,19 @@ function App() {
   // Global click sound for all clickable elements
   useEffect(() => {
     const handleClick = (e) => {
-      // ... existing click handler ...
+      // Start background ambient music on first user interaction anywhere on the document (e.g. inside the Portal)
+      if (!shouldStartAudio) {
+        setShouldStartAudio(true)
+      }
+
       if (isSoundMuted) return // Don't play if muted
+      if (e._soundPlayed) return // Ignore if sound was already played by a hook
 
       const clickable = e.target.closest('a, button, [role="button"], .card, .character-link, .role-card')
       if (clickable) {
+        e._soundPlayed = true
         const audio = new Audio('/ButtonAudio.mp3')
-        audio.volume = 0.7
+        audio.volume = buttonVolume
         audio.play().catch(err => console.log('Audio play failed:', err))
       }
     }
@@ -72,7 +79,8 @@ function App() {
 
     document.addEventListener('click', handleClick)
     return () => document.removeEventListener('click', handleClick)
-  }, [isSoundMuted])
+  }, [isSoundMuted, buttonVolume, shouldStartAudio])
+
 
 
   return (
@@ -112,6 +120,7 @@ function App() {
               <Route path="/academy/students" element={<AcademyStudents />} />
               <Route path="/academy/students/:id" element={<AcademyStudentDetail />} />
               <Route path="/thanks" element={<SpecialThanks />} />
+              <Route path="/settings" element={<Settings />} />
 
               {/* 404 Route */}
               <Route path="*" element={<Navigate to="/" replace />} />

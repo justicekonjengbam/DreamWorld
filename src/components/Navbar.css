@@ -1,5 +1,5 @@
 /* ================================
-   Navbar — Clean Single Row
+   Navbar — Clean Single Row (Fantasy Overhaul)
    ================================ */
 
 .navbar {
@@ -8,15 +8,15 @@
   left: 0;
   right: 0;
   z-index: 1000;
-  background: rgba(10, 14, 26, 0.96);
+  background: rgba(9, 6, 18, 0.95);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(76, 161, 175, 0.22);
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.35);
-  transition: border-color 0.3s;
+  border-bottom: 2px solid rgba(255, 215, 120, 0.35); /* Elegant gold border */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(212, 106, 174, 0.08);
+  transition: all 0.3s;
 }
 
 .navbar-academy {
-  border-bottom-color: rgba(106, 141, 195, 0.35);
+  border-bottom-color: rgba(255, 215, 120, 0.45); /* Gold for academy too */
 }
 
 .navbar-container {
@@ -36,21 +36,25 @@
   align-items: center;
   gap: 10px;
   text-decoration: none;
-  color: var(--color-white);
-  font-size: 1.15rem;
+  color: #ffd778 !important; /* Beautiful gold text */
+  font-family: var(--font-display), serif;
+  font-size: 1.25rem;
   font-weight: 700;
   flex-shrink: 0;
-  transition: opacity 0.2s;
+  transition: all 0.2s;
+  letter-spacing: 0.06em;
 }
 
 .navbar-logo:hover {
-  opacity: 0.85;
+  opacity: 1;
+  text-shadow: 0 0 10px rgba(255, 215, 120, 0.45);
 }
 
 .logo-image {
   height: 38px;
   width: auto;
   object-fit: contain;
+  filter: drop-shadow(0 0 5px rgba(255, 215, 120, 0.3));
 }
 
 .logo-text {
@@ -58,7 +62,7 @@
 }
 
 .logo-muted {
-  color: rgba(255, 255, 255, 0.45);
+  color: rgba(255, 215, 120, 0.45);
   font-weight: 400;
   font-size: 0.85em;
 }
@@ -69,46 +73,56 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  gap: 2px;
+  gap: 6px;
   align-items: center;
 }
 
 .navbar-menu li a {
   display: block;
-  padding: 8px 11px;
-  color: rgba(255, 255, 255, 0.5);
+  padding: 8px 14px;
+  color: rgba(195, 175, 218, 0.7); /* Soft lavender text */
   text-decoration: none;
-  font-size: 0.84rem;
-  font-weight: 500;
+  font-size: 0.86rem;
+  font-weight: 600;
   border-radius: 6px;
-  transition: color 0.2s, background 0.2s;
+  transition: all 0.3s ease;
   white-space: nowrap;
+  letter-spacing: 0.06em;
 }
 
 .navbar-menu li a:hover {
-  color: rgba(255, 255, 255, 0.9);
-  background: rgba(255, 255, 255, 0.04);
+  color: #ffd778; /* Gold on hover */
+  background: rgba(255, 215, 120, 0.05);
 }
 
 .navbar-menu li a.active {
-  color: var(--color-gold);
+  color: #ffd778 !important;
+  text-shadow: 0 0 8px rgba(255, 215, 120, 0.4);
+  background: rgba(255, 215, 120, 0.05);
+  border: 1px solid rgba(255, 215, 120, 0.25);
 }
 
 /* Cross-site pill link */
 .cross-link {
   font-size: 0.78rem !important;
-  padding: 5px 12px !important;
-  border: 1px solid rgba(76, 161, 175, 0.3) !important;
+  padding: 6px 14px !important;
+  border: 1.5px solid rgba(255, 215, 120, 0.45) !important;
   border-radius: 20px !important;
-  color: rgba(76, 161, 175, 0.85) !important;
+  color: #ffd778 !important;
+  background: rgba(212, 106, 174, 0.06) !important;
   margin-left: 8px;
-  transition: all 0.2s !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 0 8px rgba(212, 106, 174, 0.15) !important;
+  font-family: var(--font-display), serif !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
 }
 
 .cross-link:hover {
-  border-color: rgba(76, 161, 175, 0.7) !important;
-  color: #7ec8e3 !important;
-  background: rgba(76, 161, 175, 0.08) !important;
+  border-color: #ffd778 !important;
+  color: #ffd778 !important;
+  background: rgba(212, 106, 174, 0.15) !important;
+  box-shadow: 0 0 15px rgba(212, 106, 174, 0.3) !important;
 }
 
 /* Hamburger */
@@ -127,7 +141,7 @@
 .hamburger span {
   width: 24px;
   height: 2px;
-  background: var(--color-cyan);
+  background: var(--color-gold);
   border-radius: 2px;
   transition: all 0.3s ease;
   display: block;
@@ -152,9 +166,9 @@
   right: -100%;
   width: min(280px, 85vw);
   height: calc(100vh - 64px);
-  background: rgba(10, 14, 26, 0.99);
+  background: rgba(9, 6, 18, 0.99);
   backdrop-filter: blur(14px);
-  border-left: 1px solid rgba(76, 161, 175, 0.18);
+  border-left: 2px solid rgba(255, 215, 120, 0.35); /* Gold divider line */
   transition: right 0.32s ease;
   overflow-y: auto;
   z-index: 999;
@@ -176,48 +190,49 @@
 .drawer-links li a {
   display: block;
   padding: 15px 24px;
-  color: rgba(255, 255, 255, 0.65);
+  color: rgba(195, 175, 218, 0.8);
   text-decoration: none;
   font-size: 1rem;
   font-weight: 500;
-  border-bottom: 1px solid rgba(76, 161, 175, 0.07);
-  transition: color 0.2s, background 0.2s;
+  border-bottom: 1px solid rgba(255, 215, 120, 0.08);
+  transition: all 0.2s;
 }
 
 .drawer-links li a:hover {
-  color: white;
-  background: rgba(76, 161, 175, 0.06);
+  color: #ffd778;
+  background: rgba(255, 215, 120, 0.04);
 }
 
 .drawer-links li a.active {
-  color: var(--color-gold);
-  border-left: 3px solid var(--color-gold);
+  color: #ffd778 !important;
+  border-left: 3px solid #ffd778 !important;
   padding-left: 21px;
+  background: rgba(255, 215, 120, 0.04);
 }
 
 /* Top cross-link in drawer */
 .drawer-cross-link {
   padding: 16px 20px;
-  border-bottom: 1px solid rgba(76, 161, 175, 0.15);
-  background: rgba(76, 161, 175, 0.03);
+  border-bottom: 1px solid rgba(255, 215, 120, 0.12);
+  background: rgba(212, 106, 174, 0.03);
 }
 
 .drawer-cross-link a {
   display: block;
-  color: rgba(76, 161, 175, 0.85);
+  color: #ffd778 !important;
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: 600;
   text-align: center;
   padding: 10px;
-  border: 1px solid rgba(76, 161, 175, 0.25);
+  border: 1.5px solid rgba(255, 215, 120, 0.4) !important;
   border-radius: 8px;
   transition: all 0.2s;
 }
 
 .drawer-cross-link a:hover {
-  color: #7ec8e3;
-  background: rgba(76, 161, 175, 0.08);
+  border-color: #ffd778 !important;
+  background: rgba(212, 106, 174, 0.08) !important;
 }
 
 .overlay {
@@ -250,4 +265,4 @@
   .navbar-logo {
     font-size: 1rem;
   }
-}
+}

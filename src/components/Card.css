@@ -1,26 +1,196 @@
 .card {
+  position: relative;
   background: var(--color-card-bg);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--glow-primary);
-  border-radius: 15px;
-  padding: 25px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
+  backdrop-filter: blur(12px);
+  border: 1.5px solid rgba(255, 215, 120, 0.35); /* Outer gold border */
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(212, 106, 174, 0.12);
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
   color: var(--color-text);
+  overflow: visible; /* Let corner scrolls extend perfectly */
+}
+
+/* Parallel Inner Purple Border */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border: 1px solid rgba(212, 106, 174, 0.22);
+  border-radius: 8px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Ornate Corner Scrolls (Top Left, Top Right, Bottom Left, Bottom Right) */
+.card::after {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background-image: 
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30' fill='none'%3E%3Cpath d='M1.5 30V1.5H30' stroke='%23ffd778' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M4.5 25.5V4.5H25.5' stroke='%23d46aae' stroke-width='1' stroke-opacity='0.6'/%3E%3Ccircle cx='4.5' cy='4.5' r='1.5' fill='%23ffd778'/%3E%3Cpath d='M10 4.5C10 6 6 10 6 10' stroke='%23ffd778' stroke-width='0.8' opacity='0.7'/%3E%3Ccircle cx='12' cy='12' r='1' fill='%23ffd778' opacity='0.5'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30' fill='none'%3E%3Cpath d='M28.5 30V1.5H0' stroke='%23ffd778' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M25.5 25.5V4.5H4.5' stroke='%23d46aae' stroke-width='1' stroke-opacity='0.6'/%3E%3Ccircle cx='25.5' cy='4.5' r='1.5' fill='%23ffd778'/%3E%3Cpath d='M20 4.5C20 6 24 10 24 10' stroke='%23ffd778' stroke-width='0.8' opacity='0.7'/%3E%3Ccircle cx='18' cy='12' r='1' fill='%23ffd778' opacity='0.5'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30' fill='none'%3E%3Cpath d='M1.5 0V28.5H30' stroke='%23ffd778' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M4.5 4.5V25.5H25.5' stroke='%23d46aae' stroke-width='1' stroke-opacity='0.6'/%3E%3Ccircle cx='4.5' cy='25.5' r='1.5' fill='%23ffd778'/%3E%3Cpath d='M10 25.5C10 24 6 20 6 20' stroke='%23ffd778' stroke-width='0.8' opacity='0.7'/%3E%3Ccircle cx='12' cy='18' r='1' fill='%23ffd778' opacity='0.5'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30' fill='none'%3E%3Cpath d='M28.5 0V28.5H0' stroke='%23ffd778' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M25.5 4.5V25.5H4.5' stroke='%23d46aae' stroke-width='1' stroke-opacity='0.6'/%3E%3Ccircle cx='25.5' cy='25.5' r='1.5' fill='%23ffd778'/%3E%3Cpath d='M20 25.5C20 24 24 20 24 20' stroke='%23ffd778' stroke-width='0.8' opacity='0.7'/%3E%3Ccircle cx='18' cy='18' r='1' fill='%23ffd778' opacity='0.5'/%3E%3C/svg%3E");
+  background-position: top left, top right, bottom left, bottom right;
+  background-size: 30px 30px;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  z-index: 2;
+  border-radius: 12px;
 }
 
 .card-hover:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 35px var(--glow-primary);
-  border-color: var(--color-primary);
+  transform: translateY(-6px);
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.9), 0 0 35px rgba(212, 106, 174, 0.25);
+  border-color: rgba(255, 215, 120, 0.55);
 }
 
 .card h3 {
-  color: var(--color-accent);
-  margin-bottom: 10px;
+  color: var(--color-primary);
+  margin-bottom: 12px;
 }
 
 .card p {
   color: var(--color-text-sub);
   line-height: 1.6;
 }
+
+/* ========================================================
+   PREMIUM PURE GOLD FANTASY CARD SYSTEM
+   (Specifically for Sponsors, Support, and Academy sections)
+   ======================================================== */
+.card.gold-theme,
+.quest-sponsor-card,
+.champion-card,
+.builder-card,
+.firsttimer-card,
+.legend-card,
+.way-card,
+.opportunity-card,
+.completed-card,
+.royal-card,
+.sponsor-card,
+.academy-pillar,
+.academy-form-card,
+.enroll-form-card,
+.enroll-info-card,
+.enroll-note-card,
+.detail-level-card,
+.detail-fact-card,
+.student-card,
+.leaderboard-card {
+  position: relative !important;
+  background: rgba(12, 9, 6, 0.88) !important; /* Warm translucent obsidian gold background */
+  backdrop-filter: blur(12px) !important;
+  border: 1.5px solid rgba(255, 215, 120, 0.45) !important; /* Premium Gold border */
+  border-radius: 12px !important;
+  padding: 30px !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 215, 120, 0.15) !important;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+  color: var(--color-text) !important;
+  overflow: visible !important;
+}
+
+/* Parallel Inner Gold Border (no purple!) */
+.card.gold-theme::before,
+.quest-sponsor-card::before,
+.champion-card::before,
+.builder-card::before,
+.firsttimer-card::before,
+.legend-card::before,
+.way-card::before,
+.opportunity-card::before,
+.completed-card::before,
+.royal-card::before,
+.sponsor-card::before,
+.academy-pillar::before,
+.academy-form-card::before,
+.enroll-form-card::before,
+.enroll-info-card::before,
+.enroll-note-card::before,
+.detail-level-card::before,
+.detail-fact-card::before,
+.student-card::before,
+.leaderboard-card::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 4px !important;
+  border: 1px solid rgba(255, 215, 120, 0.22) !important; /* Inner gold outline */
+  border-radius: 8px !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+  background: none !important;
+  height: auto !important;
+  width: auto !important;
+}
+
+/* Gold Corner Scrolls (All four corners are golden scrolls!) */
+.card.gold-theme::after,
+.quest-sponsor-card::after,
+.champion-card::after,
+.builder-card::after,
+.firsttimer-card::after,
+.legend-card::after,
+.way-card::after,
+.opportunity-card::after,
+.completed-card::after,
+.royal-card::after,
+.sponsor-card::after,
+.academy-pillar::after,
+.academy-form-card::after,
+.enroll-form-card::after,
+.enroll-info-card::after,
+.enroll-note-card::after,
+.detail-level-card::after,
+.detail-fact-card::after,
+.student-card::after,
+.leaderboard-card::after {
+  content: "" !important;
+  position: absolute !important;
+  top: -2px !important;
+  left: -2px !important;
+  right: -2px !important;
+  bottom: -2px !important;
+  background-image: 
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30' fill='none'%3E%3Cpath d='M1.5 30V1.5H30' stroke='%23ffd778' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M4.5 25.5V4.5H25.5' stroke='%23ffd778' stroke-width='1' stroke-opacity='0.5'/%3E%3Ccircle cx='4.5' cy='4.5' r='1.5' fill='%23ffd778'/%3E%3Cpath d='M10 4.5C10 6 6 10 6 10' stroke='%23ffd778' stroke-width='0.8' opacity='0.7'/%3E%3Ccircle cx='12' cy='12' r='1' fill='%23ffd778' opacity='0.5'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30' fill='none'%3E%3Cpath d='M28.5 30V1.5H0' stroke='%23ffd778' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M25.5 25.5V4.5H4.5' stroke='%23ffd778' stroke-width='1' stroke-opacity='0.5'/%3E%3Ccircle cx='25.5' cy='4.5' r='1.5' fill='%23ffd778'/%3E%3Cpath d='M20 4.5C20 6 24 10 24 10' stroke='%23ffd778' stroke-width='0.8' opacity='0.7'/%3E%3Ccircle cx='18' cy='12' r='1' fill='%23ffd778' opacity='0.5'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30' fill='none'%3E%3Cpath d='M1.5 0V28.5H30' stroke='%23ffd778' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M4.5 4.5V25.5H25.5' stroke='%23ffd778' stroke-width='1' stroke-opacity='0.5'/%3E%3Ccircle cx='4.5' cy='25.5' r='1.5' fill='%23ffd778'/%3E%3Cpath d='M10 25.5C10 24 6 20 6 20' stroke='%23ffd778' stroke-width='0.8' opacity='0.7'/%3E%3Ccircle cx='12' cy='18' r='1' fill='%23ffd778' opacity='0.5'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30' fill='none'%3E%3Cpath d='M28.5 0V28.5H0' stroke='%23ffd778' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M25.5 4.5V25.5H4.5' stroke='%23ffd778' stroke-width='1' stroke-opacity='0.5'/%3E%3Ccircle cx='25.5' cy='25.5' r='1.5' fill='%23ffd778'/%3E%3Cpath d='M20 25.5C20 24 24 20 24 20' stroke='%23ffd778' stroke-width='0.8' opacity='0.7'/%3E%3Ccircle cx='18' cy='18' r='1' fill='%23ffd778' opacity='0.5'/%3E%3C/svg%3E") !important;
+  background-position: top left, top right, bottom left, bottom right !important;
+  background-size: 30px 30px !important;
+  background-repeat: no-repeat !important;
+  pointer-events: none !important;
+  z-index: 2 !important;
+  border-radius: 12px !important;
+}
+
+/* Floating Gold Hover Glow */
+.card.gold-theme:hover,
+.quest-sponsor-card:hover,
+.champion-card:hover,
+.builder-card:hover,
+.firsttimer-card:hover,
+.legend-card:hover,
+.way-card:hover,
+.opportunity-card:hover,
+.completed-card:hover,
+.royal-card:hover,
+.sponsor-card:hover,
+.academy-pillar:hover,
+.academy-form-card:hover,
+.enroll-form-card:hover,
+.enroll-info-card:hover,
+.enroll-note-card:hover,
+.detail-level-card:hover,
+.detail-fact-card:hover,
+.student-card:hover,
+.leaderboard-card:hover {
+  transform: translateY(-6px) !important;
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.9), 0 0 35px rgba(255, 215, 120, 0.3) !important;
+  border-color: rgba(255, 215, 120, 0.8) !important;
+}
+

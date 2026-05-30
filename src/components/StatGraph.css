@@ -2,31 +2,75 @@
     width: 100%;
     max-width: 800px;
     margin: 20px auto;
-    background: rgba(20, 25, 40, 0.4);
-    border: 1px solid rgba(76, 161, 175, 0.2);
+    background: var(--color-card-bg, rgba(9, 6, 18, 0.85));
+    backdrop-filter: blur(12px);
+    border: 1.5px solid rgba(255, 215, 120, 0.35); /* Ornate outer gold border */
     border-radius: 16px;
-    padding: 20px;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    padding: 25px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(212, 106, 174, 0.12);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     position: relative;
-    overflow: hidden;
+    overflow: visible; /* Let corner scrolls extend perfectly */
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-/* Add a subtle magical glow behind the chart */
+/* Hover dynamic halo */
+.stat-graph-container:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.9), 0 0 35px var(--glow-accent, rgba(212, 106, 174, 0.25));
+    border-color: rgba(255, 215, 120, 0.55);
+}
+
+/* Parallel Inner Ornate Border */
 .stat-graph-container::before {
-    content: '';
+    content: "";
+    position: absolute;
+    inset: 4px;
+    border: 1px solid var(--glow-accent, rgba(212, 106, 174, 0.22));
+    border-radius: 12px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Ornate Corner Scrolls (Top Left, Top Right, Bottom Left, Bottom Right) */
+.stat-graph-container::after {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background-image: 
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30' fill='none'%3E%3Cpath d='M1.5 30V1.5H30' stroke='%23ffd778' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M4.5 25.5V4.5H25.5' stroke='%23d46aae' stroke-width='1' stroke-opacity='0.6'/%3E%3Ccircle cx='4.5' cy='4.5' r='1.5' fill='%23ffd778'/%3E%3Cpath d='M10 4.5C10 6 6 10 6 10' stroke='%23ffd778' stroke-width='0.8' opacity='0.7'/%3E%3Ccircle cx='12' cy='12' r='1' fill='%23ffd778' opacity='0.5'/%3E%3C/svg%3E"),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30' fill='none'%3E%3Cpath d='M28.5 30V1.5H0' stroke='%23ffd778' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M25.5 25.5V4.5H4.5' stroke='%23d46aae' stroke-width='1' stroke-opacity='0.6'/%3E%3Ccircle cx='25.5' cy='4.5' r='1.5' fill='%23ffd778'/%3E%3Cpath d='M20 4.5C20 6 24 10 24 10' stroke='%23ffd778' stroke-width='0.8' opacity='0.7'/%3E%3Ccircle cx='18' cy='12' r='1' fill='%23ffd778' opacity='0.5'/%3E%3C/svg%3E"),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30' fill='none'%3E%3Cpath d='M1.5 0V28.5H30' stroke='%23ffd778' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M4.5 4.5V25.5H25.5' stroke='%23d46aae' stroke-width='1' stroke-opacity='0.6'/%3E%3Ccircle cx='4.5' cy='25.5' r='1.5' fill='%23ffd778'/%3E%3Cpath d='M10 25.5C10 24 6 20 6 20' stroke='%23ffd778' stroke-width='0.8' opacity='0.7'/%3E%3Ccircle cx='12' cy='18' r='1' fill='%23ffd778' opacity='0.5'/%3E%3C/svg%3E"),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30' fill='none'%3E%3Cpath d='M28.5 0V28.5H0' stroke='%23ffd778' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M25.5 4.5V25.5H4.5' stroke='%23d46aae' stroke-width='1' stroke-opacity='0.6'/%3E%3Ccircle cx='25.5' cy='25.5' r='1.5' fill='%23ffd778'/%3E%3Cpath d='M20 25.5C20 24 24 20 24 20' stroke='%23ffd778' stroke-width='0.8' opacity='0.7'/%3E%3Ccircle cx='18' cy='18' r='1' fill='%23ffd778' opacity='0.5'/%3E%3C/svg%3E");
+    background-position: top left, top right, bottom left, bottom right;
+    background-size: 30px 30px;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    z-index: 2;
+    border-radius: 16px;
+}
+
+/* Subtle magical background glow */
+.stat-graph-glow {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 200px;
-    height: 200px;
-    background: radial-gradient(circle, rgba(76, 161, 175, 0.15) 0%, transparent 70%);
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, var(--glow-accent, rgba(212, 106, 174, 0.15)) 0%, transparent 70%);
     z-index: 0;
     pointer-events: none;
+}
+
+.stat-graph-chart-wrapper {
+    position: relative;
+    z-index: 1;
 }
 
 .recharts-wrapper {
@@ -35,16 +79,16 @@
 
 .recharts-polar-grid-angle line,
 .recharts-polar-grid-concentric-polygon {
-    stroke: rgba(126, 200, 227, 0.2);
+    stroke: var(--glow-accent, rgba(126, 200, 227, 0.2)) !important;
 }
 
 .stat-sliders-container {
     margin-top: 15px;
     padding-top: 20px;
-    border-top: 1px solid rgba(76, 161, 175, 0.2);
+    border-top: 1px solid var(--glow-accent, rgba(76, 161, 175, 0.2));
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
     position: relative;
     z-index: 2;
 }
@@ -52,42 +96,49 @@
 .stat-slider-row {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 6px;
 }
 
 .stat-slider-header {
     display: flex;
     justify-content: space-between;
-    font-size: 0.85rem;
+    align-items: center;
 }
 
 .stat-slider-name {
-    font-weight: 600;
-    color: #a8d8ea;
-    letter-spacing: 0.5px;
+    font-family: var(--font-display), 'Cinzel', 'Georgia', serif;
+    font-weight: 700;
+    color: var(--color-primary, #ffd778); /* Gorgeous Gold */
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    font-size: 0.75rem;
+    font-size: 0.85rem;
+    text-shadow: 0 0 5px rgba(255, 215, 120, 0.1);
 }
 
 .stat-slider-value {
-    font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.6);
+    font-family: var(--font-body), 'Georgia', serif;
+    font-size: 0.95rem;
+    color: var(--color-text-sub, #c3afda);
+    font-weight: 600;
 }
 
 .stat-slider-track {
     width: 100%;
-    height: 6px;
-    background: rgba(0, 0, 0, 0.4);
+    height: 8px;
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 10px;
     overflow: hidden;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6);
 }
 
 .stat-slider-fill {
     height: 100%;
-    background: linear-gradient(90deg, #4CA1AF, #7ec8e3);
+    background: linear-gradient(90deg, var(--color-primary, #ffd778), var(--color-accent, #d46aae));
     border-radius: 10px;
     width: 0;
-    animation: fillSlider 1s cubic-bezier(0.1, 0.8, 0.2, 1) forwards;
+    box-shadow: 0 0 10px var(--glow-accent, rgba(212, 106, 174, 0.35));
+    animation: fillSlider 1.2s cubic-bezier(0.1, 0.8, 0.2, 1) forwards;
 }
 
 @keyframes fillSlider {
@@ -100,13 +151,13 @@
     .stat-graph-container {
         flex-direction: row;
         align-items: center;
-        padding: 30px;
+        padding: 30px 40px;
         gap: 40px;
     }
 
     .stat-graph-chart-wrapper {
         flex: 1;
-        min-width: 300px;
+        min-width: 320px;
     }
 
     .stat-sliders-container {
@@ -114,8 +165,48 @@
         margin-top: 0;
         padding-top: 0;
         border-top: none;
-        border-left: 1px solid rgba(76, 161, 175, 0.2);
+        border-left: 1px solid var(--glow-accent, rgba(76, 161, 175, 0.2));
         padding-left: 40px;
         justify-content: center;
     }
+}
+
+/* ========================================================
+   LIGHT MODE DESIGN SYSTEM OVERRIDES
+   ======================================================== */
+.light-mode .stat-graph-container {
+    background: var(--color-card-bg, rgba(255, 255, 255, 0.9)) !important;
+    border-color: rgba(170, 128, 16, 0.35) !important;
+    box-shadow: 0 8px 30px rgba(32, 21, 56, 0.05), 0 0 20px var(--glow-accent) !important;
+}
+
+.light-mode .stat-graph-container::before {
+    border-color: var(--glow-accent, rgba(184, 58, 136, 0.15)) !important;
+}
+
+.light-mode .stat-graph-container:hover {
+    border-color: rgba(170, 128, 16, 0.5) !important;
+    box-shadow: 0 15px 45px rgba(32, 21, 56, 0.1), 0 0 25px var(--glow-accent) !important;
+}
+
+.light-mode .stat-slider-track {
+    background: rgba(0, 0, 0, 0.08) !important;
+    border-color: rgba(170, 128, 16, 0.15) !important;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+.light-mode .stat-sliders-container {
+    border-color: rgba(170, 128, 16, 0.15) !important;
+}
+
+.light-mode .stat-slider-name {
+    background: linear-gradient(to bottom, #4a2b00 0%, #aa8010 50%, #735105 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    color: var(--color-primary) !important;
+    text-shadow: none !important;
+}
+
+.light-mode .stat-slider-value {
+    color: var(--color-text-sub) !important;
 }

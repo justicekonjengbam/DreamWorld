@@ -7,77 +7,174 @@
 
 .upload-label {
     display: block;
-    font-size: 0.85rem;
-    color: var(--color-cyan);
+    font-size: 0.82rem;
+    font-family: var(--font-display), serif;
+    color: var(--color-primary) !important;
     margin-bottom: 8px;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.08em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.upload-label::after {
+    content: "✦";
+    color: var(--color-primary);
+    font-size: 0.65rem;
+    opacity: 0.55;
+    animation: labelSparkle 3s infinite alternate;
 }
 
 .upload-container {
     display: flex;
     align-items: center;
-    gap: 12px;
-    background: rgba(255, 255, 255, 0.02);
-    padding: 10px;
-    border-radius: 10px;
-    border: 1px solid rgba(76, 161, 175, 0.2);
-    transition: border-color 0.3s ease;
+    gap: 20px;
+    background: rgba(9, 6, 18, 0.7);
+    padding: 15px;
+    border-radius: 12px;
+    border: 1.5px solid rgba(255, 215, 120, 0.35);
+    position: relative;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 0 15px rgba(212, 106, 174, 0.05);
 }
 
 .upload-container:hover {
-    border-color: rgba(76, 161, 175, 0.5);
+    border-color: rgba(255, 215, 120, 0.55);
+    box-shadow: 0 0 15px rgba(212, 106, 174, 0.1), inset 0 0 15px rgba(212, 106, 174, 0.05);
 }
 
+/* Ornate Frame Border overlay on preview-box to match the screenshot */
 .preview-box {
-    width: 60px;
-    height: 60px;
+    width: 80px;
+    height: 80px;
     border-radius: 8px;
-    background: #0a1118;
+    background: #090612;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
     position: relative;
-    border: 1px solid rgba(76, 161, 175, 0.3);
+    border: 1.5px solid rgba(255, 215, 120, 0.55);
     flex-shrink: 0;
+    box-shadow: 0 0 15px rgba(212, 106, 174, 0.15);
+}
+
+.preview-box::before {
+    content: "";
+    position: absolute;
+    inset: 2px;
+    border: 1px solid rgba(212, 106, 174, 0.35);
+    border-radius: 6px;
+    pointer-events: none;
+    z-index: 2;
 }
 
 .upload-preview {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    z-index: 1;
 }
 
 .preview-placeholder {
-    font-size: 0.6rem;
-    color: var(--color-gray);
+    font-size: 0.7rem;
+    font-family: var(--font-display), serif;
+    color: var(--color-primary);
     text-align: center;
-    opacity: 0.6;
+    opacity: 0.5;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .upload-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.85);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
+    z-index: 3;
 }
 
 .upload-actions {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 8px;
     flex: 1;
 }
 
+/* CHOOSE PHOTO Premium Capsule Button */
+.upload-container button.btn {
+    background: linear-gradient(to right, #1b0e32 0%, #3e125c 50%, #1b0e32 100%) !important;
+    border: 1.5px solid rgba(255, 215, 120, 0.65) !important;
+    color: #ffd778 !important;
+    font-family: var(--font-display), serif !important;
+    font-size: 1.2rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+    padding: 12px 30px !important;
+    border-radius: 30px !important;
+    cursor: pointer !important;
+    position: relative !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6), 0 0 20px rgba(212, 106, 174, 0.25) !important;
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: visible !important;
+}
+
+.upload-container button.btn:hover:not(:disabled) {
+    transform: translateY(-2px) scale(1.02) !important;
+    border-color: #ffd778 !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7), 0 0 25px rgba(212, 106, 174, 0.45) !important;
+}
+
+.upload-container button.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Outer Border Loop around the Choose Photo button */
+.upload-container button.btn::before {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    border: 1px solid rgba(212, 106, 174, 0.4);
+    border-radius: 34px;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+.upload-container button.btn:hover::before {
+    inset: -5px;
+    border-color: rgba(212, 106, 174, 0.6);
+}
+
+/* Sparkle Star Diamond on Top Center of button */
+.upload-container button.btn::after {
+    content: "✦";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #ffd778;
+    font-size: 0.6rem;
+    text-shadow: 0 0 4px #ffd778;
+    z-index: 3;
+    top: -7px;
+    animation: pulse 2s infinite;
+}
+
 .upload-success {
-    font-size: 0.75rem;
-    color: var(--color-leaf);
+    font-size: 0.8rem;
+    color: var(--color-success);
     margin: 0;
+    font-family: var(--font-body), serif;
+    font-style: italic;
     font-weight: 500;
 }
 
@@ -91,16 +188,15 @@
     .upload-container {
         flex-direction: row;
         /* Keep row but allow shrink */
-        padding: 5px;
+        padding: 10px;
         width: 100%;
         box-sizing: border-box;
     }
 
-    /* If button text is long, let it wrap */
-    .button-secondary {
+    .upload-container button.btn {
         white-space: normal !important;
-        font-size: 0.8rem !important;
-        padding: 8px !important;
+        font-size: 0.95rem !important;
+        padding: 8px 15px !important;
         text-align: center;
     }
-}
+}

@@ -12,32 +12,30 @@
 }
 
 :root {
-  /* Default Night Mode (base) */
-  --color-background: #0A0E1A;
-  --color-card-bg: rgba(20, 25, 40, 0.8);
-  --color-text: #FFFFFF;
-  --color-text-sub: #B8C5D6;
-  --color-primary: #4CA1AF;
-  --color-accent: #FFD700;
+  /* Default Night Mode (base overhauled to Magical-Fantasy Theme) */
+  --color-background: #06040d;
+  --color-card-bg: rgba(9, 6, 18, 0.85);
+  --color-text: #f0e6ff;
+  --color-text-sub: #c3afda;
+  --color-primary: #ffd778; /* Rich Metallic Gold */
+  --color-accent: #d46aae;  /* Glowing Brand Pink/Violet */
   --color-success: #4FD15F;
-  --glow-primary: rgba(76, 161, 175, 0.5);
-  --glow-accent: rgba(255, 215, 0, 0.5);
+  --glow-primary: rgba(255, 215, 120, 0.25);
+  --glow-accent: rgba(212, 106, 174, 0.35);
 
   /* Shared Defaults */
   --color-white: #FFFFFF;
   --transition-speed: 0.3s;
 
-  /* Legacy/Aliases (Restored) */
+  /* Legacy/Aliases (Mapped to beautiful new colors for seamless backwards compatibility) */
   --color-gray: var(--color-text-sub);
-  --color-cyan: var(--color-primary);
-  --color-gold: var(--color-accent);
+  --color-cyan: var(--color-accent);
+  --color-gold: var(--color-primary);
   --color-leaf: var(--color-success);
-  --color-green: #5fd65f;
-  /* Keeping original green for gradients if needed */
-  --glow-cyan: var(--glow-primary);
-  --glow-gold: var(--glow-accent);
+  --color-green: #4FD15F;
+  --glow-cyan: var(--glow-accent);
+  --glow-gold: var(--glow-primary);
   --color-dark: var(--color-background);
-  /* Alias for backward compatibility */
 
   /* Fantasy Typography Tokens */
   --font-display: 'Cinzel', serif;
@@ -53,7 +51,8 @@
 
 body {
   font-family: var(--font-body), 'Georgia', serif;
-  background: var(--color-background);
+  background: var(--gradient-body, radial-gradient(circle at 50% 50%, #130a26 0%, #06040d 100%)) !important;
+  background-attachment: fixed !important;
   color: var(--color-text);
   font-size: 1.15rem; /* highly readable size for Cormorant Garamond serif */
   line-height: 1.7;
@@ -71,6 +70,7 @@ body {
   padding: 0 20px;
 }
 
+/* Beautiful carved gold text gradient for headers */
 h1,
 h2,
 h3,
@@ -78,9 +78,14 @@ h4,
 h5,
 h6 {
   font-family: var(--font-display), 'Georgia', serif;
+  background: linear-gradient(to bottom, #fff3d1 0%, #ffd778 50%, #c49d45 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: var(--color-primary); /* fallback */
   font-weight: 700;
   line-height: 1.25;
   letter-spacing: 0.05em;
+  text-shadow: 0 0 10px rgba(255, 215, 120, 0.1);
 }
 
 h1,
@@ -112,6 +117,18 @@ a {
   text-decoration: none;
 }
 
+/* Elegant Separator Divider with Central Diamond Gem & Gold Scrolls */
+.fantasy-separator {
+  display: block;
+  width: 100%;
+  height: 24px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='24' viewBox='0 0 400 24' fill='none' preserveAspectRatio='none'%3E%3Cpath d='M10 12H170M230 12H390' stroke='url(%23lineGrad)' stroke-width='1.2' stroke-linecap='round'/%3E%3Cpath d='M155 12C165 7 175 7 185 12C195 17 205 17 215 12' stroke='%23ffd778' stroke-width='1' fill='none' opacity='0.5'/%3E%3Cpath d='M200 4L208 12L200 20L192 12Z' fill='url(%23gemGrad)' stroke='%23ffd778' stroke-width='1.5'/%3E%3Ccircle cx='180' cy='12' r='2' fill='%23ffd778'/%3E%3Ccircle cx='220' cy='12' r='2' fill='%23ffd778'/%3E%3Cdefs%3E%3ClinearGradient id='lineGrad' x1='0' y1='0' x2='400' y2='0'%3E%3Cstop offset='0%25' stop-color='transparent'/%3E%3Cstop offset='30%25' stop-color='%23ffd778'/%3E%3Cstop offset='50%25' stop-color='%23ffd778'/%3E%3Cstop offset='70%25' stop-color='%23ffd778'/%3E%3Cstop offset='100%25' stop-color='transparent'/%3E%3C/linearGradient%3E%3ClinearGradient id='gemGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23ffd778'/%3E%3Cstop offset='50%25' stop-color='%23d46aae'/%3E%3Cstop offset='100%25' stop-color='%238a2be2'/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E");
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin: 18px auto;
+}
+
 /* Mix fantasy font elements to buttons and navigation elements */
 button,
 .btn,
@@ -125,14 +142,44 @@ button,
   letter-spacing: 0.06em !important;
 }
 
+/* Custom list sparkles */
+.traits-list-custom,
+.fantasy-list {
+  list-style: none;
+  padding-left: 5px;
+}
+
+.traits-list-custom li,
+.fantasy-list li {
+  position: relative;
+  padding-left: 25px;
+  margin-bottom: 12px;
+}
+
+.traits-list-custom li::before,
+.fantasy-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M6 0L7.5 4.5L12 6L7.5 7.5L6 12L4.5 7.5L0 6L4.5 4.5Z' fill='%23ffd778'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 0.95;
+  filter: drop-shadow(0 0 4px rgba(255, 215, 120, 0.6));
+}
+
 .loading-state {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
   font-size: 1.5rem;
-  color: var(--color-accent);
-  text-shadow: 0 0 15px var(--glow-accent);
+  color: var(--color-primary);
+  text-shadow: 0 0 15px var(--glow-primary);
   letter-spacing: 2px;
   animation: pulse 2s infinite;
 }
@@ -150,3 +197,336 @@ button,
     opacity: 0.6;
   }
 }
+
+/* ========================================================
+   GLOBAL FANTASY FORM FIELDS & CONTROLS
+   ======================================================== */
+.academy-form input,
+.academy-form select,
+.academy-form textarea,
+.donation-form input,
+.donation-form select,
+.donation-form textarea,
+.admin-form input,
+.admin-form textarea,
+.admin-form select {
+    width: 100%;
+    padding: 12px 18px;
+    background: rgba(9, 6, 18, 0.95) !important;
+    border: 1px solid rgba(255, 215, 120, 0.3) !important;
+    border-radius: 8px !important;
+    color: #e2b3ff !important; /* soft lavender text values */
+    font-family: var(--font-fancy), var(--font-body), serif !important;
+    font-style: italic !important;
+    font-size: 1.15rem !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.04em !important;
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+    box-shadow: inset 0 0 10px rgba(212, 106, 174, 0.04) !important;
+}
+
+.academy-form input:focus,
+.academy-form select:focus,
+.academy-form textarea:focus,
+.donation-form input:focus,
+.donation-form select:focus,
+.donation-form textarea:focus,
+.admin-form input:focus,
+.admin-form textarea:focus,
+.admin-form select:focus {
+    outline: none !important;
+    border-color: var(--color-accent) !important;
+    box-shadow: 0 0 18px rgba(212, 106, 174, 0.35), inset 0 0 8px rgba(212, 106, 174, 0.08) !important;
+    color: #ffd778 !important; /* Gold on focus */
+}
+
+/* Global quill inside textareas */
+.academy-form textarea,
+.donation-form textarea,
+.admin-form textarea {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='45' height='45' viewBox='0 0 40 40' fill='none'%3E%3Cpath d='M35 5C29 11 17 21 13 27C11.5 29.2 9 31.5 5 35C3 36.7 1.5 38.2 0.5 39.5C0.2 39.8 0.7 40.2 1 39.9C2.3 38.9 3.8 37.4 5.5 35.5C9.5 31.5 11.8 29 14 27.5C20 23.5 30 13 35 5Z' fill='url(%23featherGrad)' opacity='0.85'/%3E%3Cpath d='M1 39C4.5 35.5 10.5 30.5 16.5 25.5' stroke='%23ffd778' stroke-width='0.8' stroke-linecap='round' opacity='0.5'/%3E%3Cdefs%3E%3ClinearGradient id='featherGrad' x1='0%25' y1='100%25' x2='100%25' y2='0%25'%3E%3Cstop offset='0%25' stop-color='%23ffd778'/%3E%3Cstop offset='50%25' stop-color='%23d46aae'/%3E%3Cstop offset='100%25' stop-color='%235b2c75'/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: bottom 12px right 12px !important;
+    background-size: 38px 38px !important;
+    padding-right: 48px !important;
+    padding-bottom: 28px !important;
+    resize: none !important;
+    line-height: 1.6 !important;
+}
+
+/* ========================================================
+   LIGHT MODE DESIGN SYSTEM OVERRIDES
+   ======================================================== */
+.light-mode h1,
+.light-mode h2,
+.light-mode h3,
+.light-mode h4,
+.light-mode h5,
+.light-mode h6,
+.light-mode .page-title,
+.light-mode .welcome-title,
+.light-mode .hero-title,
+.light-mode .portal-profile-name,
+.light-mode .character-header-info h1 {
+    background: linear-gradient(to bottom, #4a2b00 0%, #aa8010 50%, #735105 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    color: var(--color-primary) !important;
+    text-shadow: 0 5px 15px rgba(170, 128, 16, 0.08) !important;
+}
+
+/* Light mode specific description styles */
+.light-mode .settings-description,
+.light-mode .settings-description-full,
+.light-mode .portal-quest-desc,
+.light-mode .settings-option-info p,
+.light-mode .hero-description,
+.light-mode .feature-card p,
+.light-mode .mission-content p,
+.light-mode .update-card p,
+.light-mode .guideline p,
+.light-mode .section-description,
+.light-mode .id-label {
+    color: var(--color-text-sub) !important;
+}
+
+/* Dynamic card backdrops inside light mode */
+.light-mode .portal-card,
+.light-mode .portal-login-card,
+.light-mode .portal-dreamer-card,
+.light-mode .card,
+.light-mode .settings-card,
+.light-mode .quest-sponsor-card,
+.light-mode .champion-card,
+.light-mode .builder-card,
+.light-mode .firsttimer-card,
+.light-mode .legend-card,
+.light-mode .way-card,
+.light-mode .opportunity-card,
+.light-mode .completed-card,
+.light-mode .royal-card,
+.light-mode .sponsor-card,
+.light-mode .academy-pillar,
+.light-mode .academy-form-card,
+.light-mode .enroll-form-card,
+.light-mode .enroll-info-card,
+.light-mode .enroll-note-card,
+.light-mode .detail-level-card,
+.light-mode .detail-fact-card,
+.light-mode .student-card,
+.light-mode .leaderboard-card,
+.light-mode .feature-card,
+.light-mode .join-form-card,
+.light-mode .guidelines-card {
+    background: var(--color-card-bg, rgba(255, 255, 255, 0.9)) !important;
+    box-shadow: 0 8px 30px rgba(32, 21, 56, 0.05), 0 0 20px var(--glow-accent, rgba(184, 58, 136, 0.05)) !important;
+    border-color: rgba(170, 128, 16, 0.35) !important;
+    color: var(--color-text) !important;
+}
+
+/* Dynamic parallel inner border colors inside light mode */
+.light-mode .portal-card::before,
+.light-mode .portal-login-card::before,
+.light-mode .portal-dreamer-card::before,
+.light-mode .card::before,
+.light-mode .settings-card::before,
+.light-mode .quest-sponsor-card::before,
+.light-mode .champion-card::before,
+.light-mode .builder-card::before,
+.light-mode .firsttimer-card::before,
+.light-mode .legend-card::before,
+.light-mode .way-card::before,
+.light-mode .opportunity-card::before,
+.light-mode .completed-card::before,
+.light-mode .royal-card::before,
+.light-mode .sponsor-card::before,
+.light-mode .academy-pillar::before,
+.light-mode .academy-form-card::before,
+.light-mode .enroll-form-card::before,
+.light-mode .enroll-info-card::before,
+.light-mode .enroll-note-card::before,
+.light-mode .detail-level-card::before,
+.light-mode .detail-fact-card::before,
+.light-mode .student-card::before,
+.light-mode .leaderboard-card::before,
+.light-mode .feature-card::before,
+.light-mode .join-form-card::before,
+.light-mode .guidelines-card::before {
+    border-color: var(--glow-accent, rgba(184, 58, 136, 0.15)) !important;
+}
+
+/* Feature card heading, text, and strong tag overrides inside light mode */
+.light-mode .feature-card h3 {
+    background: linear-gradient(to bottom, #4a2b00 0%, #aa8010 50%, #735105 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    color: var(--color-primary) !important;
+}
+
+.light-mode .feature-card p strong {
+    color: var(--color-text) !important;
+    font-weight: 700 !important;
+}
+
+.light-mode .feature-cta {
+    color: var(--color-text) !important;
+    border-color: transparent !important;
+}
+
+.light-mode .feature-card:hover .feature-cta {
+    border-color: var(--color-accent) !important;
+}
+
+.light-mode .lore-card:hover .feature-cta {
+    color: var(--color-accent) !important;
+    border-color: var(--color-accent) !important;
+}
+
+.light-mode .dreamers-card:hover .feature-cta {
+    color: #aa8010 !important;
+    border-color: #aa8010 !important;
+}
+
+.light-mode .journey-card:hover .feature-cta {
+    color: var(--color-primary) !important;
+    border-color: var(--color-primary) !important;
+}
+
+/* settings theme picker button overrides in light mode */
+.light-mode .gradient-theme-button {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border: 1.5px solid rgba(170, 128, 16, 0.25) !important;
+}
+
+.light-mode .gradient-theme-button:hover,
+.light-mode .gradient-theme-button.active {
+    background: rgba(255, 255, 255, 0.99) !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.06), 0 0 10px var(--grad-accent) !important;
+}
+
+.light-mode .gradient-theme-label {
+    color: var(--color-text) !important;
+}
+
+/* Dreamer / character profile text overrides in light mode */
+.light-mode .character-full-bio,
+.light-mode .joined-date,
+.light-mode .path-member-section p {
+    color: var(--color-text) !important;
+}
+
+.light-mode .joined-label {
+    color: #aa8010 !important;
+}
+
+.light-mode .character-meta {
+    border-top: 1px solid rgba(170, 128, 16, 0.25) !important;
+}
+
+.light-mode .character-avatar-large {
+    border-color: var(--color-background) !important;
+    background-color: var(--color-background) !important;
+    box-shadow: 0 10px 30px rgba(32, 21, 56, 0.1) !important;
+}
+
+/* Global Form Elements Specificity Lock for Light Mode */
+.light-mode input,
+.light-mode textarea,
+.light-mode select,
+.light-mode .portal-input,
+.light-mode .form-group input,
+.light-mode .form-group select,
+.light-mode .form-group textarea,
+.light-mode .academy-form input,
+.light-mode .academy-form select,
+.light-mode .academy-form textarea,
+.light-mode .admin-form input,
+.light-mode .admin-form select,
+.light-mode .admin-form textarea {
+    background: #ffffff !important;
+    border: 1.5px solid rgba(170, 128, 16, 0.3) !important;
+    color: #1c1c1f !important;
+    font-weight: 500 !important;
+}
+
+/* Focused inputs in Light Mode */
+.light-mode input:focus,
+.light-mode textarea:focus,
+.light-mode select:focus,
+.light-mode .portal-input:focus,
+.light-mode .form-group input:focus,
+.light-mode .form-group select:focus,
+.light-mode .form-group textarea:focus {
+    color: #1c1c1f !important;
+    border-color: var(--color-accent) !important;
+    box-shadow: 0 0 12px var(--glow-accent, rgba(184, 58, 136, 0.25)) !important;
+}
+
+/* Select dropdown option lists */
+.light-mode select option,
+.light-mode .form-group select option,
+.light-mode .academy-form select option,
+.light-mode .admin-form select option {
+    background: #ffffff !important;
+    color: #1c1c1f !important;
+    padding: 10px !important;
+}
+
+/* Labels and placeholders */
+.light-mode .form-group label,
+.light-mode label {
+    color: var(--color-accent, #b83a88) !important;
+}
+
+.light-mode ::placeholder,
+.light-mode input::placeholder,
+.light-mode textarea::placeholder,
+.light-mode .form-group input::placeholder,
+.light-mode .form-group textarea::placeholder {
+    color: #8a8a93 !important;
+    opacity: 0.95 !important;
+}
+
+/* Navigation overrides in light mode */
+.light-mode .portal-bottom-nav {
+    background: rgba(255, 255, 255, 0.98) !important;
+    border-top: 1.5px solid rgba(170, 128, 16, 0.3) !important;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05) !important;
+}
+
+.light-mode .portal-nav-btn {
+    color: rgba(32, 21, 56, 0.45) !important;
+}
+
+.light-mode .portal-nav-active {
+    color: var(--tab-color, var(--color-accent)) !important;
+}
+
+.light-mode .portal-nav-active::before {
+    background: var(--tab-color, var(--color-accent)) !important;
+}
+
+.light-mode .main-app-content .navbar {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border-bottom: 1.5px solid rgba(170, 128, 16, 0.3) !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05) !important;
+}
+
+.light-mode .nav-link {
+    color: var(--color-text) !important;
+}
+
+.light-mode .nav-link:hover,
+.light-mode .nav-link.active {
+    color: var(--color-accent) !important;
+    text-shadow: none !important;
+}
+
+.light-mode .brand-title {
+    background: linear-gradient(to bottom, #4a2b00 0%, #aa8010 50%, #735105 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+}
+
+
+

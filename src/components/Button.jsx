@@ -5,7 +5,7 @@ function Button({ children, variant = 'primary', onClick, type = 'button' }) {
   const playButtonSound = useButtonSound()
 
   const handleClick = (e) => {
-    playButtonSound()
+    playButtonSound(e)
     if (onClick) {
       onClick(e)
     }

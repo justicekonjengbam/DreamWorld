@@ -5,7 +5,7 @@ function SoundLink({ to, children, className, onClick }) {
   const playButtonSound = useButtonSound()
 
   const handleClick = (e) => {
-    playButtonSound()
+    playButtonSound(e)
     if (onClick) {
       onClick(e)
     }

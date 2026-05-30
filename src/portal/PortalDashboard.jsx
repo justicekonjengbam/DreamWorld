@@ -5,10 +5,19 @@ import { useContent } from '../context/ContentContext'
 import StatGraph from '../components/StatGraph'
 import PrintableID from '../components/PrintableID'
 import PrintableCertificate from '../components/PrintableCertificate'
+import { useAudio } from '../context/AudioContext'
+import { useTheme } from '../context/ThemeContext'
 
 export default function PortalDashboard() {
     const { user, loading } = usePortal()
     const { quests, events, announcement } = useContent()
+    const { 
+        isSoundMuted, setIsSoundMuted, 
+        musicVolume, setMusicVolume, 
+        buttonVolume, setButtonVolume 
+    } = useAudio()
+    const { gradientTheme, setGradientTheme, themeMode, setThemeMode, resetTheme, themeGradients } = useTheme()
+
     const navigate = useNavigate()
     const [activeTab, setActiveTab] = useState('profile')
     const [showID, setShowID] = useState(false)
@@ -16,6 +25,29 @@ export default function PortalDashboard() {
     const [showAdminModal, setShowAdminModal] = useState(false)
     const [adminPassword, setAdminPassword] = useState('')
     const [adminPasswordError, setAdminPasswordError] = useState('')
+
+    const handleMusicVolumeChange = (e) => {
+        const val = parseFloat(e.target.value)
+        setMusicVolume(val)
+        if (val > 0 && isSoundMuted) {
+            setIsSoundMuted(false)
+        }
+    }
+
+    const handleButtonVolumeChange = (e) => {
+        setButtonVolume(parseFloat(e.target.value))
+    }
+
+    const gradientDisplayNames = {
+        nebula: 'Celestial Nebula',
+        solar: 'Solar Flare',
+        ocean: 'Deep Ocean',
+        forest: 'Emerald Forest',
+        void: 'Void Rift',
+        crimson: 'Crimson Eclipse',
+        silver: 'Lunar Dust'
+    }
+
 
     useEffect(() => {
         if (!loading && !user) navigate('/portal')
@@ -77,11 +109,13 @@ export default function PortalDashboard() {
         { id: 'quests', icon: '⚔️', label: 'Quests' },
         { id: 'events', icon: '📅', label: 'Events' },
         { id: 'notice', icon: '📣', label: 'Notice' },
+        { id: 'settings', icon: '⚙️', label: 'Settings' },
         ...(user.isCreator ? [{ id: 'admin', icon: '👑', label: 'Admin' }] : [])
     ]
 
     return (
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: '100vh', paddingBottom: '70px', background: '#0d1326' }}>
+        <div className="portal-dashboard-wrapper" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: '100vh', paddingBottom: '70px' }}>
+
 
             {/* Fixed top-right website button */}
             <button
@@ -113,19 +147,19 @@ export default function PortalDashboard() {
                     <div className="portal-content">
                         <div className="portal-card">
                             <div className="portal-xp-row">
-                                <span style={{ color: themeColor, fontWeight: 700, fontSize: '1rem' }}>Dream Level {level}</span>
-                                <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.85rem' }}>{xpRemainder} / 108 XP</span>
+                                 <span style={{ color: themeColor, fontWeight: 700, fontSize: '1rem' }}>Dream Level {level}</span>
+                                 <span style={{ color: 'var(--color-text-muted)', fontSize: '0.85rem' }}>{xpRemainder} / 108 XP</span>
                             </div>
                             <div className="portal-xp-track">
                                 <div className="portal-xp-fill" style={{ width: `${xpPercent}%`, backgroundColor: xpBarColor, boxShadow: `0 0 10px ${xpBarColor}88` }} />
                             </div>
-                            <p style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.3)', marginTop: 6, textAlign: 'right' }}>Total XP: {user.points || 0}</p>
+                            <p style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)', marginTop: 6, textAlign: 'right' }}>Total XP: {user.points || 0}</p>
                         </div>
 
                         {bio && (
                             <div className="portal-card">
                                 <p className="portal-card-title">📖 About</p>
-                                <p style={{ lineHeight: 1.75, color: 'rgba(255,255,255,0.82)', fontSize: '0.93rem', margin: 0 }}>{bio}</p>
+                                <p style={{ lineHeight: 1.75, color: 'var(--color-text-semi)', fontSize: '0.93rem', margin: 0 }}>{bio}</p>
                             </div>
                         )}
 
@@ -189,7 +223,7 @@ export default function PortalDashboard() {
                         <div key={q.id} className="portal-card portal-quest-card">
                             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
                                 <span className={`portal-quest-badge portal-quest-${q.difficulty}`}>{q.difficulty}</span>
-                                <span style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.4)' }}>{q.timeNeeded || q.time_needed || ''}</span>
+                                <span style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)' }}>{q.timeNeeded || q.time_needed || ''}</span>
                             </div>
                             <h3 className="portal-quest-title">{q.title}</h3>
                             <p className="portal-quest-desc">{q.purpose}</p>
@@ -210,11 +244,11 @@ export default function PortalDashboard() {
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 10 }}>
                                 <div>
                                     <h3 style={{ margin: '0 0 4px', fontSize: '1rem' }}>{ev.title}</h3>
-                                    <p style={{ margin: 0, fontSize: '0.78rem', color: 'rgba(255,255,255,0.45)' }}>🗓 {ev.date || 'TBD'}</p>
+                                    <p style={{ margin: 0, fontSize: '0.78rem', color: 'var(--color-text-muted)' }}>🗓 {ev.date || 'TBD'}</p>
                                 </div>
                                 <span className={`portal-event-type portal-event-${ev.type}`}>{ev.type}</span>
                             </div>
-                            {ev.description && <p style={{ marginTop: 10, fontSize: '0.9rem', color: 'rgba(255,255,255,0.72)', lineHeight: 1.55, marginBottom: 0 }}>{ev.description}</p>}
+                            {ev.description && <p style={{ marginTop: 10, fontSize: '0.9rem', color: 'var(--color-text-semi)', lineHeight: 1.55, marginBottom: 0 }}>{ev.description}</p>}
                             {ev.location && <p style={{ fontSize: '0.8rem', color: themeColor, marginTop: 8, marginBottom: 0 }}>📍 {ev.location}</p>}
                             {ev.registrationLink && (
                                 <a href={ev.registrationLink} target="_blank" rel="noopener noreferrer"
@@ -235,9 +269,9 @@ export default function PortalDashboard() {
                     <h2 className="portal-tab-title" style={{ color: themeColor }}>📣 Notice Board</h2>
                     {announcement ? (
                         <div className="portal-card" style={{ borderLeft: `3px solid ${themeColor}` }}>
-                            <p style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.35)', marginBottom: 8, marginTop: 0 }}>{announcement.date}</p>
+                            <p style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)', marginBottom: 8, marginTop: 0 }}>{announcement.date}</p>
                             <h3 style={{ marginTop: 0, color: themeColor, fontSize: '1.1rem' }}>{announcement.title}</h3>
-                            <p style={{ lineHeight: 1.72, color: 'rgba(255,255,255,0.82)', fontSize: '0.93rem', marginBottom: announcement.linkText ? 16 : 0 }}>{announcement.content}</p>
+                            <p style={{ lineHeight: 1.72, color: 'var(--color-text-semi)', fontSize: '0.93rem', marginBottom: announcement.linkText ? 16 : 0 }}>{announcement.content}</p>
                             {announcement.linkText && announcement.linkTo && (
                                 <a href={announcement.linkTo}
                                     style={{ display: 'inline-block', padding: '10px 20px', background: themeColor, color: '#0d1326', borderRadius: 10, fontWeight: 700, fontSize: '0.9rem', textDecoration: 'none' }}>
@@ -250,9 +284,205 @@ export default function PortalDashboard() {
                     )}
                 </div>
             )}
+            {/* ===== SETTINGS TAB ===== */}
+            {activeTab === 'settings' && (
+                <div className="portal-content">
+                    <h2 className="portal-tab-title" style={{ color: themeColor }}>⚙️ Settings</h2>
+                    
+                    {/* Light/Dark Toggle Card */}
+                    <div className="portal-card">
+                        <h3 className="portal-card-title">🌓 Theme Mode</h3>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '15px' }}>
+                            <div>
+                                <span style={{ fontWeight: 600, fontSize: '0.95rem', display: 'block', color: 'var(--color-primary)' }}>Celestial Alignment</span>
+                                <span style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)' }}>Midnight Dark or Alabaster Light</span>
+                            </div>
+                            <button 
+                                className="portal-doc-btn" 
+                                style={{ 
+                                    width: 'auto', 
+                                    padding: '6px 14px', 
+                                    borderColor: themeColor, 
+                                    color: themeColor,
+                                    background: 'transparent'
+                                }}
+                                onClick={() => setThemeMode(themeMode === 'light' ? 'dark' : 'light')}
+                            >
+                                {themeMode === 'light' ? '☀️ Light' : '🌙 Dark'}
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="portal-card">
+                        <h3 className="portal-card-title">🔮 Audio Configuration</h3>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginTop: '15px' }}>
+                            
+                            {/* Mute Control */}
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <div>
+                                    <span style={{ fontWeight: 600, fontSize: '0.95rem', display: 'block', color: 'var(--color-primary)' }}>Master Sound Mute</span>
+                                    <span style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)' }}>Toggle all background sounds</span>
+                                </div>
+                                <button 
+                                    className="portal-doc-btn" 
+                                    style={{ 
+                                        width: 'auto', 
+                                        padding: '6px 14px', 
+                                        borderColor: isSoundMuted ? '#ff6f61' : themeColor, 
+                                        color: isSoundMuted ? '#ff6f61' : themeColor,
+                                        background: isSoundMuted ? 'rgba(255,111,97,0.1)' : 'transparent'
+                                    }}
+                                    onClick={() => setIsSoundMuted(!isSoundMuted)}
+                                >
+                                    {isSoundMuted ? '🔇 Muted' : '🔊 Active'}
+                                </button>
+                            </div>
+
+                            <hr style={{ border: 'none', borderTop: '1px solid rgba(255,255,255,0.08)', margin: '0' }} />
+
+                            {/* Music Volume Slider */}
+                            <div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                                    <div>
+                                        <span style={{ fontWeight: 600, fontSize: '0.95rem', display: 'block', color: 'var(--color-primary)' }}>Melodic Volume</span>
+                                        <span style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)' }}>Ambient soundtrack level</span>
+                                    </div>
+                                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                        <span style={{ fontSize: '0.85rem', fontWeight: 'bold', color: themeColor }}>{Math.round(musicVolume * 100)}%</span>
+                                        <button 
+                                            onClick={() => setMusicVolume(0.5)}
+                                            style={{ background: 'transparent', border: 'none', color: 'var(--color-text-muted)', fontSize: '0.75rem', cursor: 'pointer', textDecoration: 'underline' }}
+                                        >
+                                            Reset
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="slider-wrapper" style={{ display: 'flex', alignItems: 'center', gap: '10px', width: '100%' }}>
+                                    <input 
+                                        type="range" 
+                                        min="0" 
+                                        max="1" 
+                                        step="0.05" 
+                                        value={musicVolume} 
+                                        onChange={handleMusicVolumeChange}
+                                        className="fantasy-slider"
+                                        style={{ 
+                                            width: '100%',
+                                            '--slider-fill': `${musicVolume * 100}%` 
+                                        }}
+                                    />
+                                </div>
+                            </div>
+
+                            <hr style={{ border: 'none', borderTop: '1px solid rgba(255,255,255,0.08)', margin: '0' }} />
+
+                            {/* Button Sound Volume Slider */}
+                            <div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                                    <div>
+                                        <span style={{ fontWeight: 600, fontSize: '0.95rem', display: 'block', color: 'var(--color-primary)' }}>Interface Clicks</span>
+                                        <span style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)' }}>Button feedback level</span>
+                                    </div>
+                                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                        <span style={{ fontSize: '0.85rem', fontWeight: 'bold', color: themeColor }}>{Math.round(buttonVolume * 100)}%</span>
+                                        <button 
+                                            onClick={() => setButtonVolume(0.7)}
+                                            style={{ background: 'transparent', border: 'none', color: 'var(--color-text-muted)', fontSize: '0.75rem', cursor: 'pointer', textDecoration: 'underline' }}
+                                        >
+                                            Reset
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="slider-wrapper" style={{ display: 'flex', alignItems: 'center', gap: '10px', width: '100%' }}>
+                                    <input 
+                                        type="range" 
+                                        min="0" 
+                                        max="1" 
+                                        step="0.05" 
+                                        value={buttonVolume} 
+                                        onChange={handleButtonVolumeChange}
+                                        className="fantasy-slider"
+                                        style={{ 
+                                            width: '100%',
+                                            '--slider-fill': `${buttonVolume * 100}%` 
+                                        }}
+                                    />
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div className="portal-card">
+                        <h3 className="portal-card-title">🎨 Celestial Theme Gradient</h3>
+                        <p style={{ fontSize: '0.82rem', color: 'var(--color-text-semi)', lineHeight: '1.4', margin: '8px 0 16px' }}>
+                            Repaint the overall atmosphere of DreamWorld. Select a preset below to instantly transform cards, borders, buttons, and backgrounds globally in real-time.
+                        </p>
+                        
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                            {Object.keys(themeGradients).map((themeName) => {
+                                const gradSet = themeGradients[themeName]
+                                const grad = gradSet[themeMode] || gradSet.dark
+                                return (
+                                    <button 
+                                        key={themeName}
+                                        onClick={() => setGradientTheme(themeName)}
+                                        style={{ 
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '12px',
+                                            width: '100%',
+                                            padding: '10px 14px',
+                                            background: 'rgba(255,255,255,0.03)',
+                                            border: `1.5px solid ${gradientTheme === themeName ? grad['--color-accent'] : 'rgba(255,255,255,0.1)'}`,
+                                            borderRadius: '12px',
+                                            color: gradientTheme === themeName ? grad['--color-primary'] : 'var(--color-text-semi)',
+                                            cursor: 'pointer',
+                                            textAlign: 'left',
+                                            transition: 'all 0.3s ease',
+                                            position: 'relative'
+                                        }}
+                                    >
+                                        <div 
+                                            style={{ 
+                                                width: '28px', 
+                                                height: '28px', 
+                                                borderRadius: '50%', 
+                                                background: grad['--gradient-body'],
+                                                border: `1.5px solid ${grad['--color-primary']}`,
+                                                flexShrink: 0
+                                            }} 
+                                        />
+                                        <span style={{ fontSize: '0.9rem', fontWeight: 600, flex: 1 }}>{gradientDisplayNames[themeName]}</span>
+                                        {gradientTheme === themeName && <span style={{ color: grad['--color-primary'], fontWeight: 'bold' }}>✦ Active</span>}
+                                    </button>
+                                )
+                            })}
+                        </div>
+
+                        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px' }}>
+                            <button 
+                                onClick={resetTheme}
+                                style={{ 
+                                    background: 'transparent', 
+                                    border: `1px solid var(--color-text-muted)`, 
+                                    borderRadius: '8px',
+                                    color: 'var(--color-text-semi)', 
+                                    fontSize: '0.8rem', 
+                                    padding: '6px 12px',
+                                    cursor: 'pointer', 
+                                    transition: 'all 0.2s' 
+                                }}
+                            >
+                                Reset Theme to Default
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* Bottom Navigation */}
-            <nav className={`portal-bottom-nav ${tabs.length >= 5 ? 'five-tabs' : ''}`}>
+            <nav className={`portal-bottom-nav ${tabs.length === 5 ? 'five-tabs' : tabs.length === 6 ? 'six-tabs' : tabs.length >= 7 ? 'seven-tabs' : ''}`}>
                 {tabs.map(tab => (
                     <button key={tab.id}
                         className={`portal-nav-btn ${activeTab === tab.id ? 'portal-nav-active' : ''}`}
@@ -279,7 +509,7 @@ export default function PortalDashboard() {
                     <div className="portal-admin-modal-box">
                         <div style={{ fontSize: '2rem', marginBottom: 12 }}>👑</div>
                         <h3 style={{ color: '#ff6f61', marginBottom: 6, fontSize: '1.1rem' }}>Creator Access</h3>
-                        <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.85rem', marginBottom: 20 }}>Enter your admin password to continue.</p>
+                        <p style={{ color: 'var(--color-text-muted)', fontSize: '0.85rem', marginBottom: 20 }}>Enter your admin password to continue.</p>
                         <input
                             type="password"
                             className="portal-input"
@@ -299,7 +529,7 @@ export default function PortalDashboard() {
                         </button>
                         <button
                             onClick={() => { setShowAdminModal(false); setAdminPassword('') }}
-                            style={{ marginTop: 12, background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.4)', fontSize: '0.85rem', cursor: 'pointer' }}
+                            style={{ marginTop: 12, background: 'transparent', border: 'none', color: 'var(--color-text-muted)', fontSize: '0.85rem', cursor: 'pointer' }}
                         >
                             Cancel
                         </button>

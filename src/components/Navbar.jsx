@@ -13,6 +13,7 @@ const DREAMWORLD_LINKS = [
   { to: '/join', label: 'Join' },
   { to: '/funders', label: 'Support' },
   { to: '/thanks', label: 'Sponsors' },
+  { to: '/settings', label: 'Settings' },
 ]
 
 const ACADEMY_LINKS = [

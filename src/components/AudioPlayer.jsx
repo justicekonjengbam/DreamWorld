@@ -7,7 +7,7 @@ function AudioPlayer({ shouldStart }) {
   const audio2Ref = useRef(null)
   const [isPlaying, setIsPlaying] = useState(false)
   const hasStartedRef = useRef(false) // prevent double-play on re-renders
-  const { isSoundMuted, setIsSoundMuted } = useAudio()
+  const { isSoundMuted, setIsSoundMuted, musicVolume } = useAudio()
 
   useEffect(() => {
     const audio1 = audio1Ref.current
@@ -36,14 +36,16 @@ function AudioPlayer({ shouldStart }) {
     }
   }, [shouldStart])
 
-  // Update music mute state when isSoundMuted changes
+  // Update music mute & volume state when isSoundMuted or musicVolume changes
   useEffect(() => {
     const audio1 = audio1Ref.current
     const audio2 = audio2Ref.current
     
     audio1.muted = isSoundMuted
     audio2.muted = isSoundMuted
-  }, [isSoundMuted])
+    audio1.volume = musicVolume
+    audio2.volume = musicVolume
+  }, [isSoundMuted, musicVolume])
 
   const togglePlay = () => {
     const audio1 = audio1Ref.current

@@ -167,49 +167,120 @@
 }
 
 .admin-form-card {
-    padding: 25px;
+    padding: 35px 30px !important;
     position: sticky;
     top: 0;
     width: 100%;
     box-sizing: border-box;
 }
 
+.admin-form-card h3 {
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-family: var(--font-display), serif;
+}
+
+.admin-form-card h3::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 20px;
+    margin-top: 8px;
+    margin-bottom: 25px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='20' viewBox='0 0 300 20' fill='none' preserveAspectRatio='none'%3E%3Cpath d='M10 10H110M190 10H290' stroke='url(%23lineGrad)' stroke-width='1.2' stroke-linecap='round'/%3E%3Cpath d='M120 10C128 6 136 6 142 10C148 14 156 14 162 10' stroke='%23ffd778' stroke-width='0.8' fill='none' opacity='0.5'/%3E%3Cpath d='M150 3L156 10L150 17L144 10Z' fill='url(%23gemGrad)' stroke='%23ffd778' stroke-width='1.2'/%3E%3Ccircle cx='132' cy='10' r='1.5' fill='%23ffd778'/%3E%3Ccircle cx='168' cy='10' r='1.5' fill='%23ffd778'/%3E%3Cdefs%3E%3ClinearGradient id='lineGrad' x1='0' y1='0' x2='300' y2='0'%3E%3Cstop offset='0%25' stop-color='transparent'/%3E%3Cstop offset='30%25' stop-color='%23ffd778'/%3E%3Cstop offset='50%25' stop-color='%23ffd778'/%3E%3Cstop offset='70%25' stop-color='%23ffd778'/%3E%3Cstop offset='100%25' stop-color='transparent'/%3E%3C/linearGradient%3E%3ClinearGradient id='gemGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23ffd778'/%3E%3Cstop offset='50%25' stop-color='%23d46aae'/%3E%3Cstop offset='100%25' stop-color='%238a2be2'/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
 .admin-form {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 24px;
 }
 
 .admin-form label {
-    color: var(--color-cyan);
-    font-size: 0.85rem;
+    color: var(--color-primary) !important;
+    font-family: var(--font-display), 'Georgia', serif;
+    font-size: 0.82rem;
     font-weight: 600;
-    margin-bottom: 6px;
-    display: block;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.admin-form label::after {
+    content: "✦";
+    color: var(--color-primary);
+    font-size: 0.65rem;
+    opacity: 0.55;
+    display: inline-block;
+    animation: labelSparkle 3s infinite alternate;
+}
+
+@keyframes labelSparkle {
+    0% { opacity: 0.3; transform: scale(0.9); }
+    100% { opacity: 0.8; transform: scale(1.1); text-shadow: 0 0 4px var(--glow-primary); }
 }
 
 .admin-form input,
 .admin-form textarea,
 .admin-form select {
     width: 100%;
-    padding: 10px 15px;
-    background: rgba(76, 161, 175, 0.05);
-    border: 1px solid rgba(76, 161, 175, 0.3);
-    border-radius: 6px;
-    color: var(--color-white);
-    font-size: 0.95rem;
+    padding: 12px 18px;
+    background: rgba(9, 6, 18, 0.95);
+    border: 1px solid rgba(255, 215, 120, 0.28);
+    border-radius: 8px;
+    color: #e2b3ff; /* Gorgeous soft lavender value font color from the screenshot */
+    font-family: var(--font-fancy), var(--font-body), 'Georgia', serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    box-shadow: inset 0 0 10px rgba(212, 106, 174, 0.04);
+}
+
+.admin-form input::placeholder,
+.admin-form textarea::placeholder {
+    color: rgba(195, 175, 218, 0.35);
+    font-family: var(--font-body), 'Georgia', serif;
+    font-style: italic;
 }
 
 .admin-form input:focus,
-.admin-form textarea:focus {
+.admin-form textarea:focus,
+.admin-form select:focus {
     outline: none;
-    border-color: var(--color-gold);
+    border-color: var(--color-accent);
+    box-shadow: 0 0 18px rgba(212, 106, 174, 0.35), inset 0 0 8px rgba(212, 106, 174, 0.08);
+    color: #ffd778; /* Muted gold on focus */
+}
+
+/* Beautiful Feather Quill inside Textareas */
+.admin-form textarea {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='45' height='45' viewBox='0 0 40 40' fill='none'%3E%3Cpath d='M35 5C29 11 17 21 13 27C11.5 29.2 9 31.5 5 35C3 36.7 1.5 38.2 0.5 39.5C0.2 39.8 0.7 40.2 1 39.9C2.3 38.9 3.8 37.4 5.5 35.5C9.5 31.5 11.8 29 14 27.5C20 23.5 30 13 35 5Z' fill='url(%23featherGrad)' opacity='0.85'/%3E%3Cpath d='M1 39C4.5 35.5 10.5 30.5 16.5 25.5' stroke='%23ffd778' stroke-width='0.8' stroke-linecap='round' opacity='0.5'/%3E%3Cdefs%3E%3ClinearGradient id='featherGrad' x1='0%25' y1='100%25' x2='100%25' y2='0%25'%3E%3Cstop offset='0%25' stop-color='%23ffd778'/%3E%3Cstop offset='50%25' stop-color='%23d46aae'/%3E%3Cstop offset='100%25' stop-color='%235b2c75'/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: bottom 12px right 12px;
+    background-size: 38px 38px;
+    padding-right: 48px !important;
+    padding-bottom: 28px !important;
+    resize: none;
+    line-height: 1.6;
 }
 
 .admin-form-actions {
     display: flex;
     gap: 15px;
+    margin-top: 10px;
 }
+
 
 /* Split Layout */
 .admin-split-layout {
