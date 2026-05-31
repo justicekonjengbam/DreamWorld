@@ -6,7 +6,7 @@ import './Academy.css'
 import './AcademyStudents.css'
 
 function Academy() {
-    const { academyStudents, loading } = useContent()
+    const { academyStudents, loading, appSettings } = useContent()
 
     return (
         <div className="academy page">
@@ -26,7 +26,15 @@ function Academy() {
                         Your legend starts here.
                     </p>
                     <div className="academy-hero-btns">
-                        <Link to="/academy/enroll"><Button variant="primary">📜 Apply Now</Button></Link>
+                        {appSettings?.academy_open === false ? (
+                            <Link to="/academy/enroll">
+                                <Button variant="secondary" style={{ border: '1px solid rgba(255, 100, 100, 0.3)', color: '#ff9090' }}>
+                                    🔒 Enrollment Closed
+                                </Button>
+                            </Link>
+                        ) : (
+                            <Link to="/academy/enroll"><Button variant="primary">📜 Apply Now</Button></Link>
+                        )}
                         <Link to="/academy/students"><Button variant="secondary">🎓 Meet Our Students</Button></Link>
                     </div>
                 </div>
@@ -73,7 +81,13 @@ function Academy() {
                 {!loading && academyStudents.length === 0 ? (
                     <div className="academy-empty">
                         <p>🏫 No students yet — be the first to enroll!</p>
-                        <Link to="/academy/enroll" className="academy-enroll-link">📜 Apply Now</Link>
+                        {appSettings?.academy_open === false ? (
+                            <Link to="/academy/enroll" className="academy-enroll-link" style={{ color: '#ff9090' }}>
+                                🔒 Enrollment Closed
+                            </Link>
+                        ) : (
+                            <Link to="/academy/enroll" className="academy-enroll-link">📜 Apply Now</Link>
+                        )}
                     </div>
 
                 ) : (

@@ -9,7 +9,7 @@ import './Home.css'
 
 
 function Home() {
-  const { announcement, loading } = useContent()
+  const { announcement, loading, appSettings } = useContent()
 
   if (loading) return <div className="loading-state">Syncing with DreamWorld...</div>
 
@@ -50,7 +50,11 @@ function Home() {
           </p>
           <div className="hero-buttons animate-on-scroll delay-4">
             <Link to="/about"><Button variant="primary">Explore DreamWorld</Button></Link>
-            <Link to="/join"><Button variant="secondary">Join the Community</Button></Link>
+            <Link to="/join">
+              <Button variant="secondary">
+                {appSettings?.dreamworld_open === false ? '🔒 Join (Closed)' : 'Join the Community'}
+              </Button>
+            </Link>
           </div>
           <div className="hero-academy-btn animate-on-scroll delay-5">
             <Link to="/academy">

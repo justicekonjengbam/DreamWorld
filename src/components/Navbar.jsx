@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import { useContent } from '../context/ContentContext'
 import './Navbar.css'
 
 const DREAMWORLD_LINKS = [
@@ -25,9 +26,20 @@ const ACADEMY_LINKS = [
 function Navbar() {
   const location = useLocation()
   const [isOpen, setIsOpen] = useState(false)
+  const { appSettings } = useContent()
 
   const isAcademyPage = location.pathname.startsWith('/academy')
   const links = isAcademyPage ? ACADEMY_LINKS : DREAMWORLD_LINKS
+
+  const processedLinks = links.map(link => {
+    if (link.to === '/academy/enroll' && appSettings?.academy_open === false) {
+      return { ...link, label: 'Enroll (Closed)' }
+    }
+    if (link.to === '/join' && appSettings?.dreamworld_open === false) {
+      return { ...link, label: 'Join (Closed)' }
+    }
+    return link
+  })
 
   const isActive = (path, exact) => {
     if (exact) return location.pathname === path ? 'active' : ''
@@ -58,7 +70,7 @@ function Navbar() {
 
         {/* Desktop Links */}
         <ul className="navbar-menu">
-          {links.map(({ to, label, exact }) => (
+          {processedLinks.map(({ to, label, exact }) => (
             <li key={to + label}>
               <Link to={to} className={isActive(to, exact)}>{label}</Link>
             </li>
@@ -85,7 +97,7 @@ function Navbar() {
             )}
           </div>
           <ul className="drawer-links">
-            {links.map(({ to, label, exact }) => (
+            {processedLinks.map(({ to, label, exact }) => (
               <li key={to + label}>
                 <Link to={to} className={isActive(to, exact)} onClick={closeMenu}>{label}</Link>
               </li>

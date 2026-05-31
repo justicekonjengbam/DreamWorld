@@ -4,7 +4,7 @@ import SectionHeader from '../components/SectionHeader'
 import './AcademyStudents.css'
 
 function AcademyStudents() {
-    const { academyStudents, loading } = useContent()
+    const { academyStudents, loading, appSettings } = useContent()
 
     if (loading) return <div className="loading-state">Summoning the Academy Scrolls...</div>
 
@@ -125,9 +125,17 @@ function AcademyStudents() {
                 )}
 
                 <div className="academy-cta">
-                    <Link to="/academy">
-                        <button className="academy-join-btn">📜 Apply to the Academy</button>
-                    </Link>
+                    {appSettings?.academy_open === false ? (
+                        <Link to="/academy/enroll">
+                            <button className="academy-join-btn" style={{ background: 'rgba(255, 100, 100, 0.1)', border: '1px solid rgba(255, 100, 100, 0.3)', color: '#ff9090' }}>
+                                🔒 Enrollment Closed
+                            </button>
+                        </Link>
+                    ) : (
+                        <Link to="/academy/enroll">
+                            <button className="academy-join-btn">📜 Apply to the Academy</button>
+                        </Link>
+                    )}
                 </div>
             </div>
         </div>
