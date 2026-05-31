@@ -6,7 +6,7 @@ import Button from '../components/Button'
 import './AcademyEnroll.css'
 
 function AcademyEnroll() {
-    const { submitAcademyApplication } = useContent()
+    const { submitAcademyApplication, appSettings } = useContent()
 
     const [form, setForm] = useState({
         name: '',
@@ -121,23 +121,66 @@ function AcademyEnroll() {
 
                     {/* Form Card */}
                     <Card className="enroll-form-card" hover={false}>
-
-                        {/* Spam block message */}
-                        {spamBlocked && (
-                            <div className="ef-inline-warn">
-                                🕐 The Academy Scrolls require patience. You have already applied recently.
-                                Please wait 24 hours before applying again.
+                        {appSettings && appSettings.academy_open === false ? (
+                            <div className="closed-applications-message" style={{
+                              textAlign: 'center',
+                              padding: '30px 10px',
+                              display: 'flex',
+                              flexDirection: 'column',
+                              alignItems: 'center',
+                              gap: '15px'
+                            }}>
+                              <div style={{ fontSize: '3rem' }}>🔒</div>
+                              <h3 style={{
+                                fontFamily: 'var(--font-display), serif',
+                                color: 'var(--color-primary)',
+                                fontSize: '1.4rem',
+                                textTransform: 'uppercase',
+                                letterSpacing: '0.05em'
+                              }}>Enrollment Suspended</h3>
+                              <p style={{
+                                color: 'var(--color-text-sub)',
+                                fontSize: '1rem',
+                                lineHeight: '1.6',
+                                maxWidth: '320px',
+                                margin: '0 auto'
+                              }}>
+                                Enrollment scrolls for <strong>DreamWorld Academy</strong> are temporarily closed. The Academy is currently at maximum capacity or is undergoing administrative revisions.
+                              </p>
+                              <div style={{
+                                borderBottom: '1px solid rgba(255, 215, 120, 0.15)',
+                                width: '100%',
+                                margin: '10px 0'
+                              }} />
+                              <p style={{
+                                fontSize: '0.85rem',
+                                color: 'rgba(255, 215, 120, 0.65)',
+                                fontStyle: 'italic'
+                              }}>
+                                Check back soon or meet our current Academy students! 🎓
+                              </p>
+                              <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                                <Link to="/academy/students"><Button variant="secondary">Meet Our Students</Button></Link>
+                              </div>
                             </div>
-                        )}
+                        ) : (
+                            <>
+                                {/* Spam block message */}
+                                {spamBlocked && (
+                                    <div className="ef-inline-warn">
+                                        🕐 The Academy Scrolls require patience. You have already applied recently.
+                                        Please wait 24 hours before applying again.
+                                    </div>
+                                )}
 
-                        {/* Submit error */}
-                        {submitError && (
-                            <div className="ef-inline-error">
-                                ⚠️ {submitError}
-                            </div>
-                        )}
+                                {/* Submit error */}
+                                {submitError && (
+                                    <div className="ef-inline-error">
+                                        ⚠️ {submitError}
+                                    </div>
+                                )}
 
-                        <form onSubmit={handleSubmit} className="enroll-form">
+                                <form onSubmit={handleSubmit} className="enroll-form">
 
                             <div className="ef-row">
                                 <div className="ef-group">
@@ -241,6 +284,8 @@ function AcademyEnroll() {
                             </Button>
 
                         </form>
+                            </>
+                        )}
                     </Card>
 
                     {/* Sidebar */}

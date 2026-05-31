@@ -7,12 +7,14 @@ function SpecialThanks() {
 
     // 1. Royal Tributes: Check for 'Royal' in themes from the Sponsors list
     const royalTributes = sponsors.filter(s =>
-        (s.themes && s.themes.includes('Royal')) ||
-        (s.name.toLowerCase().includes('peter saam'))
+        s.id !== 'system_settings' && (
+            (s.themes && s.themes.includes('Royal')) ||
+            (s.name.toLowerCase().includes('peter saam'))
+        )
     )
 
     // 2. Standard Sponsors: All other sponsors
-    const standardSponsors = sponsors.filter(s => !royalTributes.some(r => r.id === s.id))
+    const standardSponsors = sponsors.filter(s => s.id !== 'system_settings' && !royalTributes.some(r => r.id === s.id))
 
     return (
         <div className="special-thanks">

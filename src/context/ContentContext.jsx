@@ -23,6 +23,10 @@ export const ContentProvider = ({ children }) => {
     // Academy states
     const [academyApplications, setAcademyApplications] = useState([])
     const [academyStudents, setAcademyStudents] = useState([])
+    const [appSettings, setAppSettings] = useState({
+        dreamworld_open: true,
+        academy_open: true
+    })
     const [announcement, setAnnouncement] = useState({
         title: 'Welcome to DreamWorld! 🌟',
         date: 'January 18, 2026',
@@ -93,6 +97,20 @@ export const ContentProvider = ({ children }) => {
                     ...s,
                     themes: typeof s.themes === 'string' ? s.themes.split(',').map(t => t.trim()).filter(Boolean) : []
                 })))
+
+                // Extract system settings if exists
+                const settingsRow = sData.find(s => s.id === 'system_settings')
+                if (settingsRow) {
+                    try {
+                        const parsed = typeof settingsRow.bio === 'string' ? JSON.parse(settingsRow.bio) : settingsRow.bio
+                        setAppSettings({
+                            dreamworld_open: parsed?.dreamworld_open !== false,
+                            academy_open: parsed?.academy_open !== false
+                        })
+                    } catch (e) {
+                        console.error("Failed to parse app settings:", e)
+                    }
+                }
             }
 
             // 4. Fetch Events
@@ -701,6 +719,22 @@ export const ContentProvider = ({ children }) => {
         }
     }
 
+    const updateAppSettings = async (settings) => {
+        const payload = {
+            id: "system_settings",
+            name: "System Settings",
+            title: "config",
+            avatar: "none",
+            bio: JSON.stringify(settings),
+            themes: "",
+            order_index: 999
+        }
+        if (await saveToSupabase('sponsors', payload)) {
+            setAppSettings(settings)
+            fetchData()
+        }
+    }
+
     const sponsorships = useMemo(() => {
         const qSpons = quests.filter(q => parseFloat(q.amountNeeded) > 0).map(q => ({ ...q, type: 'quest', name: q.title, description: q.purpose }));
         const eSpons = events.filter(e => parseFloat(e.amountNeeded) > 0).map(e => ({ ...e, type: 'event', name: e.title, description: e.description }));
@@ -731,7 +765,10 @@ export const ContentProvider = ({ children }) => {
             declineApplication,
             deleteAcademyApplication,
             updateAcademyStudent,
-            deleteAcademyStudent
+            deleteAcademyStudent,
+            // App settings
+            appSettings,
+            updateAppSettings
         }}>
 
             {children}

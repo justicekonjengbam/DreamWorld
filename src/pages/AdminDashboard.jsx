@@ -30,7 +30,8 @@ function AdminDashboard() {
         academyApplications, academyStudents,
         acceptApplication, declineApplication,
         deleteAcademyApplication,
-        updateAcademyStudent, deleteAcademyStudent
+        updateAcademyStudent, deleteAcademyStudent,
+        appSettings, updateAppSettings
     } = useContent()
 
 
@@ -51,6 +52,10 @@ function AdminDashboard() {
     })
     const [donationFormData, setDonationFormData] = useState({
         name: '', amount: '', type: 'manual', sponsorshipId: '', sponsorshipType: 'general', message: ''
+    })
+    const [settingsForm, setSettingsForm] = useState({
+        dreamworld_open: true,
+        academy_open: true
     })
 
     const [editingId, setEditingId] = useState(null)
@@ -90,6 +95,12 @@ function AdminDashboard() {
             setAnnouncementFormData(announcement)
         }
     }, [loading, announcement])
+
+    useEffect(() => {
+        if (appSettings) {
+            setSettingsForm(appSettings)
+        }
+    }, [appSettings])
 
     // Monitor Supabase Connectivity (System Health)
     useEffect(() => {
@@ -308,6 +319,8 @@ function AdminDashboard() {
                     </button>
                     <button className={`nav-item ${activeTab === 'acad-students' ? 'active' : ''}`} onClick={() => { setActiveTab('acad-students'); resetForms() }}
                         style={{ color: '#7ec8e3' }}>🎓 Academy Students</button>
+                    <button className={`nav-item ${activeTab === 'app-settings' ? 'active' : ''}`} onClick={() => { setActiveTab('app-settings'); resetForms() }}
+                        style={{ color: '#ffd778' }}>⚙️ App Settings</button>
                     <button className={`nav-item ${activeTab === 'status' ? 'active' : ''}`} onClick={() => { setActiveTab('status'); resetForms() }}>🛡️ System Health</button>
                 </nav>
 
@@ -759,7 +772,7 @@ Your task today is to complete Chapter 2 of Advanced Magic. Focus on the breathi
                                 </form>
                             </Card>
                             <div className="admin-list">
-                                {sponsors.map(s => (
+                                {sponsors.filter(s => s.id !== 'system_settings').map(s => (
                                     <Card key={s.id} className="admin-item-card">
                                         <div className="admin-member-preview">
                                             <Avatar
@@ -1430,6 +1443,74 @@ Your task today is to complete Chapter 2 of Advanced Magic. Focus on the breathi
                                 <Button onClick={handleSync} variant="secondary" disabled={syncing}>
                                     {syncing ? '⌛ Refreshing...' : '🔄 Refresh UI'}
                                 </Button>
+                            </Card>
+                        </div>
+                    </div>
+                )}
+
+                {activeTab === 'app-settings' && (
+                    <div className="admin-section animate-fade">
+                        <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+                            <Card className="admin-form-card" hover={false}>
+                                <h3>⚙️ Application Toggles</h3>
+                                <p style={{
+                                    textAlign: 'center',
+                                    color: 'var(--color-text-sub)',
+                                    marginBottom: '25px',
+                                    fontSize: '0.9rem'
+                                }}>
+                                    Control whether new membership petitions and Academy enrollments are open or closed globally.
+                                </p>
+                                <form onSubmit={(e) => {
+                                    e.preventDefault();
+                                    updateAppSettings(settingsForm);
+                                    alert('✅ Application settings updated successfully and synced globally!');
+                                }} className="admin-form">
+                                    
+                                    <div className="form-group" style={{ 
+                                        background: 'rgba(255,255,255,0.03)', 
+                                        padding: '15px', 
+                                        borderRadius: '8px',
+                                        border: '1px solid rgba(255, 215, 120, 0.1)',
+                                        marginBottom: '10px'
+                                    }}>
+                                        <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', cursor: 'pointer' }}>
+                                            <span style={{ fontSize: '1.05rem' }}>⭐ DreamWorld Membership Applications</span>
+                                            <input 
+                                                type="checkbox" 
+                                                checked={settingsForm.dreamworld_open} 
+                                                onChange={(e) => setSettingsForm({ ...settingsForm, dreamworld_open: e.target.checked })} 
+                                                style={{ width: '20px', height: '20px', cursor: 'pointer' }}
+                                            />
+                                        </label>
+                                        <p style={{ fontSize: '0.8rem', color: '#8c95a5', marginTop: '6px' }}>
+                                            If unchecked, the Join Dreamer form on <code>/join</code> will be replaced with a closed gates notice.
+                                        </p>
+                                    </div>
+
+                                    <div className="form-group" style={{ 
+                                        background: 'rgba(255,255,255,0.03)', 
+                                        padding: '15px', 
+                                        borderRadius: '8px',
+                                        border: '1px solid rgba(255, 215, 120, 0.1)',
+                                        marginBottom: '20px'
+                                    }}>
+                                        <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', cursor: 'pointer' }}>
+                                            <span style={{ fontSize: '1.05rem' }}>🏫 Academy Enrollment Applications</span>
+                                            <input 
+                                                type="checkbox" 
+                                                checked={settingsForm.academy_open} 
+                                                onChange={(e) => setSettingsForm({ ...settingsForm, academy_open: e.target.checked })} 
+                                                style={{ width: '20px', height: '20px', cursor: 'pointer' }}
+                                            />
+                                        </label>
+                                        <p style={{ fontSize: '0.8rem', color: '#8c95a5', marginTop: '6px' }}>
+                                            If unchecked, the Academy Enrollment Scroll form on <code>/academy/enroll</code> will display a capacity/closed notice.
+                                        </p>
+                                    </div>
+
+                                    <Button type="submit" variant="primary">🛡️ Save &amp; Broadcast Settings</Button>
+                                </form>
                             </Card>
                         </div>
                     </div>

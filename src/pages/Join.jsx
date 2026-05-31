@@ -6,7 +6,7 @@ import Button from '../components/Button'
 import './Join.css'
 
 function Join() {
-  const { submitDreamerApplication, roles } = useContent()
+  const { submitDreamerApplication, roles, appSettings } = useContent()
 
   // Dreamer Form State
   const [dreamerForm, setDreamerForm] = useState({
@@ -133,7 +133,46 @@ function Join() {
 
           <div className="join-content">
             <Card className="join-form-card">
-              {!dreamerSubmitted ? (
+              {appSettings && appSettings.dreamworld_open === false ? (
+                <div className="closed-applications-message" style={{
+                  textAlign: 'center',
+                  padding: '40px 20px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '15px'
+                }}>
+                  <div style={{ fontSize: '3rem' }}>🔒</div>
+                  <h3 style={{
+                    fontFamily: 'var(--font-display), serif',
+                    color: 'var(--color-primary)',
+                    fontSize: '1.4rem',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em'
+                  }}>Applications Temporarily Closed</h3>
+                  <p style={{
+                    color: 'var(--color-text-sub)',
+                    fontSize: '1rem',
+                    lineHeight: '1.6',
+                    maxWidth: '320px',
+                    margin: '0 auto'
+                  }}>
+                    The Gates of DreamWorld are currently closed to new applicant petitions. Feel free to explore our active quests or meet our current fellowship of Dreamers.
+                  </p>
+                  <div style={{
+                    borderBottom: '1px solid rgba(255, 215, 120, 0.15)',
+                    width: '100%',
+                    margin: '10px 0'
+                  }} />
+                  <p style={{
+                    fontSize: '0.85rem',
+                    color: 'rgba(255, 215, 120, 0.65)',
+                    fontStyle: 'italic'
+                  }}>
+                    The Council will reopen registration when the cosmic alignments shift. 🌌
+                  </p>
+                </div>
+              ) : !dreamerSubmitted ? (
                 <form onSubmit={handleDreamerSubmit} className="join-form">
                   <div className="form-group">
                     <label htmlFor="dreamer-name">Full Name *</label>
