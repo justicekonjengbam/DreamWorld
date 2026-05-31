@@ -1456,8 +1456,9 @@ Your task today is to complete Chapter 2 of Advanced Magic. Focus on the breathi
                                 <p style={{
                                     textAlign: 'center',
                                     color: 'var(--color-text-sub)',
-                                    marginBottom: '25px',
-                                    fontSize: '0.9rem'
+                                    marginBottom: '30px',
+                                    fontSize: '0.92rem',
+                                    lineHeight: '1.6'
                                 }}>
                                     Control whether new membership petitions and Academy enrollments are open or closed globally.
                                 </p>
@@ -1467,49 +1468,57 @@ Your task today is to complete Chapter 2 of Advanced Magic. Focus on the breathi
                                     alert('✅ Application settings updated successfully and synced globally!');
                                 }} className="admin-form">
                                     
-                                    <div className="form-group" style={{ 
-                                        background: 'rgba(255,255,255,0.03)', 
-                                        padding: '15px', 
-                                        borderRadius: '8px',
-                                        border: '1px solid rgba(255, 215, 120, 0.1)',
-                                        marginBottom: '10px'
-                                    }}>
-                                        <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', cursor: 'pointer' }}>
-                                            <span style={{ fontSize: '1.05rem' }}>⭐ DreamWorld Membership Applications</span>
-                                            <input 
-                                                type="checkbox" 
-                                                checked={settingsForm.dreamworld_open} 
-                                                onChange={(e) => setSettingsForm({ ...settingsForm, dreamworld_open: e.target.checked })} 
-                                                style={{ width: '20px', height: '20px', cursor: 'pointer' }}
-                                            />
-                                        </label>
-                                        <p style={{ fontSize: '0.8rem', color: '#8c95a5', marginTop: '6px' }}>
-                                            If unchecked, the Join Dreamer form on <code>/join</code> will be replaced with a closed gates notice.
+                                    {/* 1. Membership Applications Card */}
+                                    <div className={`settings-toggle-card ${settingsForm.dreamworld_open ? 'is-open' : 'is-closed'}`}>
+                                        <div className="toggle-header">
+                                            <div className="toggle-info">
+                                                <h4 className="toggle-title">⭐ DreamWorld Membership</h4>
+                                                <span className={`toggle-status-badge ${settingsForm.dreamworld_open ? 'status-open' : 'status-closed'}`}>
+                                                    {settingsForm.dreamworld_open ? '🟢 Gates Open & Active' : '🔒 Gates Closed / Locked'}
+                                                </span>
+                                            </div>
+                                            <label className="magic-switch">
+                                                <input 
+                                                    type="checkbox" 
+                                                    className="magic-switch-input"
+                                                    checked={settingsForm.dreamworld_open} 
+                                                    onChange={(e) => setSettingsForm({ ...settingsForm, dreamworld_open: e.target.checked })} 
+                                                />
+                                                <span className="magic-switch-slider"></span>
+                                            </label>
+                                        </div>
+                                        <p className="toggle-description">
+                                            If closed, the Join Dreamer form on <code>/join</code> is replaced by a closed gates notice.
                                         </p>
                                     </div>
 
-                                    <div className="form-group" style={{ 
-                                        background: 'rgba(255,255,255,0.03)', 
-                                        padding: '15px', 
-                                        borderRadius: '8px',
-                                        border: '1px solid rgba(255, 215, 120, 0.1)',
-                                        marginBottom: '20px'
-                                    }}>
-                                        <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', cursor: 'pointer' }}>
-                                            <span style={{ fontSize: '1.05rem' }}>🏫 Academy Enrollment Applications</span>
-                                            <input 
-                                                type="checkbox" 
-                                                checked={settingsForm.academy_open} 
-                                                onChange={(e) => setSettingsForm({ ...settingsForm, academy_open: e.target.checked })} 
-                                                style={{ width: '20px', height: '20px', cursor: 'pointer' }}
-                                            />
-                                        </label>
-                                        <p style={{ fontSize: '0.8rem', color: '#8c95a5', marginTop: '6px' }}>
-                                            If unchecked, the Academy Enrollment Scroll form on <code>/academy/enroll</code> will display a capacity/closed notice.
+                                    {/* 2. Academy Enrollment Card */}
+                                    <div className={`settings-toggle-card ${settingsForm.academy_open ? 'is-open' : 'is-closed'}`}>
+                                        <div className="toggle-header">
+                                            <div className="toggle-info">
+                                                <h4 className="toggle-title">🏫 Academy Enrollment</h4>
+                                                <span className={`toggle-status-badge ${settingsForm.academy_open ? 'status-open' : 'status-closed'}`}>
+                                                    {settingsForm.academy_open ? '🟢 Enrollment Open' : '🔒 Enrollment Suspended'}
+                                                </span>
+                                            </div>
+                                            <label className="magic-switch">
+                                                <input 
+                                                    type="checkbox" 
+                                                    className="magic-switch-input"
+                                                    checked={settingsForm.academy_open} 
+                                                    onChange={(e) => setSettingsForm({ ...settingsForm, academy_open: e.target.checked })} 
+                                                />
+                                                <span className="magic-switch-slider"></span>
+                                            </label>
+                                        </div>
+                                        <p className="toggle-description">
+                                            If suspended, the Enrollment Scroll form on <code>/academy/enroll</code> shows a capacity notice.
                                         </p>
                                     </div>
 
-                                    <Button type="submit" variant="primary">🛡️ Save &amp; Broadcast Settings</Button>
+                                    <div style={{ marginTop: '10px' }}>
+                                        <Button type="submit" variant="primary">🛡️ Save &amp; Broadcast Settings</Button>
+                                    </div>
                                 </form>
                             </Card>
                         </div>
