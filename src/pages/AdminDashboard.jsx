@@ -686,14 +686,14 @@ Your task today is to complete Chapter 2 of Advanced Magic. Focus on the breathi
                                                     points: c.points || 0,
                                                     joinedDate: c.joinedDate || '',
                                                     order_index: c.order_index || 0,
-                                                    stat_knowledge: c.stats?.knowledge || 50,
-                                                    stat_discipline: c.stats?.discipline || 50,
-                                                    stat_charisma: c.stats?.charisma || 50,
-                                                    stat_creativity: c.stats?.creativity || 50,
-                                                    stat_courage: c.stats?.courage || 50,
-                                                    stat_physique: c.stats?.physique || 50,
-                                                    stat_empathy: c.stats?.empathy || 50,
-                                                    stat_essence: c.stats?.essence || 50
+                                                    stat_knowledge: c.stats?.knowledge ?? 50,
+                                                    stat_discipline: c.stats?.discipline ?? 50,
+                                                    stat_charisma: c.stats?.charisma ?? 50,
+                                                    stat_creativity: c.stats?.creativity ?? 50,
+                                                    stat_courage: c.stats?.courage ?? 50,
+                                                    stat_physique: c.stats?.physique ?? 50,
+                                                    stat_empathy: c.stats?.empathy ?? 50,
+                                                    stat_essence: c.stats?.essence ?? 50
                                                 })
                                             }}>✏️</button>
                                             <button onClick={() => handleMemberDelete(c.id)}>🗑️</button>
@@ -1366,14 +1366,14 @@ Your task today is to complete Chapter 2 of Advanced Magic. Focus on the breathi
                                                 setStudentFormData({ 
                                                     ...s, 
                                                     coverImage: s.cover_image || '',
-                                                    stat_knowledge: s.stats?.knowledge || 50,
-                                                    stat_discipline: s.stats?.discipline || 50,
-                                                    stat_charisma: s.stats?.charisma || 50,
-                                                    stat_creativity: s.stats?.creativity || 50,
-                                                    stat_courage: s.stats?.courage || 50,
-                                                    stat_physique: s.stats?.physique || 50,
-                                                    stat_empathy: s.stats?.empathy || 50,
-                                                    stat_essence: s.stats?.essence || 50,
+                                                    stat_knowledge: s.stats?.knowledge ?? 50,
+                                                    stat_discipline: s.stats?.discipline ?? 50,
+                                                    stat_charisma: s.stats?.charisma ?? 50,
+                                                    stat_creativity: s.stats?.creativity ?? 50,
+                                                    stat_courage: s.stats?.courage ?? 50,
+                                                    stat_physique: s.stats?.physique ?? 50,
+                                                    stat_empathy: s.stats?.empathy ?? 50,
+                                                    stat_essence: s.stats?.essence ?? 50,
                                                     passcode: s.passcode || '',
                                                     theme_color: s.theme_color || '#141932',
                                                     daily_task: s.daily_task || ''
