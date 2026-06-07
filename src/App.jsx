@@ -30,6 +30,7 @@ import PortalDashboard from './portal/PortalDashboard'
 import AcademyStudentDetail from './pages/AcademyStudentDetail'
 import AcademyEnroll from './pages/AcademyEnroll'
 import Settings from './pages/Settings'
+import Songs from './pages/Songs'
 import './App.css'
 
 
@@ -41,6 +42,7 @@ function App() {
   const location = useLocation()
   const isHomePage = location.pathname === '/'
   const isPortal = location.pathname.startsWith('/portal')
+  const isSongsPage = location.pathname === '/songs'
 
   const [hasEntered, setHasEntered] = useState(() => {
     return sessionStorage.getItem('dreamworld_entered') === 'true'
@@ -59,6 +61,9 @@ function App() {
   // Global click sound for all clickable elements
   useEffect(() => {
     const handleClick = (e) => {
+      // Block click sounds and background audio trigger on Songs page
+      if (isSongsPage) return
+
       // Start background ambient music on first user interaction anywhere on the document (e.g. inside the Portal)
       if (!shouldStartAudio) {
         setShouldStartAudio(true)
@@ -76,10 +81,9 @@ function App() {
       }
     }
 
-
     document.addEventListener('click', handleClick)
     return () => document.removeEventListener('click', handleClick)
-  }, [isSoundMuted, buttonVolume, shouldStartAudio])
+  }, [isSoundMuted, buttonVolume, shouldStartAudio, isSongsPage])
 
 
 
@@ -121,6 +125,7 @@ function App() {
               <Route path="/academy/students/:id" element={<AcademyStudentDetail />} />
               <Route path="/thanks" element={<SpecialThanks />} />
               <Route path="/settings" element={<Settings />} />
+              <Route path="/songs" element={<Songs />} />
 
               {/* 404 Route */}
               <Route path="*" element={<Navigate to="/" replace />} />
@@ -129,7 +134,7 @@ function App() {
           {!isPortal && !isHomePage && <Footer />}
         </div>
 
-        <AudioPlayer shouldStart={shouldStartAudio} />
+        <AudioPlayer shouldStart={shouldStartAudio} isSongsPage={isSongsPage} />
       </div>
     </ContentProvider>
   )

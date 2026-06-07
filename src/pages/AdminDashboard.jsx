@@ -322,6 +322,7 @@ function AdminDashboard() {
                     <button className={`nav-item ${activeTab === 'app-settings' ? 'active' : ''}`} onClick={() => { setActiveTab('app-settings'); resetForms() }}
                         style={{ color: '#ffd778' }}>⚙️ App Settings</button>
                     <button className={`nav-item ${activeTab === 'status' ? 'active' : ''}`} onClick={() => { setActiveTab('status'); resetForms() }}>🛡️ System Health</button>
+                    <button className={`nav-item ${activeTab === 'songs' ? 'active' : ''}`} onClick={() => { setActiveTab('songs'); resetForms() }}>🎵 Dreamworld Songs</button>
                 </nav>
 
 
@@ -1520,6 +1521,98 @@ Your task today is to complete Chapter 2 of Advanced Magic. Focus on the breathi
                                         <Button type="submit" variant="primary">🛡️ Save &amp; Broadcast Settings</Button>
                                     </div>
                                 </form>
+                            </Card>
+                        </div>
+                    </div>
+                )}
+
+                {activeTab === 'songs' && (
+                    <div className="admin-section animate-fade">
+                        <div style={{ maxWidth: '750px', margin: '0 auto' }}>
+                            <Card className="admin-form-card" hover={false}>
+                                <h3>🎵 Dreamworld Songs Management</h3>
+                                <p style={{
+                                    textAlign: 'center',
+                                    color: 'var(--color-text-sub)',
+                                    marginBottom: '30px',
+                                    fontSize: '0.95rem',
+                                    lineHeight: '1.6'
+                                }}>
+                                    Follow these steps to manually upload and configure song files on your website.
+                                </p>
+
+                                <div style={{ 
+                                    background: 'rgba(0,0,0,0.25)', 
+                                    padding: '25px', 
+                                    borderRadius: '12px', 
+                                    border: '1px solid rgba(255, 215, 120, 0.15)', 
+                                    fontSize: '1rem', 
+                                    lineHeight: '1.8' 
+                                }}>
+                                    <p style={{ color: 'var(--color-primary)', fontWeight: 'bold', marginBottom: '8px', fontSize: '1.1rem' }}>
+                                        📁 Step 1: Upload the Audio File
+                                    </p>
+                                    <p style={{ marginLeft: '20px', marginBottom: '20px', color: 'var(--color-text-sub)' }}>
+                                        Copy your <code>.mp3</code> audio track into the public directory:<br />
+                                        <code>public/songs/your-song.mp3</code><br />
+                                        <small style={{ color: '#ccc', fontStyle: 'italic' }}>(Create the "songs" folder inside "public" if it doesn't exist yet.)</small>
+                                    </p>
+
+                                    <p style={{ color: 'var(--color-primary)', fontWeight: 'bold', marginBottom: '8px', fontSize: '1.1rem' }}>
+                                        🖼️ Step 2: Add an Album Cover
+                                    </p>
+                                    <p style={{ marginLeft: '20px', marginBottom: '20px', color: 'var(--color-text-sub)' }}>
+                                        Place a square cover image (JPEG or PNG) into the public directory:<br />
+                                        <code>public/covers/your-cover.png</code><br />
+                                        <small style={{ color: '#ccc', fontStyle: 'italic' }}>(Or simply reuse any of the beautiful existing background/card images inside the public folder, e.g., <code>/world-tree.png</code>.)</small>
+                                    </p>
+
+                                    <p style={{ color: 'var(--color-primary)', fontWeight: 'bold', marginBottom: '8px', fontSize: '1.1rem' }}>
+                                        📝 Step 3: Register Track details in songs.js
+                                    </p>
+                                    <p style={{ marginLeft: '20px', marginBottom: '15px', color: 'var(--color-text-sub)' }}>
+                                        Open the file <code>src/data/songs.js</code> and add your new song details to the <code>initialSongs</code> list:
+                                    </p>
+                                    <pre style={{ 
+                                        background: '#090612', 
+                                        padding: '18px', 
+                                        borderRadius: '8px', 
+                                        border: '1px solid rgba(255, 215, 120, 0.1)', 
+                                        overflowX: 'auto', 
+                                        fontSize: '0.85rem', 
+                                        color: '#e2b3ff', 
+                                        fontStyle: 'normal',
+                                        fontFamily: 'monospace',
+                                        lineHeight: '1.5'
+                                    }}>{`  {
+    id: 'my-custom-track-1',
+    title: 'The Whispering Forest',
+    artist: 'Mystic Scribe',
+    album: 'Sounds of DreamWorld',
+    duration: '3:45',
+    src: '/songs/your-song.mp3',
+    cover: '/covers/your-cover.png',
+    genre: 'Cinematic / Instrumental',
+    addedAt: '2026-06-07'
+  }`}
+                                    </pre>
+                                </div>
+
+                                <div style={{ 
+                                    marginTop: '25px', 
+                                    padding: '15px', 
+                                    background: 'rgba(255, 110, 97, 0.08)', 
+                                    border: '1px solid rgba(255, 110, 97, 0.25)', 
+                                    borderRadius: '8px',
+                                    display: 'flex',
+                                    alignItems: 'flex-start',
+                                    gap: '12px'
+                                }}>
+                                    <span style={{ fontSize: '1.3rem' }}>🔒</span>
+                                    <p style={{ margin: 0, fontSize: '0.88rem', color: '#ff8a80', lineHeight: '1.5' }}>
+                                        <strong>Download Prevention Activated:</strong> To protect your audio assets, the Songs page blocks right-clicks (context menu) and disables image dragging. The audio player utilizes a custom-built interface and keeps the HTML5 <code>&lt;audio&gt;</code> element hidden, making direct song downloads extremely difficult for regular visitors.
+                                    </p>
+                                </div>
                             </Card>
                         </div>
                     </div>

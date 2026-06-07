@@ -11,6 +11,7 @@ const DREAMWORLD_LINKS = [
   { to: '/characters', label: 'Dreamers' },
   { to: '/quests', label: 'Quests' },
   { to: '/events', label: 'Events' },
+  { to: '/songs', label: 'Songs' },
   { to: '/join', label: 'Join' },
   { to: '/funders', label: 'Support' },
   { to: '/thanks', label: 'Sponsors' },
