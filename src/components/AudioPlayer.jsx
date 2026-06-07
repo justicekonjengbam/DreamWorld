@@ -120,15 +120,17 @@ function AudioPlayer({ shouldStart, isSongsPage }) {
       <audio ref={audio1Ref} src="/Music1.mp3" preload="auto"></audio>
       <audio ref={audio2Ref} src="/Music2.mp3" preload="auto"></audio>
       
-      <div className="audio-controls">
-        <button 
-          onClick={toggleMute} 
-          className="audio-btn"
-          aria-label={isSoundMuted ? 'Unmute all sounds' : 'Mute all sounds'}
-        >
-          {isSoundMuted ? '🔇' : '🔊'}
-        </button>
-      </div>
+      {!isSongsPage && (
+        <div className="audio-controls">
+          <button 
+            onClick={toggleMute} 
+            className="audio-btn"
+            aria-label={isSoundMuted ? 'Unmute all sounds' : 'Mute all sounds'}
+          >
+            {isSoundMuted ? '🔇' : '🔊'}
+          </button>
+        </div>
+      )}
     </>
   )
 }
