@@ -787,4 +787,53 @@
 
 .magic-switch:hover .magic-switch-slider {
     border-color: var(--color-accent) !important;
+}
+
+/* Base Form Row Layout to prevent dependency on other stylesheets */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+/* Dreamer Stats Grid Layout */
+.admin-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.admin-stats-grid .form-group {
+    margin: 0 !important;
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-stats-grid label {
+    font-size: 0.75rem !important;
+    margin-bottom: 6px !important;
+    color: var(--color-cyan) !important;
+    font-family: var(--font-display), 'Georgia', serif;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.admin-stats-grid input {
+    padding: 8px 12px !important;
+    font-size: 1.05rem !important;
+    text-align: center;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+}
+
+@media (max-width: 480px) {
+    .admin-stats-grid {
+        grid-template-columns: 1fr;
+    }
 }

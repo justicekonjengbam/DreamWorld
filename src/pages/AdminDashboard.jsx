@@ -59,6 +59,7 @@ function AdminDashboard() {
     const [printingDreamer, setPrintingDreamer] = useState(null)
     const [printType, setPrintType] = useState(null) // 'id' or 'cert'
     const [syncing, setSyncing] = useState(false)
+    const [xpAdjustAmount, setXpAdjustAmount] = useState('')
 
 
     useEffect(() => {
@@ -136,6 +137,7 @@ function AdminDashboard() {
         setDonationFormData({
             name: '', amount: '', type: 'manual', sponsorshipId: '', sponsorshipType: 'general', message: ''
         })
+        setXpAdjustAmount('')
     }
 
     // Submit Handlers
@@ -607,15 +609,15 @@ Your task today is to complete Chapter 2 of Advanced Magic. Focus on the breathi
                                     </div>
                                     <div className="admin-stats-editor" style={{ background: 'rgba(0,0,0,0.2)', padding: '15px', borderRadius: '8px', margin: '15px 0' }}>
                                         <h4 style={{ color: 'var(--color-cyan)', marginBottom: '10px' }}>Dreamer Stats (1-100)</h4>
-                                        <div className="form-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
-                                            <div className="form-group" style={{ margin: 0 }}><label style={{ fontSize: '0.75rem' }}>Knowledge</label><input type="number" min="0" max="100" value={memberFormData.stat_knowledge} onChange={(e) => setMemberFormData({ ...memberFormData, stat_knowledge: e.target.value })} /></div>
-                                            <div className="form-group" style={{ margin: 0 }}><label style={{ fontSize: '0.75rem' }}>Discipline</label><input type="number" min="0" max="100" value={memberFormData.stat_discipline} onChange={(e) => setMemberFormData({ ...memberFormData, stat_discipline: e.target.value })} /></div>
-                                            <div className="form-group" style={{ margin: 0 }}><label style={{ fontSize: '0.75rem' }}>Charisma</label><input type="number" min="0" max="100" value={memberFormData.stat_charisma} onChange={(e) => setMemberFormData({ ...memberFormData, stat_charisma: e.target.value })} /></div>
-                                            <div className="form-group" style={{ margin: 0 }}><label style={{ fontSize: '0.75rem' }}>Creativity</label><input type="number" min="0" max="100" value={memberFormData.stat_creativity} onChange={(e) => setMemberFormData({ ...memberFormData, stat_creativity: e.target.value })} /></div>
-                                            <div className="form-group" style={{ margin: 0 }}><label style={{ fontSize: '0.75rem' }}>Courage</label><input type="number" min="0" max="100" value={memberFormData.stat_courage} onChange={(e) => setMemberFormData({ ...memberFormData, stat_courage: e.target.value })} /></div>
-                                            <div className="form-group" style={{ margin: 0 }}><label style={{ fontSize: '0.75rem' }}>Physique</label><input type="number" min="0" max="100" value={memberFormData.stat_physique} onChange={(e) => setMemberFormData({ ...memberFormData, stat_physique: e.target.value })} /></div>
-                                            <div className="form-group" style={{ margin: 0 }}><label style={{ fontSize: '0.75rem' }}>Empathy</label><input type="number" min="0" max="100" value={memberFormData.stat_empathy} onChange={(e) => setMemberFormData({ ...memberFormData, stat_empathy: e.target.value })} /></div>
-                                            <div className="form-group" style={{ margin: 0 }}><label style={{ fontSize: '0.75rem' }}>Essence</label><input type="number" min="0" max="100" value={memberFormData.stat_essence} onChange={(e) => setMemberFormData({ ...memberFormData, stat_essence: e.target.value })} /></div>
+                                        <div className="admin-stats-grid">
+                                            <div className="form-group"><label>Knowledge</label><input type="number" min="0" max="100" value={memberFormData.stat_knowledge} onChange={(e) => setMemberFormData({ ...memberFormData, stat_knowledge: e.target.value })} /></div>
+                                            <div className="form-group"><label>Discipline</label><input type="number" min="0" max="100" value={memberFormData.stat_discipline} onChange={(e) => setMemberFormData({ ...memberFormData, stat_discipline: e.target.value })} /></div>
+                                            <div className="form-group"><label>Charisma</label><input type="number" min="0" max="100" value={memberFormData.stat_charisma} onChange={(e) => setMemberFormData({ ...memberFormData, stat_charisma: e.target.value })} /></div>
+                                            <div className="form-group"><label>Creativity</label><input type="number" min="0" max="100" value={memberFormData.stat_creativity} onChange={(e) => setMemberFormData({ ...memberFormData, stat_creativity: e.target.value })} /></div>
+                                            <div className="form-group"><label>Courage</label><input type="number" min="0" max="100" value={memberFormData.stat_courage} onChange={(e) => setMemberFormData({ ...memberFormData, stat_courage: e.target.value })} /></div>
+                                            <div className="form-group"><label>Physique</label><input type="number" min="0" max="100" value={memberFormData.stat_physique} onChange={(e) => setMemberFormData({ ...memberFormData, stat_physique: e.target.value })} /></div>
+                                            <div className="form-group"><label>Empathy</label><input type="number" min="0" max="100" value={memberFormData.stat_empathy} onChange={(e) => setMemberFormData({ ...memberFormData, stat_empathy: e.target.value })} /></div>
+                                            <div className="form-group"><label>Essence</label><input type="number" min="0" max="100" value={memberFormData.stat_essence} onChange={(e) => setMemberFormData({ ...memberFormData, stat_essence: e.target.value })} /></div>
                                         </div>
                                     </div>
                                     <Button type="submit" variant="primary">{editingId ? 'Update' : 'Add'} Dreamer</Button>
