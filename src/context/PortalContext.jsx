@@ -29,8 +29,7 @@ export const PortalProvider = ({ children }) => {
 
     const fetchUser = async (id, type) => {
         try {
-            const table = type === 'dreamer' ? 'dreamers' : 'academy_students'
-            const { data, error } = await supabase.from(table).select('*').eq('id', id).single()
+            const { data, error } = await supabase.from('dreamers').select('*').eq('id', id).single()
 
             if (error) throw error
 
@@ -72,18 +71,7 @@ export const PortalProvider = ({ children }) => {
                 return { success: true, isCreator }
             }
 
-            // Check academy students
-            const { data: students, error: sError } = await supabase.from('academy_students').select('*').eq('passcode', passcode)
-            if (sError) throw sError
 
-            if (students && students.length > 0) {
-                const student = students[0]
-                setUser({ ...student, type: 'student' })
-                localStorage.setItem('dw_portal_user_id', student.id)
-                localStorage.setItem('dw_portal_user_type', 'student')
-                setLoading(false)
-                return { success: true }
-            }
 
             setLoading(false)
             return { success: false, error: 'Invalid passcode' }

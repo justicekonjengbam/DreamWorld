@@ -56,14 +56,6 @@ function Home() {
               </Button>
             </Link>
           </div>
-          <div className="hero-academy-btn animate-on-scroll delay-5">
-            <Link to="/academy">
-              <button className="academy-explore-btn">
-                <img src="/DreamWorldAcademy.png" alt="" className="acad-btn-icon" />
-                Explore DreamWorld Academy
-              </button>
-            </Link>
-          </div>
         </div>
       </section>
 

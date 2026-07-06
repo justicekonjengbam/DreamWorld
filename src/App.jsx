@@ -22,13 +22,9 @@ import { ContentProvider } from './context/ContentContext'
 import AdminLogin from './pages/AdminLogin'
 import AdminDashboard from './pages/AdminDashboard'
 import SpecialThanks from './pages/SpecialThanks'
-import Academy from './pages/Academy'
-import AcademyStudents from './pages/AcademyStudents'
 import PortalLayout from './portal/PortalLayout'
 import PortalLogin from './portal/PortalLogin'
 import PortalDashboard from './portal/PortalDashboard'
-import AcademyStudentDetail from './pages/AcademyStudentDetail'
-import AcademyEnroll from './pages/AcademyEnroll'
 import Settings from './pages/Settings'
 import Songs from './pages/Songs'
 import './App.css'
@@ -119,10 +115,6 @@ function App() {
                 <Route path="dashboard" element={<PortalDashboard />} />
               </Route>
 
-              <Route path="/academy" element={<Academy />} />
-              <Route path="/academy/enroll" element={<AcademyEnroll />} />
-              <Route path="/academy/students" element={<AcademyStudents />} />
-              <Route path="/academy/students/:id" element={<AcademyStudentDetail />} />
               <Route path="/thanks" element={<SpecialThanks />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/songs" element={<Songs />} />

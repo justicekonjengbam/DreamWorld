@@ -71,10 +71,8 @@ export default function PortalDashboard() {
     }
 
     const bio = user.bio || user.aim_in_life || ''
-    const title = user.type === 'dreamer' ? (user.title || '') : `${user.class || ''} • ${user.school_name || ''}`
-    const rawThemes = user.type === 'dreamer'
-        ? (Array.isArray(user.themes) ? user.themes : (user.themes || '').split(',').map(t => t.trim()).filter(Boolean))
-        : [user.hobbies, user.favourite_colour ? `Fav: ${user.favourite_colour}` : ''].filter(Boolean)
+    const title = user.title || ''
+    const rawThemes = Array.isArray(user.themes) ? user.themes : (user.themes || '').split(',').map(t => t.trim()).filter(Boolean)
 
     const themeColor = user.theme_color || '#4CA1AF'
     const xpBarColor = '#4CA1AF'
@@ -179,17 +177,15 @@ export default function PortalDashboard() {
                             <StatGraph stats={stats} />
                         </div>
 
-                        {user.type === 'dreamer' && (
-                            <div className="portal-card">
-                                <p className="portal-card-title">🪪 Documents</p>
-                                <button onClick={() => setShowID(true)} className="portal-doc-btn" style={{ borderColor: themeColor, color: themeColor }}>
-                                    🪪 View & Print ID Card
-                                </button>
-                                <button onClick={() => setShowCert(true)} className="portal-doc-btn" style={{ borderColor: themeColor, color: themeColor, marginTop: 8 }}>
-                                    🏅 View & Print Certificate
-                                </button>
-                            </div>
-                        )}
+                        <div className="portal-card">
+                            <p className="portal-card-title">🪪 Documents</p>
+                            <button onClick={() => setShowID(true)} className="portal-doc-btn" style={{ borderColor: themeColor, color: themeColor }}>
+                                🪪 View & Print ID Card
+                            </button>
+                            <button onClick={() => setShowCert(true)} className="portal-doc-btn" style={{ borderColor: themeColor, color: themeColor, marginTop: 8 }}>
+                                🏅 View & Print Certificate
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}

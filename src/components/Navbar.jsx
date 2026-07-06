@@ -18,24 +18,12 @@ const DREAMWORLD_LINKS = [
   { to: '/settings', label: 'Settings' },
 ]
 
-const ACADEMY_LINKS = [
-  { to: '/academy', label: 'Home', exact: true },
-  { to: '/academy/students', label: 'Students' },
-  { to: '/academy/enroll', label: 'Enroll' },
-]
-
 function Navbar() {
   const location = useLocation()
   const [isOpen, setIsOpen] = useState(false)
   const { appSettings } = useContent()
 
-  const isAcademyPage = location.pathname.startsWith('/academy')
-  const links = isAcademyPage ? ACADEMY_LINKS : DREAMWORLD_LINKS
-
-  const processedLinks = links.map(link => {
-    if (link.to === '/academy/enroll' && appSettings?.academy_open === false) {
-      return { ...link, label: 'Enroll (Closed)' }
-    }
+  const processedLinks = DREAMWORLD_LINKS.map(link => {
     if (link.to === '/join' && appSettings?.dreamworld_open === false) {
       return { ...link, label: 'Join (Closed)' }
     }
@@ -50,7 +38,7 @@ function Navbar() {
   const closeMenu = () => setIsOpen(false)
 
   return (
-    <nav className={`navbar ${isAcademyPage ? 'navbar-academy' : ''}`}>
+    <nav className="navbar">
       <div className="navbar-container">
 
         {/* Logo — always DreamWorld */}
@@ -76,27 +64,10 @@ function Navbar() {
               <Link to={to} className={isActive(to, exact)}>{label}</Link>
             </li>
           ))}
-          {/* Cross-link pill */}
-          {isAcademyPage ? (
-            <li>
-              <Link to="/" className="cross-link">← DreamWorld</Link>
-            </li>
-          ) : (
-            <li>
-              <Link to="/academy" className="cross-link">🏫 Academy</Link>
-            </li>
-          )}
         </ul>
 
         {/* Mobile Drawer */}
         <div className={`navbar-drawer ${isOpen ? 'open' : ''}`}>
-          <div className="drawer-cross-link">
-            {isAcademyPage ? (
-              <Link to="/" onClick={closeMenu}>← Back to DreamWorld</Link>
-            ) : (
-              <Link to="/academy" onClick={closeMenu}>🏫 Explore Academy</Link>
-            )}
-          </div>
           <ul className="drawer-links">
             {processedLinks.map(({ to, label, exact }) => (
               <li key={to + label}>
