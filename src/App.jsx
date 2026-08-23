@@ -27,6 +27,7 @@ import PortalLogin from './portal/PortalLogin'
 import PortalDashboard from './portal/PortalDashboard'
 import Settings from './pages/Settings'
 import Songs from './pages/Songs'
+import Games from './pages/Games'
 import './App.css'
 
 
@@ -118,6 +119,7 @@ function App() {
               <Route path="/thanks" element={<SpecialThanks />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/songs" element={<Songs />} />
+              <Route path="/games" element={<Games />} />
 
               {/* 404 Route */}
               <Route path="*" element={<Navigate to="/" replace />} />

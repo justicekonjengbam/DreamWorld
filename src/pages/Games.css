@@ -1,0 +1,205 @@
+.games {
+  min-height: 100dvh;
+  padding: clamp(20px, 4vw, 48px) 0 clamp(48px, 7vw, 96px);
+}
+
+.mind-intro {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 9px;
+  max-width: 680px;
+  margin: 0 auto clamp(22px, 3vw, 34px);
+  color: var(--color-primary);
+  font-family: var(--font-display);
+  font-size: clamp(.72rem, 1.7vw, .92rem);
+  letter-spacing: .06em;
+  text-align: center;
+}
+
+.mind-intro i { color: var(--color-accent); }
+.mind-intro p { flex-basis: 100%; margin: 4px 0 0; color: var(--color-text-sub); font-family: var(--font-body); font-size: clamp(1rem, 2vw, 1.15rem); letter-spacing: 0; }
+
+.game-tabs {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: clamp(8px, 1.5vw, 14px);
+  margin: 0 auto 28px;
+}
+
+.game-tabs button,
+.game-action {
+  border: 1px solid rgba(255, 215, 120, 0.45);
+  border-radius: 999px;
+  min-height: 48px;
+  padding: 11px clamp(15px, 2.3vw, 24px);
+  background: rgba(9, 6, 18, 0.8);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+}
+
+.game-tabs button:hover,
+.game-tabs button.active,
+.game-action:hover {
+  background: linear-gradient(135deg, rgba(212, 106, 174, .8), rgba(126, 113, 233, .8));
+  box-shadow: 0 0 20px var(--glow-accent);
+  transform: translateY(-2px);
+}
+
+.game-panel {
+  display: grid;
+  grid-template-columns: minmax(0, .9fr) minmax(320px, 1.1fr);
+  gap: clamp(24px, 4vw, 48px);
+  align-items: center;
+  max-width: min(100%, 1080px);
+  margin: auto;
+  padding: clamp(24px, 5vw, 52px);
+  background: var(--color-card-bg);
+  border: 1px solid rgba(255, 215, 120, .35);
+  border-radius: 18px;
+  box-shadow: 0 12px 42px rgba(0, 0, 0, .35);
+}
+
+.game-kicker {
+  display: block;
+  color: var(--color-accent);
+  font-family: var(--font-display);
+  font-size: .78rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.game-copy h2 { margin: 6px 0 14px; font-size: clamp(1.75rem, 4vw, 2.5rem); }
+.game-copy p { color: var(--color-text-sub); }
+.game-status { min-height: 2.5em; color: var(--color-primary) !important; }
+
+.game-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px clamp(14px, 2vw, 24px);
+  margin: 20px 0;
+  color: var(--color-primary);
+  font-family: var(--font-display);
+}
+
+.memory-board {
+  display: grid;
+  gap: clamp(16px, 3vw, 24px);
+  max-width: min(100%, 430px);
+  width: 100%;
+  margin: auto;
+}
+
+.memory-oracle {
+  display: grid;
+  min-height: clamp(140px, 20vw, 184px);
+  place-items: center;
+  align-content: center;
+  border: 1px solid rgba(255, 215, 120, .4);
+  border-radius: 18px;
+  background: radial-gradient(circle, color-mix(in srgb, var(--rune-color), transparent 75%), rgba(7, 5, 15, .82) 66%);
+  color: var(--rune-color);
+  transition: background .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+
+.memory-oracle.revealing {
+  border-color: var(--rune-color);
+  box-shadow: 0 0 30px color-mix(in srgb, var(--rune-color), transparent 42%), inset 0 0 28px color-mix(in srgb, var(--rune-color), transparent 72%);
+}
+
+.oracle-label { color: var(--color-text-sub); font-family: var(--font-display); font-size: clamp(.68rem, 1.4vw, .8rem); letter-spacing: .1em; text-transform: uppercase; }
+.memory-oracle strong { font-family: var(--font-display); font-size: clamp(3rem, 9vw, 5rem); line-height: 1; }
+
+.rune-choices {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(8px, 1.5vw, 13px);
+}
+
+.rune-choice {
+  display: grid;
+  min-height: clamp(86px, 13vw, 112px);
+  place-items: center;
+  align-content: center;
+  gap: 2px;
+  border: 1px solid color-mix(in srgb, var(--rune-color), white 18%);
+  border-radius: 13px;
+  background: rgba(7, 5, 15, .85);
+  color: var(--rune-color);
+  cursor: pointer;
+  transition: transform .16s ease, background .16s ease, border-color .16s ease;
+}
+
+.rune-choice span { font-size: clamp(1.65rem, 4.5vw, 2.35rem); line-height: 1; }
+.rune-choice small { color: var(--color-text-sub); font-family: var(--font-display); font-size: clamp(.52rem, 1.2vw, .68rem); letter-spacing: .04em; }
+.rune-choice:hover:not(:disabled) { transform: translateY(-4px); border-color: var(--rune-color); background: color-mix(in srgb, var(--rune-color), #080611 87%); }
+.rune-choice:active:not(:disabled) { transform: translateY(0) scale(.96); background: color-mix(in srgb, var(--rune-color), #080611 78%); }
+.rune-choice:disabled { cursor: not-allowed; opacity: .42; }
+
+.focus-board {
+  position: relative;
+  min-height: clamp(280px, 38vw, 410px);
+  overflow: hidden;
+  border: 1px solid rgba(255, 215, 120, .3);
+  border-radius: 18px;
+  background: radial-gradient(circle at 50% 45%, rgba(126, 113, 233, .22), transparent 52%), rgba(6, 4, 13, .75);
+}
+
+.focus-board p { display: grid; min-height: clamp(280px, 38vw, 410px); place-items: center; color: var(--color-text-sub); text-align: center; padding: 25px; }
+
+.focus-target {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: clamp(54px, 8vw, 66px);
+  height: clamp(54px, 8vw, 66px);
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #ffe8a6;
+  font-size: 2.3rem;
+  cursor: pointer;
+  filter: drop-shadow(0 0 10px #f4b942);
+  transition: left .13s ease, top .13s ease, transform .13s ease;
+}
+
+.focus-target:hover { transform: translate(-50%, -50%) scale(1.18); }
+
+.number-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  max-width: 360px;
+  width: 100%;
+  margin: auto;
+  padding: 30px;
+  border-radius: 18px;
+  background: rgba(6, 4, 13, .65);
+  border: 1px solid rgba(255, 215, 120, .25);
+}
+
+.number-question { color: var(--color-primary); font-family: var(--font-fancy); font-size: clamp(2.2rem, 7vw, 3.4rem); text-align: center; }
+.number-flow label { color: var(--color-text-sub); }
+.number-flow input { padding: 12px; border: 1px solid rgba(255, 215, 120, .4); border-radius: 8px; background: rgba(255,255,255,.06); color: var(--color-text); font: inherit; }
+
+@media (max-width: 900px) {
+  .game-panel { grid-template-columns: 1fr; padding: 25px; }
+  .game-copy { max-width: 620px; margin: auto; text-align: center; }
+  .game-stats { justify-content: center; }
+  .game-action { width: min(100%, 350px); }
+  .focus-board { width: min(100%, 620px); margin: auto; }
+}
+
+@media (max-width: 520px) {
+  .game-tabs { display: grid; grid-template-columns: 1fr; width: min(100%, 340px); }
+  .game-panel { border-radius: 14px; }
+  .memory-board { gap: 11px; }
+  .rune-choices { gap: 7px; }
+  .number-flow { padding: 22px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game-tabs button, .game-action, .memory-tile, .focus-target { transition: none; }
+}

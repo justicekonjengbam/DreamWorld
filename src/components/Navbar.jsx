@@ -12,6 +12,7 @@ const DREAMWORLD_LINKS = [
   { to: '/quests', label: 'Quests' },
   { to: '/events', label: 'Events' },
   { to: '/songs', label: 'Songs' },
+  { to: '/games', label: 'Mind Games' },
   { to: '/join', label: 'Join' },
   { to: '/funders', label: 'Support' },
   { to: '/thanks', label: 'Sponsors' },
