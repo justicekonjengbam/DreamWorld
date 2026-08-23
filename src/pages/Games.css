@@ -49,6 +49,22 @@
   transform: translateY(-2px);
 }
 
+.game-mode {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 auto clamp(24px, 3vw, 34px);
+}
+
+.game-mode span { color: var(--color-text-sub); font-family: var(--font-display); font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; margin-right: 4px; }
+.game-mode button { min-height: 40px; padding: 7px 16px; border: 1px solid rgba(255, 255, 255, .2); border-radius: 999px; background: rgba(6, 4, 13, .7); color: var(--color-text-sub); cursor: pointer; transition: transform .18s ease, background .18s ease, border-color .18s ease; }
+.game-mode button:hover { transform: translateY(-2px); color: var(--color-text); }
+.game-mode .mode-easy.active { border-color: #48b8a8; background: rgba(72, 184, 168, .2); color: #7ae8d8; }
+.game-mode .mode-medium.active { border-color: #f4b942; background: rgba(244, 185, 66, .2); color: #ffe09a; }
+.game-mode .mode-hard.active { border-color: #d46aae; background: rgba(212, 106, 174, .2); color: #ffb5dd; }
+
 .game-panel {
   display: grid;
   grid-template-columns: minmax(0, .9fr) minmax(320px, 1.1fr);
@@ -153,8 +169,8 @@
 .focus-target {
   position: absolute;
   transform: translate(-50%, -50%);
-  width: clamp(54px, 8vw, 66px);
-  height: clamp(54px, 8vw, 66px);
+  width: var(--target-size, clamp(54px, 8vw, 66px));
+  height: var(--target-size, clamp(54px, 8vw, 66px));
   border: 0;
   border-radius: 50%;
   background: transparent;

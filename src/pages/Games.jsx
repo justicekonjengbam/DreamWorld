@@ -9,8 +9,14 @@ const MEMORY_RUNES = [
   { symbol: '✧', name: 'Spark', color: '#48b8a8' }
 ]
 
-const makeQuestion = (streak = 0) => {
-  const level = Math.min(Math.floor(streak / 3), 2)
+const GAME_MODES = {
+  easy: { label: 'Easy', memoryLength: 2, memoryDelay: 850, focusTime: 30, focusDelay: 1300, targetSize: '72px', level: 0 },
+  medium: { label: 'Medium', memoryLength: 3, memoryDelay: 620, focusTime: 20, focusDelay: 850, targetSize: '58px', level: 1 },
+  hard: { label: 'Hard', memoryLength: 5, memoryDelay: 430, focusTime: 12, focusDelay: 540, targetSize: '46px', level: 2 }
+}
+
+const makeQuestion = (streak = 0, mode = 'easy') => {
+  const level = Math.min(GAME_MODES[mode].level + Math.floor(streak / 4), 2)
   const left = Math.floor(Math.random() * (level === 2 ? 16 : 10)) + 3
   const right = Math.floor(Math.random() * (level === 0 ? 8 : 12)) + 2
 
@@ -23,6 +29,7 @@ const makeQuestion = (streak = 0) => {
 
 function Games() {
   const [activeGame, setActiveGame] = useState('memory')
+  const [gameMode, setGameMode] = useState('easy')
   const [sequence, setSequence] = useState([])
   const [playerSteps, setPlayerSteps] = useState([])
   const [showingSequence, setShowingSequence] = useState(false)
@@ -33,11 +40,11 @@ function Games() {
 
   const [focusActive, setFocusActive] = useState(false)
   const [focusScore, setFocusScore] = useState(0)
-  const [focusTime, setFocusTime] = useState(20)
+  const [focusTime, setFocusTime] = useState(GAME_MODES.easy.focusTime)
   const [focusBest, setFocusBest] = useState(0)
   const [targetPosition, setTargetPosition] = useState({ x: 50, y: 50 })
 
-  const [question, setQuestion] = useState(makeQuestion)
+  const [question, setQuestion] = useState(() => makeQuestion(0, 'easy'))
   const [answer, setAnswer] = useState('')
   const [concentrationScore, setConcentrationScore] = useState(0)
   const [concentrationStatus, setConcentrationStatus] = useState('Solve each calculation without rushing.')
@@ -60,9 +67,9 @@ function Games() {
 
     const mover = setInterval(() => {
       setTargetPosition({ x: 10 + Math.random() * 80, y: 10 + Math.random() * 80 })
-    }, 850)
+    }, GAME_MODES[gameMode].focusDelay)
     return () => clearInterval(mover)
-  }, [focusActive])
+  }, [focusActive, gameMode])
 
   useEffect(() => {
     if (focusTime === 0) setFocusBest(best => Math.max(best, focusScore))
@@ -76,17 +83,18 @@ function Games() {
     setMemoryStatus(`Watch carefully — round ${nextSequence.length}.`)
 
     nextSequence.forEach((tile, index) => {
-      memoryTimers.current.push(setTimeout(() => setLitTile(tile), index * 700 + 350))
-      memoryTimers.current.push(setTimeout(() => setLitTile(null), index * 700 + 800))
+      const delay = GAME_MODES[gameMode].memoryDelay
+      memoryTimers.current.push(setTimeout(() => setLitTile(tile), index * delay + 350))
+      memoryTimers.current.push(setTimeout(() => setLitTile(null), index * delay + delay - 110))
     })
     memoryTimers.current.push(setTimeout(() => {
       setShowingSequence(false)
       setMemoryStatus('Your turn: repeat the sequence.')
-    }, nextSequence.length * 700 + 350))
+    }, nextSequence.length * GAME_MODES[gameMode].memoryDelay + 350))
   }
 
   const startMemory = () => {
-    const firstSequence = [Math.floor(Math.random() * MEMORY_RUNES.length)]
+    const firstSequence = Array.from({ length: GAME_MODES[gameMode].memoryLength }, () => Math.floor(Math.random() * MEMORY_RUNES.length))
     setSequence(firstSequence)
     setPlayerSteps([])
     showMemorySequence(firstSequence)
@@ -116,7 +124,7 @@ function Games() {
 
   const startFocus = () => {
     setFocusScore(0)
-    setFocusTime(20)
+    setFocusTime(GAME_MODES[gameMode].focusTime)
     setTargetPosition({ x: 50, y: 50 })
     setFocusActive(true)
   }
@@ -133,12 +141,31 @@ function Games() {
       const nextScore = concentrationScore + 1
       setConcentrationScore(nextScore)
       setConcentrationStatus('Correct. Keep the rhythm going.')
-      setQuestion(makeQuestion(nextScore))
+      setQuestion(makeQuestion(nextScore, gameMode))
     } else {
       setConcentrationScore(0)
       setConcentrationStatus(`The answer was ${question.answer}. Start a new streak.`)
-      setQuestion(makeQuestion())
+      setQuestion(makeQuestion(0, gameMode))
     }
+    setAnswer('')
+  }
+
+  const changeGameMode = (mode) => {
+    if (mode === gameMode) return
+    memoryTimers.current.forEach(clearTimeout)
+    memoryTimers.current = []
+    setGameMode(mode)
+    setSequence([])
+    setPlayerSteps([])
+    setLitTile(null)
+    setShowingSequence(false)
+    setMemoryStatus(`${GAME_MODES[mode].label} mode selected. Press Begin to reveal a sequence.`)
+    setFocusActive(false)
+    setFocusScore(0)
+    setFocusTime(GAME_MODES[mode].focusTime)
+    setConcentrationScore(0)
+    setConcentrationStatus(`${GAME_MODES[mode].label} mode selected. Solve the next pattern.`)
+    setQuestion(makeQuestion(0, mode))
     setAnswer('')
   }
 
@@ -161,12 +188,19 @@ function Games() {
           <button className={activeGame === 'concentration' ? 'active' : ''} onClick={() => setActiveGame('concentration')} role="tab" aria-selected={activeGame === 'concentration'}>Number Flow</button>
         </div>
 
+        <div className="game-mode" aria-label="Game difficulty">
+          <span>Game mode</span>
+          {Object.entries(GAME_MODES).map(([key, mode]) => (
+            <button key={key} className={gameMode === key ? `mode-${key} active` : `mode-${key}`} onClick={() => changeGameMode(key)} aria-pressed={gameMode === key}>{mode.label}</button>
+          ))}
+        </div>
+
         {activeGame === 'memory' && (
           <section className="game-panel" aria-labelledby="memory-title">
             <div className="game-copy">
               <span className="game-kicker">Memory</span>
               <h2 id="memory-title">Memory Path</h2>
-              <p>Watch the glowing runes, then repeat their order. Each round adds one more step.</p>
+              <p>Watch the glowing runes, then repeat their order. {GAME_MODES[gameMode].label} mode begins with {GAME_MODES[gameMode].memoryLength} runes and adds one each round.</p>
               <div className="game-stats"><span>Round: {sequence.length || 0}</span><span>Best: {memoryBest}</span></div>
               <p className="game-status" aria-live="polite">{memoryStatus}</p>
               <button className="game-action" onClick={startMemory}>Begin a new path</button>
@@ -192,12 +226,12 @@ function Games() {
             <div className="game-copy">
               <span className="game-kicker">Focus</span>
               <h2 id="focus-title">Focus Hunt</h2>
-              <p>Catch the wandering star before it moves again. You have twenty seconds.</p>
+              <p>Catch the wandering star before it moves again. {GAME_MODES[gameMode].label} mode gives you {GAME_MODES[gameMode].focusTime} seconds.</p>
               <div className="game-stats"><span>Time: {focusTime}s</span><span>Stars: {focusScore}</span><span>Best: {focusBest}</span></div>
               <button className="game-action" onClick={startFocus}>{focusActive ? 'Restart round' : 'Start 20-second round'}</button>
             </div>
             <div className="focus-board" aria-label="Focus target area">
-              {focusActive && <button className="focus-target" onClick={catchTarget} style={{ left: `${targetPosition.x}%`, top: `${targetPosition.y}%` }} aria-label="Catch the star">✦</button>}
+              {focusActive && <button className="focus-target" onClick={catchTarget} style={{ left: `${targetPosition.x}%`, top: `${targetPosition.y}%`, '--target-size': GAME_MODES[gameMode].targetSize }} aria-label="Catch the star">✦</button>}
               {!focusActive && <p>{focusTime === 0 ? `Round complete: ${focusScore} stars caught. Can you beat your best?` : 'Start a round to summon the star.'}</p>}
             </div>
           </section>
