@@ -18,10 +18,26 @@ function Join() {
     role: '',
     otherRole: '',
     reason: '',
-    roleReason: ''
+    roleReason: '',
+    website_hp: '', // Honeypot field (bots fill this, humans don't)
+    captchaInput: ''
   })
+
+  // Dynamic Math Verification Challenge
+  const [mathPuzzle, setMathPuzzle] = useState({ a: 7, b: 5 })
+
+  useEffect(() => {
+    // Generate random math challenge on mount
+    const numA = Math.floor(Math.random() * 9) + 2
+    const numB = Math.floor(Math.random() * 9) + 1
+    setMathPuzzle({ a: numA, b: numB })
+  }, [])
+
   const [dreamerErrors, setDreamerErrors] = useState({})
   const [dreamerSubmitted, setDreamerSubmitted] = useState(false)
+
+  // Sanitization utility against XSS/script injection
+  const sanitizeInput = (text) => typeof text === 'string' ? text.replace(/<[^>]*>?/gm, '') : text
 
   // Dreamer Form Handlers
   const handleDreamerChange = (e) => {
@@ -76,19 +92,31 @@ function Join() {
       errors.roleReason = 'Please tell us why you chose this role'
     }
 
+    // Bot Verification Check
+    if (parseInt(dreamerForm.captchaInput) !== mathPuzzle.a + mathPuzzle.b) {
+      errors.captchaInput = `Incorrect calculation. What is ${mathPuzzle.a} + ${mathPuzzle.b}?`
+    }
+
     return errors
   }
 
   const handleDreamerSubmit = async (e) => {
     e.preventDefault()
 
-    // Spam Protection: check local storage
+    // 🛡️ ANTI-SPAM PROTECTION 1: Honeypot Check
+    if (dreamerForm.website_hp && dreamerForm.website_hp.trim() !== '') {
+      console.warn('Spam bot detected via honeypot field.')
+      setDreamerSubmitted(true) // Silent rejection
+      return
+    }
+
+    // 🛡️ ANTI-SPAM PROTECTION 2: Cooldown timer
     const lastSubmission = localStorage.getItem('dreamworld_last_submission')
     if (lastSubmission) {
       const timeSince = Date.now() - parseInt(lastSubmission)
-      const COOLDOWN = 24 * 60 * 60 * 1000 // 24 hours
+      const COOLDOWN = 12 * 60 * 60 * 1000 // 12 hours
       if (timeSince < COOLDOWN) {
-        alert("🛑 The Council requires patience. You have already sent a petition recently. Please wait for the decree.")
+        alert("🛑 The Council requires patience. You have already sent a join petition recently. Please wait for admin review.")
         return
       }
     }
@@ -100,8 +128,21 @@ function Join() {
       return
     }
 
+    // Sanitize all inputs before saving
+    const sanitizedForm = {
+      name: sanitizeInput(dreamerForm.name),
+      email: sanitizeInput(dreamerForm.email),
+      phone: sanitizeInput(dreamerForm.phone),
+      age: sanitizeInput(dreamerForm.age),
+      gender: sanitizeInput(dreamerForm.gender),
+      role: sanitizeInput(dreamerForm.role),
+      otherRole: sanitizeInput(dreamerForm.otherRole),
+      reason: sanitizeInput(dreamerForm.reason),
+      roleReason: sanitizeInput(dreamerForm.roleReason)
+    }
+
     try {
-      await submitDreamerApplication(dreamerForm)
+      await submitDreamerApplication(sanitizedForm)
 
       // Set Spam Protection Timestamp
       localStorage.setItem('dreamworld_last_submission', Date.now().toString())
@@ -109,7 +150,7 @@ function Join() {
       setDreamerSubmitted(true)
 
       setTimeout(() => {
-        setDreamerForm({ name: '', email: '', phone: '', age: '', gender: '', role: '', otherRole: '', reason: '', roleReason: '' })
+        setDreamerForm({ name: '', email: '', phone: '', age: '', gender: '', role: '', otherRole: '', reason: '', roleReason: '', website_hp: '', captchaInput: '' })
         setDreamerSubmitted(false)
       }, 6000)
     } catch (error) {
@@ -318,6 +359,39 @@ function Join() {
                       onChange={handleDreamerChange}
                       placeholder="If you have an idea for a role not listed..."
                     />
+                  </div>
+
+                  {/* 🛡️ Anti-Bot Honeypot Field (Hidden from human eyes) */}
+                  <div style={{ display: 'none', visibility: 'hidden' }}>
+                    <label htmlFor="website_hp">Leave empty</label>
+                    <input
+                      type="text"
+                      id="website_hp"
+                      name="website_hp"
+                      value={dreamerForm.website_hp}
+                      onChange={handleDreamerChange}
+                      tabIndex={-1}
+                      autoComplete="off"
+                    />
+                  </div>
+
+                  {/* 🧠 Anti-Bot Math Challenge */}
+                  <div className="form-group" style={{ background: 'rgba(76,161,175,0.08)', padding: '14px', borderRadius: '8px', border: '1px solid rgba(76,161,175,0.25)' }}>
+                    <label htmlFor="captchaInput" style={{ fontWeight: 700, color: '#4CA1AF' }}>
+                      🤖 Anti-Bot Verification: What is {mathPuzzle.a} + {mathPuzzle.b}? *
+                    </label>
+                    <input
+                      type="number"
+                      id="captchaInput"
+                      name="captchaInput"
+                      value={dreamerForm.captchaInput}
+                      onChange={handleDreamerChange}
+                      placeholder="Enter the number..."
+                      className={dreamerErrors.captchaInput ? 'error' : ''}
+                      style={{ marginTop: 6 }}
+                      required
+                    />
+                    {dreamerErrors.captchaInput && <span className="error-message">{dreamerErrors.captchaInput}</span>}
                   </div>
 
                   <Button type="submit" variant="primary">

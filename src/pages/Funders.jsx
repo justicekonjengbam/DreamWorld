@@ -81,6 +81,14 @@ function Funders() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+
+    // 🛡️ Anti-Spam Honeypot check
+    if (formData.website_hp && formData.website_hp.trim() !== '') {
+      console.warn('Spam bot blocked via honeypot field.')
+      setSubmitted(true)
+      return
+    }
+
     setIsProcessing(true)
 
     // Common Razorpay Config

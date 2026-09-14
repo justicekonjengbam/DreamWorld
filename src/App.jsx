@@ -27,12 +27,8 @@ import PortalLogin from './portal/PortalLogin'
 import PortalDashboard from './portal/PortalDashboard'
 import Settings from './pages/Settings'
 import Songs from './pages/Songs'
+import Clans from './pages/Clans'
 import './App.css'
-
-
-
-
-import { useTheme } from './context/ThemeContext'
 
 function App() {
   const location = useLocation()
@@ -46,46 +42,33 @@ function App() {
   const [shouldStartAudio, setShouldStartAudio] = useState(false)
   const { isSoundMuted, buttonVolume } = useAudio()
 
-
   const handleEnterDreamWorld = () => {
     sessionStorage.setItem('dreamworld_entered', 'true')
     setHasEntered(true)
     setShouldStartAudio(true)
   }
 
-
   // Global click sound for all clickable elements
   useEffect(() => {
     const handleClick = (e) => {
-      // Block click sounds and background audio trigger on Songs page
       if (isSongsPage) return
-
-      // Start background ambient music on first user interaction anywhere on the document (e.g. inside the Portal)
-      if (!shouldStartAudio) {
-        setShouldStartAudio(true)
-      }
-
-      if (isSoundMuted) return // Don't play if muted
-      if (e._soundPlayed) return // Ignore if sound was already played by a hook
-
-      const clickable = e.target.closest('a, button, [role="button"], .card, .character-link, .role-card')
-      if (clickable) {
-        e._soundPlayed = true
-        const audio = new Audio('/ButtonAudio.mp3')
-        audio.volume = buttonVolume
-        audio.play().catch(err => console.log('Audio play failed:', err))
+      const isClickable = e.target.closest('button, a, input[type="button"], input[type="submit"], select, .clickable, .card, .nav-link, .interactive')
+      if (isClickable) {
+        if (!isSoundMuted && buttonVolume > 0) {
+          const audio = new Audio('/ButtonAudio.mp3')
+          audio.volume = buttonVolume
+          audio.play().catch(() => {})
+        }
       }
     }
 
     document.addEventListener('click', handleClick)
     return () => document.removeEventListener('click', handleClick)
-  }, [isSoundMuted, buttonVolume, shouldStartAudio, isSongsPage])
-
-
+  }, [isSoundMuted, buttonVolume, isSongsPage])
 
   return (
     <ContentProvider>
-      <div className={`app ${isPortal ? 'portal-mode' : ''}`}>
+      <div className="app">
         <ScrollToTop />
         {!isPortal && !hasEntered && <WelcomeOverlay onEnter={handleEnterDreamWorld} />}
 
@@ -101,6 +84,7 @@ function App() {
               <Route path="/characters/:id" element={<CharacterDetail />} />
               <Route path="/roles" element={<Roles />} />
               <Route path="/roles/:id" element={<RoleDetail />} />
+              <Route path="/clans" element={<Clans />} />
               <Route path="/creator" element={<Creator />} />
               <Route path="/quests" element={<Quests />} />
               <Route path="/events" element={<Events />} />
@@ -131,6 +115,5 @@ function App() {
     </ContentProvider>
   )
 }
-
 
 export default App

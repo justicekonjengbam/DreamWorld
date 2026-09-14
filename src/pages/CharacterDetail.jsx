@@ -11,13 +11,14 @@ import './CharacterDetail.css'
 
 function CharacterDetail() {
   const { id } = useParams()
-  const { characters, roles, loading } = useContent()
+  const { characters, roles, loading, getClanById } = useContent()
   const [modalOpen, setModalOpen] = useState(false)
   const [modalImage, setModalImage] = useState('')
 
   if (loading) return <div className="loading-state">Syncing Member Info...</div>
 
   const character = characters.find(c => String(c.id) === String(id))
+  const clan = getClanById ? getClanById(character?.clan) : null
 
   if (!character) {
     return (
@@ -81,10 +82,41 @@ function CharacterDetail() {
           <div className="character-header-info">
             <h1>{character.name}</h1>
             <p className="character-role-large">{character.title}</p>
-            {role && (
-              <Link to={`/roles/${role.id}`} className="role-badge-small-link">
-                {role.singular}
-              </Link>
+            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '12px' }}>
+              {role && (
+                <Link to={`/roles/${role.id}`} className="role-badge-small-link">
+                  {role.singular}
+                </Link>
+              )}
+              {clan && (
+                <span className="role-badge-small-link" style={{ background: `${clan.color}22`, border: `1px solid ${clan.color}66`, color: clan.color }}>
+                  {clan.icon} {clan.name}
+                </span>
+              )}
+            </div>
+
+            {clan && (
+              <div style={{
+                background: 'rgba(20, 25, 45, 0.9)',
+                border: `1px solid ${clan.color}55`,
+                borderRadius: '12px',
+                padding: '14px 18px',
+                marginTop: '10px',
+                marginBottom: '15px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '14px',
+                boxShadow: `0 0 15px ${clan.color}20`
+              }}>
+                <img src={clan.logo} alt={clan.name} style={{ width: 52, height: 52, objectFit: 'contain' }} />
+                <div>
+                  <div style={{ fontSize: '0.72rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: 1, color: clan.color }}>
+                    {clan.icon} Appointed Clan ({clan.element} Element)
+                  </div>
+                  <h4 style={{ margin: '2px 0', fontSize: '1.05rem', color: '#fff' }}>{clan.name}</h4>
+                  <p style={{ margin: 0, fontStyle: 'italic', fontSize: '0.82rem', color: 'var(--color-text-muted)' }}>"{clan.motto}"</p>
+                </div>
+              </div>
             )}
 
             <div className="character-stats-row">

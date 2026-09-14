@@ -5,12 +5,13 @@ import { useContent } from '../context/ContentContext'
 import StatGraph from '../components/StatGraph'
 import PrintableID from '../components/PrintableID'
 import PrintableCertificate from '../components/PrintableCertificate'
+import ImageUpload from '../components/ImageUpload'
 import { useAudio } from '../context/AudioContext'
 import { useTheme } from '../context/ThemeContext'
 
 export default function PortalDashboard() {
     const { user, loading } = usePortal()
-    const { quests, events, announcement } = useContent()
+    const { quests, events, announcement, requestProfileUpdate, getClanById } = useContent()
     const { 
         isSoundMuted, setIsSoundMuted, 
         musicVolume, setMusicVolume, 
@@ -26,28 +27,63 @@ export default function PortalDashboard() {
     const [adminPassword, setAdminPassword] = useState('')
     const [adminPasswordError, setAdminPasswordError] = useState('')
 
-    const handleMusicVolumeChange = (e) => {
-        const val = parseFloat(e.target.value)
-        setMusicVolume(val)
-        if (val > 0 && isSoundMuted) {
-            setIsSoundMuted(false)
+    const userClan = getClanById ? getClanById(user?.clan) : null
+
+    const [editFormData, setEditFormData] = useState({
+        name: user?.name || '',
+        title: user?.title || '',
+        avatar: user?.avatar || '',
+        cover_image: user?.cover_image || user?.coverImage || '',
+        bio: user?.bio || '',
+        themes: Array.isArray(user?.themes) ? user.themes.join(', ') : (user?.themes || ''),
+        youtube: user?.socials?.youtube || user?.youtube || '',
+        instagram: user?.socials?.instagram || user?.instagram || '',
+        facebook: user?.socials?.facebook || user?.facebook || '',
+        twitter: user?.socials?.twitter || user?.twitter || ''
+    })
+    const [editSubmitting, setEditSubmitting] = useState(false)
+    const [editSuccessMsg, setEditSuccessMsg] = useState('')
+
+    useEffect(() => {
+        if (user) {
+            setEditFormData({
+                name: user.name || '',
+                title: user.title || '',
+                avatar: user.avatar || '',
+                cover_image: user.cover_image || user.coverImage || '',
+                bio: user.bio || '',
+                themes: Array.isArray(user.themes) ? user.themes.join(', ') : (user.themes || ''),
+                youtube: user.socials?.youtube || user.youtube || '',
+                instagram: user.socials?.instagram || user.instagram || '',
+                facebook: user.socials?.facebook || user.facebook || '',
+                twitter: user.socials?.twitter || user.twitter || ''
+            })
+        }
+    }, [user])
+
+    const handleEditSubmit = async (e) => {
+        e.preventDefault()
+        if (!user?.id) return
+
+        // Check if there is already a pending edit request under review
+        if (user.pending_changes) {
+            alert('⏳ You already have a profile edit request pending Admin approval. Please wait for Admin confirmation.')
+            return
+        }
+
+        setEditSubmitting(true)
+        setEditSuccessMsg('')
+
+        const success = await requestProfileUpdate(user.id, editFormData)
+        setEditSubmitting(false)
+        if (success) {
+            localStorage.setItem(`dw_last_edit_${user.id}`, Date.now().toString())
+            setEditSuccessMsg('✅ Profile update request submitted! Pending Admin approval.')
+            alert('✅ Profile update request submitted!\n\nYour requested changes have been sent to the Admin for confirmation. Once approved, your live public profile will be updated.')
+        } else {
+            alert('❌ Failed to submit profile update request. Please try again.')
         }
     }
-
-    const handleButtonVolumeChange = (e) => {
-        setButtonVolume(parseFloat(e.target.value))
-    }
-
-    const gradientDisplayNames = {
-        nebula: 'Celestial Nebula',
-        solar: 'Solar Flare',
-        ocean: 'Deep Ocean',
-        forest: 'Emerald Forest',
-        void: 'Void Rift',
-        crimson: 'Crimson Eclipse',
-        silver: 'Lunar Dust'
-    }
-
 
     useEffect(() => {
         if (!loading && !user) navigate('/portal')
@@ -86,10 +122,31 @@ export default function PortalDashboard() {
 
     const today = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
 
+    const handleMusicVolumeChange = (e) => {
+        const val = parseFloat(e.target.value)
+        setMusicVolume(val)
+        if (val > 0 && isSoundMuted) {
+            setIsSoundMuted(false)
+        }
+    }
+
+    const handleButtonVolumeChange = (e) => {
+        setButtonVolume(parseFloat(e.target.value))
+    }
+
+    const gradientDisplayNames = {
+        nebula: 'Celestial Nebula',
+        solar: 'Solar Flare',
+        ocean: 'Deep Ocean',
+        forest: 'Emerald Forest',
+        void: 'Void Rift',
+        crimson: 'Crimson Eclipse',
+        silver: 'Lunar Dust'
+    }
+
     const handleAdminAccess = () => {
         const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || 'dreamworld2026'
         if (adminPassword === ADMIN_PASSWORD) {
-            // Auto-set the admin token so AdminLogin is bypassed
             localStorage.setItem('dw_admin_token', 'logged_in_' + Date.now())
             sessionStorage.setItem('dw_admin_pass', adminPassword)
             setShowAdminModal(false)
@@ -103,6 +160,7 @@ export default function PortalDashboard() {
 
     const tabs = [
         { id: 'profile', icon: '👤', label: 'Profile' },
+        { id: 'edit', icon: '✏️', label: 'Edit Profile' },
         { id: 'daily', icon: '📜', label: 'Daily' },
         { id: 'quests', icon: '⚔️', label: 'Quests' },
         { id: 'events', icon: '📅', label: 'Events' },
@@ -137,12 +195,71 @@ export default function PortalDashboard() {
                             <div>
                                 <h1 className="portal-profile-name">{user.name}</h1>
                                 <p className="portal-profile-title" style={{ color: themeColor }}>{title}</p>
-                                {user.isCreator && <span className="portal-creator-badge">👑 Creator</span>}
+                                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 4 }}>
+                                    {user.isCreator && <span className="portal-creator-badge">👑 Creator</span>}
+                                    {userClan && (
+                                        <span className="portal-creator-badge" style={{ background: `${userClan.color}22`, borderColor: `${userClan.color}66`, color: userClan.color }}>
+                                            {userClan.icon} {userClan.name}
+                                        </span>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <div className="portal-content">
+                        {/* ===== APPOINTED CLAN CARD ===== */}
+                        {userClan && (
+                            <div className="portal-card" style={{
+                                background: `linear-gradient(135deg, rgba(20, 25, 45, 0.95), rgba(10, 14, 28, 0.98))`,
+                                border: `1px solid ${userClan.color}66`,
+                                boxShadow: `0 0 20px ${userClan.color}25`,
+                                position: 'relative',
+                                overflow: 'hidden'
+                            }}>
+                                <div style={{
+                                    position: 'absolute',
+                                    top: -20,
+                                    right: -20,
+                                    width: 140,
+                                    height: 140,
+                                    background: userClan.gradient,
+                                    opacity: 0.15,
+                                    borderRadius: '50%',
+                                    filter: 'blur(30px)'
+                                }} />
+
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                                    <img 
+                                        src={userClan.logo} 
+                                        alt={userClan.name} 
+                                        style={{ 
+                                            width: 72, 
+                                            height: 72, 
+                                            objectFit: 'contain',
+                                            filter: `drop-shadow(0 0 10px ${userClan.color}88)`
+                                        }} 
+                                    />
+                                    <div style={{ flex: 1 }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                                            <span style={{ fontSize: '0.75rem', fontWeight: 800, letterSpacing: 1, textTransform: 'uppercase', color: userClan.color }}>
+                                                {userClan.icon} Appointed Clan
+                                            </span>
+                                            <span style={{ fontSize: '0.7rem', padding: '2px 8px', borderRadius: 10, background: `${userClan.color}22`, border: `1px solid ${userClan.color}44`, color: userClan.color, fontWeight: 700 }}>
+                                                {userClan.element} Element
+                                            </span>
+                                        </div>
+                                        <h3 style={{ margin: '4px 0 2px 0', fontSize: '1.18rem', color: '#FFF' }}>{userClan.name}</h3>
+                                        <p style={{ margin: 0, fontStyle: 'italic', color: 'var(--color-text-muted)', fontSize: '0.88rem' }}>"{userClan.motto}"</p>
+                                    </div>
+                                </div>
+
+                                <p style={{ marginTop: 12, marginBottom: 0, fontSize: '0.85rem', lineHeight: 1.6, color: 'var(--color-text-semi)', borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 10 }}>
+                                    {userClan.description}
+                                </p>
+                            </div>
+                        )}
+
                         <div className="portal-card">
                             <div className="portal-xp-row">
                                  <span style={{ color: themeColor, fontWeight: 700, fontSize: '1rem' }}>Dream Level {level}</span>
@@ -187,6 +304,152 @@ export default function PortalDashboard() {
                             </button>
                         </div>
                     </div>
+                </div>
+            )}
+
+            {/* ===== EDIT PROFILE TAB ===== */}
+            {activeTab === 'edit' && (
+                <div className="portal-content">
+                    <h2 className="portal-tab-title" style={{ color: themeColor }}>✏️ Edit Profile</h2>
+
+                    {user.pending_changes && (
+                        <div style={{ padding: '14px 18px', background: 'rgba(255,193,7,0.15)', border: '1px solid rgba(255,193,7,0.5)', borderRadius: 12, marginBottom: 20, color: '#FFD54F' }}>
+                            <p style={{ margin: 0, fontWeight: 700, fontSize: '0.95rem' }}>⏳ Profile Update Pending Admin Approval</p>
+                            <p style={{ margin: '6px 0 0 0', fontSize: '0.85rem', lineHeight: 1.5, opacity: 0.9 }}>
+                                Your requested profile updates have been sent to the Admin for confirmation. Once approved, your live public profile will update automatically across DreamWorld!
+                            </p>
+                        </div>
+                    )}
+
+                    {editSuccessMsg && (
+                        <div style={{ padding: '14px 18px', background: 'rgba(76,175,80,0.15)', border: '1px solid rgba(76,175,80,0.5)', borderRadius: 12, marginBottom: 20, color: '#81C784', fontWeight: 700 }}>
+                            {editSuccessMsg}
+                        </div>
+                    )}
+
+                    <form onSubmit={handleEditSubmit} className="portal-card" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                        <div>
+                            <label className="portal-label" style={{ display: 'block', marginBottom: 6, fontWeight: 600 }}>Full Name</label>
+                            <input
+                                type="text"
+                                className="portal-input"
+                                value={editFormData.name}
+                                onChange={e => setEditFormData({ ...editFormData, name: e.target.value })}
+                                placeholder="Your Full Name"
+                                required
+                            />
+                        </div>
+
+                        <div>
+                            <label className="portal-label" style={{ display: 'block', marginBottom: 6, fontWeight: 600 }}>Title / Designation</label>
+                            <input
+                                type="text"
+                                className="portal-input"
+                                value={editFormData.title}
+                                onChange={e => setEditFormData({ ...editFormData, title: e.target.value })}
+                                placeholder="e.g. Lead Florist, Basketball Player..."
+                            />
+                        </div>
+
+                        <div>
+                            <label className="portal-label" style={{ display: 'block', marginBottom: 6, fontWeight: 600 }}>Avatar Photo</label>
+                            <ImageUpload
+                                label=""
+                                defaultImage={editFormData.avatar}
+                                onUploadComplete={url => setEditFormData(prev => ({ ...prev, avatar: url }))}
+                                folder="dreamers"
+                            />
+                            <input
+                                type="text"
+                                className="portal-input"
+                                style={{ marginTop: 8 }}
+                                value={editFormData.avatar}
+                                onChange={e => setEditFormData({ ...editFormData, avatar: e.target.value })}
+                                placeholder="Or paste Photo URL..."
+                            />
+                        </div>
+
+                        <div>
+                            <label className="portal-label" style={{ display: 'block', marginBottom: 6, fontWeight: 600 }}>Background / Cover Photo</label>
+                            <ImageUpload
+                                label=""
+                                defaultImage={editFormData.cover_image}
+                                onUploadComplete={url => setEditFormData(prev => ({ ...prev, cover_image: url }))}
+                                folder="covers"
+                            />
+                            <input
+                                type="text"
+                                className="portal-input"
+                                style={{ marginTop: 8 }}
+                                value={editFormData.cover_image}
+                                onChange={e => setEditFormData({ ...editFormData, cover_image: e.target.value })}
+                                placeholder="Or paste Cover Image URL..."
+                            />
+                        </div>
+
+                        <div>
+                            <label className="portal-label" style={{ display: 'block', marginBottom: 6, fontWeight: 600 }}>Bio / Aim in Life</label>
+                            <textarea
+                                className="portal-input"
+                                rows={4}
+                                value={editFormData.bio}
+                                onChange={e => setEditFormData({ ...editFormData, bio: e.target.value })}
+                                placeholder="Share your bio, aims, and story with DreamWorld..."
+                            />
+                        </div>
+
+                        <div>
+                            <label className="portal-label" style={{ display: 'block', marginBottom: 6, fontWeight: 600 }}>Themes / Interests (comma separated)</label>
+                            <input
+                                type="text"
+                                className="portal-input"
+                                value={editFormData.themes}
+                                onChange={e => setEditFormData({ ...editFormData, themes: e.target.value })}
+                                placeholder="e.g. Education, Peace, Flowers, Basketball"
+                            />
+                        </div>
+
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                            <div>
+                                <label className="portal-label" style={{ display: 'block', marginBottom: 6, fontWeight: 600 }}>Instagram URL</label>
+                                <input
+                                    type="text"
+                                    className="portal-input"
+                                    value={editFormData.instagram}
+                                    onChange={e => setEditFormData({ ...editFormData, instagram: e.target.value })}
+                                    placeholder="https://instagram.com/..."
+                                />
+                            </div>
+                            <div>
+                                <label className="portal-label" style={{ display: 'block', marginBottom: 6, fontWeight: 600 }}>YouTube / Web</label>
+                                <input
+                                    type="text"
+                                    className="portal-input"
+                                    value={editFormData.youtube}
+                                    onChange={e => setEditFormData({ ...editFormData, youtube: e.target.value })}
+                                    placeholder="https://youtube.com/..."
+                                />
+                            </div>
+                        </div>
+
+                        <button
+                            type="submit"
+                            disabled={editSubmitting}
+                            style={{
+                                padding: '14px',
+                                background: `linear-gradient(135deg, ${themeColor}, #4CA1AF)`,
+                                color: '#fff',
+                                fontWeight: 700,
+                                fontSize: '0.95rem',
+                                border: 'none',
+                                borderRadius: 12,
+                                cursor: editSubmitting ? 'not-allowed' : 'pointer',
+                                marginTop: 8
+                            }}
+                        >
+                            {editSubmitting ? 'Submitting to Admin...' : '📨 Submit Changes for Admin Confirmation'}
+                        </button>
+                    </form>
                 </div>
             )}
 

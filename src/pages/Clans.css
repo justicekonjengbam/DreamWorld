@@ -1,0 +1,338 @@
+.clans-page {
+  padding-bottom: 90px;
+}
+
+/* Hero Section */
+.clans-hero {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.clans-logo {
+  max-width: 160px;
+  margin-bottom: 12px;
+  filter: drop-shadow(0 0 20px rgba(76, 161, 175, 0.4));
+  transition: transform 0.3s ease;
+}
+
+.clans-logo:hover {
+  transform: scale(1.05);
+}
+
+.clans-title-main {
+  font-family: var(--font-heading, Georgia, serif);
+  font-size: 2.6rem;
+  margin: 0 0 10px 0;
+  background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 0.5px;
+}
+
+.clans-subtitle-main {
+  font-size: 1.05rem;
+  color: var(--color-text-muted);
+  max-width: 650px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Filter Nav Tabs */
+.clan-nav-tabs {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 48px;
+}
+
+.clan-nav-btn {
+  background: rgba(18, 24, 44, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--color-text-muted);
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+}
+
+.clan-nav-btn:hover {
+  transform: translateY(-2px);
+  background: rgba(28, 36, 64, 0.95);
+  color: #fff;
+}
+
+.clan-nav-btn.active {
+  background: rgba(30, 40, 75, 0.95);
+  color: #fff;
+  box-shadow: 0 4px 20px var(--clan-color, rgba(76, 161, 175, 0.3));
+}
+
+/* Story Cards List */
+.clans-story-list {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.clan-story-card {
+  background: linear-gradient(160deg, rgba(20, 26, 48, 0.9), rgba(10, 14, 28, 0.95));
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 24px;
+  padding: 36px;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 40px;
+  align-items: start;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.clan-story-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.5);
+}
+
+/* Visual Emblem Column */
+.clan-card-visual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  position: sticky;
+  top: 100px;
+}
+
+.clan-emblem-frame {
+  width: 100%;
+  max-width: 240px;
+  height: 240px;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-in;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.clan-emblem-frame:hover {
+  transform: scale(1.03);
+}
+
+/* IMPORTANT: Perfect Image Scaling without Distortion or Overflow */
+.clan-emblem-img {
+  width: 100%;
+  height: 100%;
+  max-width: 180px;
+  max-height: 180px;
+  object-fit: contain;
+  display: block;
+}
+
+.emblem-zoom-tag {
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  margin-top: 8px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.clan-meta-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.clan-element-tag {
+  padding: 4px 14px;
+  border-radius: 12px;
+  border: 1px solid;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.clan-name-heading {
+  font-family: var(--font-heading, Georgia, serif);
+  font-size: 1.8rem;
+  margin: 4px 0 0 0;
+  color: #fff;
+}
+
+.clan-motto-text {
+  font-style: italic;
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Story Content Column */
+.clan-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.section-label {
+  font-family: var(--font-heading, Georgia, serif);
+  font-size: 1rem;
+  color: #fff;
+  margin: 0 0 12px 0;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+/* Story Narrative */
+.clan-narrative-box {
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 16px;
+  padding: 20px 24px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.narrative-text {
+  font-size: 1.02rem;
+  line-height: 1.7;
+  color: #f8fafc;
+  font-weight: 400;
+  margin: 0;
+}
+
+/* Principles Grid */
+.principles-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.principle-item {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.principle-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.principle-desc {
+  font-size: 0.88rem;
+  color: #cbd5e1;
+  line-height: 1.5;
+}
+
+/* Who Belongs Box */
+.clan-belonging-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  border: 1px solid;
+  border-radius: 16px;
+  padding: 18px 20px;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.belonging-icon {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.clan-belonging-box strong {
+  display: block;
+  font-size: 0.98rem;
+  margin-bottom: 4px;
+}
+
+.clan-belonging-box p {
+  margin: 0;
+  font-size: 0.92rem;
+  color: #f1f5f9;
+  line-height: 1.55;
+}
+
+/* Champions Roster */
+.clan-champions-box {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  padding: 20px 24px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.empty-champions-msg {
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+  margin: 0;
+  font-style: italic;
+}
+
+.champions-chips-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.champion-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 6px 14px;
+  border-radius: 20px;
+  text-decoration: none;
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.champion-chip:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.champion-avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+}
+
+/* RESPONSIVE LAYOUT */
+@media (max-width: 992px) {
+  .clan-story-card {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    padding: 24px;
+  }
+
+  .clan-card-visual {
+    position: static;
+  }
+
+  .principles-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+

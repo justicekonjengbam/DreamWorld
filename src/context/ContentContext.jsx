@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabase'
 import { quests as initialQuests } from '../data/quests'
 import { roles as initialRoles, characters as initialCharacters } from '../data/characters'
 import { events as initialEvents } from '../data/events'
+import { clans as initialClans, getClanById } from '../data/clans'
 
 
 const ContentContext = createContext()
@@ -16,6 +17,7 @@ export const ContentProvider = ({ children }) => {
     const [quests, setQuests] = useState(initialQuests)
     const [roles, setRoles] = useState(initialRoles)
     const [characters, setCharacters] = useState(initialCharacters)
+    const clans = initialClans
     const [sponsors, setSponsors] = useState([])
     const [events, setEvents] = useState(initialEvents)
     const [donations, setDonations] = useState([]) // New state for donations
@@ -65,25 +67,43 @@ export const ContentProvider = ({ children }) => {
             // 3. Fetch Characters (Dreamers)
             const { data: cData } = await supabase.from('dreamers').select('*').order('order_index', { ascending: true })
             if (cData) {
-                setCharacters(cData.map(c => ({
-                    ...c,
-                    coverImage: c.cover_image,
-                    joinedDate: c.joined_date,
-                    themes: typeof c.themes === 'string' ? c.themes.split(',').map(t => t.trim()).filter(Boolean) : [],
-                    socials: { youtube: c.youtube, instagram: c.instagram, facebook: c.facebook, twitter: c.twitter },
-                    level: Math.floor((c.points || 0) / 108),
-                    points: c.points || 0,
-                    stats: {
-                        knowledge: c.stat_knowledge ?? 50,
-                        discipline: c.stat_discipline ?? 50,
-                        charisma: c.stat_charisma ?? 50,
-                        creativity: c.stat_creativity ?? 50,
-                        courage: c.stat_courage ?? 50,
-                        physique: c.stat_physique ?? 50,
-                        empathy: c.stat_empathy ?? 50,
-                        essence: c.stat_essence ?? 50
+                setCharacters(cData.map(c => {
+                    let pending = null
+                    if (c.pending_changes) {
+                        try {
+                            pending = typeof c.pending_changes === 'string' ? JSON.parse(c.pending_changes) : c.pending_changes
+                        } catch (e) {
+                            pending = null
+                        }
+                    } else {
+                        const localPending = localStorage.getItem(`dw_pending_edit_${c.id}`)
+                        if (localPending) {
+                            try { pending = JSON.parse(localPending) } catch (e) {}
+                        }
                     }
-                })))
+
+                    return {
+                        ...c,
+                        coverImage: c.cover_image,
+                        joinedDate: c.joined_date,
+                        pending_changes: pending,
+                        clan: c.clan || null,
+                        themes: typeof c.themes === 'string' ? c.themes.split(',').map(t => t.trim()).filter(Boolean) : [],
+                        socials: { youtube: c.youtube, instagram: c.instagram, facebook: c.facebook, twitter: c.twitter },
+                        level: Math.floor((c.points || 0) / 108),
+                        points: c.points || 0,
+                        stats: {
+                            knowledge: c.stat_knowledge ?? 50,
+                            discipline: c.stat_discipline ?? 50,
+                            charisma: c.stat_charisma ?? 50,
+                            creativity: c.stat_creativity ?? 50,
+                            courage: c.stat_courage ?? 50,
+                            physique: c.stat_physique ?? 50,
+                            empathy: c.stat_empathy ?? 50,
+                            essence: c.stat_essence ?? 50
+                        }
+                    }
+                }))
             }
 
             // 3b. Fetch Sponsors (Dedicated Table)
@@ -279,7 +299,8 @@ export const ContentProvider = ({ children }) => {
             stat_essence: parseInt(newChar.stat_essence === "" || newChar.stat_essence == null ? 50 : newChar.stat_essence),
             passcode: newChar.passcode || null,
             theme_color: newChar.theme_color || null,
-            daily_task: newChar.daily_task || null
+            daily_task: newChar.daily_task || null,
+            clan: newChar.clan || null
         }
         if (await saveToSupabase('dreamers', payload)) fetchData()
     }
@@ -311,7 +332,8 @@ export const ContentProvider = ({ children }) => {
             stat_essence: parseInt(updated.stat_essence === "" || updated.stat_essence == null ? 50 : updated.stat_essence),
             passcode: updated.passcode || null,
             theme_color: updated.theme_color || null,
-            daily_task: updated.daily_task || null
+            daily_task: updated.daily_task || null,
+            clan: updated.clan || null
         }
 
         if (await saveToSupabase('dreamers', payload)) fetchData()
@@ -319,6 +341,105 @@ export const ContentProvider = ({ children }) => {
 
     const deleteCharacter = async (id) => {
         if (await saveToSupabase('dreamers', null, true, id)) fetchData()
+    }
+
+    const requestProfileUpdate = async (characterId, requestedChanges) => {
+        try {
+            const char = characters.find(c => c.id === characterId)
+            const payloadChanges = {
+                name: requestedChanges.name ?? char?.name ?? '',
+                title: requestedChanges.title ?? char?.title ?? '',
+                avatar: requestedChanges.avatar ?? char?.avatar ?? '',
+                cover_image: requestedChanges.coverImage ?? requestedChanges.cover_image ?? char?.coverImage ?? char?.cover_image ?? '',
+                bio: requestedChanges.bio ?? char?.bio ?? '',
+                themes: Array.isArray(requestedChanges.themes) ? requestedChanges.themes.join(',') : (requestedChanges.themes ?? char?.themes ?? ''),
+                youtube: requestedChanges.youtube ?? char?.socials?.youtube ?? char?.youtube ?? '',
+                instagram: requestedChanges.instagram ?? char?.socials?.instagram ?? char?.instagram ?? '',
+                facebook: requestedChanges.facebook ?? char?.socials?.facebook ?? char?.facebook ?? '',
+                twitter: requestedChanges.twitter ?? char?.socials?.twitter ?? char?.twitter ?? '',
+                requested_at: new Date().toISOString()
+            }
+
+            localStorage.setItem(`dw_pending_edit_${characterId}`, JSON.stringify(payloadChanges))
+
+            const { error } = await supabase.from('dreamers').update({
+                pending_changes: JSON.stringify(payloadChanges)
+            }).eq('id', characterId)
+
+            if (error) {
+                console.warn('Supabase update warning (fallback to local state):', error.message)
+            }
+            await fetchData()
+            return true
+        } catch (err) {
+            console.error('Error submitting profile update:', err)
+            return false
+        }
+    }
+
+    const approveProfileUpdate = async (characterId) => {
+        try {
+            const char = characters.find(c => c.id === characterId)
+            if (!char) return false
+
+            const pending = char.pending_changes || JSON.parse(localStorage.getItem(`dw_pending_edit_${characterId}`) || 'null')
+            if (!pending) return false
+
+            const payload = {
+                id: characterId,
+                name: pending.name || char.name,
+                title: pending.title || char.title,
+                avatar: pending.avatar || char.avatar,
+                cover_image: pending.cover_image || pending.coverImage || char.coverImage || char.cover_image,
+                bio: pending.bio || char.bio,
+                themes: Array.isArray(pending.themes) ? pending.themes.join(',') : (pending.themes || char.themes || ''),
+                youtube: pending.youtube || char.socials?.youtube || char.youtube || '',
+                instagram: pending.instagram || char.socials?.instagram || char.instagram || '',
+                facebook: pending.facebook || char.socials?.facebook || char.facebook || '',
+                twitter: pending.twitter || char.socials?.twitter || char.twitter || '',
+                pending_changes: null
+            }
+
+            localStorage.removeItem(`dw_pending_edit_${characterId}`)
+
+            const { error } = await supabase.from('dreamers').update(payload).eq('id', characterId)
+            if (error) throw error
+
+            await fetchData()
+            return true
+        } catch (err) {
+            console.error('Error approving profile update:', err)
+            alert(`Approval failed: ${err.message}`)
+            return false
+        }
+    }
+
+    const rejectProfileUpdate = async (characterId) => {
+        try {
+            localStorage.removeItem(`dw_pending_edit_${characterId}`)
+            await supabase.from('dreamers').update({ pending_changes: null }).eq('id', characterId)
+            await fetchData()
+            return true
+        } catch (err) {
+            console.error('Error rejecting profile update:', err)
+            return false
+        }
+    }
+
+    const clearAllDreamers = async () => {
+        try {
+            const toDelete = characters.filter(c => !c.name?.toLowerCase().includes('justice') && !c.is_creator && !c.isCreator)
+            for (const c of toDelete) {
+                await supabase.from('dreamers').delete().eq('id', c.id)
+                localStorage.removeItem(`dw_pending_edit_${c.id}`)
+            }
+            await fetchData()
+            return true
+        } catch (err) {
+            console.error('Error clearing dreamers:', err)
+            alert(`Clear Failed: ${err.message}`)
+            return false
+        }
     }
 
     // --- Sponsor Actions ---
@@ -569,6 +690,13 @@ export const ContentProvider = ({ children }) => {
             deleteDonation,
             reorderCharacter,
             sponsorships,
+            // Profile Edit & Moderation Workflow
+            requestProfileUpdate,
+            approveProfileUpdate,
+            rejectProfileUpdate,
+            clearAllDreamers,
+            clans,
+            getClanById,
             // App settings
             appSettings,
             updateAppSettings

@@ -25,7 +25,11 @@ function AdminDashboard() {
         syncGlobalData,
         submitDonation,
         donations, deleteDonation,
-        appSettings, updateAppSettings
+        appSettings, updateAppSettings,
+        approveProfileUpdate,
+        rejectProfileUpdate,
+        clearAllDreamers,
+        clans
     } = useContent()
 
 
@@ -38,7 +42,7 @@ function AdminDashboard() {
         needsFunding: false, amountNeeded: '', galleryImages: [], completionImages: [], completionNote: ''
     })
     const [roleFormData, setRoleFormData] = useState({ id: '', name: '', singular: '', description: '', color: '#4CA1AF', traits: '', philosophy: '', isExclusive: false })
-    const [memberFormData, setMemberFormData] = useState({ name: '', role: '', title: '', avatar: '', coverImage: '', bio: '', themes: '', joinedDate: '', order_index: 0, stat_knowledge: 50, stat_discipline: 50, stat_charisma: 50, stat_creativity: 50, stat_courage: 50, stat_physique: 50, stat_empathy: 50, stat_essence: 50, passcode: '', theme_color: '#141932', daily_task: '' })
+    const [memberFormData, setMemberFormData] = useState({ name: '', role: '', title: '', avatar: '', coverImage: '', bio: '', themes: '', joinedDate: '', order_index: 0, stat_knowledge: 50, stat_discipline: 50, stat_charisma: 50, stat_creativity: 50, stat_courage: 50, stat_physique: 50, stat_empathy: 50, stat_essence: 50, passcode: '', theme_color: '#141932', daily_task: '', clan: '' })
     const [sponsorFormData, setSponsorFormData] = useState({ name: '', title: '', avatar: '', bio: '', themes: '' })
     const [eventFormData, setEventFormData] = useState({
         title: '', host: '', type: 'online', date: '', location: '', description: '', registrationLink: '',
@@ -60,6 +64,18 @@ function AdminDashboard() {
     const [printType, setPrintType] = useState(null) // 'id' or 'cert'
     const [syncing, setSyncing] = useState(false)
     const [xpAdjustAmount, setXpAdjustAmount] = useState('')
+
+    const pendingEditsList = characters ? characters.filter(c => c.pending_changes != null) : []
+
+    const handleClearAllMembers = async () => {
+        if (window.confirm('⚠️ ARE YOU SURE YOU WANT TO CLEAR ALL MEMBERS?\n\nThis will remove all non-creator members from the database so they can re-register/re-join cleanly. This action cannot be undone!')) {
+            const success = await clearAllDreamers()
+            if (success) {
+                alert('✅ All non-creator members cleared successfully!')
+                setHasUnsyncedChanges(true)
+            }
+        }
+    }
 
 
     useEffect(() => {
@@ -281,6 +297,14 @@ function AdminDashboard() {
                 )}
                 <nav className="admin-nav">
                     <button className={`nav-item ${activeTab === 'announcement' ? 'active' : ''}`} onClick={() => { setActiveTab('announcement'); resetForms() }}>📢 Announcement</button>
+                    <button className={`nav-item ${activeTab === 'approvals' ? 'active' : ''}`} onClick={() => { setActiveTab('approvals'); resetForms() }} style={{ color: '#ffb74d', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <span>⏳ Pending Approvals</span>
+                        {pendingEditsList.length > 0 && (
+                            <span style={{ background: '#ff6f61', color: '#fff', fontSize: '0.72rem', fontWeight: 800, padding: '2px 7px', borderRadius: 10 }}>
+                                {pendingEditsList.length}
+                            </span>
+                        )}
+                    </button>
                     <button className={`nav-item ${activeTab === 'quests' ? 'active' : ''}`} onClick={() => { setActiveTab('quests'); resetForms() }}>🎯 Quests</button>
                     <button className={`nav-item ${activeTab === 'roles' ? 'active' : ''}`} onClick={() => { setActiveTab('roles'); resetForms() }}>🎭 Roles</button>
                     <button className={`nav-item ${activeTab === 'members' ? 'active' : ''}`} onClick={() => { setActiveTab('members'); resetForms() }}>👥 Dreamers</button>
@@ -459,8 +483,145 @@ function AdminDashboard() {
                     </div>
                 )}
 
+                {activeTab === 'approvals' && (
+                    <div className="admin-section animate-fade">
+                        <header style={{ marginBottom: 20 }}>
+                            <h3 style={{ color: '#ffb74d', display: 'flex', alignItems: 'center', gap: 10, margin: 0 }}>
+                                ⏳ Pending Profile Change Approvals
+                                <span style={{ fontSize: '0.85rem', background: 'rgba(255,183,77,0.2)', color: '#ffb74d', padding: '3px 10px', borderRadius: 12, border: '1px solid rgba(255,183,77,0.4)' }}>
+                                    {pendingEditsList.length} Requests
+                                </span>
+                            </h3>
+                            <p style={{ color: 'var(--color-gray)', fontSize: '0.85rem', marginTop: 6 }}>
+                                Review profile edit requests submitted by Dreamers. Approving a request updates their live profile on DreamWorld immediately.
+                            </p>
+                        </header>
+
+                        {pendingEditsList.length === 0 ? (
+                            <div style={{ textAlign: 'center', padding: '40px 20px', background: 'rgba(255,255,255,0.02)', borderRadius: 12, border: '1px dashed rgba(255,255,255,0.1)' }}>
+                                <span style={{ fontSize: '2.5rem', display: 'block', marginBottom: 10 }}>✨</span>
+                                <h4 style={{ color: 'var(--color-text)', margin: 0 }}>No Pending Approvals</h4>
+                                <p style={{ color: 'var(--color-gray)', fontSize: '0.85rem', marginTop: 4 }}>All Dreamer profile changes are up to date.</p>
+                            </div>
+                        ) : (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                                {pendingEditsList.map(char => {
+                                    const changes = char.pending_changes
+                                    return (
+                                        <Card key={char.id} className="approval-card" style={{ padding: 20, border: '1px solid rgba(255,183,77,0.3)', background: 'rgba(20, 25, 50, 0.7)' }}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: 12, flexWrap: 'wrap', gap: 10 }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                                                    <Avatar src={char.avatar} name={char.name} style={{ width: 44, height: 44, borderRadius: '50%' }} />
+                                                    <div>
+                                                        <h4 style={{ margin: 0, fontSize: '1.05rem', color: '#fff' }}>{char.name}</h4>
+                                                        <span style={{ fontSize: '0.78rem', color: 'var(--color-accent)' }}>ID: {char.id} • Role: {char.role}</span>
+                                                    </div>
+                                                </div>
+                                                <div style={{ display: 'flex', gap: 10 }}>
+                                                    <Button
+                                                        variant="primary"
+                                                        size="small"
+                                                        onClick={async () => {
+                                                            if (window.confirm(`Approve profile updates for ${char.name}?`)) {
+                                                                const res = await approveProfileUpdate(char.id)
+                                                                if (res) alert(`✅ Profile updated for ${char.name}!`)
+                                                            }
+                                                        }}
+                                                        style={{ background: 'linear-gradient(135deg, #4CAF50, #45a049)' }}
+                                                    >
+                                                        ✅ Approve Changes
+                                                    </Button>
+                                                    <Button
+                                                        variant="secondary"
+                                                        size="small"
+                                                        onClick={async () => {
+                                                            if (window.confirm(`Reject profile updates for ${char.name}?`)) {
+                                                                await rejectProfileUpdate(char.id)
+                                                                alert(`❌ Profile update rejected for ${char.name}.`)
+                                                            }
+                                                        }}
+                                                        style={{ border: '1px solid rgba(255,100,100,0.4)', color: '#ff7b7b' }}
+                                                    >
+                                                        ❌ Reject
+                                                    </Button>
+                                                </div>
+                                            </div>
+
+                                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16 }}>
+                                                {/* Current Live Profile */}
+                                                <div style={{ padding: 14, background: 'rgba(0,0,0,0.3)', borderRadius: 10, border: '1px solid rgba(255,255,255,0.05)' }}>
+                                                    <h5 style={{ margin: '0 0 10px 0', color: 'var(--color-gray)', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: 1 }}>
+                                                        Current Live Profile
+                                                    </h5>
+                                                    <p style={{ margin: '0 0 6px 0', fontSize: '0.88rem' }}><strong>Name:</strong> {char.name}</p>
+                                                    <p style={{ margin: '0 0 6px 0', fontSize: '0.88rem' }}><strong>Title:</strong> {char.title || 'N/A'}</p>
+                                                    <p style={{ margin: '0 0 6px 0', fontSize: '0.88rem', color: 'var(--color-text-muted)', lineHeight: 1.5 }}><strong>Bio:</strong> {char.bio || 'N/A'}</p>
+                                                    <div style={{ marginTop: 8 }}>
+                                                        <span style={{ fontSize: '0.75rem', color: 'var(--color-gray)' }}>Avatar Preview:</span>
+                                                        <img src={char.avatar || '/logo.png'} alt="Avatar" style={{ width: 44, height: 44, borderRadius: '50%', display: 'block', marginTop: 4 }} />
+                                                    </div>
+                                                </div>
+
+                                                {/* Requested Changes */}
+                                                <div style={{ padding: 14, background: 'rgba(255,183,77,0.05)', borderRadius: 10, border: '1px solid rgba(255,183,77,0.25)' }}>
+                                                    <h5 style={{ margin: '0 0 10px 0', color: '#ffb74d', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: 1 }}>
+                                                        Requested Changes
+                                                    </h5>
+                                                    <p style={{ margin: '0 0 6px 0', fontSize: '0.88rem', color: changes?.name && changes.name !== char.name ? '#81C784' : '#fff' }}>
+                                                        <strong>Name:</strong> {changes?.name || char.name}
+                                                    </p>
+                                                    <p style={{ margin: '0 0 6px 0', fontSize: '0.88rem', color: changes?.title && changes.title !== char.title ? '#81C784' : '#fff' }}>
+                                                        <strong>Title:</strong> {changes?.title || 'N/A'}
+                                                    </p>
+                                                    <p style={{ margin: '0 0 6px 0', fontSize: '0.88rem', color: changes?.bio && changes.bio !== char.bio ? '#81C784' : 'var(--color-text-muted)', lineHeight: 1.5 }}>
+                                                        <strong>Bio:</strong> {changes?.bio || 'N/A'}
+                                                    </p>
+                                                    <div style={{ marginTop: 8, display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+                                                        <div>
+                                                            <span style={{ fontSize: '0.75rem', color: '#ffb74d' }}>New Avatar:</span>
+                                                            <img src={changes?.avatar || char.avatar || '/logo.png'} alt="New Avatar" style={{ width: 44, height: 44, borderRadius: '50%', display: 'block', marginTop: 4, border: '2px solid #81C784' }} />
+                                                        </div>
+                                                        {changes?.cover_image && (
+                                                            <div>
+                                                                <span style={{ fontSize: '0.75rem', color: '#ffb74d' }}>New Cover:</span>
+                                                                <img src={changes.cover_image} alt="New Cover" style={{ width: 88, height: 44, borderRadius: 6, display: 'block', marginTop: 4, objectFit: 'cover', border: '2px solid #81C784' }} />
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </Card>
+                                    )
+                                })}
+                            </div>
+                        )}
+                    </div>
+                )}
+
                 {activeTab === 'members' && (
                     <div className="admin-section animate-fade">
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+                            <h3 style={{ margin: 0, color: 'var(--color-text)' }}>Dreamers Directory</h3>
+                            <button
+                                type="button"
+                                onClick={handleClearAllMembers}
+                                style={{
+                                    padding: '8px 14px',
+                                    background: 'rgba(255, 77, 77, 0.15)',
+                                    border: '1px solid rgba(255, 77, 77, 0.4)',
+                                    color: '#ff7676',
+                                    borderRadius: 8,
+                                    fontWeight: 700,
+                                    fontSize: '0.82rem',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 6
+                                }}
+                            >
+                                ⚠️ Reset / Clear All Members
+                            </button>
+                        </div>
                         <div className="admin-split-layout">
                             <Card className="admin-form-card">
                                 <h3>{editingId ? 'Edit Dreamer' : 'Add New Dreamer'}</h3>
@@ -589,6 +750,21 @@ function AdminDashboard() {
                                         <div className="form-row">
                                             <div className="form-group"><label>Portal Passcode</label><input type="text" placeholder="e.g. SECRET123" value={memberFormData.passcode || ''} onChange={(e) => setMemberFormData({ ...memberFormData, passcode: e.target.value })} /></div>
                                             <div className="form-group"><label>Theme Color (Hex)</label><input type="text" placeholder="#141932" value={memberFormData.theme_color || ''} onChange={(e) => setMemberFormData({ ...memberFormData, theme_color: e.target.value })} /></div>
+                                        </div>
+                                        <div className="form-group-full" style={{ margin: '10px 0' }}>
+                                            <label style={{ color: '#FFD700', fontWeight: 700 }}>🏰 Appointed Clan</label>
+                                            <select 
+                                                value={memberFormData.clan || ''} 
+                                                onChange={(e) => setMemberFormData({ ...memberFormData, clan: e.target.value })}
+                                                style={{ width: '100%', padding: '10px', background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,215,0,0.4)', borderRadius: 8, color: '#FFD700', fontWeight: 700 }}
+                                            >
+                                                <option value="">No Clan Appointed</option>
+                                                {clans && clans.map(c => (
+                                                    <option key={c.id} value={c.id}>
+                                                        {c.icon} {c.name} ({c.element}) — "{c.motto}"
+                                                    </option>
+                                                ))}
+                                            </select>
                                         </div>
                                         <div className="form-group-full">
                                             <label>Daily Task / Letter for Portal</label>

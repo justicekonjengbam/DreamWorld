@@ -8,12 +8,12 @@ const DREAMWORLD_LINKS = [
   { to: '/about', label: 'Story' },
   { to: '/creator', label: 'Creator' },
   { to: '/roles', label: 'Roles' },
+  { to: '/clans', label: 'Clans' },
   { to: '/characters', label: 'Dreamers' },
   { to: '/quests', label: 'Quests' },
   { to: '/events', label: 'Events' },
   { to: '/songs', label: 'Songs' },
   { to: '/join', label: 'Join' },
-  { to: '/funders', label: 'Support' },
   { to: '/thanks', label: 'Sponsors' },
   { to: '/settings', label: 'Settings' },
 ]
