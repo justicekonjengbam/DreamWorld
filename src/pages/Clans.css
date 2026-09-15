@@ -1,338 +1,803 @@
+/* ==========================================================
+   CLANS PAGE - INTERCHANGEABLE DESKTOP/MOBILE BACKGROUNDS
+   & SACRED PENTAGON HIGH-VISIBILITY FLOWING ENERGY STREAMS
+   ========================================================== */
+
 .clans-page {
-  padding-bottom: 90px;
+  position: relative;
+  min-height: 100vh;
+  padding-bottom: 40px;
+  /* Desktop view background */
+  background-image: url('/Clans/clan_background_desktop.png');
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  transition: background-image 0.5s ease-in-out;
+}
+
+/* Mobile view interchangeable background */
+@media (max-width: 768px) {
+  .clans-page {
+    background-image: url('/Clans/clan_background_mobile.png');
+    background-attachment: scroll; /* Mobile scroll performance optimization */
+  }
+}
+
+/* Dark gradient overlay for ultra crisp contrast and readable text */
+.clans-bg-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 50% 30%, rgba(10, 15, 30, 0.45) 0%, rgba(6, 9, 20, 0.85) 75%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.clans-container {
+  position: relative;
+  z-index: 2;
+  max-width: 1000px;
 }
 
 /* Hero Section */
 .clans-hero {
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 16px;
+  padding-top: 5px;
 }
 
 .clans-logo {
   max-width: 160px;
-  margin-bottom: 12px;
-  filter: drop-shadow(0 0 20px rgba(76, 161, 175, 0.4));
+  margin-bottom: 8px;
+  filter: drop-shadow(0 0 20px rgba(255, 215, 120, 0.5));
   transition: transform 0.3s ease;
 }
 
 .clans-logo:hover {
-  transform: scale(1.05);
+  transform: scale(1.05) rotate(2deg);
 }
 
 .clans-title-main {
   font-family: var(--font-heading, Georgia, serif);
-  font-size: 2.6rem;
-  margin: 0 0 10px 0;
-  background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+  font-size: 2.2rem;
+  margin: 0 0 6px 0;
+  background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #94a3b8 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   letter-spacing: 0.5px;
+  text-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
 }
 
 .clans-subtitle-main {
-  font-size: 1.05rem;
-  color: var(--color-text-muted);
-  max-width: 650px;
-  margin: 0 auto;
-  line-height: 1.6;
+  font-size: 0.95rem;
+  color: #cbd5e1;
+  max-width: 580px;
+  margin: 0 auto 12px auto;
+  line-height: 1.5;
 }
 
-/* Filter Nav Tabs */
-.clan-nav-tabs {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-bottom: 48px;
-}
-
-.clan-nav-btn {
-  background: rgba(18, 24, 44, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: var(--color-text-muted);
-  padding: 10px 20px;
-  border-radius: 25px;
-  font-size: 0.9rem;
+.pentagon-instruction-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(76, 161, 175, 0.2);
+  border: 1px solid rgba(76, 161, 175, 0.4);
+  color: #70e1f5;
+  padding: 6px 16px;
+  border-radius: 30px;
+  font-size: 0.82rem;
   font-weight: 700;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  backdrop-filter: blur(10px);
+  letter-spacing: 0.5px;
+  box-shadow: 0 0 15px rgba(76, 161, 175, 0.25);
+  animation: pulseInstruction 2.5s infinite ease-in-out;
 }
 
-.clan-nav-btn:hover {
-  transform: translateY(-2px);
-  background: rgba(28, 36, 64, 0.95);
-  color: #fff;
+@keyframes pulseInstruction {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 15px rgba(76, 161, 175, 0.25); }
+  50% { transform: scale(1.03); box-shadow: 0 0 25px rgba(112, 225, 245, 0.5); }
 }
 
-.clan-nav-btn.active {
-  background: rgba(30, 40, 75, 0.95);
-  color: #fff;
-  box-shadow: 0 4px 20px var(--clan-color, rgba(76, 161, 175, 0.3));
+/* ==========================================================
+   PENTAGON SACRED SEAL ARENA (TRANSPARENT - HIGH VISIBILITY)
+   ========================================================== */
+
+.pentagon-section {
+  background: transparent;
+  backdrop-filter: none;
+  border: none;
+  box-shadow: none;
+  padding: 10px 0 20px 0;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
-/* Story Cards List */
-.clans-story-list {
+/* Pentagon Arena Container */
+.pentagon-arena-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, rgba(16, 24, 48, 0.5) 0%, rgba(8, 12, 24, 0.2) 70%, transparent 100%);
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.4);
+}
+
+/* SVG Connecting Lines & Organic Smoke Filter */
+.pentagon-svg-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Vibrant Outer Pentagon Edges */
+.pentagon-polygon-edge {
+  fill: rgba(76, 161, 175, 0.05);
+  stroke: rgba(112, 225, 245, 0.85);
+  stroke-width: 1.8;
+  stroke-dasharray: 8 4;
+  animation: rotateDashes 35s linear infinite;
+  filter: drop-shadow(0 0 10px rgba(112, 225, 245, 0.9)) drop-shadow(0 0 25px rgba(112, 225, 245, 0.5));
+}
+
+/* Vibrant Inner Pentagram Star Edges */
+.pentagon-star-edge {
+  fill: none;
+  stroke: rgba(196, 113, 237, 0.75);
+  stroke-width: 1.4;
+  filter: drop-shadow(0 0 10px rgba(196, 113, 237, 0.8));
+}
+
+@keyframes rotateDashes {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: 200; }
+}
+
+
+
+/* Central Core using clan_core.png (TRANSPARENT BACKGROUND & LARGER MAJESTIC EMBLEM) */
+.pentagon-center-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 175px;
+  height: 175px;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  box-shadow: none;
+  overflow: visible;
+  padding: 0;
+  pointer-events: none; /* Prevents unwanted clicking/re-animating on center artifact */
+}
+
+.core-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 16px rgba(255, 255, 255, 0.95)) drop-shadow(0 0 35px rgba(112, 225, 245, 0.75));
+  animation: corePulse 3s infinite ease-in-out;
+  z-index: 2;
+}
+
+@keyframes corePulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 16px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 30px rgba(112, 225, 245, 0.7));
+  }
+  50% {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 26px rgba(255, 255, 255, 1)) drop-shadow(0 0 45px rgba(112, 225, 245, 1));
+  }
+}
+
+/* ==========================================================
+   PENTAGON VERTEX NODES (LARGER LOGO & GLOWING AURA SMOKE)
+   ========================================================== */
+
+.pentagon-node {
+  position: absolute;
+  top: var(--pos-y);
+  left: var(--pos-x);
+  transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  align-items: center;
+  cursor: pointer;
+  z-index: 4;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  
+  /* OPENING SWIRLING ORBIT ENTRANCE ANIMATION */
+  animation: pentagonOrbitEntrance 1.2s cubic-bezier(0.25, 1, 0.5, 1) both;
+  animation-delay: calc(var(--node-index) * 0.14s);
 }
 
-.clan-story-card {
-  background: linear-gradient(160deg, rgba(20, 26, 48, 0.9), rgba(10, 14, 28, 0.95));
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 24px;
-  padding: 36px;
-  display: grid;
-  grid-template-columns: 280px 1fr;
-  gap: 40px;
-  align-items: start;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+@keyframes pentagonOrbitEntrance {
+  0% {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.1) rotate(-360deg);
+    opacity: 0;
+    filter: blur(10px);
+  }
+  65% {
+    top: var(--pos-y);
+    left: var(--pos-x);
+    transform: translate(-50%, -50%) scale(1.2) rotate(12deg);
+    opacity: 1;
+    filter: blur(0px);
+  }
+  100% {
+    top: var(--pos-y);
+    left: var(--pos-x);
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    opacity: 1;
+    filter: blur(0px);
+  }
+}
+
+/* Circular Avatar Frame - Larger size & Relative Anchor */
+.node-avatar-frame {
   position: relative;
-  overflow: hidden;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: rgba(12, 16, 32, 0.95);
+  border: 3px solid var(--clan-color);
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6), 0 0 25px var(--clan-color);
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
 }
 
-.clan-story-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.5);
+/* Mystical Aura Smoke Layer (Centered on avatar frame) */
+.node-aura-smoke {
+  position: absolute;
+  top: -14px;
+  left: -14px;
+  right: -14px;
+  bottom: -14px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--clan-color) 0%, rgba(0, 0, 0, 0) 70%);
+  opacity: 0.5;
+  filter: blur(10px);
+  pointer-events: none;
+  animation: auraSmokeSwirl 5s ease-in-out infinite alternate;
+  transition: all 0.35s ease;
 }
 
-/* Visual Emblem Column */
-.clan-card-visual {
+@keyframes auraSmokeSwirl {
+  0% { transform: scale(1) rotate(0deg); opacity: 0.4; filter: blur(8px); }
+  50% { transform: scale(1.2) rotate(180deg); opacity: 0.7; filter: blur(12px); }
+  100% { transform: scale(1.05) rotate(360deg); opacity: 0.5; filter: blur(9px); }
+}
+
+/* Pulse Ring - 100% Perfectly Centered inside the avatar frame */
+.node-pulse-ring {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  border-radius: 50%;
+  border: 2.5px solid var(--clan-color);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.node-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 10px var(--clan-color)) drop-shadow(0 0 18px var(--clan-color));
+  transition: transform 0.35s ease;
+  z-index: 2;
+}
+
+.node-info-badge {
+  margin-top: 6px;
+  background: rgba(10, 14, 28, 0.92);
+  border: 1px solid var(--clan-color);
+  padding: 4px 12px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+}
+
+.node-name {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.2px;
+}
+
+/* Node Hover Effects */
+.pentagon-node:hover {
+  transform: translate(-50%, -50%) scale(1.18);
+  z-index: 10;
+}
+
+.pentagon-node:hover .node-avatar-frame {
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.8), 0 0 40px var(--clan-color);
+  background: rgba(18, 24, 48, 0.98);
+}
+
+.pentagon-node:hover .node-aura-smoke {
+  opacity: 0.95;
+  transform: scale(1.35);
+  filter: blur(14px);
+}
+
+.pentagon-node:hover .node-logo-img {
+  transform: scale(1.12);
+}
+
+.pentagon-node:hover .node-pulse-ring {
+  animation: nodeRingExpand 1.5s infinite ease-out;
+}
+
+@keyframes nodeRingExpand {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(1.55); opacity: 0; }
+}
+
+/* Active Node State */
+.pentagon-node.active {
+  transform: translate(-50%, -50%) scale(1.22);
+  z-index: 10;
+}
+
+.pentagon-node.active .node-avatar-frame {
+  border-width: 3.5px;
+  box-shadow: 0 0 45px var(--clan-color), inset 0 0 20px var(--clan-color);
+}
+
+.pentagon-node.active .node-pulse-ring {
+  animation: nodeRingExpand 1.5s infinite ease-out;
+}
+
+.pentagon-node.active .node-aura-smoke {
+  opacity: 1;
+  transform: scale(1.4);
+  filter: blur(15px);
+}
+
+/* ==========================================================
+   SPOTLIGHT DETAIL MODAL / OVERLAY (REFINED TYPOGRAPHY)
+   ========================================================== */
+
+.spotlight-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(4, 7, 16, 0.82);
+  backdrop-filter: blur(12px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  overflow-y: auto;
+  animation: fadeInOverlay 0.3s ease;
+}
+
+@keyframes fadeInOverlay {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.spotlight-card {
+  background: linear-gradient(160deg, rgba(18, 24, 46, 0.98), rgba(8, 12, 24, 0.98));
+  border: 1.5px solid var(--clan-color);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 840px;
+  max-height: 88vh;
+  overflow-y: auto;
+  padding: 24px 28px;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.8), 0 0 40px var(--clan-color);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: scaleInSpotlight 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes scaleInSpotlight {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.spotlight-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 12px;
+}
+
+.spotlight-nav-btn-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.spotlight-nav-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  padding: 5px 12px;
+  border-radius: 14px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.spotlight-nav-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+.spotlight-element-tag {
+  padding: 4px 12px;
+  border-radius: 16px;
+  border: 1px solid;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.spotlight-close-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.spotlight-close-btn:hover {
+  background: rgba(255, 77, 77, 0.85);
+  border-color: #ff4d4d;
+  transform: rotate(90deg);
+}
+
+.spotlight-body {
+  display: grid;
+  grid-template-columns: 210px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+/* Emblem in spotlight */
+.spotlight-emblem-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 16px;
-  position: sticky;
-  top: 100px;
+  gap: 8px;
 }
 
-.clan-emblem-frame {
-  width: 100%;
-  max-width: 240px;
-  height: 240px;
-  border-radius: 20px;
-  background: rgba(0, 0, 0, 0.5);
+.spotlight-emblem-frame {
+  width: 180px;
+  height: 180px;
+  border-radius: 18px;
+  background: rgba(0, 0, 0, 0.6);
   border: 2px solid;
-  padding: 20px;
+  padding: 14px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   cursor: zoom-in;
-  position: relative;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s ease;
 }
 
-.clan-emblem-frame:hover {
-  transform: scale(1.03);
+.spotlight-emblem-frame:hover {
+  transform: scale(1.04);
 }
 
-/* IMPORTANT: Perfect Image Scaling without Distortion or Overflow */
-.clan-emblem-img {
+.spotlight-emblem-img {
   width: 100%;
   height: 100%;
-  max-width: 180px;
-  max-height: 180px;
+  max-width: 140px;
+  max-height: 140px;
   object-fit: contain;
-  display: block;
 }
 
-.emblem-zoom-tag {
-  font-size: 0.72rem;
-  color: var(--color-text-muted);
-  margin-top: 8px;
+.pulse-enlarge {
+  animation: pulseLogo 4s infinite ease-in-out;
+}
+
+@keyframes pulseLogo {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.spotlight-zoom-hint {
+  font-size: 0.68rem;
+  color: #94a3b8;
+  margin-top: 4px;
   font-weight: 600;
-  letter-spacing: 0.5px;
 }
 
-.clan-meta-info {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-}
-
-.clan-element-tag {
-  padding: 4px 14px;
-  border-radius: 12px;
-  border: 1px solid;
-  font-size: 0.78rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.clan-name-heading {
+.spotlight-clan-title {
   font-family: var(--font-heading, Georgia, serif);
-  font-size: 1.8rem;
-  margin: 4px 0 0 0;
+  font-size: 1.4rem;
   color: #fff;
+  margin: 2px 0 0 0;
+  line-height: 1.25;
 }
 
-.clan-motto-text {
+.spotlight-motto {
   font-style: italic;
-  font-size: 1.05rem;
+  font-size: 0.85rem;
   font-weight: 600;
   margin: 0;
 }
 
-/* Story Content Column */
-.clan-card-content {
+/* Spotlight details */
+.spotlight-details {
   display: flex;
   flex-direction: column;
-  gap: 24px;
-}
-
-.section-label {
-  font-family: var(--font-heading, Georgia, serif);
-  font-size: 1rem;
-  color: #fff;
-  margin: 0 0 12px 0;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  font-weight: 700;
-}
-
-/* Story Narrative */
-.clan-narrative-box {
-  background: rgba(0, 0, 0, 0.4);
-  border-radius: 16px;
-  padding: 20px 24px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.narrative-text {
-  font-size: 1.02rem;
-  line-height: 1.7;
-  color: #f8fafc;
-  font-weight: 400;
-  margin: 0;
-}
-
-/* Principles Grid */
-.principles-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
   gap: 14px;
 }
 
-.principle-item {
+.spotlight-section-box {
   background: rgba(0, 0, 0, 0.4);
-  border: 1px solid;
   border-radius: 14px;
-  padding: 16px;
+  padding: 14px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.spotlight-section-title {
+  font-family: var(--font-heading, Georgia, serif);
+  font-size: 0.88rem;
+  color: #fff;
+  margin: 0 0 6px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.spotlight-narrative {
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: #f1f5f9;
+  margin: 0;
+}
+
+/* Principles Grid with clean non-overlapping layout */
+.spotlight-principles-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.spotlight-principle-card {
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid;
+  border-radius: 10px;
+  padding: 10px 10px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 3px;
+  overflow: hidden;
 }
 
-.principle-title {
+.principle-name {
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 0.8rem;
+  word-break: break-word;
 }
 
-.principle-desc {
-  font-size: 0.88rem;
+.principle-text {
+  font-size: 0.74rem;
   color: #cbd5e1;
-  line-height: 1.5;
+  line-height: 1.35;
+  word-break: break-word;
 }
 
-/* Who Belongs Box */
-.clan-belonging-box {
+.spotlight-belonging-box {
   display: flex;
   align-items: flex-start;
-  gap: 16px;
+  gap: 10px;
   border: 1px solid;
-  border-radius: 16px;
-  padding: 18px 20px;
+  border-radius: 14px;
+  padding: 12px 14px;
   background: rgba(0, 0, 0, 0.3);
 }
 
-.belonging-icon {
-  font-size: 1.8rem;
+.belonging-emoji {
+  font-size: 1.35rem;
   line-height: 1;
 }
 
-.clan-belonging-box strong {
+.spotlight-belonging-box strong {
   display: block;
-  font-size: 0.98rem;
-  margin-bottom: 4px;
+  font-size: 0.84rem;
+  margin-bottom: 2px;
 }
 
-.clan-belonging-box p {
+.spotlight-belonging-box p {
   margin: 0;
-  font-size: 0.92rem;
-  color: #f1f5f9;
-  line-height: 1.55;
+  font-size: 0.82rem;
+  color: #e2e8f0;
+  line-height: 1.4;
 }
 
-/* Champions Roster */
-.clan-champions-box {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 16px;
-  padding: 20px 24px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+.spotlight-champions-box {
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 14px;
+  padding: 12px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.empty-champions-msg {
-  font-size: 0.88rem;
-  color: var(--color-text-muted);
+.no-champions-text {
+  font-size: 0.78rem;
+  color: #94a3b8;
   margin: 0;
   font-style: italic;
 }
 
-.champions-chips-list {
+.spotlight-champions-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 6px;
 }
 
-.champion-chip {
+.spotlight-champion-chip {
   display: flex;
   align-items: center;
-  gap: 10px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  padding: 6px 14px;
-  border-radius: 20px;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 4px 10px;
+  border-radius: 16px;
   text-decoration: none;
   color: #fff;
-  font-size: 0.88rem;
+  font-size: 0.78rem;
   font-weight: 600;
   transition: all 0.2s ease;
 }
 
-.champion-chip:hover {
-  background: rgba(255, 255, 255, 0.14);
-  border-color: rgba(255, 255, 255, 0.3);
-  transform: translateY(-2px);
+.spotlight-champion-chip:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
 }
 
-.champion-avatar {
-  width: 26px;
-  height: 26px;
+.spotlight-avatar {
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
 }
 
-/* RESPONSIVE LAYOUT */
-@media (max-width: 992px) {
-  .clan-story-card {
+/* ==========================================================
+   RESPONSIVE LAYOUT ADJUSTMENTS FOR MOBILE & TABLETS
+   ========================================================== */
+
+@media (max-width: 850px) {
+  .spotlight-body {
     grid-template-columns: 1fr;
-    gap: 30px;
-    padding: 24px;
+    gap: 16px;
   }
 
-  .clan-card-visual {
-    position: static;
+  .spotlight-emblem-container {
+    align-items: center;
   }
 
-  .principles-grid {
-    grid-template-columns: 1fr;
+  .spotlight-principles-grid {
+    grid-template-columns: 1fr; /* Stacks cards cleanly on smaller screens */
+    gap: 8px;
   }
 }
 
+@media (max-width: 768px) {
+  .clans-title-main {
+    font-size: 1.8rem;
+  }
 
+  .clans-subtitle-main {
+    font-size: 0.88rem;
+  }
+
+  .pentagon-section {
+    padding: 10px 0 20px 0;
+  }
+
+  /* Scale pentagon arena down on mobile screens (~330px) */
+  .pentagon-arena-wrapper {
+    max-width: 330px;
+  }
+
+  .node-avatar-frame {
+    width: 72px;
+    height: 72px;
+    padding: 6px;
+  }
+
+  .pentagon-center-core {
+    width: 125px;
+    height: 125px;
+  }
+
+  .node-info-badge {
+    padding: 2px 7px;
+    border-radius: 10px;
+    margin-top: 3px;
+  }
+
+  .node-name {
+    font-size: 0.65rem;
+  }
+
+  .spotlight-card {
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  .spotlight-emblem-frame {
+    width: 140px;
+    height: 140px;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pentagon-arena-wrapper {
+    max-width: 285px;
+  }
+
+  .node-avatar-frame {
+    width: 60px;
+    height: 60px;
+    padding: 5px;
+  }
+
+  .pentagon-center-core {
+    width: 90px;
+    height: 90px;
+  }
+
+  .node-name {
+    display: none; /* Hide text on ultra small screens to keep UI perfectly clean */
+  }
+
+  .node-info-badge {
+    padding: 2px 5px;
+  }
+
+  .spotlight-nav-btn-group {
+    gap: 5px;
+  }
+
+  .spotlight-nav-btn {
+    padding: 3px 8px;
+    font-size: 0.72rem;
+  }
+}

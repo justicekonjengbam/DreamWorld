@@ -1,0 +1,144 @@
+/* ==========================================================
+   SONG REALM AUDIO PRELOADER LOADING SCREEN
+   ========================================================== */
+
+.songs-preloader-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(circle at center, rgba(12, 16, 32, 0.98) 0%, rgba(6, 8, 18, 0.99) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.songs-preloader-card {
+  background: linear-gradient(160deg, rgba(18, 24, 48, 0.95), rgba(8, 12, 24, 0.98));
+  border: 1.5px solid rgba(255, 215, 120, 0.35);
+  border-radius: 24px;
+  padding: 36px 32px;
+  max-width: 520px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(112, 225, 245, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Animated Equalizer Waveform */
+.preloader-equalizer {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 5px;
+  height: 48px;
+  margin-bottom: 20px;
+}
+
+.eq-bar-anim {
+  width: 6px;
+  background: linear-gradient(to top, #ffd778, #70e1f5);
+  border-radius: 4px;
+  animation: eqBounce 1.2s infinite ease-in-out alternate;
+}
+
+.eq-bar-0 { animation-delay: 0s; }
+.eq-bar-1 { animation-delay: 0.2s; }
+.eq-bar-2 { animation-delay: 0.4s; }
+
+@keyframes eqBounce {
+  0% { height: 10px; opacity: 0.5; }
+  100% { height: 44px; opacity: 1; filter: drop-shadow(0 0 8px #70e1f5); }
+}
+
+.songs-preloader-title {
+  font-family: var(--font-heading, serif);
+  font-size: 1.8rem;
+  color: #ffd778;
+  margin: 0 0 6px 0;
+  text-shadow: 0 0 15px rgba(255, 215, 120, 0.4);
+}
+
+.songs-preloader-subtitle {
+  font-size: 0.92rem;
+  color: #cbd5e1;
+  margin: 0 0 24px 0;
+}
+
+/* Progress bar container */
+.songs-progress-container {
+  width: 100%;
+  background: rgba(10, 14, 28, 0.8);
+  border: 1px solid rgba(112, 225, 245, 0.25);
+  border-radius: 16px;
+  padding: 14px 16px;
+  margin-bottom: 24px;
+}
+
+.songs-progress-outer {
+  width: 100%;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.songs-progress-inner {
+  height: 100%;
+  background: linear-gradient(90deg, #ffd778, #d46aae, #70e1f5);
+  border-radius: 10px;
+  transition: width 0.3s ease;
+  box-shadow: 0 0 12px rgba(212, 106, 174, 0.8);
+}
+
+.songs-progress-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.82rem;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.songs-status-text {
+  color: #70e1f5;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 80%;
+}
+
+.songs-pct {
+  color: #ffd778;
+  font-weight: 800;
+}
+
+.songs-enter-btn {
+  padding: 14px 34px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.songs-enter-btn.ready {
+  background: linear-gradient(135deg, #ffd778, #d46aae);
+  color: #080c18;
+  border-color: #ffd778;
+  box-shadow: 0 6px 30px rgba(255, 215, 0, 0.45);
+  animation: pulseButton 2s ease-in-out infinite;
+}
+
+.songs-enter-btn:hover {
+  transform: translateY(-2px) scale(1.03);
+}

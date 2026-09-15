@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useAudio } from '../context/AudioContext'
 import Card from '../components/Card'
 import Button from '../components/Button'
+import SongsPreloader from '../components/SongsPreloader'
 import './Songs.css'
 
 function Songs() {
@@ -30,6 +31,14 @@ function Songs() {
   const [hoveredSongId, setHoveredSongId] = useState(null)
   const [showVolumeSlider, setShowVolumeSlider] = useState(false)
   const [smoothTime, setSmoothTime] = useState(0)
+  const [showSongsPreloader, setShowSongsPreloader] = useState(() => {
+    return sessionStorage.getItem('dreamworld_songs_preloaded') !== 'true'
+  })
+
+  const handleSongsPreloadComplete = () => {
+    sessionStorage.setItem('dreamworld_songs_preloaded', 'true')
+    setShowSongsPreloader(false)
+  }
 
   const visualizerCanvasRef = useRef(null)
   const lyricsContainerRef = useRef(null)
@@ -224,6 +233,8 @@ function Songs() {
 
   return (
     <div className="songs-page page" onContextMenu={(e) => e.preventDefault()}>
+      {showSongsPreloader && <SongsPreloader onComplete={handleSongsPreloadComplete} />}
+
       <div className="page-hero">
         <img src="/logo.png" alt="DreamWorld Logo" className="page-logo" draggable="false" />
       </div>
