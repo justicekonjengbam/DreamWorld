@@ -10,8 +10,6 @@ import Home from './pages/Home'
 import About from './pages/About'
 import Characters from './pages/Characters'
 import CharacterDetail from './pages/CharacterDetail'
-import Roles from './pages/Roles'
-import RoleDetail from './pages/RoleDetail'
 import Creator from './pages/Creator'
 import Quests from './pages/Quests'
 import Events from './pages/Events'
@@ -82,8 +80,8 @@ function App() {
               <Route path="/about" element={<About />} />
               <Route path="/characters" element={<Characters />} />
               <Route path="/characters/:id" element={<CharacterDetail />} />
-              <Route path="/roles" element={<Roles />} />
-              <Route path="/roles/:id" element={<RoleDetail />} />
+              <Route path="/roles" element={<Navigate to="/characters" replace />} />
+              <Route path="/roles/:id" element={<Navigate to="/characters" replace />} />
               <Route path="/clans" element={<Clans />} />
               <Route path="/creator" element={<Creator />} />
               <Route path="/quests" element={<Quests />} />

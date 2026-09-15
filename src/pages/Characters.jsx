@@ -33,15 +33,6 @@ function Characters() {
           subtitle="Meet the people building DreamWorld together"
         />
 
-        <div className="view-roles-banner">
-          <Card hover={false}>
-            <p>Want to understand the different paths in DreamWorld?</p>
-            <Link to="/roles" className="roles-banner-link">
-              Explore Character Roles & Traits →
-            </Link>
-          </Card>
-        </div>
-
         <ImageModal
           src={modalImage}
           alt="Member Photo"

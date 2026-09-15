@@ -157,35 +157,14 @@ function Clans() {
                 borderColor: activeSpotlightClan.color
               }}
             >
-              {/* Top Navigation & Close Bar */}
-              <div className="spotlight-header">
-                <div className="spotlight-nav-btn-group">
-                  <button 
-                    className="spotlight-nav-btn interactive clickable" 
-                    onClick={() => navigateSpotlight('prev')}
-                    title="Previous Clan"
-                  >
-                    ◀ Prev
-                  </button>
-                  <span className="spotlight-element-tag" style={{ background: `${activeSpotlightClan.color}25`, color: activeSpotlightClan.color, borderColor: activeSpotlightClan.color }}>
-                    {activeSpotlightClan.icon} {activeSpotlightClan.element} Element
-                  </span>
-                  <button 
-                    className="spotlight-nav-btn interactive clickable" 
-                    onClick={() => navigateSpotlight('next')}
-                    title="Next Clan"
-                  >
-                    Next ▶
-                  </button>
-                </div>
-                <button 
-                  className="spotlight-close-btn interactive clickable" 
-                  onClick={() => setActiveSpotlightClan(null)}
-                  title="Close details"
-                >
-                  ✕
-                </button>
-              </div>
+              {/* Top-Right Absolute Floating Close Button */}
+              <button 
+                className="spotlight-close-btn interactive clickable" 
+                onClick={() => setActiveSpotlightClan(null)}
+                title="Close details"
+              >
+                ✕
+              </button>
 
               {/* Spotlight Body */}
               <div className="spotlight-body">
@@ -196,7 +175,7 @@ function Clans() {
                     onClick={(e) => openLightbox(activeSpotlightClan.logo, e)}
                     style={{
                       borderColor: activeSpotlightClan.color,
-                      boxShadow: `0 0 45px ${activeSpotlightClan.color}50`
+                      boxShadow: `0 0 35px ${activeSpotlightClan.color}40`
                     }}
                   >
                     <img 
@@ -206,6 +185,12 @@ function Clans() {
                     />
                     <span className="spotlight-zoom-hint">🔍 Tap image to expand</span>
                   </div>
+
+                  {/* Element Badge */}
+                  <span className="spotlight-element-tag" style={{ background: `${activeSpotlightClan.color}25`, color: activeSpotlightClan.color, borderColor: activeSpotlightClan.color }}>
+                    {activeSpotlightClan.icon} {activeSpotlightClan.element} Element
+                  </span>
+
                   <h2 className="spotlight-clan-title" style={{ textShadow: `0 0 20px ${activeSpotlightClan.color}60` }}>
                     {activeSpotlightClan.name}
                   </h2>
@@ -280,6 +265,16 @@ function Clans() {
                     )}
                   </div>
                 </div>
+              </div>
+
+              {/* Bottom Close Button */}
+              <div className="spotlight-footer">
+                <button 
+                  className="spotlight-footer-close-btn interactive clickable"
+                  onClick={() => setActiveSpotlightClan(null)}
+                >
+                  ✕ Close & Return to Clans Seal
+                </button>
               </div>
             </div>
           </div>

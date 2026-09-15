@@ -387,14 +387,18 @@
 
 .spotlight-overlay {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(4, 7, 16, 0.82);
-  backdrop-filter: blur(12px);
-  z-index: 9999;
+  top: 64px; /* Starts EXACTLY below the 64px fixed navbar */
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(4, 7, 16, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  z-index: 990;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  padding: 16px;
+  padding: 16px 16px 24px 16px;
   overflow-y: auto;
   animation: fadeInOverlay 0.3s ease;
 }
@@ -410,14 +414,15 @@
   border-radius: 20px;
   width: 100%;
   max-width: 840px;
-  max-height: 88vh;
+  max-height: calc(100vh - 88px);
   overflow-y: auto;
-  padding: 24px 28px;
-  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.8), 0 0 40px var(--clan-color);
+  padding: 20px 24px;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.85), 0 0 40px var(--clan-color);
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
+  margin-top: 4px;
   animation: scaleInSpotlight 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -426,35 +431,30 @@
   to { transform: scale(1); opacity: 1; }
 }
 
-.spotlight-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  padding-bottom: 12px;
-}
-
-.spotlight-nav-btn-group {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.spotlight-nav-btn {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+/* Floating Top-Right Cross Close Button */
+.spotlight-close-btn {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   color: #fff;
-  padding: 5px 12px;
-  border-radius: 14px;
-  font-size: 0.78rem;
-  font-weight: 700;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+  z-index: 10;
   transition: all 0.2s ease;
 }
 
-.spotlight-nav-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: translateY(-1px);
+.spotlight-close-btn:hover {
+  background: rgba(255, 77, 77, 0.9);
+  border-color: #ff4d4d;
+  transform: rotate(90deg);
 }
 
 .spotlight-element-tag {
@@ -467,25 +467,33 @@
   letter-spacing: 0.8px;
 }
 
-.spotlight-close-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #fff;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  font-size: 1rem;
+/* Footer Close Action Button */
+.spotlight-footer {
   display: flex;
-  align-items: center;
   justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 6px;
 }
 
-.spotlight-close-btn:hover {
+.spotlight-footer-close-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  padding: 10px 26px;
+  border-radius: 20px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+.spotlight-footer-close-btn:hover {
   background: rgba(255, 77, 77, 0.85);
   border-color: #ff4d4d;
-  transform: rotate(90deg);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(255, 77, 77, 0.4);
 }
 
 .spotlight-body {
@@ -704,7 +712,7 @@
 @media (max-width: 850px) {
   .spotlight-body {
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 14px;
   }
 
   .spotlight-emblem-container {
@@ -756,15 +764,60 @@
     font-size: 0.65rem;
   }
 
+  /* Spotlight Card Mobile Styling */
+  .spotlight-overlay {
+    top: 64px;
+    padding: 10px 10px 20px 10px;
+  }
+
   .spotlight-card {
-    padding: 16px;
+    padding: 14px;
     border-radius: 16px;
+    max-height: calc(100vh - 84px);
+    gap: 10px;
+  }
+
+  .spotlight-header {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .spotlight-nav-btn-group {
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .spotlight-element-tag {
+    font-size: 0.7rem;
+    padding: 3px 8px;
   }
 
   .spotlight-emblem-frame {
-    width: 140px;
-    height: 140px;
-    padding: 10px;
+    width: 130px;
+    height: 130px;
+    padding: 8px;
+  }
+
+  .spotlight-emblem-img {
+    max-width: 100px;
+    max-height: 100px;
+  }
+
+  .spotlight-clan-title {
+    font-size: 1.25rem;
+  }
+
+  .spotlight-motto {
+    font-size: 0.8rem;
+  }
+
+  .spotlight-section-box {
+    padding: 10px 12px;
+  }
+
+  .spotlight-narrative {
+    font-size: 0.82rem;
+    line-height: 1.45;
   }
 }
 
@@ -792,12 +845,22 @@
     padding: 2px 5px;
   }
 
+  .spotlight-card {
+    padding: 12px;
+  }
+
   .spotlight-nav-btn-group {
-    gap: 5px;
+    gap: 4px;
   }
 
   .spotlight-nav-btn {
     padding: 3px 8px;
-    font-size: 0.72rem;
+    font-size: 0.7rem;
+  }
+
+  .spotlight-close-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 0.85rem;
   }
 }

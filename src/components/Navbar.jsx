@@ -14,7 +14,6 @@ const PRIMARY_LINKS = [
 ]
 
 const MORE_LINKS = [
-  { to: '/roles', label: 'Roles & Path' },
   { to: '/creator', label: 'Creator' },
   { to: '/thanks', label: 'Sponsors' },
 ]
