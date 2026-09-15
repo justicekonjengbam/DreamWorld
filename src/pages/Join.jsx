@@ -80,15 +80,15 @@ function Join() {
       errors.phone = 'Phone number is required'
     }
 
-    if (!dreamerForm.role && !dreamerForm.otherRole.trim()) {
-      errors.role = 'Please select a role or propose a new one'
+    if (!dreamerForm.role.trim()) {
+      errors.role = 'Please write your role'
     }
 
     if (!dreamerForm.reason.trim()) {
       errors.reason = 'Please tell us why you want to join'
     }
 
-    if (!dreamerForm.roleReason.trim() && !dreamerForm.otherRole.trim()) {
+    if (!dreamerForm.roleReason.trim()) {
       errors.roleReason = 'Please tell us why you chose this role'
     }
 
@@ -289,21 +289,16 @@ function Join() {
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="dreamer-role">Choose Your Role (Optional if suggesting new)</label>
-                    <select
+                    <label htmlFor="dreamer-role">Write Your Desired Role *</label>
+                    <input
+                      type="text"
                       id="dreamer-role"
                       name="role"
                       value={dreamerForm.role}
                       onChange={handleDreamerChange}
                       className={dreamerErrors.role ? 'error' : ''}
-                    >
-                      <option value="">Select a role...</option>
-                      {roles.filter(r => r.is_exclusive !== true && r.is_exclusive !== 'true').map(role => (
-                        <option key={role.id} value={role.id}>
-                          {role.singular} - {role.description.substring(0, 50)}...
-                        </option>
-                      ))}
-                    </select>
+                      placeholder="e.g. Visionary Architect, Music Composer, Software Engineer, Storyteller, Healer..."
+                    />
                     {dreamerErrors.role && <span className="error-message">{dreamerErrors.role}</span>}
                   </div>
 
@@ -329,7 +324,7 @@ function Join() {
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="dreamer-roleReason">Why did you choose this role? (Required if selected)</label>
+                    <label htmlFor="dreamer-roleReason">Why did you choose this role? *</label>
                     <textarea
                       id="dreamer-roleReason"
                       name="roleReason"
@@ -347,18 +342,6 @@ function Join() {
                       }}
                     />
                     {dreamerErrors.roleReason && <span className="error-message">{dreamerErrors.roleReason}</span>}
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="dreamer-otherRole">Have another role in mind? (Optional)</label>
-                    <input
-                      type="text"
-                      id="dreamer-otherRole"
-                      name="otherRole"
-                      value={dreamerForm.otherRole}
-                      onChange={handleDreamerChange}
-                      placeholder="If you have an idea for a role not listed..."
-                    />
                   </div>
 
                   {/* 🛡️ Anti-Bot Honeypot Field (Hidden from human eyes) */}
