@@ -3,6 +3,7 @@ import { useContent } from '../context/ContentContext'
 import Card from '../components/Card'
 import SectionHeader from '../components/SectionHeader'
 import Button from '../components/Button'
+import ImageUpload from '../components/ImageUpload'
 import './Join.css'
 
 function Join() {
@@ -304,17 +305,13 @@ function Join() {
                     {dreamerErrors.role && <span className="error-message">{dreamerErrors.role}</span>}
                   </div>
 
-                  <div className="form-group">
-                    <label htmlFor="dreamer-avatar">Profile Photo URL <span style={{ fontWeight: 400, color: 'var(--color-text-sub)', fontSize: '0.85em' }}>(Optional)</span></label>
-                    <input
-                      type="url"
-                      id="dreamer-avatar"
-                      name="avatar"
-                      value={dreamerForm.avatar}
-                      onChange={handleDreamerChange}
-                      placeholder="https://your-photo-link.com/photo.jpg"
+                  <div className="form-group-full" style={{ marginBottom: '20px' }}>
+                    <ImageUpload
+                      label="Profile Photo (Upload from Device)"
+                      onUploadComplete={(url) => setDreamerForm(prev => ({ ...prev, avatar: url }))}
+                      defaultImage={dreamerForm.avatar}
+                      folder="applicants"
                     />
-                    <small style={{ color: 'var(--color-text-sub)', fontSize: '0.78rem', marginTop: '4px', display: 'block' }}>Paste a direct link to a photo of yourself (e.g. from Google Drive, Imgur, etc.)</small>
                   </div>
 
                   <div className="form-group">
