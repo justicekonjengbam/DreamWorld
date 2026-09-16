@@ -269,9 +269,6 @@ function Funders() {
                       <p style={{ margin: '0 0 4px', fontSize: '0.82rem', color: 'var(--color-text-sub)' }}>Scan the QR code above or pay to:</p>
                       <p style={{ margin: 0, fontSize: '1rem', fontWeight: 700, color: '#ffd778', letterSpacing: '0.03em' }}>justicekonjengbam2002@okicici</p>
                     </div>
-                    <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--color-text-sub)' }}>
-                      After paying, submit the form and <strong>DM us a screenshot</strong> via WhatsApp or email for confirmation. 🙏
-                    </p>
                   </div>
                 </div>
 
@@ -358,10 +355,7 @@ function Funders() {
                 <div className="success-icon">✨</div>
                 <h3>Thank You for Your Support!</h3>
                 <p>
-                  {formData.name}, your donation intent of <strong>₹{formData.amount}</strong> via {formData.paymentMethod.toUpperCase()} has been recorded.
-                </p>
-                <p style={{ color: 'var(--color-text-sub)', fontSize: '0.9rem' }}>
-                  Please complete the payment using the method you selected, then send us a screenshot via WhatsApp or email so we can confirm it. 🙏
+                  {formData.name}, your donation of <strong>₹{formData.amount}</strong> means the world to us. 💙
                 </p>
                 {formData.sponsorshipId && (
                   <p className="sponsorship-thanks">
