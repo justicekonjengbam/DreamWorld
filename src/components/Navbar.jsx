@@ -15,6 +15,7 @@ const PRIMARY_LINKS = [
 
 const MORE_LINKS = [
   { to: '/creator', label: 'Creator' },
+  { to: '/funders', label: 'Support Us' },
   { to: '/thanks', label: 'Sponsors' },
 ]
 
