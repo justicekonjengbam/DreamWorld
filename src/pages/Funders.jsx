@@ -245,50 +245,34 @@ function Funders() {
                 </div>
 
                 <div className="payment-method-section">
-                  <label className="section-label">How will you pay?</label>
-                  <div className="payment-methods-grid">
-                    <div
-                      className={`payment-method-card ${formData.paymentMethod === 'upi' ? 'active' : ''}`}
-                      onClick={() => setFormData(prev => ({ ...prev, paymentMethod: 'upi' }))}
-                    >
-                      <div className="method-icon">📱</div>
-                      <div className="method-name">UPI</div>
-                      <div className="method-sub">PhonePe, GPay, etc.</div>
+                  <label className="section-label">Pay via GPay / UPI</label>
+
+                  {/* QR Code + UPI ID box */}
+                  <div style={{
+                    marginTop: '10px',
+                    background: 'rgba(76,161,175,0.07)',
+                    border: '1px solid rgba(76,161,175,0.25)',
+                    borderRadius: '14px',
+                    padding: '20px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '14px',
+                    textAlign: 'center'
+                  }}>
+                    <img
+                      src="/gpay.jpeg"
+                      alt="GPay QR Code"
+                      style={{ width: '180px', height: '180px', borderRadius: '12px', objectFit: 'cover', border: '2px solid rgba(76,161,175,0.3)' }}
+                    />
+                    <div>
+                      <p style={{ margin: '0 0 4px', fontSize: '0.82rem', color: 'var(--color-text-sub)' }}>Scan the QR code above or pay to:</p>
+                      <p style={{ margin: 0, fontSize: '1rem', fontWeight: 700, color: '#ffd778', letterSpacing: '0.03em' }}>justicekonjengbam2002@okicici</p>
                     </div>
-                    <div
-                      className={`payment-method-card ${formData.paymentMethod === 'bank' ? 'active' : ''}`}
-                      onClick={() => setFormData(prev => ({ ...prev, paymentMethod: 'bank' }))}
-                    >
-                      <div className="method-icon">🏛️</div>
-                      <div className="method-name">Bank Transfer</div>
-                      <div className="method-sub">NEFT / IMPS</div>
-                    </div>
-                    <div
-                      className={`payment-method-card ${formData.paymentMethod === 'other' ? 'active' : ''}`}
-                      onClick={() => setFormData(prev => ({ ...prev, paymentMethod: 'other' }))}
-                    >
-                      <div className="method-icon">💬</div>
-                      <div className="method-name">Other</div>
-                      <div className="method-sub">Cash / In-person</div>
-                    </div>
+                    <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--color-text-sub)' }}>
+                      After paying, submit the form and <strong>DM us a screenshot</strong> via WhatsApp or email for confirmation. 🙏
+                    </p>
                   </div>
-
-                  {/* UPI instruction box */}
-                  {(formData.paymentMethod === 'upi') && (
-                    <div style={{ marginTop: '14px', background: 'rgba(76,161,175,0.08)', border: '1px solid rgba(76,161,175,0.25)', borderRadius: '10px', padding: '14px 18px' }}>
-                      <p style={{ margin: '0 0 6px', fontWeight: 700, color: '#a8edea', fontSize: '0.9rem' }}>📱 UPI Payment Instructions</p>
-                      <p style={{ margin: '0 0 4px', fontSize: '0.85rem', color: 'var(--color-text-sub)' }}>After submitting the form, send your payment to our UPI ID and DM us the screenshot.</p>
-                      <p style={{ margin: 0, fontSize: '0.9rem' }}>UPI ID: <strong style={{ color: '#ffd778' }}>dreamworld@upi</strong></p>
-                    </div>
-                  )}
-
-                  {formData.paymentMethod === 'bank' && (
-                    <div style={{ marginTop: '14px', background: 'rgba(76,161,175,0.08)', border: '1px solid rgba(76,161,175,0.25)', borderRadius: '10px', padding: '14px 18px' }}>
-                      <p style={{ margin: '0 0 6px', fontWeight: 700, color: '#a8edea', fontSize: '0.9rem' }}>🏛️ Bank Transfer Details</p>
-                      <p style={{ margin: '0 0 4px', fontSize: '0.85rem', color: 'var(--color-text-sub)' }}>After submitting the form, transfer the amount and DM us the reference number.</p>
-                      <p style={{ margin: '0 0 2px', fontSize: '0.85rem' }}>Contact us via WhatsApp or email for account details.</p>
-                    </div>
-                  )}
                 </div>
 
                 {!formData.sponsorshipId && formData.type === 'one-time' && (
