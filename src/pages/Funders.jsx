@@ -405,11 +405,7 @@ function Funders() {
               <h4>Spread the Word</h4>
               <p>Share DreamWorld with your community</p>
             </Card>
-            <Card className="way-card">
-              <div className="way-icon">💻</div>
-              <h4>Build Together</h4>
-              <p>Contribute code or design</p>
-            </Card>
+
             <Card className="way-card">
               <div className="way-icon">📝</div>
               <h4>Create Quests</h4>
