@@ -193,14 +193,26 @@ function AdminDashboard() {
         alert(editingId ? 'Role updated!' : 'Role added!')
     }
 
-    const handleMemberSubmit = (e) => {
+    const handleMemberSubmit = async (e) => {
         e.preventDefault()
         console.log('DEBUG - Submitting Member Data:', memberFormData)
         const data = { ...memberFormData, themes: memberFormData.themes.split(',').map(t => t.trim()) }
-        editingId ? updateCharacter(editingId, data) : addCharacter(data)
-        setHasUnsyncedChanges(true)
-        resetForms()
-        alert(editingId ? 'Member updated!' : 'Member added!')
+        try {
+            let success = false
+            if (editingId) {
+                success = await updateCharacter(editingId, data)
+                if (success) alert('Member updated!')
+            } else {
+                success = await addCharacter(data)
+                if (success) alert('Member added!')
+            }
+            if (success) {
+                setHasUnsyncedChanges(true)
+                resetForms()
+            }
+        } catch (error) {
+            console.error('Failed to submit member:', error)
+        }
     }
 
     const handleSponsorSubmit = (e) => {
@@ -642,15 +654,8 @@ function AdminDashboard() {
                                 <form onSubmit={handleMemberSubmit} className="admin-form">
                                     <div className="form-row">
                                         <div className="form-group"><label>Full Name</label><input type="text" value={memberFormData.name} onChange={(e) => setMemberFormData({ ...memberFormData, name: e.target.value })} required /></div>
-                                        <div className="form-group">
-                                            <label>Role</label>
-                                            <select value={memberFormData.role} onChange={(e) => setMemberFormData({ ...memberFormData, role: e.target.value })} required>
-                                                <option value="">Select Role</option>
-                                                {roles.map(r => <option key={r.id} value={r.id}>{r.singular}</option>)}
-                                            </select>
-                                        </div>
+                                        <div className="form-group"><label>Title (e.g. Lead Artist)</label><input type="text" value={memberFormData.title} onChange={(e) => setMemberFormData({ ...memberFormData, title: e.target.value })} required /></div>
                                     </div>
-                                    <div className="form-group-full"><label>Title (e.g. Lead Artist)</label><input type="text" value={memberFormData.title} onChange={(e) => setMemberFormData({ ...memberFormData, title: e.target.value })} required /></div>
                                     <div className="form-row admin-uploaders-row" style={{ gap: '20px' }}>
                                         <ImageUpload
                                             label="Avatar Image"
@@ -1471,7 +1476,7 @@ Your task today is to complete Chapter 2 of Advanced Magic. Focus on the breathi
                                                     <p style={{ margin: '4px 0 0', fontSize: '0.85rem' }}><strong style={{ color: '#a8edea' }}>Role:</strong> {app.role || app.otherrole || '—'}</p>
                                                 </div>
                                                 <div style={{ fontSize: '0.78rem', color: 'var(--color-text-sub)', textAlign: 'right' }}>
-                                                    {app.created_at ? new Date(app.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : ''}
+                                                    {(app.submitted_at || app.created_at) ? new Date(app.submitted_at || app.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : ''}
                                                 </div>
                                             </div>
 

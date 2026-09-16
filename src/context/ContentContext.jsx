@@ -162,7 +162,13 @@ export const ContentProvider = ({ children }) => {
             }
 
             // 7. Fetch Join Applications
-            const { data: jData } = await supabase.from('joindream').select('*').order('created_at', { ascending: false })
+            let { data: jData, error: jErr } = await supabase.from('joindream').select('*').order('id', { ascending: false })
+            if (jErr) {
+                console.warn("Failed to fetch joindream ordered by id:", jErr)
+                const { data: fallbackJData, error: fallbackErr } = await supabase.from('joindream').select('*')
+                if (fallbackErr) console.error("Error fetching joindream fallback:", fallbackErr)
+                jData = fallbackJData
+            }
             if (jData) {
                 setJoinApplications(jData)
             }
@@ -305,10 +311,12 @@ export const ContentProvider = ({ children }) => {
             stat_essence: parseInt(newChar.stat_essence === "" || newChar.stat_essence == null ? 50 : newChar.stat_essence),
             passcode: newChar.passcode || null,
             theme_color: newChar.theme_color || null,
-            daily_task: newChar.daily_task || null,
-            clan: newChar.clan || null
+            daily_task: newChar.daily_task || null
+            // clan column is missing from Supabase, intentionally removed to prevent errors
         }
-        if (await saveToSupabase('dreamers', payload)) fetchData()
+        const success = await saveToSupabase('dreamers', payload)
+        if (success) fetchData()
+        return success
     }
 
     const updateCharacter = async (id, updated) => {
@@ -338,11 +346,13 @@ export const ContentProvider = ({ children }) => {
             stat_essence: parseInt(updated.stat_essence === "" || updated.stat_essence == null ? 50 : updated.stat_essence),
             passcode: updated.passcode || null,
             theme_color: updated.theme_color || null,
-            daily_task: updated.daily_task || null,
-            clan: updated.clan || null
+            daily_task: updated.daily_task || null
+            // clan column is missing from Supabase, intentionally removed to prevent errors
         }
 
-        if (await saveToSupabase('dreamers', payload)) fetchData()
+        const success = await saveToSupabase('dreamers', payload)
+        if (success) fetchData()
+        return success
     }
 
     const deleteCharacter = async (id) => {
@@ -548,7 +558,11 @@ export const ContentProvider = ({ children }) => {
         const { error } = await supabase.from('joindream').insert(payload)
         if (error) throw error
         // Refresh join applications list
-        const { data: jData } = await supabase.from('joindream').select('*').order('created_at', { ascending: false })
+        let { data: jData, error: jErr } = await supabase.from('joindream').select('*').order('id', { ascending: false })
+        if (jErr || !jData) {
+            const { data: fallbackJData } = await supabase.from('joindream').select('*')
+            jData = fallbackJData
+        }
         if (jData) setJoinApplications(jData)
     }
 
