@@ -29,7 +29,9 @@ function AdminDashboard() {
         approveProfileUpdate,
         rejectProfileUpdate,
         clearAllDreamers,
-        clans
+        clans,
+        joinApplications,
+        deleteJoinApplication
     } = useContent()
 
 
@@ -315,6 +317,18 @@ function AdminDashboard() {
                         style={{ color: '#ffd778' }}>⚙️ App Settings</button>
                     <button className={`nav-item ${activeTab === 'status' ? 'active' : ''}`} onClick={() => { setActiveTab('status'); resetForms() }}>🛡️ System Health</button>
                     <button className={`nav-item ${activeTab === 'songs' ? 'active' : ''}`} onClick={() => { setActiveTab('songs'); resetForms() }}>🎵 Dreamworld Songs</button>
+                    <button
+                        className={`nav-item ${activeTab === 'join-requests' ? 'active' : ''}`}
+                        onClick={() => { setActiveTab('join-requests'); resetForms() }}
+                        style={{ color: '#a8edea', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+                    >
+                        <span>📥 Join Requests</span>
+                        {joinApplications && joinApplications.length > 0 && (
+                            <span style={{ background: '#4CA1AF', color: '#fff', fontSize: '0.72rem', fontWeight: 800, padding: '2px 7px', borderRadius: 10 }}>
+                                {joinApplications.length}
+                            </span>
+                        )}
+                    </button>
                 </nav>
 
 
@@ -1424,6 +1438,87 @@ Your task today is to complete Chapter 2 of Advanced Magic. Focus on the breathi
                                 </div>
                             </Card>
                         </div>
+                    </div>
+                )}
+
+                {activeTab === 'join-requests' && (
+                    <div className="admin-section animate-fade">
+                        <Card className="admin-form-card">
+                            <h3 style={{ marginBottom: '8px' }}>📥 Join Requests</h3>
+                            <p style={{ color: 'var(--color-text-sub)', marginBottom: '20px', fontSize: '0.9rem' }}>
+                                These are the applicants who submitted the Join form. Review their info, then manually add them as Dreamers in the <strong>Dreamers</strong> tab when approved.
+                            </p>
+                            {!joinApplications || joinApplications.length === 0 ? (
+                                <div style={{ textAlign: 'center', padding: '40px 20px', color: 'var(--color-text-sub)' }}>
+                                    <div style={{ fontSize: '2.5rem', marginBottom: '12px' }}>📭</div>
+                                    <p>No join requests yet. When applicants fill out the /join form, they will appear here.</p>
+                                </div>
+                            ) : (
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                                    {joinApplications.map(app => (
+                                        <div key={app.id} style={{
+                                            background: 'rgba(76,161,175,0.06)',
+                                            border: '1px solid rgba(76,161,175,0.2)',
+                                            borderRadius: '12px',
+                                            padding: '18px 20px',
+                                            position: 'relative'
+                                        }}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '10px' }}>
+                                                <div>
+                                                    <h4 style={{ margin: '0 0 4px', color: 'var(--color-primary)', fontSize: '1.05rem' }}>{app.name}</h4>
+                                                    <p style={{ margin: '0 0 2px', fontSize: '0.82rem', color: 'var(--color-text-sub)' }}>📧 {app.email} &nbsp;|&nbsp; 📞 {app.phone}</p>
+                                                    <p style={{ margin: '0 0 2px', fontSize: '0.82rem', color: 'var(--color-text-sub)' }}>🎂 Age: {app.age} &nbsp;|&nbsp; ⚧ {app.gender}</p>
+                                                    <p style={{ margin: '4px 0 0', fontSize: '0.85rem' }}><strong style={{ color: '#a8edea' }}>Role:</strong> {app.role || app.otherrole || '—'}</p>
+                                                </div>
+                                                <div style={{ fontSize: '0.78rem', color: 'var(--color-text-sub)', textAlign: 'right' }}>
+                                                    {app.created_at ? new Date(app.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : ''}
+                                                </div>
+                                            </div>
+
+                                            <div style={{ marginTop: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                                <div style={{ background: 'rgba(0,0,0,0.2)', padding: '10px 14px', borderRadius: '8px' }}>
+                                                    <p style={{ margin: '0 0 2px', fontSize: '0.78rem', fontWeight: 700, color: '#ffd778', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Why do they want to join?</p>
+                                                    <p style={{ margin: 0, fontSize: '0.88rem', lineHeight: 1.5 }}>{app.whydream || '—'}</p>
+                                                </div>
+                                                <div style={{ background: 'rgba(0,0,0,0.2)', padding: '10px 14px', borderRadius: '8px' }}>
+                                                    <p style={{ margin: '0 0 2px', fontSize: '0.78rem', fontWeight: 700, color: '#ffd778', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Why this role?</p>
+                                                    <p style={{ margin: 0, fontSize: '0.88rem', lineHeight: 1.5 }}>{app.whyrole || '—'}</p>
+                                                </div>
+                                            </div>
+
+                                            <div style={{ marginTop: '14px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                                                <button
+                                                    onClick={() => {
+                                                        // Pre-fill the members form with this applicant's data then switch to members tab
+                                                        setMemberFormData(prev => ({
+                                                            ...prev,
+                                                            name: app.name || '',
+                                                            role: app.role || app.otherrole || '',
+                                                            bio: `${app.whydream || ''} ${app.whyrole || ''}`.trim()
+                                                        }))
+                                                        setActiveTab('members')
+                                                        alert(`✅ Applicant data pre-filled in the Dreamers form! Review, add a photo, and save to add ${app.name} as a Dreamer.`)
+                                                    }}
+                                                    style={{ padding: '8px 16px', background: 'rgba(76,161,175,0.15)', border: '1px solid rgba(76,161,175,0.4)', borderRadius: '8px', color: '#a8edea', fontWeight: 700, fontSize: '0.82rem', cursor: 'pointer' }}
+                                                >
+                                                    ✅ Approve & Add as Dreamer
+                                                </button>
+                                                <button
+                                                    onClick={async () => {
+                                                        if (window.confirm(`Delete ${app.name}'s application? This cannot be undone.`)) {
+                                                            await deleteJoinApplication(app.id)
+                                                        }
+                                                    }}
+                                                    style={{ padding: '8px 16px', background: 'rgba(255,80,80,0.1)', border: '1px solid rgba(255,80,80,0.3)', borderRadius: '8px', color: '#ff8a80', fontWeight: 700, fontSize: '0.82rem', cursor: 'pointer' }}
+                                                >
+                                                    🗑️ Reject & Delete
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </Card>
                     </div>
                 )}
             </div>

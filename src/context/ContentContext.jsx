@@ -21,6 +21,7 @@ export const ContentProvider = ({ children }) => {
     const [sponsors, setSponsors] = useState([])
     const [events, setEvents] = useState(initialEvents)
     const [donations, setDonations] = useState([]) // New state for donations
+    const [joinApplications, setJoinApplications] = useState([]) // Join requests from /join form
 
     const [appSettings, setAppSettings] = useState({
         dreamworld_open: true
@@ -160,6 +161,11 @@ export const ContentProvider = ({ children }) => {
                 setDonations(dData)
             }
 
+            // 7. Fetch Join Applications
+            const { data: jData } = await supabase.from('joindream').select('*').order('created_at', { ascending: false })
+            if (jData) {
+                setJoinApplications(jData)
+            }
 
 
             setLoading(false)
@@ -538,7 +544,18 @@ export const ContentProvider = ({ children }) => {
             age: formData.age,
             gender: formData.gender
         }
-        await saveToSupabase('joindream', payload)
+        const { error } = await supabase.from('joindream').insert(payload)
+        if (error) throw error
+        // Refresh join applications list
+        const { data: jData } = await supabase.from('joindream').select('*').order('created_at', { ascending: false })
+        if (jData) setJoinApplications(jData)
+    }
+
+    const deleteJoinApplication = async (id) => {
+        const { error } = await supabase.from('joindream').delete().eq('id', id)
+        if (error) { console.error('Error deleting join application:', error); return false }
+        setJoinApplications(prev => prev.filter(a => a.id !== id))
+        return true
     }
 
     const submitDonation = async (donationData) => {
@@ -685,6 +702,8 @@ export const ContentProvider = ({ children }) => {
             announcement, updateAnnouncement,
             syncGlobalData: fetchData,
             submitDreamerApplication,
+            joinApplications,
+            deleteJoinApplication,
             donations,
             submitDonation,
             deleteDonation,
