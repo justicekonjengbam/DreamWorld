@@ -17,6 +17,7 @@ function Join() {
     gender: '',
     role: '',
     otherRole: '',
+    avatar: '',
     reason: '',
     roleReason: '',
     website_hp: '', // Honeypot field (bots fill this, humans don't)
@@ -137,6 +138,7 @@ function Join() {
       gender: sanitizeInput(dreamerForm.gender),
       role: sanitizeInput(dreamerForm.role),
       otherRole: sanitizeInput(dreamerForm.otherRole),
+      avatar: sanitizeInput(dreamerForm.avatar),
       reason: sanitizeInput(dreamerForm.reason),
       roleReason: sanitizeInput(dreamerForm.roleReason)
     }
@@ -150,7 +152,7 @@ function Join() {
       setDreamerSubmitted(true)
 
       setTimeout(() => {
-        setDreamerForm({ name: '', email: '', phone: '', age: '', gender: '', role: '', otherRole: '', reason: '', roleReason: '', website_hp: '', captchaInput: '' })
+        setDreamerForm({ name: '', email: '', phone: '', age: '', gender: '', role: '', otherRole: '', avatar: '', reason: '', roleReason: '', website_hp: '', captchaInput: '' })
         setDreamerSubmitted(false)
       }, 6000)
     } catch (error) {
@@ -300,6 +302,19 @@ function Join() {
                       placeholder="e.g. Visionary Architect, Music Composer, Software Engineer, Storyteller, Healer..."
                     />
                     {dreamerErrors.role && <span className="error-message">{dreamerErrors.role}</span>}
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="dreamer-avatar">Profile Photo URL <span style={{ fontWeight: 400, color: 'var(--color-text-sub)', fontSize: '0.85em' }}>(Optional)</span></label>
+                    <input
+                      type="url"
+                      id="dreamer-avatar"
+                      name="avatar"
+                      value={dreamerForm.avatar}
+                      onChange={handleDreamerChange}
+                      placeholder="https://your-photo-link.com/photo.jpg"
+                    />
+                    <small style={{ color: 'var(--color-text-sub)', fontSize: '0.78rem', marginTop: '4px', display: 'block' }}>Paste a direct link to a photo of yourself (e.g. from Google Drive, Imgur, etc.)</small>
                   </div>
 
                   <div className="form-group">

@@ -1494,10 +1494,11 @@ Your task today is to complete Chapter 2 of Advanced Magic. Focus on the breathi
                                                             ...prev,
                                                             name: app.name || '',
                                                             role: app.role || app.otherrole || '',
+                                                            avatar: app.avatar || '',
                                                             bio: `${app.whydream || ''} ${app.whyrole || ''}`.trim()
                                                         }))
                                                         setActiveTab('members')
-                                                        alert(`✅ Applicant data pre-filled in the Dreamers form! Review, add a photo, and save to add ${app.name} as a Dreamer.`)
+                                                        alert(`✅ Applicant data pre-filled! ${app.avatar ? 'Their photo has been loaded too.' : 'They did not submit a photo — you can upload one.'} Review and save to add ${app.name} as a Dreamer.`)
                                                     }}
                                                     style={{ padding: '8px 16px', background: 'rgba(76,161,175,0.15)', border: '1px solid rgba(76,161,175,0.4)', borderRadius: '8px', color: '#a8edea', fontWeight: 700, fontSize: '0.82rem', cursor: 'pointer' }}
                                                 >

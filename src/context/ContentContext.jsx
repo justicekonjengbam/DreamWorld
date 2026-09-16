@@ -542,7 +542,8 @@ export const ContentProvider = ({ children }) => {
             whyrole: formData.roleReason,
             otherrole: formData.otherRole,
             age: formData.age,
-            gender: formData.gender
+            gender: formData.gender,
+            avatar: formData.avatar || ''
         }
         const { error } = await supabase.from('joindream').insert(payload)
         if (error) throw error
