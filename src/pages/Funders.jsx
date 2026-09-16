@@ -60,17 +60,6 @@ function Funders() {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target
-
-    // If user selects "monthly", auto-set amount to 399 and lock it
-    if (name === 'type' && value === 'monthly') {
-      setFormData(prev => ({
-        ...prev,
-        [name]: value,
-        amount: '399' // Hardcoded to match your Razorpay Plan
-      }))
-      return
-    }
-
     setFormData(prev => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value
@@ -89,156 +78,36 @@ function Funders() {
       return
     }
 
+    if (!formData.name || !formData.email || !formData.amount) {
+      alert('Please fill in your name, email, and amount.')
+      return
+    }
+
     setIsProcessing(true)
 
-    // Common Razorpay Config
-    const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID
-
     try {
-      // --- AUTO-PAY (MONTHLY) FLOW ---
-      if (formData.type === 'monthly') {
-        const PLAN_ID = import.meta.env.VITE_RAZORPAY_PLAN_ID; // Should be set in .env
-
-        // If no Plan ID is configured, fallback to the redirect method but in same window
-        if (!PLAN_ID) {
-          console.warn("No VITE_RAZORPAY_PLAN_ID found. Falling back to redirect.");
-          submitDonation(formData).catch(err => console.error("Failed to log monthly intent", err))
-          window.location.href = import.meta.env.VITE_RAZORPAY_SUBSCRIPTION_URL || 'https://rzp.io/rzp/VUIo0oZ';
-          return;
-        }
-
-        // Create a real subscription via our backend API
-        const subRes = await fetch('/api/create-subscription', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            planId: PLAN_ID,
-            customerName: formData.name,
-            customerEmail: formData.email
-          })
-        });
-
-        const subData = await subRes.json();
-
-        if (!subRes.ok) {
-          // If the secret is missing, it will throw here
-          throw new Error(subData.error || 'Check if RAZORPAY_SECRET is added to Vercel/Env');
-        }
-
-        const subOptions = {
-          key: RAZORPAY_KEY_ID, // Use the public key here
-          subscription_id: subData.subscriptionId,
-          name: "DreamWorld",
-          description: "Monthly Support Subscription",
-          image: "/logo.png",
-          handler: function (response) {
-            submitDonation({
-              ...formData,
-              message: `[SUB_ID: ${response.razorpay_subscription_id}] ${formData.message}`,
-              status: 'success',
-              paymentMethod: formData.paymentMethod,
-              transactionId: response.razorpay_subscription_id
-            })
-            setSubmitted(true)
-          },
-          prefill: {
-            name: formData.name,
-            email: formData.email
-          },
-          theme: { color: "#4CA1AF" },
-          modal: {
-            ondismiss: function () {
-              // Log payment cancellation
-              submitDonation({
-                ...formData,
-                status: 'failed',
-                paymentMethod: formData.paymentMethod,
-                transactionId: '',
-                message: 'Payment cancelled by user'
-              }).catch(err => console.error("Failed to log cancellation", err))
-              setIsProcessing(false)
-            }
-          }
-        };
-
-        const rzpSub = new window.Razorpay(subOptions);
-        rzpSub.open();
-        setIsProcessing(false);
-        return;
-      }
-
-      // --- ONE-TIME PAYMENT FLOW ---
-      const options = {
-        key: RAZORPAY_KEY_ID,
-        amount: formData.amount * 100,
-        currency: "INR",
-        name: "DreamWorld",
-        description: "Support Contribution",
-        image: "/logo.png",
-        handler: function (response) {
-          submitDonation({
-            ...formData,
-            status: 'success',
-            paymentMethod: formData.paymentMethod,
-            transactionId: response.razorpay_payment_id
-          }).catch(err => console.error("Failed to log donation", err))
-          setSubmitted(true)
-          setTimeout(() => {
-            setFormData({
-              name: '', displayName: '', email: '', amount: '',
-              message: '', type: 'one-time', showPublicly: true,
-              paymentMethod: 'upi', upiId: ''
-            })
-            setSubmitted(false)
-          }, 5000)
-        },
-        prefill: {
-          name: formData.name,
-          email: formData.email,
-          method: formData.paymentMethod === 'upi' ? 'upi' : (formData.paymentMethod === 'gpay' ? 'upi' : 'card')
-        },
-        notes: {
-          contribution_type: formData.type,
-          display_name: formData.displayName || formData.name,
-          message: formData.message
-        },
-        theme: { color: "#4CA1AF" },
-        modal: {
-          ondismiss: function () {
-            // Log payment cancellation
-            submitDonation({
-              ...formData,
-              status: 'failed',
-              paymentMethod: formData.paymentMethod,
-              transactionId: '',
-              message: 'Payment cancelled by user'
-            }).catch(err => console.error("Failed to log cancellation", err))
-            setIsProcessing(false)
-          }
-        }
-      }
-
-      if (formData.paymentMethod === 'upi' && formData.upiId) {
-        options.prefill.vpa = formData.upiId
-      }
-
-      if (window.Razorpay) {
-        const rzp = new window.Razorpay(options)
-        rzp.open()
-      } else {
-        alert("Razorpay SDK failed to load.")
-      }
-    } catch (err) {
-      console.error("Payment Error:", err);
-      // Log payment initialization failure
-      submitDonation({
+      // Log the donation intent to Supabase
+      await submitDonation({
         ...formData,
-        status: 'failed',
+        status: 'pending',
         paymentMethod: formData.paymentMethod,
-        transactionId: '',
-        message: `Error: ${err.message}`
-      }).catch(logErr => console.error("Failed to log error", logErr))
-      alert("⚠️ Payment Initialization Failed: " + err.message + "\n\n(Ask Antigravity if you need help with the Secret Key!)");
+        transactionId: `MANUAL-${Date.now()}`,
+        message: formData.message || ''
+      })
+
+      setSubmitted(true)
+      setTimeout(() => {
+        setFormData({
+          name: '', displayName: '', email: '', amount: '',
+          message: '', type: 'one-time', showPublicly: true,
+          paymentMethod: 'upi', upiId: '',
+          sponsorshipType: 'general', sponsorshipId: '', sponsorshipMessage: ''
+        })
+        setSubmitted(false)
+      }, 8000)
+    } catch (err) {
+      console.error('Donation log error:', err)
+      alert('Something went wrong. Please try again.')
     } finally {
       setIsProcessing(false)
     }
@@ -361,46 +230,22 @@ function Funders() {
 
                 <div className="form-row">
                   <div className="form-group">
-                    <label htmlFor="amount">
-                      {formData.type === 'monthly' ? 'Fixed Subscription Amount (INR)' : 'Amount (INR)'}
-                    </label>
+                    <label htmlFor="amount">Amount (INR)</label>
                     <input
                       type="number"
                       id="amount"
                       name="amount"
                       value={formData.amount}
                       onChange={handleChange}
-                      required={formData.type !== 'monthly'}
-                      disabled={formData.type === 'monthly'}
+                      required
                       min="1"
-                      placeholder={formData.type === 'monthly' ? '399' : 'Any amount helps'}
-                      style={formData.type === 'monthly' ? { opacity: 0.7, cursor: 'not-allowed', background: 'rgba(255,215,0,0.1)', borderColor: 'var(--color-gold)' } : {}}
+                      placeholder="Any amount helps"
                     />
-                    {formData.type === 'monthly' && (
-                      <small style={{ color: 'var(--color-gold)', marginTop: '4px', fontSize: '0.75rem' }}>
-                        ✨ Price is locked to ₹399/mo by your selected plan.
-                      </small>
-                    )}
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="type">Contribution Schedule</label>
-                    <select
-                      id="type"
-                      name="type"
-                      value={formData.type}
-                      onChange={handleChange}
-                    >
-                      <option value="one-time">One-Time Support</option>
-                      {!formData.sponsorshipId && (
-                        <option value="monthly">Auto Pay (₹399 Monthly)</option>
-                      )}
-                    </select>
                   </div>
                 </div>
 
                 <div className="payment-method-section">
-                  <label className="section-label">Select Payment Method</label>
+                  <label className="section-label">How will you pay?</label>
                   <div className="payment-methods-grid">
                     <div
                       className={`payment-method-card ${formData.paymentMethod === 'upi' ? 'active' : ''}`}
@@ -411,44 +256,37 @@ function Funders() {
                       <div className="method-sub">PhonePe, GPay, etc.</div>
                     </div>
                     <div
-                      className={`payment-method-card ${formData.paymentMethod === 'gpay' ? 'active' : ''}`}
-                      onClick={() => setFormData(prev => ({ ...prev, paymentMethod: 'gpay' }))}
-                    >
-                      <div className="method-icon">💳</div>
-                      <div className="method-name">Google Pay</div>
-                      <div className="method-sub">Fast & Secure</div>
-                    </div>
-                    <div
-                      className={`payment-method-card ${formData.paymentMethod === 'card' ? 'active' : ''}`}
-                      onClick={() => setFormData(prev => ({ ...prev, paymentMethod: 'card' }))}
+                      className={`payment-method-card ${formData.paymentMethod === 'bank' ? 'active' : ''}`}
+                      onClick={() => setFormData(prev => ({ ...prev, paymentMethod: 'bank' }))}
                     >
                       <div className="method-icon">🏛️</div>
-                      <div className="method-name">Credit/Debit</div>
-                      <div className="method-sub">All major cards</div>
+                      <div className="method-name">Bank Transfer</div>
+                      <div className="method-sub">NEFT / IMPS</div>
+                    </div>
+                    <div
+                      className={`payment-method-card ${formData.paymentMethod === 'other' ? 'active' : ''}`}
+                      onClick={() => setFormData(prev => ({ ...prev, paymentMethod: 'other' }))}
+                    >
+                      <div className="method-icon">💬</div>
+                      <div className="method-name">Other</div>
+                      <div className="method-sub">Cash / In-person</div>
                     </div>
                   </div>
 
-                  {formData.paymentMethod === 'upi' && (
-                    <div className="form-group-full upi-input-field">
-                      <label htmlFor="upiId">Your UPI ID</label>
-                      <input
-                        type="text"
-                        id="upiId"
-                        name="upiId"
-                        value={formData.upiId}
-                        onChange={handleChange}
-                        required
-                        placeholder="username@bank"
-                      />
+                  {/* UPI instruction box */}
+                  {(formData.paymentMethod === 'upi') && (
+                    <div style={{ marginTop: '14px', background: 'rgba(76,161,175,0.08)', border: '1px solid rgba(76,161,175,0.25)', borderRadius: '10px', padding: '14px 18px' }}>
+                      <p style={{ margin: '0 0 6px', fontWeight: 700, color: '#a8edea', fontSize: '0.9rem' }}>📱 UPI Payment Instructions</p>
+                      <p style={{ margin: '0 0 4px', fontSize: '0.85rem', color: 'var(--color-text-sub)' }}>After submitting the form, send your payment to our UPI ID and DM us the screenshot.</p>
+                      <p style={{ margin: 0, fontSize: '0.9rem' }}>UPI ID: <strong style={{ color: '#ffd778' }}>dreamworld@upi</strong></p>
                     </div>
                   )}
 
-                  {formData.paymentMethod === 'gpay' && (
-                    <div className="gpay-container">
-                      <div className="gpay-simulated-button clickable" onClick={handleSubmit}>
-                        <span className="gpay-logo">Pay with Google Pay</span>
-                      </div>
-                      <p className="gpay-infoText">Razorpay will open to securely process your GPay request.</p>
+                  {formData.paymentMethod === 'bank' && (
+                    <div style={{ marginTop: '14px', background: 'rgba(76,161,175,0.08)', border: '1px solid rgba(76,161,175,0.25)', borderRadius: '10px', padding: '14px 18px' }}>
+                      <p style={{ margin: '0 0 6px', fontWeight: 700, color: '#a8edea', fontSize: '0.9rem' }}>🏛️ Bank Transfer Details</p>
+                      <p style={{ margin: '0 0 4px', fontSize: '0.85rem', color: 'var(--color-text-sub)' }}>After submitting the form, transfer the amount and DM us the reference number.</p>
+                      <p style={{ margin: '0 0 2px', fontSize: '0.85rem' }}>Contact us via WhatsApp or email for account details.</p>
                     </div>
                   )}
                 </div>
@@ -528,20 +366,22 @@ function Funders() {
                 </div>
 
                 <Button type="submit" variant="primary" disabled={isProcessing}>
-                  {isProcessing ? '🔄 Processing...' : (formData.paymentMethod === 'gpay' ? 'Pay Now' : 'Continue to Payment')}
+                  {isProcessing ? '🔄 Processing...' : '💝 Submit Donation Intent'}
                 </Button>
               </form>
             ) : (
               <div className="success-message">
                 <div className="success-icon">✨</div>
-                <h3>Thank You for Your Impact!</h3>
+                <h3>Thank You for Your Support!</h3>
                 <p>
-                  {formData.name}, you're now part of the community building DreamWorld.
-                  Your {formData.type === 'monthly' ? 'Auto Pay subscription' : 'contribution'} via {formData.paymentMethod.toUpperCase()} will help create real opportunities for learning and growth!
+                  {formData.name}, your donation intent of <strong>₹{formData.amount}</strong> via {formData.paymentMethod.toUpperCase()} has been recorded.
+                </p>
+                <p style={{ color: 'var(--color-text-sub)', fontSize: '0.9rem' }}>
+                  Please complete the payment using the method you selected, then send us a screenshot via WhatsApp or email so we can confirm it. 🙏
                 </p>
                 {formData.sponsorshipId && (
                   <p className="sponsorship-thanks">
-                    Your contribution has been directed to: <strong>{formData.sponsorshipMessage}</strong>
+                    Your contribution will go toward: <strong>{formData.sponsorshipMessage}</strong>
                   </p>
                 )}
               </div>
