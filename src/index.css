@@ -314,7 +314,6 @@ button,
 .light-mode .detail-level-card,
 .light-mode .detail-fact-card,
 .light-mode .student-card,
-.light-mode .leaderboard-card,
 .light-mode .feature-card,
 .light-mode .join-form-card,
 .light-mode .guidelines-card {
@@ -348,7 +347,6 @@ button,
 .light-mode .detail-level-card::before,
 .light-mode .detail-fact-card::before,
 .light-mode .student-card::before,
-.light-mode .leaderboard-card::before,
 .light-mode .feature-card::before,
 .light-mode .join-form-card::before,
 .light-mode .guidelines-card::before {
@@ -529,4 +527,4 @@ button,
 }
 
 
-
+

@@ -81,8 +81,7 @@
 .enroll-note-card,
 .detail-level-card,
 .detail-fact-card,
-.student-card,
-.leaderboard-card {
+.student-card {
   position: relative !important;
   background: rgba(12, 9, 6, 0.88) !important; /* Warm translucent obsidian gold background */
   backdrop-filter: blur(12px) !important;
@@ -114,8 +113,7 @@
 .enroll-note-card::before,
 .detail-level-card::before,
 .detail-fact-card::before,
-.student-card::before,
-.leaderboard-card::before {
+.student-card::before {
   content: "" !important;
   position: absolute !important;
   inset: 4px !important;
@@ -147,8 +145,7 @@
 .enroll-note-card::after,
 .detail-level-card::after,
 .detail-fact-card::after,
-.student-card::after,
-.leaderboard-card::after {
+.student-card::after {
   content: "" !important;
   position: absolute !important;
   top: -2px !important;
@@ -187,10 +184,9 @@
 .enroll-note-card:hover,
 .detail-level-card:hover,
 .detail-fact-card:hover,
-.student-card:hover,
-.leaderboard-card:hover {
+.student-card:hover {
   transform: translateY(-6px) !important;
   box-shadow: 0 15px 45px rgba(0, 0, 0, 0.9), 0 0 35px rgba(255, 215, 120, 0.3) !important;
   border-color: rgba(255, 215, 120, 0.8) !important;
 }
-
+

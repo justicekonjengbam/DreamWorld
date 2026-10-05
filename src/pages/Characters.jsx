@@ -40,35 +40,6 @@ function Characters() {
           onClose={() => setModalOpen(false)}
         />
 
-        {characters.length > 0 && (
-          <div className="leaderboard-section">
-            <h2 className="leaderboard-title">Top Dreamers</h2>
-            <div className="leaderboard-podium">
-              {[...characters]
-                .sort((a, b) => (b.points || 0) - (a.points || 0))
-                .slice(0, 3)
-                .map((character, index) => {
-                  const rankClass = index === 0 ? 'rank-gold' : index === 1 ? 'rank-silver' : 'rank-bronze';
-                  const xp = ((character.points || 0) % 108) / 108 * 100;
-                  return (
-                    <Link to={`/characters/${character.id}`} key={`top-${character.id}`} className={`leaderboard-card ${rankClass}`}>
-                      <div className="rank-badge">#{index + 1}</div>
-                      <Avatar src={character.avatar} name={character.name} className="leaderboard-avatar" />
-                      <div className="leaderboard-info">
-                        <h3>{character.name}</h3>
-                        <p className="leaderboard-role">{character.title}</p>
-                        <div className="leaderboard-level">Lvl {character.level || 0}</div>
-                        <div className="xp-bar-container">
-                          <div className="xp-bar-fill" style={{ width: `${xp}%` }}></div>
-                        </div>
-                      </div>
-                    </Link>
-                  );
-                })}
-            </div>
-          </div>
-        )}
-
         <div className="characters-grid">
           {characters.map((character) => (
             <Link to={`/characters/${character.id}`} key={character.id} className="character-link">
