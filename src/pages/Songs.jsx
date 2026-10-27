@@ -337,7 +337,7 @@ function Songs() {
                         <tr 
                           key={song.id} 
                           className={`song-row ${isCurrent ? 'active-row' : ''}`}
-                          onDoubleClick={() => playCustomSong(song)}
+                          onClick={() => handlePlaySong(song)}
                           onMouseEnter={() => setHoveredSongId(song.id)}
                           onMouseLeave={() => setHoveredSongId(null)}
                         >
@@ -345,7 +345,10 @@ function Songs() {
                             {hoveredSongId === song.id ? (
                               <button 
                                 className="row-play-btn" 
-                                onClick={() => handlePlaySong(song)}
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  handlePlaySong(song)
+                                }}
                               >
                                 {isPlayingThis ? '❚❚' : '▶'}
                               </button>

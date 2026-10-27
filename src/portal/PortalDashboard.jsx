@@ -11,7 +11,7 @@ import { useTheme } from '../context/ThemeContext'
 
 export default function PortalDashboard() {
     const { user, loading } = usePortal()
-    const { quests, events, announcement, requestProfileUpdate, getClanById } = useContent()
+    const { quests, events, announcement, requestProfileUpdate } = useContent()
     const { 
         isSoundMuted, setIsSoundMuted, 
         musicVolume, setMusicVolume, 
@@ -26,8 +26,6 @@ export default function PortalDashboard() {
     const [showAdminModal, setShowAdminModal] = useState(false)
     const [adminPassword, setAdminPassword] = useState('')
     const [adminPasswordError, setAdminPasswordError] = useState('')
-
-    const userClan = getClanById ? getClanById(user?.clan) : null
 
     const [editFormData, setEditFormData] = useState({
         name: user?.name || '',
@@ -197,68 +195,12 @@ export default function PortalDashboard() {
                                 <p className="portal-profile-title" style={{ color: themeColor }}>{title}</p>
                                 <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 4 }}>
                                     {user.isCreator && <span className="portal-creator-badge">👑 Creator</span>}
-                                    {userClan && (
-                                        <span className="portal-creator-badge" style={{ background: `${userClan.color}22`, borderColor: `${userClan.color}66`, color: userClan.color }}>
-                                            {userClan.icon} {userClan.name}
-                                        </span>
-                                    )}
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <div className="portal-content">
-                        {/* ===== APPOINTED CLAN CARD ===== */}
-                        {userClan && (
-                            <div className="portal-card" style={{
-                                background: `linear-gradient(135deg, rgba(20, 25, 45, 0.95), rgba(10, 14, 28, 0.98))`,
-                                border: `1px solid ${userClan.color}66`,
-                                boxShadow: `0 0 20px ${userClan.color}25`,
-                                position: 'relative',
-                                overflow: 'hidden'
-                            }}>
-                                <div style={{
-                                    position: 'absolute',
-                                    top: -20,
-                                    right: -20,
-                                    width: 140,
-                                    height: 140,
-                                    background: userClan.gradient,
-                                    opacity: 0.15,
-                                    borderRadius: '50%',
-                                    filter: 'blur(30px)'
-                                }} />
-
-                                <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-                                    <img 
-                                        src={userClan.logo} 
-                                        alt={userClan.name} 
-                                        style={{ 
-                                            width: 72, 
-                                            height: 72, 
-                                            objectFit: 'contain',
-                                            filter: `drop-shadow(0 0 10px ${userClan.color}88)`
-                                        }} 
-                                    />
-                                    <div style={{ flex: 1 }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-                                            <span style={{ fontSize: '0.75rem', fontWeight: 800, letterSpacing: 1, textTransform: 'uppercase', color: userClan.color }}>
-                                                {userClan.icon} Appointed Clan
-                                            </span>
-                                            <span style={{ fontSize: '0.7rem', padding: '2px 8px', borderRadius: 10, background: `${userClan.color}22`, border: `1px solid ${userClan.color}44`, color: userClan.color, fontWeight: 700 }}>
-                                                {userClan.element} Element
-                                            </span>
-                                        </div>
-                                        <h3 style={{ margin: '4px 0 2px 0', fontSize: '1.18rem', color: '#FFF' }}>{userClan.name}</h3>
-                                        <p style={{ margin: 0, fontStyle: 'italic', color: 'var(--color-text-muted)', fontSize: '0.88rem' }}>"{userClan.motto}"</p>
-                                    </div>
-                                </div>
-
-                                <p style={{ marginTop: 12, marginBottom: 0, fontSize: '0.85rem', lineHeight: 1.6, color: 'var(--color-text-semi)', borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 10 }}>
-                                    {userClan.description}
-                                </p>
-                            </div>
-                        )}
 
                         <div className="portal-card">
                             <div className="portal-xp-row">

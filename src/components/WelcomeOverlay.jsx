@@ -6,15 +6,7 @@ const ESSENTIAL_ASSETS = [
   '/world-tree.png',
   '/crystal-library.png',
   '/future-vision.png',
-  '/living-city.png',
-  '/Clans/clan_background_desktop.png',
-  '/Clans/clan_background_mobile.png',
-  '/Clans/clan_core.png',
-  '/Clans/The_Crimson_Phoenix.png',
-  '/Clans/The_White_Lotus_Clan.png',
-  '/Clans/The_Silver_Feather_Clan.png',
-  '/Clans/The_Verdant_Grove.png',
-  '/Clans/The_Golden_Thunder_Clan.png'
+  '/living-city.png'
 ]
 
 function WelcomeOverlay({ onEnter }) {
@@ -30,7 +22,7 @@ function WelcomeOverlay({ onEnter }) {
 
     const updateStatusText = (pct) => {
       if (pct < 30) setLoadingText('Connecting to Sacred Realm...')
-      else if (pct < 60) setLoadingText('Downloading High-Res Imagery & Clan Seals...')
+      else if (pct < 60) setLoadingText('Downloading High-Res Imagery & Artworks...')
       else if (pct < 90) setLoadingText('Caching Realm Backgrounds & Artworks...')
       else setLoadingText('DreamWorld Realm Preloaded & Ready!')
     }

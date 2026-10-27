@@ -6,7 +6,6 @@ import './Navbar.css'
 const PRIMARY_LINKS = [
   { to: '/', label: 'Home', exact: true },
   { to: '/about', label: 'Story' },
-  { to: '/clans', label: 'Clans' },
   { to: '/characters', label: 'Dreamers' },
   { to: '/quests', label: 'Quests' },
   { to: '/events', label: 'Events' },

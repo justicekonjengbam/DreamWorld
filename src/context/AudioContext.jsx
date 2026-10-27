@@ -134,6 +134,9 @@ export function AudioProvider({ children }) {
       setActiveSong(song)
     }
 
+    setIsSoundMuted(false)
+    customAudioRef.current.muted = false
+
     customAudioRef.current.play()
       .then(() => {
         setIsPlayingCustom(true)

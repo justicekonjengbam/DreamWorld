@@ -3,7 +3,6 @@ import { supabase } from '../lib/supabase'
 import { quests as initialQuests } from '../data/quests'
 import { roles as initialRoles, characters as initialCharacters } from '../data/characters'
 import { events as initialEvents } from '../data/events'
-import { clans as initialClans, getClanById } from '../data/clans'
 
 
 const ContentContext = createContext()
@@ -17,7 +16,6 @@ export const ContentProvider = ({ children }) => {
     const [quests, setQuests] = useState(initialQuests)
     const [roles, setRoles] = useState(initialRoles)
     const [characters, setCharacters] = useState(initialCharacters)
-    const clans = initialClans
     const [sponsors, setSponsors] = useState([])
     const [events, setEvents] = useState(initialEvents)
     const [donations, setDonations] = useState([]) // New state for donations
@@ -729,8 +727,6 @@ export const ContentProvider = ({ children }) => {
             approveProfileUpdate,
             rejectProfileUpdate,
             clearAllDreamers,
-            clans,
-            getClanById,
             // App settings
             appSettings,
             updateAppSettings

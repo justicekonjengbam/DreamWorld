@@ -25,7 +25,6 @@ import PortalLogin from './portal/PortalLogin'
 import PortalDashboard from './portal/PortalDashboard'
 import Settings from './pages/Settings'
 import Songs from './pages/Songs'
-import Clans from './pages/Clans'
 import './App.css'
 
 function App() {
@@ -82,7 +81,6 @@ function App() {
               <Route path="/characters/:id" element={<CharacterDetail />} />
               <Route path="/roles" element={<Navigate to="/characters" replace />} />
               <Route path="/roles/:id" element={<Navigate to="/characters" replace />} />
-              <Route path="/clans" element={<Clans />} />
               <Route path="/creator" element={<Creator />} />
               <Route path="/quests" element={<Quests />} />
               <Route path="/events" element={<Events />} />
