@@ -57,7 +57,7 @@ function Navbar({ onLeaveDreamWorld }) {
   }, [])
 
   return (
-    <nav className="navbar">
+    <nav className={`navbar${isOpen ? ' menu-open' : ''}`}>
       <div className="navbar-container">
 
         {/* Brand Logo */}
@@ -138,7 +138,8 @@ function Navbar({ onLeaveDreamWorld }) {
           <button
             className={`hamburger ${isOpen ? 'active' : ''}`}
             onClick={() => setIsOpen(!isOpen)}
-            aria-label="Toggle menu"
+            aria-label={isOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={isOpen}
           >
             <span /><span /><span />
           </button>

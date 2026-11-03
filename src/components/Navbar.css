@@ -712,3 +712,42 @@
     font-size: 0.75rem;
   }
 }
+
+@media (max-width: 900px) and (orientation: landscape) {
+  .navbar,
+  .navbar.menu-open {
+    height: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .navbar::after { display: none; }
+  .navbar-container { height: 0; padding: 0; }
+  .navbar-logo, .realm-location, .navbar-menu, .nav-join-btn, .nav-settings-btn { display: none !important; }
+  .navbar-actions {
+    position: fixed;
+    z-index: 1030;
+    top: max(8px, env(safe-area-inset-top));
+    right: max(10px, env(safe-area-inset-right));
+    margin: 0;
+  }
+  .hamburger {
+    display: flex;
+    width: 38px;
+    height: 38px;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 7px;
+    border: 1px solid rgba(219, 190, 137, .55);
+    border-radius: 50%;
+    background: rgba(7, 18, 15, .78);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .navbar-drawer { height: 100vh; height: 100dvh; padding-top: max(14px, env(safe-area-inset-top)); }
+  .navbar-drawer.open { right: 0; }
+  .main-content { padding-top: 0; }
+}

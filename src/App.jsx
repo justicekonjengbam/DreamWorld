@@ -66,10 +66,18 @@ function App() {
   const handleEnterDreamWorld = () => {
     sessionStorage.setItem('dreamworld_entered', 'true')
     const isMobile = window.matchMedia('(max-width: 900px)').matches
+    const isPortraitPhone = window.matchMedia('(max-width: 900px) and (orientation: portrait)').matches
+    const orientation = window.screen?.orientation
     if (isMobile) {
       const enterFullscreen = document.documentElement.requestFullscreen
       if (typeof enterFullscreen === 'function' && !document.fullscreenElement) {
-        enterFullscreen.call(document.documentElement).catch(() => {})
+        enterFullscreen.call(document.documentElement).then(() => {
+          if (isPortraitPhone && typeof orientation?.lock === 'function') orientation.lock('landscape').catch(() => {})
+        }).catch(() => {
+          if (isPortraitPhone && typeof orientation?.lock === 'function') orientation.lock('landscape').catch(() => {})
+        })
+      } else if (isPortraitPhone && typeof orientation?.lock === 'function') {
+        orientation.lock('landscape').catch(() => {})
       }
     }
     setHasEntered(true)
