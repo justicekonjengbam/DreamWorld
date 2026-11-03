@@ -8,7 +8,6 @@
 
 .realm-backdrop {
   --realm-art: url('/realm-art/admin-wide.jpg');
-  --realm-art-mobile: url('/realm-art/admin-tall.jpg');
   position: fixed;
   z-index: 0;
   inset: 0;
@@ -88,16 +87,6 @@
 .main-app-content.portal-visible .main-content::before { display: none; }
 
 .app-home .realm-backdrop { display: none; }
-
-@media (max-width: 760px) and (orientation: portrait) {
-  .realm-backdrop {
-    background-image:
-      linear-gradient(180deg, rgba(5, 16, 19, .4), rgba(5, 15, 17, .56) 56%, rgba(4, 16, 13, .66)),
-      radial-gradient(ellipse at 50% 32%, rgba(42, 140, 117, .12), transparent 60%),
-      var(--realm-art-mobile, var(--realm-art));
-    background-position: center, center, center 38%;
-  }
-}
 
 /* Universal page logo styling */
 .page-hero {

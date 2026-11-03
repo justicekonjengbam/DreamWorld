@@ -28,24 +28,24 @@ import Songs from './pages/Songs'
 import './App.css'
 
 const PAGE_BACKDROPS = {
-  about: ['/realm-art/about-wide.jpg', '/realm-art/about-tall.jpg'],
-  characters: ['/realm-art/characters-wide.jpg', '/realm-art/characters-tall.jpg'],
-  creator: ['/realm-art/creator-wide.jpg', '/realm-art/creator-tall.jpg'],
-  quests: ['/realm-art/quests-wide.jpg', '/realm-art/quests-tall.jpg'],
-  events: ['/realm-art/events-wide.jpg', '/realm-art/events-tall.jpg'],
-  join: ['/realm-art/join-wide.jpg', '/realm-art/join-tall.jpg'],
-  funders: ['/realm-art/funders-wide.jpg', '/realm-art/funders-tall.jpg'],
-  thanks: ['/realm-art/thanks-wide.jpg', '/realm-art/thanks-tall.jpg'],
-  settings: ['/realm-art/settings-wide.jpg', '/realm-art/settings-tall.jpg'],
-  songs: ['/realm-art/songs-wide.jpg', '/realm-art/songs-tall.jpg'],
-  admin: ['/realm-art/admin-wide.jpg', '/realm-art/admin-tall.jpg']
+  about: '/realm-art/about-wide.jpg',
+  characters: '/realm-art/characters-wide.jpg',
+  creator: '/realm-art/creator-wide.jpg',
+  quests: '/realm-art/quests-wide.jpg',
+  events: '/realm-art/events-wide.jpg',
+  join: '/realm-art/join-wide.jpg',
+  funders: '/realm-art/funders-wide.jpg',
+  thanks: '/realm-art/thanks-wide.jpg',
+  settings: '/realm-art/settings-wide.jpg',
+  songs: '/realm-art/songs-wide.jpg',
+  admin: '/realm-art/admin-wide.jpg'
 }
 
 function getPageBackdrop(pathname) {
   const segment = pathname.split('/')[1]
   const route = pathname.startsWith('/characters/') ? 'characters' : segment === 'admin' ? 'admin' : segment
-  const [desktop, mobile] = PAGE_BACKDROPS[route] || []
-  return desktop ? { '--realm-art': `url('${desktop}')`, '--realm-art-mobile': `url('${mobile}')` } : undefined
+  const backdrop = PAGE_BACKDROPS[route]
+  return backdrop ? { '--realm-art': `url('${backdrop}')` } : undefined
 }
 
 function App() {
@@ -66,18 +66,10 @@ function App() {
   const handleEnterDreamWorld = () => {
     sessionStorage.setItem('dreamworld_entered', 'true')
     const isMobile = window.matchMedia('(max-width: 900px)').matches
-    const isPortraitPhone = window.matchMedia('(max-width: 900px) and (orientation: portrait)').matches
-    const orientation = window.screen?.orientation
     if (isMobile) {
       const enterFullscreen = document.documentElement.requestFullscreen
       if (typeof enterFullscreen === 'function' && !document.fullscreenElement) {
-        enterFullscreen.call(document.documentElement).then(() => {
-          if (isPortraitPhone && typeof orientation?.lock === 'function') orientation.lock('landscape').catch(() => {})
-        }).catch(() => {
-          if (isPortraitPhone && typeof orientation?.lock === 'function') orientation.lock('landscape').catch(() => {})
-        })
-      } else if (isPortraitPhone && typeof orientation?.lock === 'function') {
-        orientation.lock('landscape').catch(() => {})
+        enterFullscreen.call(document.documentElement).catch(() => {})
       }
     }
     setHasEntered(true)
