@@ -20,7 +20,7 @@ export const initialSongs = [
     album: 'DreamWorld Ambient, Vol. 1',
     duration: '3:08',
     src: '/Songs/DreamWorld.mp3',
-    cover: '/world-tree.png',
+    cover: '/realm-art/songs-wide.jpg',
     genre: 'Ambient / Ethereal',
     addedAt: '2026-06-07',
     lyrics: [
@@ -77,7 +77,7 @@ export const initialSongs = [
     album: 'DreamWorld Ambient, Vol. 1',
     duration: '2:55',
     src: '/Songs/DreamWorld Calling.mp3',
-    cover: '/crystal-library.png',
+    cover: '/realm-art/songs-wide.jpg',
     genre: 'Ambient / Focus',
     addedAt: '2026-06-07',
     lyrics: [
@@ -120,7 +120,7 @@ export const initialSongs = [
     album: 'DreamWorld Ambient, Vol. 1',
     duration: '3:43',
     src: '/Songs/DreamWorld Rise.mp3',
-    cover: '/future-vision.png',
+    cover: '/realm-art/songs-wide.jpg',
     genre: 'Ambient / Uplifting',
     addedAt: '2026-06-07',
     lyrics: [
@@ -174,7 +174,7 @@ export const initialSongs = [
     album: 'DreamWorld Ambient, Vol. 1',
     duration: '3:31',
     src: '/Songs/Sleeping walls.mp3',
-    cover: '/living-city.png',
+    cover: '/realm-art/songs-wide.jpg',
     genre: 'Ambient / Relaxing',
     addedAt: '2026-06-07',
     lyrics: [
@@ -207,7 +207,7 @@ export const initialSongs = [
     album: 'DreamWorld Ambient, Vol. 1',
     duration: '4:24',
     src: '/Songs/Waiting for.mp3',
-    cover: '/WAITING FOR IMAGE.png',
+    cover: '/realm-art/songs-wide.jpg',
     genre: 'Ambient / Ethereal',
     addedAt: '2026-10-31',
     lyrics: [

@@ -3,6 +3,7 @@
    ========================================================== */
 
 .navbar {
+  --realm-header-height: 72px;
   position: fixed;
   top: 0;
   left: 0;
@@ -98,6 +99,187 @@
   border-color: rgba(255, 215, 120, 0.35);
   box-shadow: 0 0 12px rgba(255, 215, 120, 0.15);
 }
+
+/* Realm HUD finish */
+.navbar {
+  background:
+    linear-gradient(90deg, rgba(7, 18, 19, 0.98), rgba(10, 12, 27, 0.96) 45%, rgba(7, 18, 19, 0.98));
+  border-bottom: 1px solid rgba(226, 190, 105, 0.48);
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(115, 205, 181, 0.13);
+}
+
+.navbar::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 50%;
+  width: 92px;
+  height: 5px;
+  transform: translateX(-50%);
+  background: #d5b36a;
+  clip-path: polygon(0 0, 43% 0, 50% 100%, 57% 0, 100% 0, 100% 35%, 58% 35%, 50% 100%, 42% 35%, 0 35%);
+  opacity: 0.82;
+}
+
+.navbar-container {
+  position: relative;
+  max-width: 1540px;
+  height: 72px;
+  padding: 0 26px;
+}
+
+.navbar-logo {
+  gap: 8px;
+  color: #f1dfb3 !important;
+  font-family: var(--font-fancy), Georgia, serif;
+  font-size: 1rem;
+  letter-spacing: 0.09em;
+}
+
+.logo-image {
+  height: 38px;
+  max-width: 48px;
+  filter: drop-shadow(0 0 9px rgba(129, 215, 193, 0.42));
+}
+
+.realm-location {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 118px;
+  padding: 7px 12px;
+  border-left: 1px solid rgba(226, 190, 105, 0.24);
+  border-right: 1px solid rgba(226, 190, 105, 0.24);
+  color: #dfd2b2;
+}
+
+.realm-location-sigil {
+  color: #91d2be;
+  font-size: 1.2rem;
+  text-shadow: 0 0 12px rgba(115, 205, 181, 0.65);
+  animation: sigil-breathe 3.8s ease-in-out infinite;
+}
+
+.realm-location-copy { display: grid; line-height: 1.15; }
+.realm-location-label { color: rgba(222, 210, 178, 0.53); font: 600 0.54rem/1.2 var(--font-display), serif; letter-spacing: 0.16em; }
+.realm-location-name { color: #e7d8b1; font: 600 0.75rem/1.35 var(--font-display), serif; white-space: nowrap; }
+
+.navbar-menu { gap: 2px; }
+.nav-link {
+  position: relative;
+  gap: 6px;
+  padding: 8px 10px;
+  border-radius: 3px;
+  color: rgba(221, 221, 205, 0.76);
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.nav-rune { color: #84b9a9; font-size: 0.9rem; transition: color 180ms ease, text-shadow 180ms ease; }
+.nav-link:hover .nav-rune, .nav-link.active .nav-rune { color: #f3d58c; text-shadow: 0 0 10px rgba(243, 213, 140, 0.7); }
+.nav-link:hover { background: rgba(117, 188, 166, 0.07); border-color: rgba(117, 188, 166, 0.18); }
+.nav-link.active {
+  background: linear-gradient(180deg, rgba(209, 176, 103, 0.12), rgba(209, 176, 103, 0.025));
+  border-color: rgba(209, 176, 103, 0.18);
+  color: #f2d994 !important;
+  box-shadow: inset 0 -1px #d7b76e, 0 5px 18px rgba(209, 176, 103, 0.08);
+}
+
+.nav-join-btn {
+  border-radius: 4px;
+  padding: 7px 12px;
+  background: linear-gradient(135deg, rgba(73, 117, 103, 0.38), rgba(37, 61, 61, 0.42));
+  border: 1px solid rgba(134, 195, 167, 0.55);
+  color: #c7e7d5;
+  box-shadow: inset 0 0 14px rgba(102, 179, 143, 0.08);
+}
+.nav-join-btn:hover { border-color: #b0e4c8; background: rgba(91, 149, 120, 0.42); box-shadow: 0 0 20px rgba(115, 205, 164, 0.2); }
+.nav-settings-btn { border-radius: 4px; background: rgba(223, 207, 165, 0.045); border-color: rgba(223, 207, 165, 0.2); }
+
+@keyframes sigil-breathe { 50% { opacity: 0.68; transform: scale(0.92) rotate(15deg); } }
+
+@media (max-width: 1120px) {
+  .navbar-container { height: 68px; }
+  .navbar { --realm-header-height: 68px; }
+  .realm-location { margin-left: auto; margin-right: 10px; }
+}
+
+@media (max-width: 520px) {
+  .navbar-container { height: 62px; }
+  .navbar { --realm-header-height: 62px; }
+  .realm-location { min-width: 0; padding: 5px 8px; }
+  .realm-location-label { display: none; }
+  .realm-location-name { font-size: 0.65rem; }
+  .logo-text { display: none; }
+}
+
+/* A quiet chapter ribbon, with rounded, hand-bound details */
+.navbar::after {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  transform: none;
+  clip-path: none;
+  background: linear-gradient(90deg, transparent, rgba(221, 193, 140, 0.58) 28%, rgba(169, 137, 177, 0.44) 72%, transparent);
+}
+
+.realm-location {
+  border-left: 0;
+  border-right: 0;
+  gap: 8px;
+  padding: 6px 12px;
+}
+.realm-location-sigil {
+  color: #d4b77c;
+  text-shadow: 0 0 12px rgba(212, 183, 124, 0.48);
+}
+.realm-location-label {
+  color: rgba(226, 215, 193, 0.55);
+  font-family: var(--font-body), Georgia, serif;
+  font-size: 0.72rem;
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-transform: none;
+}
+.realm-location-name {
+  color: #ead9b4;
+  font-family: var(--font-fancy), var(--font-display), serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.nav-link {
+  border-radius: 18px;
+  font-family: var(--font-fancy), var(--font-display), serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+.nav-link.active {
+  border-color: rgba(219, 190, 137, 0.18);
+  border-radius: 18px;
+  background: rgba(224, 194, 142, 0.08);
+  box-shadow: inset 0 0 18px rgba(224, 194, 142, 0.035), 0 0 16px rgba(181, 143, 191, 0.06);
+}
+.nav-rune { color: #b8a6c8; }
+.nav-link:hover .nav-rune, .nav-link.active .nav-rune { color: #e6ca8c; }
+
+.nav-join-btn {
+  border-radius: 24px;
+  background: linear-gradient(135deg, rgba(121, 91, 132, 0.24), rgba(94, 111, 74, 0.24));
+  border-color: rgba(219, 190, 137, 0.48);
+  color: #eddbb4;
+  font-family: var(--font-fancy), var(--font-display), serif;
+  letter-spacing: 0.02em;
+}
+.nav-join-btn:hover { background: linear-gradient(135deg, rgba(140, 105, 149, 0.32), rgba(112, 132, 85, 0.32)); border-color: #e8ce98; box-shadow: 0 0 20px rgba(205, 171, 139, 0.18); }
+.join-dot, .nav-join-btn.closed .join-dot { background: #d8c083; box-shadow: 0 0 8px rgba(216, 192, 131, 0.55); }
+.nav-settings-btn { border-radius: 24px; background: rgba(234, 220, 195, 0.045); border-color: rgba(234, 220, 195, 0.16); }
 
 /* Dropdown Menu Item */
 .nav-dropdown-item {

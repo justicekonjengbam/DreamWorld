@@ -27,6 +27,27 @@ import Settings from './pages/Settings'
 import Songs from './pages/Songs'
 import './App.css'
 
+const PAGE_BACKDROPS = {
+  about: ['/realm-art/about-wide.jpg', '/realm-art/about-tall.jpg'],
+  characters: ['/realm-art/characters-wide.jpg', '/realm-art/characters-tall.jpg'],
+  creator: ['/realm-art/creator-wide.jpg', '/realm-art/creator-tall.jpg'],
+  quests: ['/realm-art/quests-wide.jpg', '/realm-art/quests-tall.jpg'],
+  events: ['/realm-art/events-wide.jpg', '/realm-art/events-tall.jpg'],
+  join: ['/realm-art/join-wide.jpg', '/realm-art/join-tall.jpg'],
+  funders: ['/realm-art/funders-wide.jpg', '/realm-art/funders-tall.jpg'],
+  thanks: ['/realm-art/thanks-wide.jpg', '/realm-art/thanks-tall.jpg'],
+  settings: ['/realm-art/settings-wide.jpg', '/realm-art/settings-tall.jpg'],
+  songs: ['/realm-art/songs-wide.jpg', '/realm-art/songs-tall.jpg'],
+  admin: ['/realm-art/admin-wide.jpg', '/realm-art/admin-tall.jpg']
+}
+
+function getPageBackdrop(pathname) {
+  const segment = pathname.split('/')[1]
+  const route = pathname.startsWith('/characters/') ? 'characters' : segment === 'admin' ? 'admin' : segment
+  const [desktop, mobile] = PAGE_BACKDROPS[route] || []
+  return desktop ? { '--realm-art': `url('${desktop}')`, '--realm-art-mobile': `url('${mobile}')` } : undefined
+}
+
 function App() {
   const location = useLocation()
   const isHomePage = location.pathname === '/'
@@ -36,11 +57,25 @@ function App() {
   const [hasEntered, setHasEntered] = useState(() => {
     return sessionStorage.getItem('dreamworld_entered') === 'true'
   })
+  const [showWelcomeOverlay, setShowWelcomeOverlay] = useState(() => {
+    return sessionStorage.getItem('dreamworld_entered') !== 'true'
+  })
   const [shouldStartAudio, setShouldStartAudio] = useState(false)
   const { isSoundMuted, buttonVolume } = useAudio()
 
   const handleEnterDreamWorld = () => {
     sessionStorage.setItem('dreamworld_entered', 'true')
+    const isPortraitPhone = window.matchMedia('(max-width: 900px) and (orientation: portrait)').matches
+    const orientation = window.screen?.orientation
+    if (isPortraitPhone && typeof orientation?.lock === 'function') {
+      const lockLandscape = () => orientation.lock('landscape').catch(() => {})
+      const enterFullscreen = document.documentElement.requestFullscreen
+      if (typeof enterFullscreen === 'function' && !document.fullscreenElement) {
+        Promise.resolve(enterFullscreen.call(document.documentElement)).then(lockLandscape).catch(lockLandscape)
+      } else {
+        lockLandscape()
+      }
+    }
     setHasEntered(true)
     setShouldStartAudio(true)
   }
@@ -65,15 +100,22 @@ function App() {
 
   return (
     <ContentProvider>
-      <div className="app">
+      <div className={`app${isHomePage ? ' app-home' : ''}`}>
+        {!isHomePage && !isPortal && <div className="realm-backdrop" style={getPageBackdrop(location.pathname)} aria-hidden="true" />}
         <ScrollToTop />
-        {!isPortal && !hasEntered && <WelcomeOverlay onEnter={handleEnterDreamWorld} />}
+        {!isPortal && showWelcomeOverlay && (
+          <WelcomeOverlay
+            onEnter={handleEnterDreamWorld}
+            onExitComplete={() => setShowWelcomeOverlay(false)}
+          />
+        )}
 
         <ParticlesBackground />
 
         <div className={`main-app-content ${!isPortal && hasEntered ? 'fade-in' : ''} ${isPortal ? 'portal-visible' : ''}`}>
           {!isPortal && <Navbar />}
           <main className="main-content">
+            <div className="realm-screen" key={location.pathname}>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
@@ -102,6 +144,7 @@ function App() {
               {/* 404 Route */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
+            </div>
           </main>
           {!isPortal && !isHomePage && <Footer />}
         </div>

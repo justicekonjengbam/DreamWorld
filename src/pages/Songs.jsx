@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useAudio } from '../context/AudioContext'
-import SongsPreloader from '../components/SongsPreloader'
 import './Songs.css'
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -20,9 +19,6 @@ function Songs() {
   const [smoothTime, setSmoothTime]           = useState(0)
   const [viewMode, setViewMode]               = useState('playlist')
   const [selectedSong, setSelectedSong]       = useState(null)
-  const [showSongsPreloader, setShowSongsPreloader] = useState(() =>
-    sessionStorage.getItem('dreamworld_songs_preloaded') !== 'true'
-  )
 
   // ── Calibration state ──────────────────────────────────────────────────────
   const visualizerCanvasRef = useRef(null)
@@ -30,10 +26,6 @@ function Songs() {
   const rafRef              = useRef(null)
 
   // ── Preloader ──────────────────────────────────────────────────────────────
-  const handleSongsPreloadComplete = () => {
-    sessionStorage.setItem('dreamworld_songs_preloaded', 'true')
-    setShowSongsPreloader(false)
-  }
 
   // ── Disable right-click ────────────────────────────────────────────────────
   useEffect(() => {
@@ -174,7 +166,6 @@ function Songs() {
 
     return (
       <div className="songs-page page song-detail-page" onContextMenu={e => e.preventDefault()}>
-        {showSongsPreloader && <SongsPreloader onComplete={handleSongsPreloadComplete} />}
 
         <div className="song-detail-bg" style={{ backgroundImage: `url(${selectedSong.cover})` }} />
 
@@ -300,7 +291,6 @@ function Songs() {
   // ═══════════════════════════════════════════════════════════════════════════
   return (
     <div className="songs-page page" onContextMenu={(e) => e.preventDefault()}>
-      {showSongsPreloader && <SongsPreloader onComplete={handleSongsPreloadComplete} />}
 
       <div className="page-hero">
         <img src="/logo.png" alt="DreamWorld Logo" className="page-logo" draggable="false" />
@@ -337,7 +327,7 @@ function Songs() {
           <div className="playlist-header-card">
             <div className="playlist-cover-art-square">
               <img
-                src={activeSong ? activeSong.cover : '/world-tree.png'}
+                src={activeSong?.cover || '/realm-art/songs-wide.jpg'}
                 alt="Playlist Cover"
                 className="playlist-img-square"
                 draggable="false"

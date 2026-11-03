@@ -3,15 +3,16 @@ import './WelcomeOverlay.css'
 
 const ESSENTIAL_ASSETS = [
   '/logo.png',
+  '/dreamworld-home-world.png',
   '/world-tree.png',
   '/crystal-library.png',
   '/future-vision.png',
   '/living-city.png'
 ]
 
-function WelcomeOverlay({ onEnter }) {
+function WelcomeOverlay({ onEnter, onExitComplete }) {
   const [progress, setProgress] = useState(0)
-  const [loadingText, setLoadingText] = useState('Connecting to Sacred Realm...')
+  const [loadingText, setLoadingText] = useState('Establishing realm link...')
   const [isPreloadComplete, setIsPreloadComplete] = useState(false)
   const [isExiting, setIsExiting] = useState(false)
   const [isVisible, setIsVisible] = useState(true)
@@ -21,10 +22,10 @@ function WelcomeOverlay({ onEnter }) {
     const totalAssets = ESSENTIAL_ASSETS.length
 
     const updateStatusText = (pct) => {
-      if (pct < 30) setLoadingText('Connecting to Sacred Realm...')
-      else if (pct < 60) setLoadingText('Downloading High-Res Imagery & Artworks...')
-      else if (pct < 90) setLoadingText('Caching Realm Backgrounds & Artworks...')
-      else setLoadingText('DreamWorld Realm Preloaded & Ready!')
+      if (pct < 30) setLoadingText('Establishing realm link...')
+      else if (pct < 60) setLoadingText('Gathering world fragments...')
+      else if (pct < 90) setLoadingText('Waking the living world...')
+      else setLoadingText('DreamWorld is ready.')
     }
 
     ESSENTIAL_ASSETS.forEach(src => {
@@ -46,7 +47,7 @@ function WelcomeOverlay({ onEnter }) {
     // Fallback timer ensuring preloader finishes in max 3.5 seconds
     const fallbackTimer = setTimeout(() => {
       setProgress(100)
-      setLoadingText('DreamWorld Realm Preloaded & Ready!')
+      setLoadingText('DreamWorld is ready.')
       setIsPreloadComplete(true)
     }, 3500)
 
@@ -59,17 +60,20 @@ function WelcomeOverlay({ onEnter }) {
     setIsExiting(true)
     setTimeout(() => {
       setIsVisible(false)
-    }, 800)
+      onExitComplete?.()
+    }, 1100)
   }
 
   if (!isVisible) return null
 
   return (
-    <div className={`welcome-overlay ${isExiting ? 'exiting' : ''}`}>
+      <div className={`welcome-overlay ${isExiting ? 'exiting' : ''}`}>
+        <div className="welcome-portal" aria-hidden="true" />
       <div className="welcome-content">
+        <p className="welcome-kicker"><span>✧</span> A BEAUTIFUL DREAM <span>✧</span></p>
         <img src="/logo.png" alt="DreamWorld" className="welcome-logo" />
-        <h1 className="welcome-title">Welcome to DreamWorld</h1>
-        <p className="welcome-subtitle">Where nature, technology, and wonder unite</p>
+        <h1 className="welcome-title">The Realm Awaits</h1>
+        <p className="welcome-subtitle">A living world, ready to grow with you.</p>
 
         {/* Real-time Preloading Progress Card */}
         <div className="preloader-progress-box">
@@ -88,11 +92,11 @@ function WelcomeOverlay({ onEnter }) {
         {/* Action Enter Button */}
         <button 
           onClick={handleEnter} 
-          className={`enter-btn ${isPreloadComplete ? 'ready' : ''}`}
+          className="enter-btn"
         >
-          {isPreloadComplete ? '✨ Enter DreamWorld ✨' : '⚡ Enter Realm Anyway'}
+          <span className="welcome-enter-sigil" aria-hidden="true">✧</span>{isPreloadComplete ? 'Enter DreamWorld' : 'Enter the Realm'}<span className="welcome-enter-sigil" aria-hidden="true">✧</span>
         </button>
-        <p className="welcome-note">Click to initialize sound and enter the world</p>
+        <p className="welcome-note">Select to awaken the sound and enter</p>
       </div>
       
       {isExiting && (
