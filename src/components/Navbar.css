@@ -654,6 +654,16 @@
   color: #ffffff;
 }
 
+.drawer-action-btn.leave {
+  width: 100%;
+  border: 1px solid rgba(219, 190, 137, 0.28);
+  color: rgba(238, 225, 200, 0.82);
+  background: rgba(255, 255, 255, 0.035);
+  font: inherit;
+  cursor: pointer;
+}
+.drawer-action-btn.leave:hover { color: #f1dca9; border-color: rgba(219, 190, 137, 0.58); }
+
 .overlay {
   position: fixed;
   inset: 0;

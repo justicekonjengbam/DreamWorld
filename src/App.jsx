@@ -66,22 +66,24 @@ function App() {
   const handleEnterDreamWorld = () => {
     sessionStorage.setItem('dreamworld_entered', 'true')
     const isMobile = window.matchMedia('(max-width: 900px)').matches
-    const isPortraitPhone = window.matchMedia('(max-width: 900px) and (orientation: portrait)').matches
-    const orientation = window.screen?.orientation
     if (isMobile) {
       const enterFullscreen = document.documentElement.requestFullscreen
       if (typeof enterFullscreen === 'function' && !document.fullscreenElement) {
-        Promise.resolve(enterFullscreen.call(document.documentElement)).then(() => {
-          if (isPortraitPhone && typeof orientation?.lock === 'function') {
-            orientation.lock('landscape').catch(() => {})
-          }
-        }).catch(() => {
-          if (isPortraitPhone && typeof orientation?.lock === 'function') orientation.lock('landscape').catch(() => {})
-        })
+        enterFullscreen.call(document.documentElement).catch(() => {})
       }
     }
     setHasEntered(true)
     setShouldStartAudio(true)
+  }
+
+  const handleLeaveDreamWorld = () => {
+    sessionStorage.removeItem('dreamworld_entered')
+    if (document.fullscreenElement && typeof document.exitFullscreen === 'function') {
+      document.exitFullscreen().catch(() => {})
+    }
+    setShouldStartAudio(false)
+    setHasEntered(false)
+    setShowWelcomeOverlay(true)
   }
 
   // Global click sound for all clickable elements
@@ -117,7 +119,7 @@ function App() {
         <ParticlesBackground />
 
         <div className={`main-app-content ${!isPortal && hasEntered ? 'fade-in' : ''} ${isPortal ? 'portal-visible' : ''}`}>
-          {!isPortal && <Navbar />}
+          {!isPortal && <Navbar onLeaveDreamWorld={handleLeaveDreamWorld} />}
           <main className="main-content">
             <div className="realm-screen" key={location.pathname}>
             <Routes>

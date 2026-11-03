@@ -18,7 +18,7 @@ const MORE_LINKS = [
   { to: '/thanks', label: 'Sponsors' },
 ]
 
-function Navbar() {
+function Navbar({ onLeaveDreamWorld }) {
   const location = useLocation()
   const [isOpen, setIsOpen] = useState(false)
   const [moreDropdownOpen, setMoreDropdownOpen] = useState(false)
@@ -184,6 +184,9 @@ function Navbar() {
             <Link to="/settings" className="drawer-action-btn settings" onClick={closeMenu}>
               ⚙️ System Settings
             </Link>
+            <button type="button" className="drawer-action-btn leave" onClick={() => { closeMenu(); onLeaveDreamWorld?.() }}>
+              ← Leave DreamWorld
+            </button>
           </div>
         </div>
 
