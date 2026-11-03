@@ -380,3 +380,88 @@
   .deck-current { min-width: 112px; font-size: 10px; }
   .home-gesture-hint { display: none; }
 }
+
+/* Mobile home chapters use a bounded content area so controls never cover text. */
+@media (max-width: 900px) {
+  .app-home { height: 100dvh; min-height: 100dvh; overflow: hidden; }
+  .app-home .main-content, .app-home .realm-screen { height: 100%; min-height: 0; padding-top: 0; }
+  .home { height: 100dvh; min-height: 100dvh; padding: 0; }
+  .home-slide { align-items: stretch; padding: max(8px, env(safe-area-inset-top)) 26px max(58px, calc(env(safe-area-inset-bottom) + 48px)); }
+  .home-copy {
+    width: min(86vw, 760px);
+    max-height: 100%;
+    margin: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+  }
+  .home-copy::-webkit-scrollbar { display: none; }
+  .home-slide.is-active .home-copy > * { animation: none; }
+  .home-title { margin: 6px auto 10px; font-size: clamp(24px, 6vh, 40px); line-height: 1.1; }
+  .home-description { max-width: 620px; font-size: clamp(12px, 2.5vh, 15px); line-height: 1.4; }
+  .home-eyebrow { margin: 0 auto 8px; font-size: 9px; line-height: 1.25; letter-spacing: .15em; }
+  .home-actions { justify-content: center; gap: 8px; margin-top: 12px; }
+  .home-action { min-height: 36px; padding: 0 13px; font-size: 11px; }
+  .home-pillars { margin-top: 10px; }
+  .home-pillar { min-height: 68px; padding: 6px 12px; }
+  .home-pillar h3 { margin: 4px 0; font-size: 14px; }
+  .home-pillar p { font-size: 11px; line-height: 1.3; }
+  .home-arrival-copy {
+    position: static;
+    display: grid;
+    grid-template-rows: auto auto auto auto;
+    align-content: center;
+    justify-items: center;
+    gap: clamp(5px, 1.5vh, 12px);
+    width: 100%;
+    height: 100%;
+    padding: 0 6px;
+  }
+  .home-arrival-copy .home-eyebrow,
+  .home-arrival-copy .home-logo,
+  .home-arrival-copy .home-description,
+  .home-arrival-copy .home-actions {
+    position: static;
+    top: auto;
+    left: auto;
+    translate: none;
+    margin: 0;
+  }
+  .home-arrival-copy .home-eyebrow { width: auto; }
+  .home-arrival-copy .home-logo { width: min(48vw, 250px); height: min(24dvh, 170px); object-fit: contain; }
+  .home-arrival-copy .home-description { width: min(84vw, 620px); max-width: 620px; font-size: clamp(12px, 2.5vh, 15px); line-height: 1.4; }
+  .home-arrival-copy .home-actions { width: auto; max-width: 100%; }
+  .home-paths-copy { width: min(88vw, 880px); }
+  .home-paths-copy .home-title { margin: 2px auto 9px; font-size: clamp(23px, 5.4vh, 36px); }
+  .home-path-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px 10px; }
+  .home-path { min-height: 60px; gap: 4px; padding: 7px 14px; }
+  .home-path .path-number { top: 6px; left: 7px; font-size: 8px; }
+  .home-path .path-arrow { right: 7px; bottom: 5px; font-size: 12px; }
+  .path-sigil { font-size: 13px; }
+  .path-copy { gap: 3px; }
+  .path-copy strong { font-size: 12px; line-height: 1.2; }
+  .path-copy small { font-size: 10px; line-height: 1.25; }
+  .home-update-copy { width: min(86vw, 720px); padding: 10px 14px; }
+  .home-update-date { font-size: 10px; }
+  .home-update-copy .home-title { font-size: clamp(24px, 5.4vh, 38px); }
+  .home-update-description { margin-bottom: 10px; }
+  .home-deck-controls { bottom: max(8px, env(safe-area-inset-bottom)); gap: 10px; width: calc(100% - 48px); }
+  .deck-arrow { flex-basis: 36px; width: 36px; height: 36px; font-size: 17px; }
+  .deck-current { min-width: 118px; font-size: 10px; }
+  .home-gesture-hint { display: none; }
+}
+
+@media (max-width: 900px) and (orientation: landscape) {
+  .home-slide { padding: 8px 48px max(48px, calc(env(safe-area-inset-bottom) + 42px)); }
+  .home-arrival-copy .home-logo { width: min(34vw, 210px); height: min(26dvh, 105px); }
+  .home-arrival-copy .home-description { width: min(78vw, 600px); font-size: clamp(11px, 2.3vh, 14px); line-height: 1.3; }
+  .home-path-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px 9px; }
+  .home-path { min-height: 56px; }
+  .path-copy strong { font-size: 11px; }
+  .path-copy small { font-size: 9px; line-height: 1.15; }
+  .home-pillars { margin-top: 7px; }
+  .home-pillar { min-height: 58px; padding: 4px 10px; }
+  .home-pillar h3 { margin: 3px 0; font-size: 12px; }
+  .home-pillar p { font-size: 9px; line-height: 1.2; }
+}
