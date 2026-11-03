@@ -270,6 +270,41 @@
   .home-gesture-hint { bottom: 66px; }
 }
 
+/* Short mobile landscape viewports need a compact, non-overlapping chapter layout. */
+@media (max-width: 900px) and (orientation: landscape) and (max-height: 560px) {
+  .home { padding: 0 clamp(20px, 5vw, 52px); }
+  .home-arrival-copy .home-eyebrow { top: 8%; font-size: 9px; }
+  .home-arrival-copy .home-logo { top: 37%; width: min(40vw, 300px); }
+  .home-arrival-copy .home-description { top: 61%; width: min(75vw, 620px); font-size: clamp(12px, 2.4vh, 15px); line-height: 1.35; }
+  .home-arrival-copy .home-actions { top: 79%; gap: 8px; }
+  .home-arrival-copy .home-action { min-height: 34px; padding: 0 12px; font-size: 11px; }
+  .home-copy { width: min(78vw, 760px); }
+  .home-title { margin: 8px 0; font-size: clamp(27px, 5.3vh, 42px); line-height: 1.05; }
+  .home-description { max-width: 680px; font-size: clamp(12px, 2.3vh, 15px); line-height: 1.4; }
+  .home-eyebrow { margin-bottom: 8px; font-size: 9px; }
+  .home-actions { gap: 8px; margin-top: 12px; }
+  .home-action { min-height: 35px; padding: 0 13px; font-size: 11px; }
+  .home-pillars { margin-top: 12px; }
+  .home-pillar { min-height: 78px; padding: 6px 12px; }
+  .pillar-sigil { font-size: 15px; }
+  .home-pillar h3 { margin: 5px 0 3px; font-size: 14px; }
+  .home-pillar p { font-size: 11px; line-height: 1.3; }
+  .home-paths-copy { width: min(88vw, 900px); }
+  .home-paths-copy .home-title { margin-bottom: 10px; font-size: clamp(25px, 4.8vh, 38px); }
+  .home-path-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px 10px; }
+  .home-path { min-height: 70px; gap: 4px; padding: 7px 12px; }
+  .path-sigil { font-size: 14px; }
+  .path-copy strong { font-size: 13px; }
+  .path-copy small { font-size: 10px; line-height: 1.25; }
+  .home-update-copy { padding: 14px 20px; }
+  .home-update-copy .home-title { font-size: clamp(26px, 5vh, 40px); }
+  .home-update-description { margin-bottom: 12px; }
+  .home-gesture-hint { bottom: 58px; font-size: 8px; }
+  .home-deck-controls { bottom: 7px; gap: 12px; }
+  .deck-arrow { flex-basis: 34px; width: 34px; height: 34px; font-size: 17px; }
+  .deck-indicators { gap: 12px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .home-background { animation: none; }
   .home-slide, .home-slide.is-active { transition-duration: 1ms; transform: none; }

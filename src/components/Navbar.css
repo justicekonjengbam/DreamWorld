@@ -213,6 +213,37 @@
   .logo-text { display: none; }
 }
 
+/* Keep landscape pages unobstructed; the menu control stays available on demand. */
+@media (max-width: 900px) and (orientation: landscape) and (max-height: 560px) {
+  .navbar {
+    height: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .navbar::after { display: none; }
+  .navbar-container { height: 0; padding: 0; }
+  .navbar-logo, .realm-location, .navbar-menu, .nav-join-btn, .nav-settings-btn { display: none; }
+  .navbar-actions { position: fixed; z-index: 1030; top: max(10px, env(safe-area-inset-top)); right: max(12px, env(safe-area-inset-right)); }
+  .hamburger {
+    display: flex;
+    width: 42px;
+    height: 42px;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    border: 1px solid rgba(219, 190, 137, .5);
+    border-radius: 50%;
+    background: rgba(8, 18, 17, .72);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .navbar-drawer { height: 100vh; height: 100dvh; padding-top: max(18px, env(safe-area-inset-top)); }
+  .main-content { padding-top: 0; }
+}
+
 /* A quiet chapter ribbon, with rounded, hand-bound details */
 .navbar::after {
   left: 0;
