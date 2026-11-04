@@ -1,10 +1,12 @@
+import { useState } from 'react'
 import { useAudio } from '../context/AudioContext'
 import { useTheme } from '../context/ThemeContext'
 import Card from '../components/Card'
 import Button from '../components/Button'
 import './Settings.css'
 
-function Settings() {
+function Settings({ canInstall = false, isAppInstalled = false, onInstall }) {
+    const [installMessage, setInstallMessage] = useState('')
     const { 
         isSoundMuted, setIsSoundMuted, 
         musicVolume, setMusicVolume, 
@@ -31,6 +33,29 @@ function Settings() {
 
     const resetMusicVolume = () => setMusicVolume(0.5)
     const resetButtonVolume = () => setButtonVolume(0.7)
+
+    const handleInstallClick = async () => {
+        if (isAppInstalled) {
+            setInstallMessage('DreamWorld is already installed on this device.')
+            return
+        }
+
+        if (!canInstall || !onInstall) {
+            setInstallMessage('Open your browser menu and choose Install app or Add to Home Screen.')
+            return
+        }
+
+        try {
+            const choice = await onInstall()
+            setInstallMessage(
+                choice?.outcome === 'accepted'
+                    ? 'DreamWorld is being installed.'
+                    : 'Installation was dismissed. You can try again from your browser menu.'
+            )
+        } catch {
+            setInstallMessage('The install prompt could not open. Try Install app in your browser menu.')
+        }
+    }
 
     const gradientDisplayNames = {
         nebula: 'Celestial Nebula',
@@ -171,6 +196,27 @@ function Settings() {
 
                     <div style={{ marginTop: '25px', display: 'flex', justifyContent: 'flex-end' }}>
                         <Button variant="secondary" onClick={resetTheme}>Reset Visuals to Default</Button>
+                    </div>
+                </Card>
+
+                <Card className="settings-card gold-theme settings-install-card">
+                    <h2 className="settings-section-title">Install DreamWorld</h2>
+                    <div className="settings-divider"></div>
+                    <div className="settings-option-row">
+                        <div className="settings-option-info">
+                            <span className="settings-label">Add DreamWorld to your device</span>
+                            <p className="settings-description">
+                                {isAppInstalled
+                                    ? 'DreamWorld is installed and ready to open from your device.'
+                                    : 'Install DreamWorld for quick access from your home screen or app launcher.'}
+                            </p>
+                            {installMessage && <p className="settings-description install-status" role="status">{installMessage}</p>}
+                        </div>
+                        <div className="settings-control-box">
+                            <Button variant="secondary" onClick={handleInstallClick}>
+                                {isAppInstalled ? 'Already Installed' : 'Install DreamWorld'}
+                            </Button>
+                        </div>
                     </div>
                 </Card>
             </div>

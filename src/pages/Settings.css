@@ -15,6 +15,15 @@
     padding: 30px !important;
 }
 
+.settings-install-card {
+    grid-column: 1 / -1;
+}
+
+.install-status {
+    margin-top: 8px;
+    color: var(--color-primary);
+}
+
 .settings-section-title {
     font-size: 1.4rem;
     color: var(--color-primary);

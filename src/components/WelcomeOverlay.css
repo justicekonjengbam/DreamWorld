@@ -1052,7 +1052,7 @@
 /* Full-bleed portal artwork: no geometric frame or competing ring effects. */
 .welcome-overlay {
   isolation: isolate;
-  background: #171038 url('/dreamworld-portal-bg.png') center / cover no-repeat;
+  background: #171038 url('/dreamworld-portal-bg.jpg') center / cover no-repeat;
 }
 .welcome-overlay::before,
 .welcome-overlay::after { content: none; display: none; }

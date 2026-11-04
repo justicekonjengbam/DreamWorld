@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useContent } from '../context/ContentContext'
 import Card from '../components/Card'
 import SectionHeader from '../components/SectionHeader'
@@ -21,8 +21,19 @@ function Join() {
     avatar: '',
     reason: '',
     roleReason: '',
-    website_hp: '' // Honeypot field (bots fill this, humans don't)
+    website_hp: '', // Honeypot field (bots fill this, humans don't)
+    captchaInput: ''
   })
+
+  // Dynamic Math Verification Challenge
+  const [mathPuzzle, setMathPuzzle] = useState({ a: 7, b: 5 })
+
+  useEffect(() => {
+    // Generate random math challenge on mount
+    const numA = Math.floor(Math.random() * 9) + 2
+    const numB = Math.floor(Math.random() * 9) + 1
+    setMathPuzzle({ a: numA, b: numB })
+  }, [])
 
   const [dreamerErrors, setDreamerErrors] = useState({})
   const [dreamerSubmitted, setDreamerSubmitted] = useState(false)
@@ -83,6 +94,11 @@ function Join() {
       errors.roleReason = 'Please tell us why you chose this role'
     }
 
+    // Bot Verification Check
+    if (parseInt(dreamerForm.captchaInput) !== mathPuzzle.a + mathPuzzle.b) {
+      errors.captchaInput = `Incorrect calculation. What is ${mathPuzzle.a} + ${mathPuzzle.b}?`
+    }
+
     return errors
   }
 
@@ -137,7 +153,7 @@ function Join() {
       setDreamerSubmitted(true)
 
       setTimeout(() => {
-        setDreamerForm({ name: '', email: '', phone: '', age: '', gender: '', role: '', otherRole: '', avatar: '', reason: '', roleReason: '', website_hp: '' })
+        setDreamerForm({ name: '', email: '', phone: '', age: '', gender: '', role: '', otherRole: '', avatar: '', reason: '', roleReason: '', website_hp: '', captchaInput: '' })
         setDreamerSubmitted(false)
       }, 6000)
     } catch (error) {
@@ -352,6 +368,25 @@ function Join() {
                       tabIndex={-1}
                       autoComplete="off"
                     />
+                  </div>
+
+                  {/* 🧠 Anti-Bot Math Challenge */}
+                  <div className="form-group" style={{ background: 'rgba(76,161,175,0.08)', padding: '14px', borderRadius: '8px', border: '1px solid rgba(76,161,175,0.25)' }}>
+                    <label htmlFor="captchaInput" style={{ fontWeight: 700, color: '#4CA1AF' }}>
+                      🤖 Anti-Bot Verification: What is {mathPuzzle.a} + {mathPuzzle.b}? *
+                    </label>
+                    <input
+                      type="number"
+                      id="captchaInput"
+                      name="captchaInput"
+                      value={dreamerForm.captchaInput}
+                      onChange={handleDreamerChange}
+                      placeholder="Enter the number..."
+                      className={dreamerErrors.captchaInput ? 'error' : ''}
+                      style={{ marginTop: 6 }}
+                      required
+                    />
+                    {dreamerErrors.captchaInput && <span className="error-message">{dreamerErrors.captchaInput}</span>}
                   </div>
 
                   <Button type="submit" variant="primary">

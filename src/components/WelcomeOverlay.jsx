@@ -3,11 +3,7 @@ import './WelcomeOverlay.css'
 
 const ESSENTIAL_ASSETS = [
   '/logo.png',
-  '/dreamworld-home-world.png',
-  '/world-tree.png',
-  '/crystal-library.png',
-  '/future-vision.png',
-  '/living-city.png'
+  '/dreamworld-portal-bg.jpg'
 ]
 
 function WelcomeOverlay({ onEnter, onExitComplete }) {

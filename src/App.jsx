@@ -27,27 +27,6 @@ import Settings from './pages/Settings'
 import Songs from './pages/Songs'
 import './App.css'
 
-const PAGE_BACKDROPS = {
-  about: '/realm-art/about-wide.jpg',
-  characters: '/realm-art/characters-wide.jpg',
-  creator: '/realm-art/creator-wide.jpg',
-  quests: '/realm-art/quests-wide.jpg',
-  events: '/realm-art/events-wide.jpg',
-  join: '/realm-art/join-wide.jpg',
-  funders: '/realm-art/funders-wide.jpg',
-  thanks: '/realm-art/thanks-wide.jpg',
-  settings: '/realm-art/settings-wide.jpg',
-  songs: '/realm-art/songs-wide.jpg',
-  admin: '/realm-art/admin-wide.jpg'
-}
-
-function getPageBackdrop(pathname) {
-  const segment = pathname.split('/')[1]
-  const route = pathname.startsWith('/characters/') ? 'characters' : segment === 'admin' ? 'admin' : segment
-  const backdrop = PAGE_BACKDROPS[route]
-  return backdrop ? { '--realm-art': `url('${backdrop}')` } : undefined
-}
-
 function App() {
   const location = useLocation()
   const isHomePage = location.pathname === '/'
@@ -57,33 +36,47 @@ function App() {
   const [hasEntered, setHasEntered] = useState(() => {
     return sessionStorage.getItem('dreamworld_entered') === 'true'
   })
-  const [showWelcomeOverlay, setShowWelcomeOverlay] = useState(() => {
-    return sessionStorage.getItem('dreamworld_entered') !== 'true'
-  })
   const [shouldStartAudio, setShouldStartAudio] = useState(false)
+  const [installPrompt, setInstallPrompt] = useState(null)
+  const [isAppInstalled, setIsAppInstalled] = useState(false)
   const { isSoundMuted, buttonVolume } = useAudio()
+
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (event) => {
+      event.preventDefault()
+      setInstallPrompt(event)
+    }
+    const handleAppInstalled = () => {
+      setInstallPrompt(null)
+      setIsAppInstalled(true)
+    }
+
+    setIsAppInstalled(
+      window.matchMedia?.('(display-mode: standalone)').matches ||
+      window.navigator.standalone === true
+    )
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
+    window.addEventListener('appinstalled', handleAppInstalled)
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
+      window.removeEventListener('appinstalled', handleAppInstalled)
+    }
+  }, [])
+
+  const handleInstallApp = async () => {
+    if (!installPrompt) return null
+
+    const promptEvent = installPrompt
+    await promptEvent.prompt()
+    const choice = await promptEvent.userChoice
+    setInstallPrompt(null)
+    return choice
+  }
 
   const handleEnterDreamWorld = () => {
     sessionStorage.setItem('dreamworld_entered', 'true')
-    const isMobile = window.matchMedia('(max-width: 900px)').matches
-    if (isMobile) {
-      const enterFullscreen = document.documentElement.requestFullscreen
-      if (typeof enterFullscreen === 'function' && !document.fullscreenElement) {
-        enterFullscreen.call(document.documentElement).catch(() => {})
-      }
-    }
     setHasEntered(true)
     setShouldStartAudio(true)
-  }
-
-  const handleLeaveDreamWorld = () => {
-    sessionStorage.removeItem('dreamworld_entered')
-    if (document.fullscreenElement && typeof document.exitFullscreen === 'function') {
-      document.exitFullscreen().catch(() => {})
-    }
-    setShouldStartAudio(false)
-    setHasEntered(false)
-    setShowWelcomeOverlay(true)
   }
 
   // Global click sound for all clickable elements
@@ -106,22 +99,15 @@ function App() {
 
   return (
     <ContentProvider>
-      <div className={`app${isHomePage ? ' app-home' : ''}`}>
-        {!isHomePage && !isPortal && <div className="realm-backdrop" style={getPageBackdrop(location.pathname)} aria-hidden="true" />}
+      <div className="app">
         <ScrollToTop />
-        {!isPortal && showWelcomeOverlay && (
-          <WelcomeOverlay
-            onEnter={handleEnterDreamWorld}
-            onExitComplete={() => setShowWelcomeOverlay(false)}
-          />
-        )}
+        {!isPortal && !hasEntered && <WelcomeOverlay onEnter={handleEnterDreamWorld} />}
 
         <ParticlesBackground />
 
         <div className={`main-app-content ${!isPortal && hasEntered ? 'fade-in' : ''} ${isPortal ? 'portal-visible' : ''}`}>
-          {!isPortal && <Navbar onLeaveDreamWorld={handleLeaveDreamWorld} />}
+          {!isPortal && <Navbar />}
           <main className="main-content">
-            <div className="realm-screen" key={location.pathname}>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
@@ -144,13 +130,21 @@ function App() {
               </Route>
 
               <Route path="/thanks" element={<SpecialThanks />} />
-              <Route path="/settings" element={<Settings />} />
+              <Route
+                path="/settings"
+                element={
+                  <Settings
+                    canInstall={Boolean(installPrompt)}
+                    isAppInstalled={isAppInstalled}
+                    onInstall={handleInstallApp}
+                  />
+                }
+              />
               <Route path="/songs" element={<Songs />} />
 
               {/* 404 Route */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
-            </div>
           </main>
           {!isPortal && !isHomePage && <Footer />}
         </div>

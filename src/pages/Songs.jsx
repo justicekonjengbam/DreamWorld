@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useAudio } from '../context/AudioContext'
+import SongsPreloader from '../components/SongsPreloader'
 import './Songs.css'
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -19,13 +20,19 @@ function Songs() {
   const [smoothTime, setSmoothTime]           = useState(0)
   const [viewMode, setViewMode]               = useState('playlist')
   const [selectedSong, setSelectedSong]       = useState(null)
+  const [showSongsPreloader, setShowSongsPreloader] = useState(() =>
+    sessionStorage.getItem('dreamworld_songs_preloaded') !== 'true'
+  )
 
   // ── Calibration state ──────────────────────────────────────────────────────
   const visualizerCanvasRef = useRef(null)
   const lyricsContainerRef  = useRef(null)
-  const rafRef              = useRef(null)
 
   // ── Preloader ──────────────────────────────────────────────────────────────
+  const handleSongsPreloadComplete = () => {
+    sessionStorage.setItem('dreamworld_songs_preloaded', 'true')
+    setShowSongsPreloader(false)
+  }
 
   // ── Disable right-click ────────────────────────────────────────────────────
   useEffect(() => {
@@ -36,13 +43,18 @@ function Songs() {
 
   // ── RAF: read currentTime every frame ─────────────────────────────────────
   useEffect(() => {
-    const tick = () => {
-      if (customAudioElement) setSmoothTime(customAudioElement.currentTime)
-      rafRef.current = requestAnimationFrame(tick)
-    }
-    rafRef.current = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(rafRef.current)
-  }, [customAudioElement])
+    if (!customAudioElement || !isPlayingCustom) return
+    const intervalId = window.setInterval(() => {
+      if (!customAudioElement.paused) {
+        setSmoothTime(customAudioElement.currentTime)
+      }
+    }, 100)
+    return () => window.clearInterval(intervalId)
+  }, [customAudioElement, isPlayingCustom])
+
+  useEffect(() => {
+    if (customAudioElement?.paused) setSmoothTime(currentTime || 0)
+  }, [customAudioElement, currentTime])
 
   // ── When activeSong changes in song view, follow it ───────────────────────
   useEffect(() => {
@@ -118,7 +130,7 @@ function Songs() {
         ctx.roundRect ? ctx.roundRect(x, y, bw, barHeights[i], [3, 3, 0, 0]) : ctx.rect(x, y, bw, barHeights[i])
         ctx.fill()
       }
-      animId = requestAnimationFrame(render)
+      if (isPlayingCustom) animId = requestAnimationFrame(render)
     }
     render()
     return () => cancelAnimationFrame(animId)
@@ -166,6 +178,7 @@ function Songs() {
 
     return (
       <div className="songs-page page song-detail-page" onContextMenu={e => e.preventDefault()}>
+        {showSongsPreloader && <SongsPreloader onComplete={handleSongsPreloadComplete} />}
 
         <div className="song-detail-bg" style={{ backgroundImage: `url(${selectedSong.cover})` }} />
 
@@ -291,6 +304,7 @@ function Songs() {
   // ═══════════════════════════════════════════════════════════════════════════
   return (
     <div className="songs-page page" onContextMenu={(e) => e.preventDefault()}>
+      {showSongsPreloader && <SongsPreloader onComplete={handleSongsPreloadComplete} />}
 
       <div className="page-hero">
         <img src="/logo.png" alt="DreamWorld Logo" className="page-logo" draggable="false" />
@@ -327,7 +341,7 @@ function Songs() {
           <div className="playlist-header-card">
             <div className="playlist-cover-art-square">
               <img
-                src={activeSong?.cover || '/realm-art/songs-wide.jpg'}
+                src={activeSong ? activeSong.cover : '/world-tree.jpg'}
                 alt="Playlist Cover"
                 className="playlist-img-square"
                 draggable="false"
@@ -400,7 +414,7 @@ function Songs() {
                       </td>
                       <td className="col-title">
                         <div className="song-title-cell">
-                          <img src={song.cover} alt={song.title} className="song-row-cover" draggable="false" />
+                          <img src={song.cover} alt={song.title} className="song-row-cover" loading="lazy" decoding="async" draggable="false" />
                           <div className="song-title-meta">
                             <span className="song-title-name">{song.title}</span>
                             <span className="song-title-artist">{song.artist}</span>

@@ -4,12 +4,12 @@ import { useContent } from '../context/ContentContext'
 import './Navbar.css'
 
 const PRIMARY_LINKS = [
-  { to: '/', label: 'Home', exact: true, glyph: '⌂' },
-  { to: '/about', label: 'Lore', glyph: '◇' },
-  { to: '/characters', label: 'Dreamers', glyph: '✧' },
-  { to: '/quests', label: 'Quests', glyph: '✦' },
-  { to: '/events', label: 'Gatherings', glyph: '◉' },
-  { to: '/songs', label: 'Sound', glyph: '♫' },
+  { to: '/', label: 'Home', exact: true },
+  { to: '/about', label: 'Story' },
+  { to: '/characters', label: 'Dreamers' },
+  { to: '/quests', label: 'Quests' },
+  { to: '/events', label: 'Events' },
+  { to: '/songs', label: 'Songs' },
 ]
 
 const MORE_LINKS = [
@@ -18,7 +18,7 @@ const MORE_LINKS = [
   { to: '/thanks', label: 'Sponsors' },
 ]
 
-function Navbar({ onLeaveDreamWorld }) {
+function Navbar() {
   const location = useLocation()
   const [isOpen, setIsOpen] = useState(false)
   const [moreDropdownOpen, setMoreDropdownOpen] = useState(false)
@@ -26,12 +26,6 @@ function Navbar({ onLeaveDreamWorld }) {
   const { appSettings } = useContent()
 
   const isJoinClosed = appSettings?.dreamworld_open === false
-  const currentLocation = [
-    ...PRIMARY_LINKS,
-    ...MORE_LINKS,
-    { to: '/join', label: 'Join the Realm' },
-    { to: '/settings', label: 'Settings' },
-  ].find(({ to, exact }) => exact ? location.pathname === to : location.pathname.startsWith(to))?.label || 'The Realm'
 
   const isActive = (path, exact) => {
     if (exact) return location.pathname === path ? 'active' : ''
@@ -57,29 +51,19 @@ function Navbar({ onLeaveDreamWorld }) {
   }, [])
 
   return (
-    <nav className={`navbar${isOpen ? ' menu-open' : ''}`}>
+    <nav className="navbar">
       <div className="navbar-container">
 
         {/* Brand Logo */}
         <Link to="/" className="navbar-logo" onClick={closeMenu}>
-          <img src="/logo.png" alt="" className="logo-image" />
           <span className="logo-text">DreamWorld</span>
         </Link>
-
-        <div className="realm-location" aria-live="polite">
-          <span className="realm-location-sigil" aria-hidden="true">✧</span>
-          <span className="realm-location-copy">
-            <span className="realm-location-label">NOW VISITING</span>
-            <span className="realm-location-name">{currentLocation}</span>
-          </span>
-        </div>
 
         {/* Desktop Navigation Links */}
         <ul className="navbar-menu desktop-menu">
           {PRIMARY_LINKS.map(({ to, label, exact }) => (
             <li key={to}>
               <Link to={to} className={`nav-link ${isActive(to, exact)}`}>
-                <span className="nav-rune" aria-hidden="true">{PRIMARY_LINKS.find(link => link.to === to)?.glyph}</span>
                 {label}
               </Link>
             </li>
@@ -138,8 +122,7 @@ function Navbar({ onLeaveDreamWorld }) {
           <button
             className={`hamburger ${isOpen ? 'active' : ''}`}
             onClick={() => setIsOpen(!isOpen)}
-            aria-label={isOpen ? 'Close menu' : 'Open menu'}
-            aria-expanded={isOpen}
+            aria-label="Toggle menu"
           >
             <span /><span /><span />
           </button>
@@ -185,9 +168,6 @@ function Navbar({ onLeaveDreamWorld }) {
             <Link to="/settings" className="drawer-action-btn settings" onClick={closeMenu}>
               ⚙️ System Settings
             </Link>
-            <button type="button" className="drawer-action-btn leave" onClick={() => { closeMenu(); onLeaveDreamWorld?.() }}>
-              ← Leave DreamWorld
-            </button>
           </div>
         </div>
 
